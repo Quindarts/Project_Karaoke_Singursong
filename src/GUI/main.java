@@ -26,10 +26,10 @@ public class main extends JFrame {
 			public void run() {
 				try {
 					FlatLightLaf.setup();
-//					UploadImg	upload = new UploadImg();
+					UploadImg	upload = new UploadImg();
 					main frame = new main();
 					frame.setVisible(true);
-//					upload.setVisible(true);
+					upload.setVisible(true);
 					
 				
 				} catch (Exception e) {
