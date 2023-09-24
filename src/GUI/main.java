@@ -1,6 +1,8 @@
 package GUI;
 
 import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -8,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import ConnectDB.ConnectDB;
 import OtherFunction.HelpXLSX;
 
 public class main extends JFrame {
@@ -23,9 +26,12 @@ public class main extends JFrame {
 			public void run() {
 				try {
 					FlatLightLaf.setup();
+//					UploadImg	upload = new UploadImg();
 					main frame = new main();
 					frame.setVisible(true);
-					new UploadImg();
+//					upload.setVisible(true);
+					
+				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -40,6 +46,13 @@ public class main extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
+		try {
+			ConnectDB.getInstance().connect();
+			System.out.println("Connected!!!!");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 }
