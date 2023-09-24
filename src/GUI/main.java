@@ -8,6 +8,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import OtherFunction.HelpXLSX;
+
 public class main extends JFrame {
 
 	private JPanel contentPane;
@@ -15,6 +17,7 @@ public class main extends JFrame {
 	/**
 	 * Launch the application.
 	 */
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -22,6 +25,7 @@ public class main extends JFrame {
 					FlatLightLaf.setup();
 					main frame = new main();
 					frame.setVisible(true);
+					new UploadImg();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
