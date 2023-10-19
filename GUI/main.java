@@ -1,6 +1,7 @@
 package GUI;
 
 import java.awt.EventQueue;
+import java.awt.geom.RoundRectangle2D;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -25,13 +26,16 @@ public class main extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					// Connect Theme Flat
 					FlatLightLaf.setup();
 					UploadImg	upload = new UploadImg();
+					// Show frame
 					main frame = new main();
 					frame.setVisible(true);
 					upload.setVisible(true);
+
 					
-				
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -44,7 +48,6 @@ public class main extends JFrame {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
 		try {
 			ConnectDB.getInstance().connect();
