@@ -2,16 +2,20 @@ package Entity;
 
 import java.util.Objects;
 
+<<<<<<< HEAD
 /**
  * TaiKhoan
  * Le Minh Quang
  * 20/10/2023
  */
+=======
+>>>>>>> c2cd45d2f51fb9cd7c754dfd192a74b8e25cce7c
 public class TaiKhoan {
 	private String maNhanVien;
 	private String tenDangNhap;
 	private String matKhau;
 	private boolean trangThai;
+<<<<<<< HEAD
 	
 	/**
 	 * @param maNhanVien
@@ -19,6 +23,8 @@ public class TaiKhoan {
 	 * @param matKhau
 	 * @param trangThai
 	 */
+=======
+>>>>>>> c2cd45d2f51fb9cd7c754dfd192a74b8e25cce7c
 	public TaiKhoan(String maNhanVien, String tenDangNhap, String matKhau, boolean trangThai) {
 		super();
 		this.maNhanVien = maNhanVien;
@@ -26,10 +32,13 @@ public class TaiKhoan {
 		this.matKhau = matKhau;
 		this.trangThai = trangThai;
 	}
+<<<<<<< HEAD
 	
 	/**
 	 * @param maNhanVien
 	 */
+=======
+>>>>>>> c2cd45d2f51fb9cd7c754dfd192a74b8e25cce7c
 	public TaiKhoan(String maNhanVien) {
 		super();
 		this.maNhanVien = maNhanVien;
@@ -78,10 +87,20 @@ public class TaiKhoan {
 		TaiKhoan other = (TaiKhoan) obj;
 		return Objects.equals(maNhanVien, other.maNhanVien);
 	}
+<<<<<<< HEAD
 	
+=======
+>>>>>>> c2cd45d2f51fb9cd7c754dfd192a74b8e25cce7c
 	@Override
 	public String toString() {
 		return "tenDangNhap [maNhanVien=" + maNhanVien + ", tenDangNhap=" + tenDangNhap + ", matKhau=" + matKhau + ", trangThai="
 				+ trangThai + "]";
 	}
+<<<<<<< HEAD
+=======
+		
+	
+	
+
+>>>>>>> c2cd45d2f51fb9cd7c754dfd192a74b8e25cce7c
 }
