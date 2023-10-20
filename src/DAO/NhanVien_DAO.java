@@ -58,8 +58,8 @@ public class NhanVien_DAO {
 	 * @param maNV
 	 * @return true / false
 	 */
-	public ArrayList<NhanVien> timNhanVienTheoMa(String maNV) {
-		ArrayList<NhanVien> danhSachNhanVien = new ArrayList<NhanVien>();
+	public NhanVien timNhanVienTheoMa(String maNV) {
+		NhanVien nv = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -78,9 +78,9 @@ public class NhanVien_DAO {
 				String diaChi = rs.getString("diaChi");
 				String trangThai = rs.getString("trangThai");
 				String anhThe = rs.getString("anhThe");
-				NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
+				 nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
 						SoDienThoai, diaChi, trangThai, anhThe);
-				danhSachNhanVien.add(nv);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +92,7 @@ public class NhanVien_DAO {
 				e2.printStackTrace();
 			}
 		}
-		return danhSachNhanVien;
+		return nv;
 	}
 
 	/**TaoNhanVien
