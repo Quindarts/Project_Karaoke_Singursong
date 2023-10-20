@@ -32,14 +32,15 @@ public class main extends JFrame {
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			private JFrame_DangNhap app;
+
 			public void run() {
 				try {
 					FlatLightLaf.setup();
 					UploadImg upload = new UploadImg();
 					main frame = new main();
-					frame.setVisible(true);
-					frame.setLayout(new FlowLayout());
-					
+					app = new JFrame_DangNhap();
+					app.setVisible(true);
 					// Demo card phong;
 					ArrayList<Phong> dsPhongDemo = new ArrayList<Phong>();
 					dsPhongDemo.add(new Phong("P101", "Phong Thường 1", new TrangThaiPhong("111", "Còn Trống"),
@@ -58,8 +59,6 @@ public class main extends JFrame {
 						
 						frame.add(cardPhong);
 					});
-					// Demo card phong
-					
 					upload.setVisible(true);
 
 				} catch (Exception e) {

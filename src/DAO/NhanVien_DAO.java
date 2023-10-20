@@ -13,6 +13,7 @@ import Entity.LoaiNhanVien;
 
 /**
  * NhanVien_DAO
+ * 
  * @author THANH CUONG
  *
  */
@@ -21,7 +22,9 @@ public class NhanVien_DAO {
 	public NhanVien_DAO() {
 	}
 
-	/** LayTatCaNhanVien
+	/**
+	 * LayTatCaNhanVien
+	 * 
 	 * @return true/false
 	 */
 	public ArrayList<NhanVien> layTatCaNhanVien() {
@@ -55,6 +58,7 @@ public class NhanVien_DAO {
 
 	/**
 	 * TimNhanVienTheoMa
+	 * 
 	 * @param maNV
 	 * @return true / false
 	 */
@@ -80,7 +84,6 @@ public class NhanVien_DAO {
 				String anhThe = rs.getString("anhThe");
 				 nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
 						SoDienThoai, diaChi, trangThai, anhThe);
-				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -95,7 +98,9 @@ public class NhanVien_DAO {
 		return nv;
 	}
 
-	/**TaoNhanVien
+	/**
+	 * TaoNhanVien
+	 * 
 	 * @param nv
 	 * @return true / false
 	 */
@@ -132,6 +137,7 @@ public class NhanVien_DAO {
 
 	/**
 	 * CapNhatNhanVien
+	 * 
 	 * @param nv
 	 * @return true / false
 	 */
@@ -171,6 +177,7 @@ public class NhanVien_DAO {
 
 	/**
 	 * XoaNhanVien
+	 * 
 	 * @param nv
 	 * @return true / false
 	 */
