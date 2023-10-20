@@ -13,10 +13,10 @@ public class ConnectDB {
 	}
 
 	public void connect() throws SQLException {
-		String url = "jdbc:sqlserver://localhost:1433;databasename=QuanLyKaraokeSUS";
+		String url = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong ";
 		String user = "sa";
-		String password = "12";
-		con = DriverManager.getConnection(url, "sa", "12");
+		String password = "230903";
+		con = DriverManager.getConnection(url, "sa", "230903");
 	}
 
 	public void disconnect() {
