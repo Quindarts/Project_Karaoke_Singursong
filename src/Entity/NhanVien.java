@@ -45,7 +45,6 @@ public class NhanVien {
 	 * @param diaChi
 	 * @param trangThai
 	 * @param anhThe
-	 * @param tenDangNhap
 	 */
 	public NhanVien(String maNhanVien, LoaiNhanVien loaiNhanVien, String hoTen, boolean gioiTinh, Date ngaySinh,
 			String soDienThoai, String cCCD, String diaChi, String trangThai, String anhThe) {
