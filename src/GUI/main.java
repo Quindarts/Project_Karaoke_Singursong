@@ -23,13 +23,16 @@ public class main extends JFrame {
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+			private JFrame_DangNhap app;
+
 			public void run() {
 				try {
 					FlatLightLaf.setup();
 					UploadImg	upload = new UploadImg();
 					main frame = new main();
-					frame.setVisible(true);
-					upload.setVisible(true);
+					app = new JFrame_DangNhap();
+//					frame.setVisible(true);
+					app.setVisible(true);
 					
 				
 				} catch (Exception e) {

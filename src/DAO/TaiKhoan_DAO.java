@@ -13,7 +13,7 @@ import Entity.TaiKhoan;
  * Le Minh Quang
  * 20/10/2023
  */
-public class TaiKhoanDAO {
+public class TaiKhoan_DAO {
 	
 	/**
 	 * @param maNhanVien
@@ -53,7 +53,6 @@ public class TaiKhoanDAO {
 			ResultSet rs = statement.executeQuery();
 			rs.next();
 			tk = new TaiKhoan(rs.getString("maNhanVien"),rs.getString("matKhau"),rs.getString("tenDangNhap"),rs.getBoolean("trangThai"));
-			con.close();
 		} catch (SQLException e) {
 			return null;
 		}
