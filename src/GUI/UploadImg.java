@@ -25,6 +25,7 @@ public class UploadImg extends JFrame {
 	public UploadImg() {
 		super("Demo Chức năng tải ảnh lên");
 		button = new JButton("Chọn tệp ảnh để tải lên");
+		button.putClientProperty( "JButton.buttonType", "roundRect" );
 		button.setBounds(10, 266, 253, 40);
 
 		img_show_panel = new JLabel();
@@ -49,7 +50,8 @@ public class UploadImg extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				readerXLSXFile(chooseFileEvent("excel"));
 			}
-		});
+		});		
+		
 		btnNewButton.setBounds(284, 50, 400, 21);
 		getContentPane().add(btnNewButton);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
