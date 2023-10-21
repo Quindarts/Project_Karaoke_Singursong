@@ -46,9 +46,9 @@ public class NhanVien_DAO {
 				String trangThai = rs.getString("trangThai");
 				String anhThe = rs.getString("anhThe");
 				TaiKhoan taiKhoan = new TaiKhoan(rs.getString("maNhanVien"));
-				NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
+				NhanVien nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
 						SoDienThoai, diaChi, trangThai, anhThe);
-				danhSachNhanVien.add(nv);
+				danhSachNhanVien.add(nhanVien);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,8 +62,8 @@ public class NhanVien_DAO {
 	 * @param maNV
 	 * @return true / false
 	 */
-	public NhanVien timNhanVienTheoMa(String maNV) {
-		NhanVien nv = null;
+	public NhanVien timNhanVien_TheoMaNhanVien(String maNV) {
+		NhanVien nhanVien = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -82,7 +82,7 @@ public class NhanVien_DAO {
 				String diaChi = rs.getString("diaChi");
 				String trangThai = rs.getString("trangThai");
 				String anhThe = rs.getString("anhThe");
-				 nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
+				nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
 						SoDienThoai, diaChi, trangThai, anhThe);
 			}
 		} catch (Exception e) {
@@ -95,7 +95,7 @@ public class NhanVien_DAO {
 				e2.printStackTrace();
 			}
 		}
-		return nv;
+		return nhanVien;
 	}
 
 	/**
@@ -104,23 +104,23 @@ public class NhanVien_DAO {
 	 * @param nv
 	 * @return true / false
 	 */
-	public boolean taoNhanVien(NhanVien nv) {
+	public boolean taoNhanVien(NhanVien nhanVien) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
 			statement = con.prepareStatement("insert into NhanVien values(?,?,?,?,?,?,?,?,?,?)");
-			statement.setString(1, nv.getMaNhanVien());
-			statement.setString(2, nv.getloaiNhanVien().getMaLoaiNhanVien());
-			statement.setString(3, nv.getHoTen());
-			statement.setBoolean(4, nv.isGioiTinh());
-			statement.setDate(5, (java.sql.Date) nv.getNgaySinh());
-			statement.setString(6, nv.getSoDienThoai());
-			statement.setString(7, nv.getCCCD());
-			statement.setString(8, nv.getDiaChi());
-			statement.setString(9, nv.getTrangThai());
-			statement.setString(10, nv.getAnhThe());
+			statement.setString(1, nhanVien.getMaNhanVien());
+			statement.setString(2, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
+			statement.setString(3, nhanVien.getHoTen());
+			statement.setBoolean(4, nhanVien.isGioiTinh());
+			statement.setDate(5, (java.sql.Date) nhanVien.getNgaySinh());
+			statement.setString(6, nhanVien.getSoDienThoai());
+			statement.setString(7, nhanVien.getCCCD());
+			statement.setString(8, nhanVien.getDiaChi());
+			statement.setString(9, nhanVien.getTrangThai());
+			statement.setString(10, nhanVien.getAnhThe());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,7 +141,7 @@ public class NhanVien_DAO {
 	 * @param nv
 	 * @return true / false
 	 */
-	public boolean capNhatNhanVien(NhanVien nv) {
+	public boolean capNhatNhanVien(NhanVien nhanVien) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -150,16 +150,16 @@ public class NhanVien_DAO {
 			statement = con.prepareStatement(
 					"update NhanVien set hoTen =?, gioiTinh=?, ngaySinh=?, soDienThoai=?, CCCD=?, diaChi=?, trangThai=?, anhThe=?"
 							+ "where maNhanVien=?");
-			statement.setString(1, nv.getMaNhanVien());
-			statement.setString(2, nv.getloaiNhanVien().getMaLoaiNhanVien());
-			statement.setString(3, nv.getHoTen());
-			statement.setBoolean(4, nv.isGioiTinh());
-			statement.setDate(5, (java.sql.Date) nv.getNgaySinh());
-			statement.setString(6, nv.getSoDienThoai());
-			statement.setString(7, nv.getCCCD());
-			statement.setString(8, nv.getDiaChi());
-			statement.setString(9, nv.getTrangThai());
-			statement.setString(10, nv.getAnhThe());
+			statement.setString(1, nhanVien.getMaNhanVien());
+			statement.setString(2, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
+			statement.setString(3, nhanVien.getHoTen());
+			statement.setBoolean(4, nhanVien.isGioiTinh());
+			statement.setDate(5, (java.sql.Date) nhanVien.getNgaySinh());
+			statement.setString(6, nhanVien.getSoDienThoai());
+			statement.setString(7, nhanVien.getCCCD());
+			statement.setString(8, nhanVien.getDiaChi());
+			statement.setString(9, nhanVien.getTrangThai());
+			statement.setString(10, nhanVien.getAnhThe());
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {
@@ -181,14 +181,14 @@ public class NhanVien_DAO {
 	 * @param nv
 	 * @return true / false
 	 */
-	public boolean xoaNhanVien(NhanVien nv) {
+	public boolean xoaNhanVien(NhanVien nhanVien) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
 			statement = con.prepareStatement("delete from NhanVien where maNhanVien=?");
-			statement.setString(1, nv.getMaNhanVien());
+			statement.setString(1, nhanVien.getMaNhanVien());
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {
