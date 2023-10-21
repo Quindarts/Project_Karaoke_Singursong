@@ -30,7 +30,6 @@ public class main extends JFrame {
 
 			public void run() {
 				try {
-					
 					//Connect Database
 					try {
 						ConnectDB.getInstance().connect();
