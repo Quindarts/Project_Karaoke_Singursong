@@ -3,70 +3,79 @@ package Entity;
 import java.util.Objects;
 
 /**
- * TaiKhoan
- * Le Minh Quang
- * 20/10/2023
+ * TaiKhoan Le Minh Quang 20/10/2023
  */
 
 public class TaiKhoan {
-	private String maNhanVien;
+	private NhanVien nhanVien;
 	private String tenDangNhap;
 	private String matKhau;
 	private boolean trangThai;
+
 	/**
 	 * @param maNhanVien
 	 * @param tenDangNhap
 	 * @param matKhau
 	 * @param trangThai
 	 */
-	public TaiKhoan(String maNhanVien, String tenDangNhap, String matKhau, boolean trangThai) {
+	public TaiKhoan(NhanVien nhanVien, String tenDangNhap, String matKhau, boolean trangThai) {
 		super();
-		this.maNhanVien = maNhanVien;
+		this.nhanVien = nhanVien;
 		this.tenDangNhap = tenDangNhap;
 		this.matKhau = matKhau;
 		this.trangThai = trangThai;
 	}
-	
+
 	/**
 	 * @param maNhanVien
 	 */
-	public TaiKhoan(String maNhanVien) {
+	public TaiKhoan(NhanVien nhanVien) {
 		super();
-		this.maNhanVien = maNhanVien;
+		this.nhanVien = nhanVien;
 	}
-	
+
 	public TaiKhoan() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public String getMaNhanVien() {
-		return maNhanVien;
+
+	public NhanVien getMaNhanVien() {
+		return nhanVien;
 	}
-	public void setMaNhanVien(String maNhanVien) {
-		this.maNhanVien = maNhanVien;
+
+	public void setMaNhanVien(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
 	}
+
 	public String gettenDangNhap() {
 		return tenDangNhap;
 	}
+
 	public void settenDangNhap(String tenDangNhap) {
 		this.tenDangNhap = tenDangNhap;
 	}
+
 	public String getMatKhau() {
 		return matKhau;
 	}
+
 	public void setMatKhau(String matKhau) {
 		this.matKhau = matKhau;
 	}
+
 	public boolean isTrangThai() {
 		return trangThai;
 	}
+
 	public void setTrangThai(boolean trangThai) {
 		this.trangThai = trangThai;
 	}
+
 	@Override
 	public int hashCode() {
-		return Objects.hash(maNhanVien);
+		return Objects.hash(nhanVien);
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -76,13 +85,13 @@ public class TaiKhoan {
 		if (getClass() != obj.getClass())
 			return false;
 		TaiKhoan other = (TaiKhoan) obj;
-		return Objects.equals(maNhanVien, other.maNhanVien);
+		return Objects.equals(nhanVien, other.nhanVien);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "tenDangNhap [maNhanVien=" + maNhanVien + ", tenDangNhap=" + tenDangNhap + ", matKhau=" + matKhau + ", trangThai="
-				+ trangThai + "]";
+		return "tenDangNhap [nhanVien=" + nhanVien + ", tenDangNhap=" + tenDangNhap + ", matKhau=" + matKhau
+				+ ", trangThai=" + trangThai + "]";
 	}
 
 }

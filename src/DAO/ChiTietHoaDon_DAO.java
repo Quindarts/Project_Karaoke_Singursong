@@ -71,6 +71,64 @@ public class ChiTietHoaDon_DAO {
 		return ctHoaDon;
 	}
 
+	public ChiTietHoaDon timCTHoaDon_TheoMaHoaDon(String maHD) {
+		ChiTietHoaDon ctHoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM ChiTietHoaDon WHERE maHoaDon = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maHD);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
+				Phong phong = new Phong(rs.getString("maPhong"));
+				int soGioHat = rs.getInt("soGioHat");
+				ctHoaDon = new ChiTietHoaDon(hoaDon, phong, soGioHat);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return ctHoaDon;
+	}
+
+	public ChiTietHoaDon timCTHoaDon_TheoMaPhong(String maPhong) {
+		ChiTietHoaDon ctHoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM ChiTietHoaDon WHERE maPhong = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maPhong);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
+				Phong phong = new Phong(rs.getString("maPhong"));
+				int soGioHat = rs.getInt("soGioHat");
+				ctHoaDon = new ChiTietHoaDon(hoaDon, phong, soGioHat);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return ctHoaDon;
+	}
+
 	public boolean taoCTHoaDon(ChiTietHoaDon ctHoaDon) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -101,11 +159,11 @@ public class ChiTietHoaDon_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("UPDATE ChiTietHoaDon SET maHoaDon = ?, maPhong = ?, soGioHat = ?"
-					+ " WHERE maHoaDon = ? AND maPhong = ?");
-			statement.setString(1, ctHoaDon.getHoaDon().getMaHoaDon());
-			statement.setString(2, ctHoaDon.getPhong().getMaPhong());
-			statement.setDouble(3, ctHoaDon.getSoGioHat());
+			statement = con
+					.prepareStatement("UPDATE ChiTietHoaDon SET soGioHat = ?" + " WHERE maHoaDon = ? AND maPhong = ?");
+			statement.setDouble(1, ctHoaDon.getSoGioHat());
+			statement.setString(2, ctHoaDon.getHoaDon().getMaHoaDon());
+			statement.setString(3, ctHoaDon.getPhong().getMaPhong());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -129,7 +187,6 @@ public class ChiTietHoaDon_DAO {
 			statement = con.prepareStatement("DELETE FROM ChiTietHoaDon" + " WHERE maHoaDon = ? AND maPhong = ?");
 			statement.setString(1, ctHoaDon.getHoaDon().getMaHoaDon());
 			statement.setString(2, ctHoaDon.getPhong().getMaPhong());
-			statement.setDouble(3, ctHoaDon.getSoGioHat());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

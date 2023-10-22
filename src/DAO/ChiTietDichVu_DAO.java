@@ -40,7 +40,7 @@ public class ChiTietDichVu_DAO {
 		return danhSachCTDichVu;
 	}
 
-	public ChiTietDichVu timCTDichVuTheoMaDichVu(String maDV) {
+	public ChiTietDichVu timCTDichVu_TheoMaDichVu(String maDV) {
 		ChiTietDichVu ctDichVu = null;
 		NhanVien nv = null;
 		ConnectDB.getInstance();
@@ -70,7 +70,7 @@ public class ChiTietDichVu_DAO {
 		return ctDichVu;
 	}
 
-	public ChiTietDichVu timCTDichVuTheoMaHoaDon(String maHD) {
+	public ChiTietDichVu timCTDichVu_TheoMaHoaDon(String maHD) {
 		ChiTietDichVu ctDichVu = null;
 		NhanVien nv = null;
 		ConnectDB.getInstance();
@@ -100,7 +100,7 @@ public class ChiTietDichVu_DAO {
 		return ctDichVu;
 	}
 
-	public ChiTietDichVu timCTDichVuTheoMaHoaDon_MaDichVu(String maHD, String maDV) {
+	public ChiTietDichVu timCTDichVu_TheoMaHoaDon_MaDichVu(String maHD, String maDV) {
 		ChiTietDichVu ctDichVu = null;
 		NhanVien nv = null;
 		ConnectDB.getInstance();
@@ -161,11 +161,11 @@ public class ChiTietDichVu_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement(
-					"UPDATE ChiTietDichVu SET maHoaDon = ?, maDichVu = ?, soLuong = ?" + " WHERE maHoaDon = ?");
-			statement.setString(1, ctDichVu.getHoaDon().getMaHoaDon());
-			statement.setString(2, ctDichVu.getDichVu().getMaDichVu());
-			statement.setInt(3, ctDichVu.getSoLuong());
+			statement = con
+					.prepareStatement("UPDATE ChiTietDichVu SET maDichVu = ?, soLuong = ?" + " WHERE maHoaDon = ?");
+			statement.setString(1, ctDichVu.getDichVu().getMaDichVu());
+			statement.setInt(2, ctDichVu.getSoLuong());
+			statement.setString(3, ctDichVu.getHoaDon().getMaHoaDon());
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {
@@ -187,11 +187,11 @@ public class ChiTietDichVu_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement(
-					"UPDATE ChiTietDichVu SET maHoaDon = ?, maDichVu = ?, soLuong = ?" + " WHERE maHoaDon = ?");
+			statement = con
+					.prepareStatement("UPDATE ChiTietDichVu SET maHoaDon = ?, soLuong = ?" + " WHERE maDichVu = ?");
 			statement.setString(1, ctDichVu.getHoaDon().getMaHoaDon());
-			statement.setString(2, ctDichVu.getDichVu().getMaDichVu());
-			statement.setInt(3, ctDichVu.getSoLuong());
+			statement.setInt(2, ctDichVu.getSoLuong());
+			statement.setString(3, ctDichVu.getDichVu().getMaDichVu());
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {
@@ -213,11 +213,12 @@ public class ChiTietDichVu_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement(
-					"UPDATE ChiTietDichVu SET maHoaDon = ?, maDichVu = ?, soLuong = ?" + " WHERE maHoaDon = ?");
-			statement.setString(1, ctDichVu.getHoaDon().getMaHoaDon());
-			statement.setString(2, ctDichVu.getDichVu().getMaDichVu());
-			statement.setInt(3, ctDichVu.getSoLuong());
+			statement = con
+					.prepareStatement("UPDATE ChiTietDichVu SET  soLuong = ?" + " WHERE maHoaDon = ? and maDichVu = ?");
+
+			statement.setInt(1, ctDichVu.getSoLuong());
+			statement.setString(2, ctDichVu.getHoaDon().getMaHoaDon());
+			statement.setString(3, ctDichVu.getDichVu().getMaDichVu());
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {

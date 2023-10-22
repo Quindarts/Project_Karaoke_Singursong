@@ -1,5 +1,7 @@
 package Entity;
 
+
+import java.sql.Date;
 import java.util.Objects;
 
 /**
@@ -10,8 +12,9 @@ import java.util.Objects;
 public class Phong {
 	private String maPhong;
 	private String tenPhong;
-	private LoaiNhanVien loaiNhanVien;
+	private LoaiPhong loaiPhong;
 	private TrangThaiPhong trangThaiPhong;
+	private Date ngayTaoPhong;
 	private String viTriPhong;
 	private String ghiChu;
 	private String tinhTrangPhong;
@@ -28,13 +31,14 @@ public class Phong {
 	 * @param ghiChu
 	 * @param tinhTrangPhong
 	 */
-	public Phong(String maPhong, String tenPhong, LoaiNhanVien loaiNhanVien, TrangThaiPhong trangThaiPhong,
+	public Phong(String maPhong, String tenPhong, LoaiPhong loaiPhong, TrangThaiPhong trangThaiPhong, Date ngayTaoPhong,
 			String viTriPhong, String ghiChu, String tinhTrangPhong) {
 		super();
 		this.maPhong = maPhong;
 		this.tenPhong = tenPhong;
-		this.loaiNhanVien = loaiNhanVien;
+		this.loaiPhong = loaiPhong;
 		this.trangThaiPhong = trangThaiPhong;
+		this.ngayTaoPhong = ngayTaoPhong;
 		this.viTriPhong = viTriPhong;
 		this.ghiChu = ghiChu;
 		this.tinhTrangPhong = tinhTrangPhong;
@@ -55,17 +59,23 @@ public class Phong {
 	public void setTenPhong(String tenPhong) {
 		this.tenPhong = tenPhong;
 	}
-	public LoaiNhanVien getLoaiNhanVien() {
-		return loaiNhanVien;
+	public LoaiPhong getLoaiPhong() {
+		return loaiPhong;
 	}
-	public void setLoaiNhanVien(LoaiNhanVien loaiNhanVien) {
-		this.loaiNhanVien = loaiNhanVien;
+	public void setLoaiPhong(LoaiPhong loaiPhong) {
+		this.loaiPhong = loaiPhong;
 	}
 	public TrangThaiPhong getTrangThaiPhong() {
 		return trangThaiPhong;
 	}
 	public void setTrangThaiPhong(TrangThaiPhong trangThaiPhong) {
 		this.trangThaiPhong = trangThaiPhong;
+	}
+	public Date getNgayTaoPhong() {
+		return ngayTaoPhong;
+	}
+	public void setNgayTaoPhong(Date ngayTaoPhong) {
+		this.ngayTaoPhong = ngayTaoPhong;
 	}
 	public String getViTriPhong() {
 		return viTriPhong;
@@ -85,7 +95,6 @@ public class Phong {
 	public void setTinhTrangPhong(String tinhTrangPhong) {
 		this.tinhTrangPhong = tinhTrangPhong;
 	}
-	
 	@Override
 	public int hashCode() {
 		return Objects.hash(maPhong);
@@ -103,10 +112,11 @@ public class Phong {
 	}
 	@Override
 	public String toString() {
-		return "Phong [maPhong=" + maPhong + ", tenPhong=" + tenPhong + ", loaiNhanVien=" + loaiNhanVien
-				+ ", trangThaiPhong=" + trangThaiPhong + ", viTriPhong=" + viTriPhong + ", ghiChu=" + ghiChu
-				+ ", tinhTrangPhong=" + tinhTrangPhong + "]";
+		return "Phong [maPhong=" + maPhong + ", tenPhong=" + tenPhong + ", loaiPhong=" + loaiPhong + ", trangThaiPhong="
+				+ trangThaiPhong + ", ngayTaoPhong=" + ngayTaoPhong + ", viTriPhong=" + viTriPhong + ", ghiChu="
+				+ ghiChu + ", tinhTrangPhong=" + tinhTrangPhong + "]";
 	}
+	
 	
 	
 }

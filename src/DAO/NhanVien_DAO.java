@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.NhanVien;
-import Entity.TaiKhoan;
 import Entity.LoaiNhanVien;
 
 /**
@@ -42,12 +41,12 @@ public class NhanVien_DAO {
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
 				String SoDienThoai = rs.getString("SoDienThoai");
+				String CCCD = rs.getString("CCCD");
 				String diaChi = rs.getString("diaChi");
 				String trangThai = rs.getString("trangThai");
 				String anhThe = rs.getString("anhThe");
-				TaiKhoan taiKhoan = new TaiKhoan(rs.getString("maNhanVien"));
-				NhanVien nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
-						SoDienThoai, diaChi, trangThai, anhThe);
+				NhanVien nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai, CCCD,
+						diaChi, trangThai, anhThe);
 				danhSachNhanVien.add(nhanVien);
 			}
 		} catch (Exception e) {
@@ -79,11 +78,12 @@ public class NhanVien_DAO {
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
 				String SoDienThoai = rs.getString("SoDienThoai");
+				String CCCD = rs.getString("CCCD");
 				String diaChi = rs.getString("diaChi");
 				String trangThai = rs.getString("trangThai");
 				String anhThe = rs.getString("anhThe");
-				nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
-						SoDienThoai, diaChi, trangThai, anhThe);
+				nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai, CCCD, diaChi,
+						trangThai, anhThe);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -110,7 +110,7 @@ public class NhanVien_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("insert into NhanVien values(?,?,?,?,?,?,?,?,?,?)");
+			statement = con.prepareStatement("INSERT INTO NhanVien values(?,?,?,?,?,?,?,?,?,?)");
 			statement.setString(1, nhanVien.getMaNhanVien());
 			statement.setString(2, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
 			statement.setString(3, nhanVien.getHoTen());
@@ -148,18 +148,19 @@ public class NhanVien_DAO {
 		int n = 0;
 		try {
 			statement = con.prepareStatement(
-					"update NhanVien set hoTen =?, gioiTinh=?, ngaySinh=?, soDienThoai=?, CCCD=?, diaChi=?, trangThai=?, anhThe=?"
-							+ "where maNhanVien=?");
-			statement.setString(1, nhanVien.getMaNhanVien());
-			statement.setString(2, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
-			statement.setString(3, nhanVien.getHoTen());
-			statement.setBoolean(4, nhanVien.isGioiTinh());
-			statement.setDate(5, (java.sql.Date) nhanVien.getNgaySinh());
-			statement.setString(6, nhanVien.getSoDienThoai());
-			statement.setString(7, nhanVien.getCCCD());
-			statement.setString(8, nhanVien.getDiaChi());
-			statement.setString(9, nhanVien.getTrangThai());
-			statement.setString(10, nhanVien.getAnhThe());
+					"UPDATE NhanVien SET hoTen =?, gioiTinh=?, ngaySinh=?, soDienThoai=?, CCCD=?, diaChi=?, trangThai=?, anhThe=?"
+							+ " WHERE maNhanVien=?");
+
+			statement.setString(1, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
+			statement.setString(2, nhanVien.getHoTen());
+			statement.setBoolean(3, nhanVien.isGioiTinh());
+			statement.setDate(4, (java.sql.Date) nhanVien.getNgaySinh());
+			statement.setString(5, nhanVien.getSoDienThoai());
+			statement.setString(6, nhanVien.getCCCD());
+			statement.setString(7, nhanVien.getDiaChi());
+			statement.setString(8, nhanVien.getTrangThai());
+			statement.setString(9, nhanVien.getAnhThe());
+			statement.setString(10, nhanVien.getMaNhanVien());
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {
@@ -187,7 +188,7 @@ public class NhanVien_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("delete from NhanVien where maNhanVien=?");
+			statement = con.prepareStatement("DELETE FROM NhanVien WHERE maNhanVien=?");
 			statement.setString(1, nhanVien.getMaNhanVien());
 			n = statement.executeUpdate();
 

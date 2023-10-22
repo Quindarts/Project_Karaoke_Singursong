@@ -8,9 +8,6 @@ import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.DichVu;
-import Entity.LoaiNhanVien;
-import Entity.NhanVien;
-import Entity.TaiKhoan;
 
 public class DichVu_DAO {
 
@@ -34,8 +31,8 @@ public class DichVu_DAO {
 				String donViTinh = rs.getString("donViTinh");
 				Double donGia = rs.getDouble("donGia");
 				String trangThai = rs.getString("trangThai");
-				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, donGia, trangThai);
-				danhSachDichVu.add(dv);
+				DichVu dichVu = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, donGia, trangThai);
+				danhSachDichVu.add(dichVu);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,7 +46,7 @@ public class DichVu_DAO {
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
-			String sql = "SELECT * FROM DichVu" + " WHERE maDichVu = ?";
+			String sql = "SELECT * FROM DichVu WHERE maDichVu = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maDV);
 			ResultSet rs = statement.executeQuery();
@@ -109,14 +106,14 @@ public class DichVu_DAO {
 		int n = 0;
 		try {
 			statement = con.prepareStatement(
-					"UPDATE DichVu SET maDichVu = ?, tenDichVu = ?, soLuong = ?, donViTinh = ?, donGia = ?, trangThai = ?"
+					"UPDATE DichVu SET tenDichVu = ?, soLuong = ?, donViTinh = ?, donGia = ?, trangThai = ?"
 							+ " WHERE maDichVu = ?");
-			statement.setString(1, dichVu.getMaDichVu());
-			statement.setString(2, dichVu.getTenDichVu());
-			statement.setInt(3, dichVu.getSoLuong());
-			statement.setString(4, dichVu.getDonViTinh());
-			statement.setDouble(5, dichVu.getDonGia());
-			statement.setString(6, dichVu.getTrangThai());
+			statement.setString(1, dichVu.getTenDichVu());
+			statement.setInt(2, dichVu.getSoLuong());
+			statement.setString(3, dichVu.getDonViTinh());
+			statement.setDouble(4, dichVu.getDonGia());
+			statement.setString(5, dichVu.getTrangThai());
+			statement.setString(6, dichVu.getMaDichVu());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,22 +127,15 @@ public class DichVu_DAO {
 		}
 		return n > 0;
 	}
-	
+
 	public boolean xoaDichVu(DichVu dichVu) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement(
-					"DELETE FROM DichVu"
-							+ " WHERE maDichVu = ?");
+			statement = con.prepareStatement("DELETE FROM DichVu" + " WHERE maDichVu = ?");
 			statement.setString(1, dichVu.getMaDichVu());
-			statement.setString(2, dichVu.getTenDichVu());
-			statement.setInt(3, dichVu.getSoLuong());
-			statement.setString(4, dichVu.getDonViTinh());
-			statement.setDouble(5, dichVu.getDonGia());
-			statement.setString(6, dichVu.getTrangThai());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
