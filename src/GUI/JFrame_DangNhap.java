@@ -50,13 +50,13 @@ import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
-/**
- * Radius
- */
+
 public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListener {
 
-	private JPanel contentPane;
-
+	
+	/**
+	 * Radius
+	 */
 	public class RoundedTransparentBorder extends AbstractBorder {
 		private int cornerRadius;
 		private Color borderColor;
@@ -107,6 +107,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	/**
 	 * Color
 	 */
+	private JPanel contentPane;
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
