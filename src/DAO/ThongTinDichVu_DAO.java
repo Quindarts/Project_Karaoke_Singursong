@@ -52,7 +52,7 @@ public class ThongTinDichVu_DAO {
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
-			String sql = "SELECT * FROM ThongTinDichVu where maThongTinDichVu = ?";
+			String sql = "SELECT * FROM ThongTinDichVu WHERE maThongTinDichVu = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maTTDichVu);
 			ResultSet rs = statement.executeQuery();

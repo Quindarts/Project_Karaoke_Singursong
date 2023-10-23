@@ -122,7 +122,7 @@ public class PhieuDatPhong_DAO {
 		try {
 			statement = con.prepareStatement(
 					"UPDATE PhieuDatPhong SET  maPhong = ?, maNhanVien = ?, maKhachHang = ?, thoiGianDatPhong = ?, thoiGianNhanPhong = ?, tienCoc = ?, trangThai = ?, moTa = ?"
-							+ " WHERE maPhieuDat = ?");			
+							+ " WHERE maPhieuDat = ?");
 			statement.setString(1, phieuDatPhong.getPhong().getMaPhong());
 			statement.setString(2, phieuDatPhong.getNhanVien().getMaNhanVien());
 			statement.setString(3, phieuDatPhong.getKhachHang().getMaKhachHang());
@@ -145,7 +145,7 @@ public class PhieuDatPhong_DAO {
 		}
 		return n > 0;
 	}
-	
+
 	public boolean xoaPhieuDatPhong(PhieuDatPhong phieuDatPhong) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();

@@ -102,10 +102,9 @@ public class TaiKhoan_DAO {
 		Connection con = ConnectDB.getInstance().getConnection();
 		TaiKhoan taiKhoan = null;
 		try {
-			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET maNhanVien =? , maKhau = ? WHERE tenDangNhap = ?");
-			statement.setString(1, maNhanVien);
-			statement.setString(2, matKhau);
-			statement.setString(3, tenDangNhap);
+			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET  maKhau = ? WHERE tenDangNhap = ?");
+			statement.setString(1, matKhau);
+			statement.setString(2, tenDangNhap);
 
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {

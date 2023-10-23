@@ -150,7 +150,6 @@ public class NhanVien_DAO {
 			statement = con.prepareStatement(
 					"UPDATE NhanVien SET hoTen =?, gioiTinh=?, ngaySinh=?, soDienThoai=?, CCCD=?, diaChi=?, trangThai=?, anhThe=?"
 							+ " WHERE maNhanVien=?");
-
 			statement.setString(1, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
 			statement.setString(2, nhanVien.getHoTen());
 			statement.setBoolean(3, nhanVien.isGioiTinh());

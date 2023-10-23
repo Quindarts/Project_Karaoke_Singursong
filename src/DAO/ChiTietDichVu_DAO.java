@@ -107,7 +107,7 @@ public class ChiTietDichVu_DAO {
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
-			String sql = "SELECT * FROM ChiTietDichVu" + " where maHoaDon = ? and maDichVu = ?";
+			String sql = "SELECT * FROM ChiTietDichVu" + " WHERE maHoaDon = ? AND maDichVu = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maHD);
 			statement.setString(2, maDV);
