@@ -25,7 +25,9 @@ public class ChiTietHoaDon_DAO {
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
+			
 			String sql = "SELECT * FROM ChiTietHoaDon";
+			
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {

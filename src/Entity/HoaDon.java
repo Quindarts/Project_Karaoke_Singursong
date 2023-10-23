@@ -2,6 +2,11 @@ package Entity;
 
 import java.sql.Date;
 
+/**HoaDon
+ * trangThai:
+ * 
+ * 
+ */
 public class HoaDon {
 	private String maHoaDon;
 	private KhachHang khachHang;

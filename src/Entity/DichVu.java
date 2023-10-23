@@ -2,7 +2,13 @@ package Entity;
 
 import java.util.Objects;
 
+/**
+ * DichVu
+ * trangThai: conHang, hetHang
+ * 
+ */
 public class DichVu {
+	
 	private String maDichVu;
 	private String tenDichVu;
 	private int soLuong;

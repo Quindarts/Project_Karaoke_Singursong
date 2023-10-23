@@ -4,6 +4,7 @@ public class ChiTietHoaDon {
 	private HoaDon hoaDon;
 	private Phong phong;
 	private double soGioHat;
+	
 	public ChiTietHoaDon() {
 		super();
 		// TODO Auto-generated constructor stub

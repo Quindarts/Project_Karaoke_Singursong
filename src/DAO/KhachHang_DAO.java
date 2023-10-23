@@ -16,7 +16,8 @@ public class KhachHang_DAO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ArrayList<KhachHang> layTatCaDichVu() {
+	public ArrayList<KhachHang> layTatCaKhachHang() {
+		
 		ArrayList<KhachHang> danhSachKhachHang = new ArrayList<KhachHang>();
 		try {
 			ConnectDB.getInstance();
@@ -24,7 +25,9 @@ public class KhachHang_DAO {
 			String sql = "SELECT * FROM KhachHang";
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
+			
 			while (rs.next()) {
+				
 				String maKhachHang = rs.getString("maKhachHang");
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
@@ -36,6 +39,7 @@ public class KhachHang_DAO {
 				KhachHang khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai,
 						diemThuong, ghiChu);
 				danhSachKhachHang.add(khachHang);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -44,16 +48,20 @@ public class KhachHang_DAO {
 	}
 
 	public KhachHang layKhachHang_TheoMaKhachHang(String maKH) {
+		
 		KhachHang khachHang = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
+		
 		try {
+			
 			String sql = "SELECT * FROM DichVu WHERE maDichVu = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maKH);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
+				
 				String maKhachHang = rs.getString("maKhachHang");
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
@@ -64,15 +72,21 @@ public class KhachHang_DAO {
 				String ghiChu = rs.getString("ghiChu");
 				khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, diemThuong,
 						ghiChu);
+				
 			}
 		} catch (Exception e) {
+			
 			e.printStackTrace();
 
 		} finally {
 			try {
+				
 				statement.close();
+				
 			} catch (Exception e2) {
+				
 				e2.printStackTrace();
+				
 			}
 		}
 		return khachHang;

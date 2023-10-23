@@ -39,13 +39,16 @@ public class TaiKhoan {
 		// TODO Auto-generated constructor stub
 	}
 
-	public NhanVien getMaNhanVien() {
-		return nhanVien;
-	}
 
-	public void setMaNhanVien(NhanVien nhanVien) {
+
+	public NhanVien getNhanVien() {
+		return nhanVien;
+	}	
+
+	public void setNhanVien(NhanVien nhanVien) {
 		this.nhanVien = nhanVien;
 	}
+
 
 	public String gettenDangNhap() {
 		return tenDangNhap;

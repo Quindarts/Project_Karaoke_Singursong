@@ -29,6 +29,7 @@ public class HoaDon_DAO {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
+				
 				String maHoaDon = rs.getString("maHoaDon");
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
@@ -40,6 +41,7 @@ public class HoaDon_DAO {
 				HoaDon hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
 				danhSachHoaDon.add(hoaDon);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
