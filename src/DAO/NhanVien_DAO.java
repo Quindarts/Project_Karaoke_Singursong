@@ -82,8 +82,13 @@ public class NhanVien_DAO {
 				String diaChi = rs.getString("diaChi");
 				String trangThai = rs.getString("trangThai");
 				String anhThe = rs.getString("anhThe");
+<<<<<<< HEAD
 				nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai, CCCD, diaChi,
 						trangThai, anhThe);
+=======
+				 nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai,
+						SoDienThoai, diaChi, trangThai, anhThe);
+>>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

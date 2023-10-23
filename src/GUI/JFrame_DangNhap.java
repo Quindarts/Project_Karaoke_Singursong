@@ -50,6 +50,8 @@ import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
+
+
 /**
  * JFrame_DangNhap NguyenNga ThienTu
  */
@@ -109,6 +111,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	/**
 	 * Color
 	 */
+	
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
@@ -215,7 +218,11 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		contentPane.add(panelLogo);
 
 		// Import image logo
+<<<<<<< HEAD
 		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo/Logo_Blue.png"));
+=======
+		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo_Blue.png"));
+>>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
 		Image scaled_imageLogo = imageLogo.getImage().getScaledInstance(400, 450, Image.SCALE_SMOOTH);
 		imageLogo = new ImageIcon(scaled_imageLogo);
 
