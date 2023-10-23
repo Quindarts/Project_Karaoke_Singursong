@@ -20,6 +20,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
+import com.toedter.calendar.JDateChooser;
 
 public class Modal_ThemNhanVien extends JFrame {
 
@@ -163,6 +164,10 @@ public class Modal_ThemNhanVien extends JFrame {
 		lbl_NgaySinh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lbl_NgaySinh.setBounds(0, 0, 110, 25);
 		pnl_NgaySinh.add(lbl_NgaySinh);
+		
+		JDateChooser dateChooser = new JDateChooser();
+		dateChooser.setBounds(125, 0, 225, 25);
+		pnl_NgaySinh.add(dateChooser);
 		
 		JPanel pnl_GioiTinh = new JPanel();
 		pnl_GioiTinh.setBackground(Color.WHITE);
