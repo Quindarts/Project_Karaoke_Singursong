@@ -51,11 +51,15 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
 
+
+/**
+ * JFrame_DangNhap NguyenNga ThienTu
+ */
 public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListener {
 
-	
+	private JPanel contentPane;
 	/**
-	 * Radius
+	 * Rounded JPanel
 	 */
 	public class RoundedTransparentBorder extends AbstractBorder {
 		private int cornerRadius;
@@ -107,16 +111,15 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	/**
 	 * Color
 	 */
-	private JPanel contentPane;
+	
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
 	private String hexColor_Blue4 = "#DBE4EE";
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
-
 	/**
-	 * Field
+	 * Component
 	 */
 	private JTextField txtPassword;
 	private JTextField txtUsername;
@@ -128,26 +131,10 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	private TaiKhoan_DAO TK_DAO;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					FlatLightLaf.setup();
-					JFrame_DangNhap frame = new JFrame_DangNhap();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public JFrame_DangNhap() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 874, 560);
 		contentPane = new JPanel();
@@ -156,13 +143,9 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		contentPane.setBackground(Color.decode(hexColor_Blue1));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
 		setLocationRelativeTo(null);
 		setResizable(false);
-//		setUndecorated(true);
-//		panelLogin.setShape(new RoundRectangle2D.Double(0, 0, 500, 368, 30,30));
-//		p.getRootPane().setBorder(BorderFactory.createMatteBorder(3,3, 3, 3, Color.getColor("#333")));
-
+		
 		/**
 		 * Create JPanel for login (right).
 		 */
@@ -235,8 +218,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		contentPane.add(panelLogo);
 
 		// Import image logo
-		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo/Logo_Blue.png"));
-		// Đọc hình ảnh từ tệp và tạo một JLabel để hiển thị nó
+		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo_Blue.png"));
 		Image scaled_imageLogo = imageLogo.getImage().getScaledInstance(400, 450, Image.SCALE_SMOOTH);
 		imageLogo = new ImageIcon(scaled_imageLogo);
 
@@ -249,34 +231,52 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 
 	}
 
+	/**
+	 * Event Button 
+	 */
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
+
+		// SUBMIT
 		if (o.equals(btnLogin)) {
+
 			if (validateTaiKhoan()) {
+
 				String username = txtUsername.getText();
 				String password = txtPassword.getText();
+
 				TK_DAO = new TaiKhoan_DAO();
-				System.out.println(password);
-				taiKhoanDangNhap = TK_DAO.timKiemTaiKhoan(username, password);
 				NV_DAO = new NhanVien_DAO();
+
+				// Search TK in DB
+				taiKhoanDangNhap = TK_DAO.timKiemTaiKhoan(username, password);
+
 				NhanVien nhanVienDangNhap;
+
 				if (taiKhoanDangNhap == null) {
 					JOptionPane.showMessageDialog(null, "Tài Khoản không tồn tại !");
 				} else {
+
 					System.out.println(taiKhoanDangNhap.toString());
 					System.out.println("Đăng nhập thành công");
 					nhanVienDangNhap = NV_DAO.timNhanVienTheoMa(taiKhoanDangNhap.getMaNhanVien());
 					System.out.println(nhanVienDangNhap.toString());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
 					System.out.println("Đăng nhập vào màn hình" + role);
+
 				}
 			}
 		}
+
 	}
 
+	/**
+	 * @return validateTaiKhoan
+	 */
 	public boolean validateTaiKhoan() {
 		String tenDangNhap = txtUsername.getText();
 		String matKhau = txtPassword.getText();
+
 		// Kt tên
 		if (matKhau.length() == 0) {
 			JOptionPane.showMessageDialog(null, "Mật khẩu không để trống !");
@@ -284,6 +284,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 			txtPassword.selectAll();
 			return false;
 		}
+
 		// Kt SĐT
 		if (tenDangNhap.length() == 0) {
 			JOptionPane.showMessageDialog(null, "Số điện thoại không được để trống !");
@@ -318,4 +319,5 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		// TODO Auto-generated method stub
 		
 	}
+
 }

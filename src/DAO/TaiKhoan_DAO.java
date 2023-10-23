@@ -21,7 +21,11 @@ public class TaiKhoan_DAO {
 	 * @param matKhau
 	 * @return	boolean
 	 */
+	public TaiKhoan_DAO() {
+	}
+	
 	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau) {
+		System.out.println("Bat Dau");
 		Connection con =  ConnectDB.getInstance().getConnection();
 		try {
 			PreparedStatement statement = con.prepareStatement("insert into TaiKhoan values(?,?,?,?)");
@@ -52,7 +56,7 @@ public class TaiKhoan_DAO {
 			
 			ResultSet rs = statement.executeQuery();
 			rs.next();
-			tk = new TaiKhoan(rs.getString("maNhanVien"),rs.getString("matKhau"),rs.getString("tenDangNhap"),rs.getBoolean("trangThai"));
+			tk = new TaiKhoan(rs.getString("maNhanVien"),rs.getString("tenDangNhap"),rs.getString("matKhau"),rs.getBoolean("trangThai"));
 		} catch (SQLException e) {
 			return null;
 		}
