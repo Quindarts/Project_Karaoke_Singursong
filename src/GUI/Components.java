@@ -2,19 +2,15 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
-<<<<<<< HEAD
 import java.time.LocalDateTime;
-=======
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
 import java.util.ArrayList;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Entity.Phong;
 import Entity.TrangThaiPhong;
-
+	
 
 /**
  * DEMO Component
@@ -38,7 +34,6 @@ public class Components extends JFrame {
 		
 		// Demo card phong;
 		ArrayList<Phong> dsPhongDemo = new ArrayList<Phong>();
-<<<<<<< HEAD
 //		dsPhongDemo.add(new Phong("P101", "Phong Thường 1", new TrangThaiPhong("111", "Còn Trống"),
 //				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
 //		dsPhongDemo.add(new Phong("VIP102", "Phong VIP 1", new TrangThaiPhong("222", "Đang hát"),
@@ -49,28 +44,13 @@ public class Components extends JFrame {
 //				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
 //		dsPhongDemo.add(new Phong("P105", "Phong Thường 5", new TrangThaiPhong("444", "Dọn Dẹp"),
 //				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-=======
-		dsPhongDemo.add(new Phong("P101", "Phong Thường 1", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("VIP102", "Phong VIP 1", new TrangThaiPhong("222", "Đang hát"),
-				"Tầng 1,bên trái từ phải sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P103", "Phong Thường 3", new TrangThaiPhong("333", "Đặt trước"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P104", "Phong Thường 4", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P105", "Phong Thường 5", new TrangThaiPhong("444", "Dọn Dẹp"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
+
 
 		dsPhongDemo.forEach(ph -> {
 			CardPhong cardPhong = new CardPhong(ph);
 			add(cardPhong);
 		});
-<<<<<<< HEAD
 		System.out.println(LocalDateTime.now());
-=======
-		
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
 		setContentPane(contentPane);
 	}
 

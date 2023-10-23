@@ -22,17 +22,10 @@ public class TaiKhoan_DAO {
 	 */
 	public TaiKhoan_DAO() {
 	}
-<<<<<<< HEAD
 
 	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau) {
 		System.out.println("Bat Dau");
 		Connection con = ConnectDB.getInstance().getConnection();
-=======
-	
-	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau) {
-		System.out.println("Bat Dau");
-		Connection con =  ConnectDB.getInstance().getConnection();
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
 		try {
 			PreparedStatement statement = con.prepareStatement("insert into TaiKhoan values(?,?,?,?)");
 			statement.setString(1, maNhanVien);
@@ -62,7 +55,7 @@ public class TaiKhoan_DAO {
 			statement.setString(1, tenDangNhap);
 			statement.setString(2, matKhau);
 			ResultSet rs = statement.executeQuery();
-<<<<<<< HEAD
+
 			while (rs.next()) {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				tenDangNhap = rs.getString("tenDangNhap");
@@ -70,10 +63,7 @@ public class TaiKhoan_DAO {
 				Boolean trangThai = rs.getBoolean("trangThai");
 				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
 			}
-=======
-			rs.next();
-			tk = new TaiKhoan(rs.getString("maNhanVien"),rs.getString("tenDangNhap"),rs.getString("matKhau"),rs.getBoolean("trangThai"));
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
+
 		} catch (SQLException e) {
 			return null;
 		}
@@ -131,7 +121,7 @@ public class TaiKhoan_DAO {
 		}
 		return taiKhoan;
 	}
-	
+
 	public TaiKhoan capNhatTaiKhoan_TheoMaNhanVien(String tenDangNhap, String maNhanVien, String matKhau) {
 		Connection con = ConnectDB.getInstance().getConnection();
 		TaiKhoan taiKhoan = null;

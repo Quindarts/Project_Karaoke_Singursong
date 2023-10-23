@@ -218,11 +218,9 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		contentPane.add(panelLogo);
 
 		// Import image logo
-<<<<<<< HEAD
-		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo/Logo_Blue.png"));
-=======
+
 		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo_Blue.png"));
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
+
 		Image scaled_imageLogo = imageLogo.getImage().getScaledInstance(400, 450, Image.SCALE_SMOOTH);
 		imageLogo = new ImageIcon(scaled_imageLogo);
 
