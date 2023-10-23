@@ -140,11 +140,13 @@ public class Modal_ThemKhachHang extends JFrame {
 		panel_1.add(txtA__GhiChu);
 		
 				JRadioButton rdbt__nu = new JRadioButton("Nữ");
+				rdbt__nu.setBackground(Color.WHITE);
 				rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 				rdbt__nu.setBounds(290, 209, 70, 21);
 				panel_1.add(rdbt__nu);
 				btngr__gioiTinh.add(rdbt__nu);
 				JRadioButton rdbt__nam = new JRadioButton("Nam");
+				rdbt__nam.setBackground(Color.WHITE);
 				rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 				rdbt__nam.setBounds(172, 209, 78, 21);
 				panel_1.add(rdbt__nam);
