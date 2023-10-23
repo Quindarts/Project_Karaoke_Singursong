@@ -38,6 +38,7 @@ public class Modal_ThemKhachHang extends JFrame {
 	private ButtonGroup btngr__gioiTinh;
 	private JTextField txt__SDT;
 	private Object dateNgaySinh;
+	
     private final SimpleDateFormat ngaySinh = new SimpleDateFormat("yyyy-MM-dd");
 
 	public Modal_ThemKhachHang() {
