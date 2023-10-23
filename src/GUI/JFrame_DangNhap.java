@@ -50,6 +50,8 @@ import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
+
+
 /**
  * JFrame_DangNhap NguyenNga ThienTu
  */
@@ -109,6 +111,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	/**
 	 * Color
 	 */
+	
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
@@ -215,7 +218,9 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		contentPane.add(panelLogo);
 
 		// Import image logo
-		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo/Logo_Blue.png"));
+
+		ImageIcon imageLogo = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/Logo_Blue.png"));
+
 		Image scaled_imageLogo = imageLogo.getImage().getScaledInstance(400, 450, Image.SCALE_SMOOTH);
 		imageLogo = new ImageIcon(scaled_imageLogo);
 
@@ -256,7 +261,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 
 					System.out.println(taiKhoanDangNhap.toString());
 					System.out.println("Đăng nhập thành công");
-					nhanVienDangNhap = NV_DAO.timNhanVienTheoMa(taiKhoanDangNhap.getMaNhanVien());
+					nhanVienDangNhap = NV_DAO.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
 					System.out.println(nhanVienDangNhap.toString());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
 					System.out.println("Đăng nhập vào màn hình" + role);

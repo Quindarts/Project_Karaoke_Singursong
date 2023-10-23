@@ -27,6 +27,7 @@ public class main extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			private JFrame_DangNhap app;
+			private JFrame_ThuNgan thuNgan;
 
 			public void run() {
 				try {
@@ -47,7 +48,9 @@ public class main extends JFrame {
 					// DEMO component
 					Components component_app = new Components();
 					component_app.setVisible(true);
-
+					thuNgan = new JFrame_ThuNgan();
+					
+					thuNgan.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
