@@ -9,10 +9,7 @@ import java.util.ArrayList;
 import ConnectDB.ConnectDB;
 import Entity.ChiTietDichVu;
 import Entity.HoaDon;
-import Entity.LoaiNhanVien;
-import Entity.NhanVien;
 import Entity.DichVu;
-import Entity.TaiKhoan;
 
 public class ChiTietDichVu_DAO {
 
@@ -42,7 +39,6 @@ public class ChiTietDichVu_DAO {
 
 	public ChiTietDichVu timCTDichVu_TheoMaDichVu(String maDV) {
 		ChiTietDichVu ctDichVu = null;
-		NhanVien nv = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -72,7 +68,6 @@ public class ChiTietDichVu_DAO {
 
 	public ChiTietDichVu timCTDichVu_TheoMaHoaDon(String maHD) {
 		ChiTietDichVu ctDichVu = null;
-		NhanVien nv = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -102,12 +97,11 @@ public class ChiTietDichVu_DAO {
 
 	public ChiTietDichVu timCTDichVu_TheoMaHoaDon_MaDichVu(String maHD, String maDV) {
 		ChiTietDichVu ctDichVu = null;
-		NhanVien nv = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
-			String sql = "SELECT * FROM ChiTietDichVu" + " where maHoaDon = ? and maDichVu = ?";
+			String sql = "SELECT * FROM ChiTietDichVu" + " WHERE maHoaDon = ? AND maDichVu = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maHD);
 			statement.setString(2, maDV);
@@ -215,7 +209,6 @@ public class ChiTietDichVu_DAO {
 		try {
 			statement = con
 					.prepareStatement("UPDATE ChiTietDichVu SET  soLuong = ?" + " WHERE maHoaDon = ? and maDichVu = ?");
-
 			statement.setInt(1, ctDichVu.getSoLuong());
 			statement.setString(2, ctDichVu.getHoaDon().getMaHoaDon());
 			statement.setString(3, ctDichVu.getDichVu().getMaDichVu());

@@ -97,6 +97,43 @@ public class NhanVien_DAO {
 		}
 		return nhanVien;
 	}
+	
+	public NhanVien timNhanVien_TheoMaLoaiNhanVien(String maLoaiNV) {
+		NhanVien nhanVien = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM NhanVien WHERE maLoaiNhanVien = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maLoaiNV);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maNhanVien = rs.getString("maNhanVien");
+				LoaiNhanVien loaiNhanVien = new LoaiNhanVien(rs.getString("maLoaiNhanVien"));
+				java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+				String hoTen = rs.getString("hoTen");
+				Boolean gioiTinh = rs.getBoolean("gioiTinh");
+				String SoDienThoai = rs.getString("SoDienThoai");
+				String CCCD = rs.getString("CCCD");
+				String diaChi = rs.getString("diaChi");
+				String trangThai = rs.getString("trangThai");
+				String anhThe = rs.getString("anhThe");
+				nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, SoDienThoai, CCCD, diaChi,
+						trangThai, anhThe);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return nhanVien;
+	}
 
 	/**
 	 * TaoNhanVien
@@ -148,9 +185,8 @@ public class NhanVien_DAO {
 		int n = 0;
 		try {
 			statement = con.prepareStatement(
-					"UPDATE NhanVien SET hoTen =?, gioiTinh=?, ngaySinh=?, soDienThoai=?, CCCD=?, diaChi=?, trangThai=?, anhThe=?"
+					"UPDATE NhanVien SET maLoaiNhanVien = ?, hoTen =?, gioiTinh=?, ngaySinh=?, soDienThoai=?, CCCD=?, diaChi=?, trangThai=?, anhThe=?"
 							+ " WHERE maNhanVien=?");
-
 			statement.setString(1, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
 			statement.setString(2, nhanVien.getHoTen());
 			statement.setBoolean(3, nhanVien.isGioiTinh());
@@ -162,7 +198,6 @@ public class NhanVien_DAO {
 			statement.setString(9, nhanVien.getAnhThe());
 			statement.setString(10, nhanVien.getMaNhanVien());
 			n = statement.executeUpdate();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 

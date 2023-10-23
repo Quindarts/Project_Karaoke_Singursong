@@ -17,7 +17,6 @@ public class KhachHang_DAO {
 	}
 
 	public ArrayList<KhachHang> layTatCaKhachHang() {
-		
 		ArrayList<KhachHang> danhSachKhachHang = new ArrayList<KhachHang>();
 		try {
 			ConnectDB.getInstance();
@@ -55,8 +54,7 @@ public class KhachHang_DAO {
 		PreparedStatement statement = null;
 		
 		try {
-			
-			String sql = "SELECT * FROM DichVu WHERE maDichVu = ?";
+			String sql = "SELECT * FROM KhachHang WHERE maKhachHang = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maKH);
 			ResultSet rs = statement.executeQuery();
@@ -130,7 +128,6 @@ public class KhachHang_DAO {
 			statement = con.prepareStatement(
 					"UPDATE KhachHang SET hoTen = ?, gioiTinh = ?, ngaySinh = ?, diaChi = ?, soDienThoai = ?, diemThuong = ?, ghiChu = ?"
 							+ " WHERE maKhachHang = ?");
-			
 			statement.setString(1, khachHang.getHoTen());
 			statement.setBoolean(2, khachHang.isGioiTinh());
 			statement.setDate(3, khachHang.getNgaySinh());
@@ -152,16 +149,14 @@ public class KhachHang_DAO {
 		}
 		return n > 0;
 	}
-	
+
 	public boolean xoaKhachHang(KhachHang khachHang) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement(
-					"DELETE FROM KhachHang"
-							+ " WHERE maKhachHang = ?");
+			statement = con.prepareStatement("DELETE FROM KhachHang" + " WHERE maKhachHang = ?");
 			statement.setString(1, khachHang.getMaKhachHang());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
