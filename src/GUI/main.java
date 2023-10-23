@@ -31,16 +31,6 @@ public class main extends JFrame {
 
 			public void run() {
 				try {
-<<<<<<< HEAD
-					//Connect Database
-					try {
-						ConnectDB.getInstance().connect();
-						System.out.println("Connected!!!!");
-					}catch (SQLException e) {
-						e.printStackTrace();
-					}
-					
-=======
 					
 					//Connect Database
 					try {
@@ -50,25 +40,17 @@ public class main extends JFrame {
 						e.printStackTrace();
 					}
 					
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
 					// Setup my app
 					FlatLightLaf.setup();
 					app = new JFrame_DangNhap();
 					app.setVisible(true);
-<<<<<<< HEAD
 
 					// DEMO component
 					Components component_app = new Components();
 					component_app.setVisible(true);
-=======
 					thuNgan = new JFrame_ThuNgan();
+					
 					thuNgan.setVisible(true);
-
-					// DEMO component
-//					Components component_app = new Components();
-//					component_app.setVisible(true);
->>>>>>> 9ac1a29a9c58755f34f7f7c2a2297bbbb3854160
-
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
