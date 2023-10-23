@@ -94,6 +94,7 @@ public class CardPhong extends JPanel {
 		g.setColor(Color.white);
 		g.drawString(phong.getTrangThaiPhong().getTenTrangThai(), 10, getHeight() - 5);
 	}
+	
 
 	/**
 	 * @param Popup Menu

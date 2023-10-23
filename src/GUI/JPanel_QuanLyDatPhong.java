@@ -245,7 +245,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
 		lblNewLabel.setBackground(Color.WHITE);
 		lblNewLabel.setIcon(new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/img/karaoke.png")));
-		lblNewLabel.setBounds(10, 10, 143, 128);
+		lblNewLabel.setBounds(10, 10, 128, 78);
 		panel.add(lblNewLabel);
 		
 		panel_2 = new JPanel();

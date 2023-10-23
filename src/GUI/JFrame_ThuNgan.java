@@ -26,6 +26,10 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.JButton;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.ImageIcon;
 
 public class JFrame_ThuNgan extends JFrame {
 
@@ -50,6 +54,11 @@ public class JFrame_ThuNgan extends JFrame {
 	private JPanel panel_Function;
 	private JLabel lblMenu_QLKhachHang;
 	private JButton btnNewButton;
+	private JPanel panelMenu_QLKhachHang_1;
+	private JLabel lblMenu_PhieuDatPhong;
+	private JPanel panelMenu_QLKhachHang_2;
+	private JLabel lblMenu_PhieuDatPhong_1;
+	private JMenuItem mntmNewMenuItem_2;
 
 	/**
 	 * Rounded JPanel
@@ -183,6 +192,32 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_QLKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblMenu_QLKhachHang.setBounds(10, 10, 166, 20);
 		panelMenu_QLKhachHang.add(lblMenu_QLKhachHang);
+		
+		panelMenu_QLKhachHang_1 = new JPanel();
+		panelMenu_QLKhachHang_1.setLayout(null);
+		panelMenu_QLKhachHang_1.setBackground(new Color(5, 74, 145));
+		panelMenu_QLKhachHang_1.setBounds(2, 195, 192, 45);
+		panel_Menu.add(panelMenu_QLKhachHang_1);
+		
+		lblMenu_PhieuDatPhong = new JLabel("PHIẾU ĐẶT PHÒNG");
+		lblMenu_PhieuDatPhong.setHorizontalAlignment(SwingConstants.LEFT);
+		lblMenu_PhieuDatPhong.setForeground(Color.WHITE);
+		lblMenu_PhieuDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		lblMenu_PhieuDatPhong.setBounds(10, 10, 166, 20);
+		panelMenu_QLKhachHang_1.add(lblMenu_PhieuDatPhong);
+		
+		panelMenu_QLKhachHang_2 = new JPanel();
+		panelMenu_QLKhachHang_2.setLayout(null);
+		panelMenu_QLKhachHang_2.setBackground(new Color(5, 74, 145));
+		panelMenu_QLKhachHang_2.setBounds(2, 241, 192, 45);
+		panel_Menu.add(panelMenu_QLKhachHang_2);
+		
+		lblMenu_PhieuDatPhong_1 = new JLabel("HÓA ĐƠN");
+		lblMenu_PhieuDatPhong_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lblMenu_PhieuDatPhong_1.setForeground(Color.WHITE);
+		lblMenu_PhieuDatPhong_1.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		lblMenu_PhieuDatPhong_1.setBounds(10, 10, 166, 20);
+		panelMenu_QLKhachHang_2.add(lblMenu_PhieuDatPhong_1);
 	
 
 		panel_Function = new JPanel();
@@ -193,6 +228,31 @@ public class JFrame_ThuNgan extends JFrame {
 
 		panel_Function.add(Panel_QLDP);
 		panel_Function.add(Panel_QLKH);
+		
+		JMenuBar menuBar = new JMenuBar();
+		menuBar.setBorderPainted(false);
+		menuBar.setBackground(Color.decode(hexColor_Blue1));
+		menuBar.setBounds(1405, 10, 90, 45);
+		contentPane.add(menuBar);
+		
+		JMenu mnNewMenu = new JMenu("");
+		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.setBackground(Color.decode(hexColor_Blue1));
+		mnNewMenu.setIcon(new ImageIcon(JFrame_ThuNgan.class.getResource("/icon/user.png")));
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Tài khoản");
+		mntmNewMenuItem.setHorizontalAlignment(SwingConstants.LEFT);
+		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.add(mntmNewMenuItem);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Trợ giúp");
+		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		mntmNewMenuItem_2 = new JMenuItem("Đăng xuất");
+		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.add(mntmNewMenuItem_2);
 
 	}
 
