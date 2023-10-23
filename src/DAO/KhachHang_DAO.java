@@ -16,7 +16,7 @@ public class KhachHang_DAO {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ArrayList<KhachHang> layTatCaDichVu() {
+	public ArrayList<KhachHang> layTatCaKhachHang() {
 		ArrayList<KhachHang> danhSachKhachHang = new ArrayList<KhachHang>();
 		try {
 			ConnectDB.getInstance();

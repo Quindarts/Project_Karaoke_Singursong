@@ -80,7 +80,7 @@ public class TrangThaiPhong_DAO {
 		return n > 0;
 	}
 	
-	public boolean capNhatThaiPhong(TrangThaiPhong trangThaiPhong) {
+	public boolean capNhatTrangThaiPhong(TrangThaiPhong trangThaiPhong) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -103,7 +103,7 @@ public class TrangThaiPhong_DAO {
 		return n > 0;
 	}
 	
-	public boolean xoaDonThaiPhong(TrangThaiPhong trangThaiPhong) {
+	public boolean xoaTrangThaiPhong(TrangThaiPhong trangThaiPhong) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;

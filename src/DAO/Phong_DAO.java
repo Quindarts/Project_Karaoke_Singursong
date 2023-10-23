@@ -79,7 +79,77 @@ public class Phong_DAO {
 		}
 		return phong;
 	}
+	
+	public Phong timPhong_TheoMaLoaiPhong(String maLoaiPh) {
+		Phong phong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM Phong WHERE maLoaiPhong = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maLoaiPh);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String tenPhong = rs.getString("tenPhong");
+				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
+				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
+				String viTriPhong = rs.getString("viTriPhong");
+				String ghiChu = rs.getString("ghiChu");
+				String tinhTrangPhong = rs.getString("tinhTrangPhong");
+				phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
+						tinhTrangPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return phong;
+	}
+
+	public Phong timPhong_TheoMaTrangThai(String maTrThai) {
+		Phong phong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM Phong WHERE maTrangThai = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maTrThai);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String tenPhong = rs.getString("tenPhong");
+				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
+				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
+				String viTriPhong = rs.getString("viTriPhong");
+				String ghiChu = rs.getString("ghiChu");
+				String tinhTrangPhong = rs.getString("tinhTrangPhong");
+				phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
+						tinhTrangPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return phong;
+	}
+	
 	public boolean taoPhong(Phong phong) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();

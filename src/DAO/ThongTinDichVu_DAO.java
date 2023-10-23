@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.DichVu;
-import Entity.LoaiNhanVien;
-import Entity.NhanVien;
 import Entity.ThongTinDichVu;
 
 public class ThongTinDichVu_DAO {
@@ -55,6 +53,41 @@ public class ThongTinDichVu_DAO {
 			String sql = "SELECT * FROM ThongTinDichVu WHERE maThongTinDichVu = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maTTDichVu);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maThongTinDichVu = rs.getString("maThongTinDichVu");
+				DichVu dichVu = new DichVu(rs.getString("maDichVu"));
+				int soLuong = rs.getInt("soLuong");
+				int soLuongDaSuDung = rs.getInt("soLuongDaSuDung");
+				java.sql.Date ngayNhap = rs.getDate("ngayNhap");
+				java.sql.Date ngayHetHan = rs.getDate("ngayHetHan");
+				String moTa = rs.getString("moTa");
+				String hinhAnh = rs.getString("hinhAnh");
+				thongTinDichVu = new ThongTinDichVu(maThongTinDichVu, dichVu, soLuong, soLuongDaSuDung, ngayNhap,
+						ngayHetHan, moTa, hinhAnh);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return thongTinDichVu;
+	}
+	
+	public ThongTinDichVu timThongTinDichVu_TheoMaDichVu(String maDv) {
+		ThongTinDichVu thongTinDichVu = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM ThongTinDichVu WHERE maDichVu = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maDv);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maThongTinDichVu = rs.getString("maThongTinDichVu");

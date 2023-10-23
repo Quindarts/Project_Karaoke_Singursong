@@ -11,7 +11,6 @@ import Entity.PhieuDatPhong;
 import Entity.Phong;
 import Entity.NhanVien;
 import Entity.KhachHang;
-import Entity.LoaiPhong;
 
 public class PhieuDatPhong_DAO {
 
@@ -57,6 +56,114 @@ public class PhieuDatPhong_DAO {
 			String sql = "SELECT * FROM PhieuDatPhong WHERE maPhieuDat = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maPD);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
+				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return phieuDatPhong;
+	}
+
+	public PhieuDatPhong layPhieuDatPhong_TheoMaPhong(String maPh) {
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM PhieuDatPhong WHERE maPhong = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maPh);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
+				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return phieuDatPhong;
+	}
+
+	public PhieuDatPhong layPhieuDatPhong_TheoMaNhanVien(String maNV) {
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM PhieuDatPhong WHERE maNhanVien = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maNV);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
+				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return phieuDatPhong;
+	}
+
+	public PhieuDatPhong layPhieuDatPhong_TheoMaKhachHang(String maKH) {
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM PhieuDatPhong WHERE maKhachHang = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maKH);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maPhieuDat = rs.getString("maPhieuDat");

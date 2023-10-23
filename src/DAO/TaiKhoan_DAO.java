@@ -119,4 +119,25 @@ public class TaiKhoan_DAO {
 		}
 		return taiKhoan;
 	}
+	
+	public TaiKhoan capNhatTaiKhoan_TheoMaNhanVien(String tenDangNhap, String maNhanVien, String matKhau) {
+		Connection con = ConnectDB.getInstance().getConnection();
+		TaiKhoan taiKhoan = null;
+		try {
+			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET  maKhau = ? WHERE maNhanVien = ?");
+			statement.setString(1, matKhau);
+			statement.setString(2, maNhanVien);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				tenDangNhap = rs.getString("tenDangNhap");
+				matKhau = rs.getString("matKhau");
+				Boolean trangThai = rs.getBoolean("trangThai");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return taiKhoan;
+	}
 }

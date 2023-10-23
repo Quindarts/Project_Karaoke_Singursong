@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import ConnectDB.ConnectDB;
 import Entity.ChiTietHoaDon;
 import Entity.HoaDon;
-import Entity.LoaiNhanVien;
-import Entity.NhanVien;
 import Entity.Phong;
 
 public class ChiTietHoaDon_DAO {
@@ -153,7 +151,7 @@ public class ChiTietHoaDon_DAO {
 		return n > 0;
 	}
 
-	public boolean capNhatCTHoaDon(ChiTietHoaDon ctHoaDon) {
+	public boolean capNhatCTHoaDon_TheoMaHoaDon_MaPhong(ChiTietHoaDon ctHoaDon) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
