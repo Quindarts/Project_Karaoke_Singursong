@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.UIManager;
 import java.awt.Font;
 
-public class JFrame_ThemNhanVien extends JFrame {
+public class Modal_ThemNhanVien extends JFrame {
 
 	private JPanel contentPane;
 
@@ -20,7 +20,7 @@ public class JFrame_ThemNhanVien extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JFrame_ThemNhanVien frame = new JFrame_ThemNhanVien();
+					Modal_ThemNhanVien frame = new Modal_ThemNhanVien();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -32,7 +32,7 @@ public class JFrame_ThemNhanVien extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JFrame_ThemNhanVien() {
+	public Modal_ThemNhanVien() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 450);
 		contentPane = new JPanel();
