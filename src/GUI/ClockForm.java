@@ -11,6 +11,7 @@ import java.awt.Font;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.awt.Color;
+import java.awt.SystemColor;
 
 public class ClockForm extends JFrame {
 
@@ -22,25 +23,12 @@ public class ClockForm extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ClockForm frame = new ClockForm();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	/**
 	 * Create the frame.
 	 */
 	public ClockForm() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 486, 300);
+		setBounds(100, 100, 100, 100);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -48,17 +36,18 @@ public class ClockForm extends JFrame {
 		contentPane.setLayout(null);
 		
 		lblClock = new JLabel("00:00:00");
-		lblClock.setForeground(new Color(0, 0, 255));
-		lblClock.setFont(new Font("Tahoma", Font.PLAIN, 29));
+		lblClock.setBackground(new Color(255, 255, 255));
+		lblClock.setForeground(SystemColor.textHighlight);
+		lblClock.setFont(new Font("Segoe UI", Font.BOLD, 29));
 		lblClock.setHorizontalAlignment(SwingConstants.CENTER);
-		lblClock.setBounds(117, 92, 220, 45);
+		lblClock.setBounds(10, 91, 220, 79);
 		contentPane.add(lblClock);
 		
 		lblDay = new JLabel("00/00/0000");
-		lblDay.setForeground(new Color(0, 0, 255));
-		lblDay.setFont(new Font("Tahoma", Font.PLAIN, 29));
+		lblDay.setForeground(SystemColor.textInactiveText);
+		lblDay.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		lblDay.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDay.setBounds(117, 50, 220, 45);
+		lblDay.setBounds(10, 10, 159, 45);
 		contentPane.add(lblDay);
 		Clock();
 	}

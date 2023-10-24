@@ -54,16 +54,18 @@ public class Components extends JFrame implements ActionListener {
 			add(cardPhong);
 		});
 		System.out.println(LocalDateTime.now());
-		
-		//BTN Them Khach Hang
+
+		// BTN Them Khach Hang
 		btnThemKhachHang = new JButton("Them khach Hang");
 		btnThemPhong = new JButton("Them phong");
 		btnThemKhachHang.addActionListener((ActionListener) this);
 		btnThemPhong.addActionListener((ActionListener) this);
 		add(btnThemKhachHang);
 		add(btnThemPhong);
-		
-		
+
+		ClockForm clock = new ClockForm();
+		clock.setVisible(true);
+		add(clock);
 		setContentPane(contentPane);
 	}
 
@@ -73,11 +75,11 @@ public class Components extends JFrame implements ActionListener {
 		Object o = e.getSource();
 		if (o.equals(btnThemKhachHang)) {
 			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
-			modalTKH.setVisible(true);		
+			modalTKH.setVisible(true);
 		}
 		if (o.equals(btnThemPhong)) {
 			Modal_ThemPhong modalTP = new Modal_ThemPhong();
-			modalTP.setVisible(true);		
+			modalTP.setVisible(true);
 		}
 	}
 

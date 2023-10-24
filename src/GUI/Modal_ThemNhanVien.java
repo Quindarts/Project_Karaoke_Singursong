@@ -237,6 +237,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		pnl_ThongTin.add(pnl_GioiTinh);
 
 		btngr_GioiTinh = new ButtonGroup();
+		
+		
 		JLabel lbl_GioiTinh = new JLabel("Giới tính");
 		lbl_GioiTinh.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_GioiTinh.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -252,7 +254,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		rdbtn_Nu.setBackground(Color.WHITE);
 		rdbtn_Nu.setBounds(190, 0, 50, 25);
 		pnl_GioiTinh.add(rdbtn_Nu);
-
+		rdbtn_Nam.setActionCommand("Nam");
+		rdbtn_Nu.setActionCommand("Nu");
 		btngr_GioiTinh.add(rdbtn_Nu);
 		btngr_GioiTinh.add(rdbtn_Nam);
 //
@@ -354,7 +357,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 			String anhThe = "";
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
-			boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
+			boolean gioiTinh = btngr_GioiTinh.getSelection().equals("Nam");
 			String hoTen = txt_TenNhanVien.getText();
 			String maNhanVien = txt_MaNhanVien.getText();
 			Date ngaySinh = new Date((dateChooser).getDate().getTime());
