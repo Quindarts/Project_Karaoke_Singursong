@@ -16,6 +16,8 @@ public class ClockForm extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lblClock;
+	private JLabel lblDay;
+	private int hour, min,sec;
 
 	/**
 	 * Launch the application.
@@ -51,6 +53,13 @@ public class ClockForm extends JFrame {
 		lblClock.setHorizontalAlignment(SwingConstants.CENTER);
 		lblClock.setBounds(117, 92, 220, 45);
 		contentPane.add(lblClock);
+		
+		lblDay = new JLabel("00/00/0000");
+		lblDay.setForeground(new Color(0, 0, 255));
+		lblDay.setFont(new Font("Tahoma", Font.PLAIN, 29));
+		lblDay.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDay.setBounds(117, 50, 220, 45);
+		contentPane.add(lblDay);
 		Clock();
 	}
 	
@@ -59,10 +68,14 @@ public class ClockForm extends JFrame {
 			public void run() {
 				while(true) {
 					Calendar ca = new GregorianCalendar();
-					int hour = ca.get(Calendar.HOUR);
-					int min = ca.get(Calendar.MINUTE);
-					int sec = ca.get(Calendar.SECOND);
+					hour = ca.get(Calendar.HOUR);
+					min = ca.get(Calendar.MINUTE);
+					sec = ca.get(Calendar.SECOND);
 					int AM_PM = ca.get(Calendar.AM_PM);
+
+					int day = ca.get(Calendar.DAY_OF_MONTH);
+					int month = ca.get(Calendar.MONTH);
+					int year = ca.get(Calendar.YEAR);
 					
 					if(AM_PM == 1) {
 						hour = hour + 12;
@@ -70,6 +83,7 @@ public class ClockForm extends JFrame {
 							hour = 0;
 						}
 					}
+					lblDay.setText(day + "/" + month + "/" + year);
 					lblClock.setText(String.format("%02d", hour) + ":" + String.format("%02d", min) + ":" + String.format("%02d", sec)  );
 				}
 			}
