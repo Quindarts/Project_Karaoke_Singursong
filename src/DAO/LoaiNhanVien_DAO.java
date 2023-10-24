@@ -28,11 +28,14 @@ public class LoaiNhanVien_DAO {
 			String sql = "SELECT * FROM LoaiNhanVien";
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
+			
 			while (rs.next()) {
+				
 				String maLoaiNhanVien = rs.getString("maLoaiNhanVien");
 				String tenLoaiNhanVien = rs.getString("tenLoaiNhanVien");
 				LoaiNhanVien loaiNhanVien = new LoaiNhanVien(maLoaiNhanVien, tenLoaiNhanVien);
 				danhSachLoaiNhanVien.add(loaiNhanVien);
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

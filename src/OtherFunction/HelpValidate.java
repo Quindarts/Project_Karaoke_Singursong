@@ -43,4 +43,100 @@ public class HelpValidate {
 	private String regexNgayXuatHoaDon;
 	
 	private int regexTuoi = 18;
+
+	public String getRegexTenDangNhap() {
+		return regexTenDangNhap;
+	}
+
+	public void setRegexTenDangNhap(String regexTenDangNhap) {
+		this.regexTenDangNhap = regexTenDangNhap;
+	}
+
+	public String getRegexMatKhau() {
+		return regexMatKhau;
+	}
+
+	public void setRegexMatKhau(String regexMatKhau) {
+		this.regexMatKhau = regexMatKhau;
+	}
+
+	public String getRegexNgayTaoPhong() {
+		return regexNgayTaoPhong;
+	}
+
+	public void setRegexNgayTaoPhong(String regexNgayTaoPhong) {
+		this.regexNgayTaoPhong = regexNgayTaoPhong;
+	}
+
+	public String getRegexTien() {
+		return regexTien;
+	}
+
+	public void setRegexTien(String regexTien) {
+		this.regexTien = regexTien;
+	}
+
+	public String getRegexEmail() {
+		return regexEmail;
+	}
+
+	public void setRegexEmail(String regexEmail) {
+		this.regexEmail = regexEmail;
+	}
+
+	public String getRegexNgayNhapDichVu() {
+		return regexNgayNhapDichVu;
+	}
+
+	public void setRegexNgayNhapDichVu(String regexNgayNhapDichVu) {
+		this.regexNgayNhapDichVu = regexNgayNhapDichVu;
+	}
+
+	public String getRegexSoDienThoai() {
+		return regexSoDienThoai;
+	}
+
+	public void setRegexSoDienThoai(String regexSoDienThoai) {
+		this.regexSoDienThoai = regexSoDienThoai;
+	}
+
+	public String getRegexCCCD() {
+		return regexCCCD;
+	}
+
+	public void setRegexCCCD(String regexCCCD) {
+		this.regexCCCD = regexCCCD;
+	}
+
+	public String getRegexHoTen() {
+		return regexHoTen;
+	}
+
+	public void setRegexHoTen(String regexHoTen) {
+		this.regexHoTen = regexHoTen;
+	}
+
+	public String getRegexNgayLapHoaDon() {
+		return regexNgayLapHoaDon;
+	}
+
+	public void setRegexNgayLapHoaDon(String regexNgayLapHoaDon) {
+		this.regexNgayLapHoaDon = regexNgayLapHoaDon;
+	}
+
+	public String getRegexNgayXuatHoaDon() {
+		return regexNgayXuatHoaDon;
+	}
+
+	public void setRegexNgayXuatHoaDon(String regexNgayXuatHoaDon) {
+		this.regexNgayXuatHoaDon = regexNgayXuatHoaDon;
+	}
+
+	public int getRegexTuoi() {
+		return regexTuoi;
+	}
+
+	public void setRegexTuoi(int regexTuoi) {
+		this.regexTuoi = regexTuoi;
+	}
 }
