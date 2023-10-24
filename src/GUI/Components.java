@@ -2,25 +2,29 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import Entity.Phong;
 import Entity.TrangThaiPhong;
-	
 
 /**
  * DEMO Component
  * 
- * - CardPhong
- * - ModalChuyenPhong
+ * - CardPhong - ModalChuyenPhong
  */
-public class Components extends JFrame {
+public class Components extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
+	private JButton btnThemKhachHang;
+	private JButton btnThemPhong;
 
 	public Components() {
 		setTitle("Demo các component và chức năng tại đây");
@@ -31,7 +35,7 @@ public class Components extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		setBackground(Color.red);
-		
+
 		// Demo card phong;
 		ArrayList<Phong> dsPhongDemo = new ArrayList<Phong>();
 //		dsPhongDemo.add(new Phong("P101", "Phong Thường 1", new TrangThaiPhong("111", "Còn Trống"),
@@ -45,13 +49,36 @@ public class Components extends JFrame {
 //		dsPhongDemo.add(new Phong("P105", "Phong Thường 5", new TrangThaiPhong("444", "Dọn Dẹp"),
 //				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
 
-
 		dsPhongDemo.forEach(ph -> {
 			CardPhong cardPhong = new CardPhong(ph);
 			add(cardPhong);
 		});
 		System.out.println(LocalDateTime.now());
+		
+		//BTN Them Khach Hang
+		btnThemKhachHang = new JButton("Them khach Hang");
+		btnThemPhong = new JButton("Them phong");
+		btnThemKhachHang.addActionListener((ActionListener) this);
+		btnThemPhong.addActionListener((ActionListener) this);
+		add(btnThemKhachHang);
+		add(btnThemPhong);
+		
+		
 		setContentPane(contentPane);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object o = e.getSource();
+		if (o.equals(btnThemKhachHang)) {
+			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
+			modalTKH.setVisible(true);		
+		}
+		if (o.equals(btnThemPhong)) {
+			Modal_ThemPhong modalTP = new Modal_ThemPhong();
+			modalTP.setVisible(true);		
+		}
 	}
 
 }
