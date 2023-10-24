@@ -150,7 +150,7 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/trash.png")));
+		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		btnXoa.setBackground(Color.decode(hexColor_Red));

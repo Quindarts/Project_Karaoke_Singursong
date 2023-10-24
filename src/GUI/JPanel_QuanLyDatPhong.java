@@ -45,6 +45,7 @@ import javax.swing.JToolBar;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.ImageIcon;
+import java.awt.GridLayout;
 
 public class JPanel_QuanLyDatPhong extends JPanel {
 
@@ -76,7 +77,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JLabel lblGioNhanPhong;
 	private JLabel lblThucDon;
 	private JPanel panel_ThanhToan;
-	private JPanel panel;
 	private JPanel panel_2;
 	private JTable table;
 
@@ -141,8 +141,8 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 
 		panel_PDP = new JPanel();
 		panel_PDP.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
-		panel_PDP.setBackground(Color.decode(hexColor_Blue1));
-		panel_PDP.setBounds(862, 0, 434, 522);
+		panel_PDP.setBackground(Color.WHITE);
+		panel_PDP.setBounds(862, 0, 434, 585);
 		add(panel_PDP);
 		panel_PDP.setLayout(null);
 
@@ -202,21 +202,16 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		lblThucDon.setForeground(Color.decode(hexColor_Blue1));
 		lblThucDon.setHorizontalAlignment(SwingConstants.CENTER);
 		lblThucDon.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		lblThucDon.setBounds(10, 258, 408, 34);
+		lblThucDon.setBounds(10, 335, 408, 34);
 		panel_PDP.add(lblThucDon);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(8, 302, 418, 194);
+		scrollPane.setBounds(10, 380, 418, 194);
 		panel_PDP.add(scrollPane);
-		
+
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"STT", "T\u00EAn s\u1EA3n ph\u1EA9m", "S\u1ED1 l\u01B0\u1EE3ng", "\u0110\u01A1n gi\u00E1"
-			}
-		));
+		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "STT", "T\u00EAn s\u1EA3n ph\u1EA9m",
+				"S\u1ED1 l\u01B0\u1EE3ng", "\u0110\u01A1n gi\u00E1" }));
 		scrollPane.setViewportView(table);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
@@ -225,53 +220,53 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		tabbedPane.setBackground(Color.WHITE);
-		tabbedPane.putClientProperty("TabbedPane.selectedBackground", Color.white);
+		tabbedPane.putClientProperty("TabbedPane.showTabSeparators", true);
 		tabbedPane.setBounds(0, 0, 858, 672);
 		add(tabbedPane);
 
-		tabbedPane.putClientProperty("TabbedPane.selectedBackground", Color.white);
+
 		panel_PhongBan = new JPanel();
 		panel_PhongBan.setBackground(Color.WHITE);
 
-		tabbedPane.addTab("PHÒNG HÁT", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/door-open.png")), panel_PhongBan, null);
+		tabbedPane.addTab("PHÒNG HÁT", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/door-open.png")),
+				panel_PhongBan, null);
 		panel_PhongBan.setLayout(null);
-		
-		panel = new JPanel();
-		panel.setBounds(0, 80, 843, 552);
-		panel_PhongBan.add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
-		lblNewLabel.setBackground(Color.WHITE);
-		lblNewLabel.setIcon(new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/img/karaoke.png")));
-		lblNewLabel.setBounds(10, 10, 128, 78);
-		panel.add(lblNewLabel);
-		
+
 		panel_2 = new JPanel();
 		panel_2.setBounds(0, 10, 843, 60);
 		panel_PhongBan.add(panel_2);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(0, 81, 843, 524);
+		scrollPane_1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		panel_PhongBan.add(scrollPane_1);
+		
+		JPanel panel_Phong = new JPanel();
+		scrollPane_1.setViewportView(panel_Phong);
+		panel_Phong.setLayout(new GridLayout(0,5));
 
 		panel_ThucDon = new JPanel();
 
 		panel_ThucDon.setBackground(Color.white);
-		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")), panel_ThucDon, null);
-		
+		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")),
+				panel_ThucDon, null);
+
 		panel_ThucDon.setLayout(null);
 
 		panel_ThanhToan = new JPanel();
-		panel_ThanhToan.setBounds(862, 528, 434, 144);
+		panel_ThanhToan.setBounds(862, 590, 434, 82);
 		panel_ThanhToan.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_ThanhToan.setBackground(Color.decode(hexColor_Blue1));
 		add(panel_ThanhToan);
 		panel_ThanhToan.setLayout(null);
-		
+
 		JButton btnThanhToan = new JButton("THANH TOÁN");
 		btnThanhToan.setIcon(new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/usd-circle.png")));
 		btnThanhToan.setBackground(Color.decode(hexColor_Orange));
 		btnThanhToan.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnThanhToan.setForeground(Color.white);
-		btnThanhToan.setBounds(133, 99, 155, 35);
+		btnThanhToan.setBounds(132, 21, 155, 35);
 		panel_ThanhToan.add(btnThanhToan);
 
 	}
