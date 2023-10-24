@@ -137,7 +137,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		JTextArea txtA__GhiChu = new JTextArea();
 		txtA__GhiChu.setBounds(604, 161, 255, 72);
 		panel_1.add(txtA__GhiChu);
-<<<<<<< HEAD
 
 		JRadioButton rdbt__nu = new JRadioButton("Nữ");
 		rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -162,33 +161,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
-=======
-		
-				JRadioButton rdbt__nu = new JRadioButton("Nữ");
-				rdbt__nu.setBackground(Color.WHITE);
-				rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-				rdbt__nu.setBounds(290, 209, 70, 21);
-				panel_1.add(rdbt__nu);
-				btngr__gioiTinh.add(rdbt__nu);
-				JRadioButton rdbt__nam = new JRadioButton("Nam");
-				rdbt__nam.setBackground(Color.WHITE);
-				rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-				rdbt__nam.setBounds(172, 209, 78, 21);
-				panel_1.add(rdbt__nam);
-				
-						btngr__gioiTinh.add(rdbt__nam);
-						
-								JLabel lbl__tieuDe = new JLabel("Thêm Khách Hàng Mới");
-								lbl__tieuDe.setBounds(43, 10, 849, 39);
-								panel_1.add(lbl__tieuDe);
-								lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 16));
-								
-								JDateChooser dateChooser = new JDateChooser();
-								dateChooser.setBounds(172, 159, 255, 25);
-								panel_1.add(dateChooser);
->>>>>>> 17bff3b9a59d100ad7428089c580d19792b1b5eb
 	}
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
