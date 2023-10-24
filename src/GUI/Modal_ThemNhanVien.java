@@ -266,7 +266,6 @@ public class Modal_ThemNhanVien extends JFrame {
 		txt_CCCD.setBounds(125, 0, 225, 25);
 		pnl_CCCD.add(txt_CCCD);
 
-		pnl_Title.add(lbl_Title);
 		
 		JPanel panel = new JPanel();
 		panel.setBounds(50, 70, 179, 234);

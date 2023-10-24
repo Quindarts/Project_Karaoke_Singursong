@@ -78,7 +78,7 @@ public class Modal_ThemDichVu extends JFrame {
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
-		pnl_ThongTin.setBounds(80, 102, 765, 150);
+		pnl_ThongTin.setBounds(149, 100, 765, 150);
 		contentPane.add(pnl_ThongTin);
 		pnl_ThongTin.setLayout(null);
 
