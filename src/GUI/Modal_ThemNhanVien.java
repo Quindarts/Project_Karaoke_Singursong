@@ -19,6 +19,7 @@ import java.awt.Font;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -61,6 +62,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private JDateChooser dateChooser;
 
 	private JComboBox<String> comboBox_TrangThai;
+
+	private JLabel img_show_panel;
 
 	/**
 	 * Launch the application.
@@ -122,19 +125,33 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		pnl_Anh.setBounds(26, 70, 179, 234);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
+		
+		
+		///
+		UploadImg appUpload = new UploadImg();
+		img_show_panel = new JLabel();
+		img_show_panel.setBounds(10, 10, 253, 246);
+		img_show_panel.setBorder(BorderFactory.createLineBorder(Color.black));
 
-		JPanel Anh = new JPanel();
-		Anh.setBackground(new Color(192, 192, 192));
-		Anh.setBounds(0, 0, 179, 192);
-		pnl_Anh.add(Anh);
+	
+		pnl_Anh.add(img_show_panel);
 
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
 		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btn_ChonAnh.setForeground(new Color(255, 255, 255));
+		
+		
 		btn_ChonAnh.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
+
+				img_show_panel.setIcon(appUpload.ResizeImage(appUpload.chooseFileEvent("image")));
 			}
 		});
+		
+		
+		
+		
 		btn_ChonAnh.setBackground(new Color(0, 128, 255));
 		btn_ChonAnh.setBounds(0, 202, 179, 32);
 		pnl_Anh.add(btn_ChonAnh);

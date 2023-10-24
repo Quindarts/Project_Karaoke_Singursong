@@ -23,41 +23,41 @@ public class UploadImg extends JFrame {
 	JLabel img_show_panel;
 
 	public UploadImg() {
-		super("Demo Chức năng tải ảnh lên");
-		button = new JButton("Chọn tệp ảnh để tải lên");
-		button.putClientProperty( "JButton.buttonType", "roundRect" );
-		button.setBounds(10, 266, 253, 40);
-
-		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 253, 246);
-		img_show_panel.setBorder(BorderFactory.createLineBorder(Color.black));
-
-		getContentPane().add(button);
-		getContentPane().add(img_show_panel);
-
-		button.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-
-				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-			}
-		});
-
-		getContentPane().setLayout(null);
-
-		JButton btnNewButton = new JButton("Đọc file Excel test ở folder Demo file Employee Write");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				readerXLSXFile(chooseFileEvent("excel"));
-			}
-		});		
-		
-		btnNewButton.setBounds(284, 50, 400, 21);
-		getContentPane().add(btnNewButton);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setLocationRelativeTo(null);
-		setSize(700, 400);
-		setVisible(true);
+//		super("Demo Chức năng tải ảnh lên");
+//		button = new JButton("Chọn tệp ảnh để tải lên");
+//		button.putClientProperty( "JButton.buttonType", "roundRect" );
+//		button.setBounds(10, 266, 253, 40);
+//
+//		img_show_panel = new JLabel();
+//		img_show_panel.setBounds(10, 10, 253, 246);
+//		img_show_panel.setBorder(BorderFactory.createLineBorder(Color.black));
+//
+//		getContentPane().add(button);
+//		getContentPane().add(img_show_panel);
+//
+//		button.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//
+//				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+//			}
+//		});
+//
+//		getContentPane().setLayout(null);
+//
+//		JButton btnNewButton = new JButton("Đọc file Excel test ở folder Demo file Employee Write");
+//		btnNewButton.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				readerXLSXFile(chooseFileEvent("excel"));
+//			}
+//		});		
+//		
+//		btnNewButton.setBounds(284, 50, 400, 21);
+//		getContentPane().add(btnNewButton);
+//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//		setLocationRelativeTo(null);
+//		setSize(700, 400);
+//		setVisible(true);
 	}
 
 	public ImageIcon ResizeImage(String ImagePath) {
