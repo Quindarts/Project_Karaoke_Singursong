@@ -66,7 +66,7 @@ public class ClockForm extends JFrame {
 					
 					if(AM_PM == 1) {
 						hour = hour + 12;
-						if(hour == 12) {
+						if(hour == 24) {
 							hour = 0;
 						}
 					}
