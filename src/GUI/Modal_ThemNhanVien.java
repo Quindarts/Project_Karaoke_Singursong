@@ -6,6 +6,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+
 import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.JLabel;
@@ -20,21 +21,27 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.UIManager;
+import java.awt.Font;
 
 public class Modal_ThemNhanVien extends JFrame {
 
 	private JPanel contentPane;
+
 	private JTextField txt_MaNhanVien;
 	private JTextField txt_TenNhanVien;
 	private JTextField txt_SoDienThoai;
 	private JTextField txt_DiaChi;
 	private JTextField txt_CCCD;
 
+
 	/**
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
+
 			private Modal_ThemNhanVien app;
 			public void run() {
 				try {
@@ -42,6 +49,7 @@ public class Modal_ThemNhanVien extends JFrame {
 					FlatLightLaf.setup();
 					app = new Modal_ThemNhanVien();
 					app.setVisible(true);
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -56,21 +64,26 @@ public class Modal_ThemNhanVien extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 450);
 		contentPane = new JPanel();
+
 		contentPane.setBackground(Color.WHITE);
+
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+
 		JPanel pnl_TieuDe = new JPanel();
 		pnl_TieuDe.setBackground(Color.WHITE);
 		pnl_TieuDe.setBounds(26, 25, 237, 35);
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
+
 		
 		JLabel lbl_Title = new JLabel("Thêm nhân viên mới");
 		lbl_Title.setBounds(0, 10, 237, 20);
 		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
 		pnl_TieuDe.add(lbl_Title);
 		
 		JPanel pnl_Anh = new JPanel();
@@ -252,5 +265,11 @@ public class Modal_ThemNhanVien extends JFrame {
 		txt_CCCD.setColumns(10);
 		txt_CCCD.setBounds(125, 0, 225, 25);
 		pnl_CCCD.add(txt_CCCD);
+
+		
+		JPanel panel = new JPanel();
+		panel.setBounds(50, 70, 179, 234);
+		contentPane.add(panel);
+
 	}
 }
