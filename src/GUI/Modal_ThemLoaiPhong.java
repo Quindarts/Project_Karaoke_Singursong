@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
@@ -19,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 
 public class Modal_ThemLoaiPhong extends JFrame {
@@ -27,8 +29,8 @@ public class Modal_ThemLoaiPhong extends JFrame {
 	private JTextField txt_MaLoaiPhong;
 	private JTextField txt_TenLoaiPhong;
 	private JTextField txt_SoLuongKhachToiDa;
-	private JTextField txt_MoTa;
 	private JTextField txt_GiaTien;
+	private JTextArea txtA_Mota;
 
 	/**
 	 * Launch the application.
@@ -156,21 +158,29 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		pnl_SoLuongKhachToiDa.add(txt_SoLuongKhachToiDa);
 
 		JPanel pnl_MoTa = new JPanel();
-		pnl_MoTa.setBackground(Color.WHITE);
-		pnl_MoTa.setLayout(null);
-		pnl_MoTa.setBounds(405, 50, 350, 25);
+		pnl_MoTa.setBackground(new Color(255, 255, 255));
+		pnl_MoTa.setBounds(405, 50, 350, 70);
 		pnl_ThongTin.add(pnl_MoTa);
+		pnl_MoTa.setLayout(null);
 
+		
 		JLabel lbl_MoTa = new JLabel("Mô tả");
 		lbl_MoTa.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_MoTa.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_MoTa.setBounds(0, 0, 110, 25);
+		lbl_MoTa.setBounds(0, 0, 143, 25);
 		pnl_MoTa.add(lbl_MoTa);
+		
+		JPanel pnl_txtA_MoTa = new JPanel();
+		pnl_txtA_MoTa.setBounds(90, 0, 260, 70);
+		pnl_MoTa.add(pnl_txtA_MoTa);
+		pnl_txtA_MoTa.setLayout(null);
+		pnl_txtA_MoTa.setBackground(Color.WHITE);
+		
+		JTextArea txtA_MoTa = new JTextArea();
+		txtA_MoTa.setBounds(2, 2, 255, 65);
+		pnl_txtA_MoTa.add(txtA_MoTa);
+		pnl_txtA_MoTa.setBorder(new LineBorder(new Color(192, 192, 192)));
 
-		txt_MoTa = new JTextField();
-		txt_MoTa.setColumns(10);
-		txt_MoTa.setBounds(125, 0, 225, 25);
-		pnl_MoTa.add(txt_MoTa);
 
 		JPanel pnl_GiaTien = new JPanel();
 		pnl_GiaTien.setLayout(null);
@@ -190,21 +200,21 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		pnl_GiaTien.add(txt_GiaTien);
 
 		JButton btn_Luu = new JButton("Lưu");
+		btn_Luu.setBounds(562, 204, 90, 30);
+		pnl_ThongTin.add(btn_Luu);
 		btn_Luu.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		
+				JButton btn_BoQua = new JButton("Bỏ qua");
+				btn_BoQua.setBounds(665, 204, 90, 30);
+				pnl_ThongTin.add(btn_BoQua);
+				btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
+				btn_BoQua.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+					}
+				});
 		btn_Luu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btn_Luu.setBounds(733, 351, 90, 30);
-		contentPane.add(btn_Luu);
-
-		JButton btn_BoQua = new JButton("Bỏ qua");
-		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_BoQua.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btn_BoQua.setBounds(836, 351, 90, 30);
-		contentPane.add(btn_BoQua);
 	}
 }
