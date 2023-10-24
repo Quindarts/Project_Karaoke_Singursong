@@ -265,7 +265,6 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 					System.out.println(nhanVienDangNhap.toString());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
 					System.out.println("Đăng nhập vào màn hình" + role);
-
 				}
 			}
 		}
