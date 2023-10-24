@@ -6,15 +6,27 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import DAO.LoaiPhong_DAO;
+import Entity.LoaiPhong;
+import OtherFunction.HelpValidate;
+
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Color;
+import java.awt.Component;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -22,8 +34,10 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 
 public class Modal_ThemLoaiPhong extends JFrame {
+
 
 	private JPanel contentPane;
 	private JTextField txt_MaLoaiPhong;
@@ -31,7 +45,10 @@ public class Modal_ThemLoaiPhong extends JFrame {
 	private JTextField txt_SoLuongKhachToiDa;
 	private JTextField txt_GiaTien;
 	private JTextArea txtA_Mota;
-
+	private JLabel img_show_panel;
+	private String pathImg ="";
+	private LoaiPhong_DAO DAO_LP;
+	private HelpValidate valiDate;
 	/**
 	 * Launch the application.
 	 */
@@ -83,17 +100,36 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
-		JPanel Anh = new JPanel();
-		Anh.setBackground(new Color(192, 192, 192));
-		Anh.setBounds(0, 0, 179, 192);
-		pnl_Anh.add(Anh);
-
+		
+		
+		img_show_panel = new JLabel();
+		img_show_panel.setBounds(10, 10, 179, 192);
+		pnl_Anh.add(img_show_panel);
+		
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
 		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btn_ChonAnh.setForeground(new Color(255, 255, 255));
+	
 		btn_ChonAnh.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
+
+				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+				
 			}
+
+			public ImageIcon ResizeImage(String ImagePath) {
+
+				ImageIcon MyImage = new ImageIcon(ImagePath);
+				Image img = MyImage.getImage();
+				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
+						Image.SCALE_SMOOTH);
+				ImageIcon image = new ImageIcon(newImg);
+				return image;
+
+			}
+			
+
 		});
 		btn_ChonAnh.setBackground(new Color(0, 128, 255));
 		btn_ChonAnh.setBounds(0, 202, 179, 32);
@@ -163,24 +199,22 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		pnl_ThongTin.add(pnl_MoTa);
 		pnl_MoTa.setLayout(null);
 
-		
 		JLabel lbl_MoTa = new JLabel("Mô tả");
 		lbl_MoTa.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_MoTa.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lbl_MoTa.setBounds(0, 0, 143, 25);
 		pnl_MoTa.add(lbl_MoTa);
-		
+
 		JPanel pnl_txtA_MoTa = new JPanel();
 		pnl_txtA_MoTa.setBounds(90, 0, 260, 70);
 		pnl_MoTa.add(pnl_txtA_MoTa);
 		pnl_txtA_MoTa.setLayout(null);
 		pnl_txtA_MoTa.setBackground(Color.WHITE);
-		
+
 		JTextArea txtA_MoTa = new JTextArea();
 		txtA_MoTa.setBounds(2, 2, 255, 65);
 		pnl_txtA_MoTa.add(txtA_MoTa);
 		pnl_txtA_MoTa.setBorder(new LineBorder(new Color(192, 192, 192)));
-
 
 		JPanel pnl_GiaTien = new JPanel();
 		pnl_GiaTien.setLayout(null);
@@ -203,18 +237,70 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		btn_Luu.setBounds(562, 204, 90, 30);
 		pnl_ThongTin.add(btn_Luu);
 		btn_Luu.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		
-				JButton btn_BoQua = new JButton("Bỏ qua");
-				btn_BoQua.setBounds(665, 204, 90, 30);
-				pnl_ThongTin.add(btn_BoQua);
-				btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
-				btn_BoQua.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-					}
-				});
-		btn_Luu.addActionListener(new ActionListener() {
+
+		JButton btn_BoQua = new JButton("Bỏ qua");
+		btn_BoQua.setBounds(665, 204, 90, 30);
+		pnl_ThongTin.add(btn_BoQua);
+		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				dispose(); // Dựa vào Frame chứ nó nó để fix
+//				TrangChu tc = new TrangChu();
+//				tc.setVisible(true);
+//				setVisible(false);
 			}
 		});
+
+		btn_Luu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String maLoaiPhong = txt_MaLoaiPhong.getText();
+				String tenLoaiPong = txt_TenLoaiPhong.getText();
+				int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
+				String hinhAnh = img_show_panel.getText();
+				double giaTien = Double.parseDouble(txt_GiaTien.getText());
+				String moTa = txtA_MoTa.getText();
+				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhAnh, moTa);
+				try {
+					DAO_LP.taoLoaiPhong(loaiPhong);
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Trùng mã");
+				}
+				System.out.println(loaiPhong);
+			}
+		});
+	}
+	public String chooseFileEvent(String typeFile) {
+		JFileChooser file = new JFileChooser();
+		String path = "";
+		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
+				"xls");
+		FileNameExtensionFilter filterExcel = new FileNameExtensionFilter("xlsx", "xls");
+
+		// Doc path image
+		if (typeFile.equals("image")) {
+			file.addChoosableFileFilter(filterImage);
+		}
+		// Doc path excel
+		else if (typeFile.equals("excel")) {
+			file.addChoosableFileFilter(filterExcel);
+		}
+
+		int result = file.showSaveDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+
+			File selectedFile = file.getSelectedFile();
+			path = selectedFile.getAbsolutePath();
+			pathImg += path;
+			return path;
+		}
+
+		else if (result == JFileChooser.CANCEL_OPTION) {
+			System.out.println("Không tìm thấy file tải lên");
+			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
+		}
+		return path;
 	}
 }
