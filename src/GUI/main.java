@@ -25,6 +25,7 @@ import OtherFunction.HelpXLSX;
 public class main extends JFrame {
 	
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			private JFrame_DangNhap app;
 			private JFrame_ThuNgan thuNgan;
