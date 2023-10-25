@@ -159,10 +159,9 @@ public class Modal_ThemPhong extends JFrame {
 				
 				try {
 					DAO_P.taoPhong(phong);
-					dispose();
 					
 				} catch (Exception e2) {
-//					JOptionPane.showMessageDialog(null, "Trùng mã");
+					JOptionPane.showMessageDialog(null, "Không thể tạo phòng mới");
 				}
 
 			}
