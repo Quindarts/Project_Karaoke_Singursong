@@ -15,7 +15,6 @@ public class Phong {
 	private LoaiPhong loaiPhong;
 	private TrangThaiPhong trangThaiPhong;
 	private Date ngayTaoPhong;
-
 	private String viTriPhong;
 	private String ghiChu;
 	private String tinhTrangPhong;

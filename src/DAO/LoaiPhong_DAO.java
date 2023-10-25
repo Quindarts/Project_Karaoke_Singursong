@@ -27,7 +27,7 @@ public class LoaiPhong_DAO {
 			while (rs.next()) {
 				String maLoaiPhong = rs.getString("maLoaiPhong");
 				String tenLoaiPhong = rs.getString("tenLoaiPhong");
-				int soLuongToiDa = rs.getInt("soLuongToiDa");
+				int soLuongToiDa = rs.getInt("soLuongKhachToiDa");
 				Double giaTien = rs.getDouble("giaTien");
 				String hinhAnh = rs.getString("hinhAnh");
 				String moTa = rs.getString("moTa");
