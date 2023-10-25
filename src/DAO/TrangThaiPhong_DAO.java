@@ -42,7 +42,7 @@ public class TrangThaiPhong_DAO {
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
-			String sql = "SELECT * FROM TrangThaiPhong WHERE maTrangThaiPhong = ?";
+			String sql = "SELECT * FROM TrangThaiPhong WHERE maTrangThai = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maTrThai);
 			ResultSet rs = statement.executeQuery();

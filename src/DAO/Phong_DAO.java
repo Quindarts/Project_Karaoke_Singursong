@@ -27,9 +27,12 @@ public class Phong_DAO {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
+				
 				String maPhong = rs.getString("maPhong");
 				String tenPhong = rs.getString("tenPhong");
 				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				
+				
 				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
 				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
 				String viTriPhong = rs.getString("viTriPhong");
@@ -37,6 +40,7 @@ public class Phong_DAO {
 				String tinhTrangPhong = rs.getString("tinhTrangPhong");
 				Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
 						tinhTrangPhong);
+				
 				danhSachPhong.add(phong);
 			}
 		} catch (Exception e) {
