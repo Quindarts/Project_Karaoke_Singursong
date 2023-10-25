@@ -27,8 +27,13 @@ import Entity.Phong;
 public class CardPhong extends JPanel {
 	
 	private Phong phong;
-	private int width = 100;
-	private int height = 100;
+	private int width = 157;
+	private int height = 157;
+	
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
 	
 	/**
 	 * @param phong
@@ -36,12 +41,12 @@ public class CardPhong extends JPanel {
 	public CardPhong(Phong phong) {
 		this.phong = phong;
 		setPreferredSize(new Dimension(width, height));
-		setBackground(Color.white);
+//		setBackground(Color.yellow);
 
 		/**
 		 * tenPhong
 		 */
-		setBackground(Color.white);
+		setBackground(Color.decode(hexColor_Blue4));
 		setLayout(new BorderLayout());
 		
 	        JLabel nameLabel = new JLabel(phong.getTenPhong());
@@ -58,6 +63,16 @@ public class CardPhong extends JPanel {
 				}
 			}
 		});
+	}
+
+	/**
+	 * @wbp.parser.constructor
+	 */
+	public CardPhong(Phong phong, int width, int height) {
+		super();
+		this.phong = phong;
+		this.width = width;
+		this.height = height;
 	}
 
 	/**
@@ -94,6 +109,7 @@ public class CardPhong extends JPanel {
 		g.setColor(Color.white);
 		g.drawString(phong.getTrangThaiPhong().getTenTrangThai(), 10, getHeight() - 5);
 	}
+	
 
 	/**
 	 * @param Popup Menu

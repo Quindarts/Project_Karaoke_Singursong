@@ -43,16 +43,16 @@ public class main extends JFrame {
 					
 					// Setup my app
 					FlatLightLaf.setup();
-					app = new JFrame_DangNhap();
-					app.setVisible(true);
-					UploadImg img = new UploadImg();
-					img.setVisible(true);
+
+//					app = new JFrame_DangNhap();
+//					app.setVisible(true);
+
 
 					// DEMO component
-					Components component_app = new Components();
-					component_app.setVisible(true);
-					thuNgan = new JFrame_ThuNgan();
+//					Components component_app = new Components();
+//					component_app.setVisible(true);
 					
+					thuNgan = new JFrame_ThuNgan();
 					thuNgan.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
