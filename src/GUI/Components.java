@@ -65,17 +65,12 @@ public class Components extends JFrame implements ActionListener {
 		btnPhieuDatPhong.addActionListener((ActionListener) this);
 		add(btnThemKhachHang);
 		add(btnThemPhong);
-<<<<<<< HEAD
+
 		add(btnPhieuDatPhong);
 		
 		
-		
-=======
 
-		ClockForm clock = new ClockForm();
-		clock.setVisible(true);
-		add(clock);
->>>>>>> 0a1f28e90c48c8727a8eeeafa6208f5fe21d7f93
+
 		setContentPane(contentPane);
 	}
 
