@@ -8,8 +8,13 @@ import javax.swing.border.EmptyBorder;
 
 import com.toedter.calendar.JDateChooser;
 
+import DAO.KhachHang_DAO;
+import Entity.KhachHang;
+import OtherFunction.HelpValidate;
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.Box;
@@ -40,13 +45,20 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private final SimpleDateFormat ngaySinh = new SimpleDateFormat("yyyy-MM-dd");
 	private JButton btn__exit;
 	private JButton btn__Save;
+	private JTextArea txtA__GhiChu;
+	private JDateChooser dateChooser;
+
+	private HelpValidate help;
+	private KhachHang_DAO DAO_KH;
 
 	public Modal_ThemKhachHang() {
+
+		DAO_KH = new KhachHang_DAO();
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 950, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -90,11 +102,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		panel_1.add(lbl__MaKH);
 
 		txt__SDT = new JTextField();
-		txt__SDT.setBounds(604, 116, 255, 25);
+		txt__SDT.setBounds(604, 71, 255, 25);
 		panel_1.add(txt__SDT);
 
 		txt__DiaChi = new JTextField();
-		txt__DiaChi.setBounds(604, 70, 255, 25);
+		txt__DiaChi.setBounds(604, 116, 255, 25);
 		panel_1.add(txt__DiaChi);
 		txt__DiaChi.setColumns(10);
 
@@ -134,7 +146,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		Box horizontalBox_6 = Box.createHorizontalBox();
 		verticalBox_1.add(horizontalBox_6);
 
-		JTextArea txtA__GhiChu = new JTextArea();
+		txtA__GhiChu = new JTextArea();
 		txtA__GhiChu.setBounds(604, 161, 255, 72);
 		panel_1.add(txtA__GhiChu);
 
@@ -144,37 +156,69 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		panel_1.add(rdbt__nu);
 		btngr__gioiTinh.add(rdbt__nu);
 		JRadioButton rdbt__nam = new JRadioButton("Nam");
+
 		rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		rdbt__nam.setBounds(172, 209, 78, 21);
 		panel_1.add(rdbt__nam);
 
 		btngr__gioiTinh.add(rdbt__nam);
 
+		rdbt__nam.setActionCommand("Nam");
+		rdbt__nu.setActionCommand("Nu");
+
 		JLabel lbl__tieuDe = new JLabel("Thêm Khách Hàng Mới");
 		lbl__tieuDe.setBounds(43, 10, 849, 39);
 		panel_1.add(lbl__tieuDe);
 		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 16));
 
-		JDateChooser dateChooser = new JDateChooser();
+		dateChooser = new JDateChooser();
 		dateChooser.setBounds(172, 159, 255, 25);
 		panel_1.add(dateChooser);
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
 	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+
 		Object o = e.getSource();
+
 		if (o.equals(btn__Save)) {
+
 			String maKhachHang = txt__MaKH.getText();
 			String tenKhachHang = txt__TenKH.getText();
 			String diaChi = txt__DiaChi.getText();
-		
+			String sdt = txt__SDT.getText();
+			Date ngaySinh = new Date((dateChooser).getDate().getTime());
+			String ghiChu = txtA__GhiChu.getText();
+			int diemThuong = 0;
+			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
+
+			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
+					ghiChu);
+
+			System.out.println(kh.toString());
+
+			if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
+				
+				try {
+					DAO_KH.taoKhachHang(kh);
+					JOptionPane.showMessageDialog(null, "Thêm Khách Hàng thành công");
+					
+				} catch (Exception e2) {
+					// TODO: handle exception
+					JOptionPane.showMessageDialog(null, "Khách Hàng đã tồn tại");
+
+				}
+
+			} else {
+				JOptionPane.showMessageDialog(null, "Khách Hàng đã tồn tại");
+			}
 
 		}
 		if (o.equals(btn__exit)) {
-
+			setVisible(false);
 		}
 	}
 
