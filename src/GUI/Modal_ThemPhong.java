@@ -57,9 +57,9 @@ public class Modal_ThemPhong extends JFrame {
 	private JDateChooser date_NgayTaoPhong;
 	private JLabel img_show_panel;
 	private String pathImg = "";
-	private Phong_DAO DAO_P;
-	private LoaiPhong_DAO DAO_LP;
-	private TrangThaiPhong_DAO DAO_TTP;
+	private Phong_DAO DAO_P = new Phong_DAO();
+	private LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+	private TrangThaiPhong_DAO DAO_TTP = new TrangThaiPhong_DAO();
 	private JTextField txt_TenPhong;
 	private JTextField txt_ViTriPhong;
 	private JTextArea txtA_GhiChu;
@@ -145,23 +145,13 @@ public class Modal_ThemPhong extends JFrame {
 				String ghiChu = txtA_GhiChu.getText().trim();
 				String tinhTrangPhong = txt_TinhTrangPhong.getText().trim();
 				Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
-						tinhTrangPhong);
-//				System.out.println("MaPhong: "+maPhong);
-//				System.out.println("TenPhong: "+tenPhong);
-//				System.out.println("LoaiPh: "+loaiPh);
-//				System.out.println("LoaiPhong: "+loaiPhong);
-//				System.out.println("TrangThaiPh: "+trangThaiPh);
-//				System.out.println("TrangThaiPhong: "+trangThaiPhong);
-//				System.out.println("NgayTaoPhong: "+ngayTaoPhong);
-//				System.out.println("ViTriPhong: "+viTriPhong);
-//				System.out.println("GhiChu: "+ghiChu);
-//				System.out.println("TinhTrangPhong: "+tinhTrangPhong);
-				
+						tinhTrangPhong);				
 				try {
 					DAO_P.taoPhong(phong);
 					
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Không thể tạo phòng mới");
+//					JOptionPane.showMessageDialog(null, "Không thể tạo phòng mới");
+					e2.printStackTrace();
 				}
 
 			}
