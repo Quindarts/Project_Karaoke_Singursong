@@ -44,6 +44,8 @@ public class main extends JFrame {
 					FlatLightLaf.setup();
 					app = new JFrame_DangNhap();
 					app.setVisible(true);
+					UploadImg img = new UploadImg();
+					img.setVisible(true);
 
 					// DEMO component
 					Components component_app = new Components();

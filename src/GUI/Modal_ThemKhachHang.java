@@ -193,7 +193,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			String sdt = txt__SDT.getText();
 			Date ngaySinh = new Date((dateChooser).getDate().getTime());
 			String ghiChu = txtA__GhiChu.getText();
-//			String maKhachHang = txt__MaKH.getText();
 			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
 			
 			String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
