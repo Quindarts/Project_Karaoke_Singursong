@@ -38,7 +38,6 @@ import javax.swing.JFileChooser;
 
 public class Modal_ThemLoaiPhong extends JFrame {
 
-
 	private JPanel contentPane;
 	private JTextField txt_MaLoaiPhong;
 	private JTextField txt_TenLoaiPhong;
@@ -46,9 +45,10 @@ public class Modal_ThemLoaiPhong extends JFrame {
 	private JTextField txt_GiaTien;
 	private JTextArea txtA_Mota;
 	private JLabel img_show_panel;
-	private String pathImg ="";
+	private String pathImg = "";
 	private LoaiPhong_DAO DAO_LP;
 	private HelpValidate valiDate;
+
 	/**
 	 * Launch the application.
 	 */
@@ -100,36 +100,27 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
-		
-		
 		img_show_panel = new JLabel();
 		img_show_panel.setBounds(10, 10, 179, 192);
 		pnl_Anh.add(img_show_panel);
-		
+
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
 		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btn_ChonAnh.setForeground(new Color(255, 255, 255));
-	
+
 		btn_ChonAnh.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
-
 				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-				
 			}
 
 			public ImageIcon ResizeImage(String ImagePath) {
-
 				ImageIcon MyImage = new ImageIcon(ImagePath);
 				Image img = MyImage.getImage();
 				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
 						Image.SCALE_SMOOTH);
 				ImageIcon image = new ImageIcon(newImg);
 				return image;
-
 			}
-			
-
 		});
 		btn_ChonAnh.setBackground(new Color(0, 128, 255));
 		btn_ChonAnh.setBounds(0, 202, 179, 32);
@@ -154,7 +145,6 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		pnl_MaLoaiPhong.add(lbl_MaLoaiPhong);
 
 		txt_MaLoaiPhong = new JTextField();
-		txt_MaLoaiPhong.setEditable(false);
 		txt_MaLoaiPhong.setBounds(125, 0, 225, 25);
 		pnl_MaLoaiPhong.add(txt_MaLoaiPhong);
 		txt_MaLoaiPhong.setColumns(10);
@@ -257,19 +247,22 @@ public class Modal_ThemLoaiPhong extends JFrame {
 				String maLoaiPhong = txt_MaLoaiPhong.getText();
 				String tenLoaiPong = txt_TenLoaiPhong.getText();
 				int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-				String hinhAnh = img_show_panel.getText();
+//				String hinhAnh = img_show_panel.getText();
+				String hinhA = pathImg;
 				double giaTien = Double.parseDouble(txt_GiaTien.getText());
 				String moTa = txtA_MoTa.getText();
-				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhAnh, moTa);
+				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
+				System.out.println(loaiPhong);
 				try {
 					DAO_LP.taoLoaiPhong(loaiPhong);
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Trùng mã");
+//					JOptionPane.showMessageDialog(null, "Trùng mã");
 				}
-				System.out.println(loaiPhong);
+				
 			}
 		});
 	}
+
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
