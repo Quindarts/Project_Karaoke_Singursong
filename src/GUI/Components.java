@@ -25,6 +25,7 @@ public class Components extends JFrame implements ActionListener {
 	private JPanel contentPane;
 	private JButton btnThemKhachHang;
 	private JButton btnThemPhong;
+	private JButton btnPhieuDatPhong;
 
 	public Components() {
 		setTitle("Demo các component và chức năng tại đây");
@@ -58,10 +59,14 @@ public class Components extends JFrame implements ActionListener {
 		//BTN Them Khach Hang
 		btnThemKhachHang = new JButton("Them khach Hang");
 		btnThemPhong = new JButton("Them phong");
+		btnPhieuDatPhong = new JButton("Đặt phòng trước");
 		btnThemKhachHang.addActionListener((ActionListener) this);
 		btnThemPhong.addActionListener((ActionListener) this);
+		btnPhieuDatPhong.addActionListener((ActionListener) this);
 		add(btnThemKhachHang);
 		add(btnThemPhong);
+		add(btnPhieuDatPhong);
+		
 		
 		
 		setContentPane(contentPane);
@@ -78,6 +83,11 @@ public class Components extends JFrame implements ActionListener {
 		if (o.equals(btnThemPhong)) {
 			Modal_ThemPhong modalTP = new Modal_ThemPhong();
 			modalTP.setVisible(true);		
+		}
+		if(o.equals(btnPhieuDatPhong)) {
+			Modal_PhieuDatPhongTruoc modalPDP = new Modal_PhieuDatPhongTruoc();
+			modalPDP.setVisible(true);
+		
 		}
 	}
 

@@ -7,6 +7,8 @@ import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,6 +32,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
+import javax.swing.border.EtchedBorder;
 
 public class JFrame_ThuNgan extends JFrame {
 
@@ -59,6 +62,12 @@ public class JFrame_ThuNgan extends JFrame {
 	private JPanel panelMenu_QLKhachHang_2;
 	private JLabel lblMenu_PhieuDatPhong_1;
 	private JMenuItem mntmNewMenuItem_2;
+	private JLabel lblDay;
+	
+	private JLabel lblClock;
+	private int hour, min,sec;
+	private JPanel panel_DateTime;
+
 
 	/**
 	 * Rounded JPanel
@@ -218,6 +227,27 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_PhieuDatPhong_1.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblMenu_PhieuDatPhong_1.setBounds(10, 10, 166, 20);
 		panelMenu_QLKhachHang_2.add(lblMenu_PhieuDatPhong_1);
+		
+		panel_DateTime = new JPanel();
+		panel_DateTime.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_DateTime.setBounds(10, 11, 177, 65);
+		panel_Menu.add(panel_DateTime);
+		panel_DateTime.setLayout(null);
+		
+		lblClock = new JLabel("00:00:00");
+		lblClock.setBounds(10, 11, 157, 24);
+		panel_DateTime.add(lblClock);
+		panel_DateTime.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
+		lblClock.setFont(new Font("Arial", Font.PLAIN, 16));
+		lblClock.setForeground(Color.BLACK);
+		lblClock.setHorizontalAlignment(SwingConstants.CENTER);
+		
+		lblDay = new JLabel("00/00/0000");
+		lblDay.setBounds(10, 33, 157, 24);
+		panel_DateTime.add(lblDay);
+		lblDay.setHorizontalAlignment(SwingConstants.CENTER);
+		lblDay.setForeground(Color.BLACK);
+		lblDay.setFont(new Font("Arial", Font.PLAIN, 15));
 	
 
 		panel_Function = new JPanel();
@@ -253,6 +283,8 @@ public class JFrame_ThuNgan extends JFrame {
 		mntmNewMenuItem_2 = new JMenuItem("Đăng xuất");
 		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		mnNewMenu.add(mntmNewMenuItem_2);
+		
+		Clock();
 
 	}
 
@@ -260,6 +292,33 @@ public class JFrame_ThuNgan extends JFrame {
 		Panel_QLDP.setVisible(false);
 		Panel_QLKH.setVisible(false);
 		panel.setVisible(true);
+	}
+	
+	private void Clock() {
+		new Thread() {
+			public void run() {
+				while(true) {
+					Calendar ca = new GregorianCalendar();
+					hour = ca.get(Calendar.HOUR);
+					min = ca.get(Calendar.MINUTE);
+					sec = ca.get(Calendar.SECOND);
+					int AM_PM = ca.get(Calendar.AM_PM);
+
+					int day = ca.get(Calendar.DAY_OF_MONTH);
+					int month = ca.get(Calendar.MONTH);
+					int year = ca.get(Calendar.YEAR);
+					
+					if(AM_PM == 1) {
+						hour = hour + 12;
+						if(hour == 24) {
+							hour = 0;
+						}
+					}
+					lblDay.setText(day + "/" + month + "/" + year);
+					lblClock.setText(String.format("%02d", hour) + ":" + String.format("%02d", min) + ":" + String.format("%02d", sec)  );
+				}
+			}
+		}.start();
 	}
 
 	private class PanelButtonMouseAdapter extends MouseAdapter {
