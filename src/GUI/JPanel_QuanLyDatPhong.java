@@ -20,6 +20,8 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.CompoundBorder;
 
 import GUI.JFrame_ThuNgan.RoundedTransparentBorder;
+import OtherFunction.HelpDate;
+
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
@@ -48,10 +50,16 @@ import javax.swing.JToolBar;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.util.SystemOutLogger;
+
 import com.itextpdf.text.List;
 
+import DAO.KhachHang_DAO;
+import DAO.PhieuDatPhong_DAO;
 import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
+import Entity.KhachHang;
+import Entity.PhieuDatPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
 
@@ -84,12 +92,12 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JTextField txtMaPhong;
 	private JTextField txtTenKhachHang;
 	private JTextField txtSoDienThoai;
-	private JTextField txtGioNhanPhong;
+	private JTextField txtGioDatPhong;
 	private JLabel lblMaPhong;
 	private JLabel lblThongTinPhongHat;
 	private JLabel lblTenKhachHang;
 	private JLabel lblSDT;
-	private JLabel lblGioNhanPhong;
+	private JLabel lblGioDatPhong;
 	private JLabel lblThucDon;
 	private JPanel panel_ThanhToan;
 	private JPanel panel_2;
@@ -98,7 +106,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 
 	private Phong_DAO phongDao;
 	private TrangThaiPhong_DAO trangThaiPhongDao;
-	private JTextField textField;
+	private JTextField txtGioNhanPhong;
 	private ArrayList<Phong> dsPhong;
 
 	/**
@@ -248,16 +256,16 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		panel_PDP.add(panel_3);
 		panel_3.setLayout(null);
 
-		lblGioNhanPhong = new JLabel("Giờ nhận phòng");
-		lblGioNhanPhong.setBounds(20, 11, 115, 25);
-		panel_3.add(lblGioNhanPhong);
-		lblGioNhanPhong.setForeground(Color.decode(hexColor_Blue1));
-		lblGioNhanPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblGioDatPhong = new JLabel("Giờ đặt phòng");
+		lblGioDatPhong.setBounds(20, 11, 115, 25);
+		panel_3.add(lblGioDatPhong);
+		lblGioDatPhong.setForeground(Color.decode(hexColor_Blue1));
+		lblGioDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-		txtGioNhanPhong = new JTextField();
-		txtGioNhanPhong.setBounds(143, 12, 255, 25);
-		panel_3.add(txtGioNhanPhong);
-		txtGioNhanPhong.setColumns(10);
+		txtGioDatPhong = new JTextField();
+		txtGioDatPhong.setBounds(143, 12, 255, 25);
+		panel_3.add(txtGioDatPhong);
+		txtGioDatPhong.setColumns(10);
 
 		JLabel lblGioNhanPhong_1 = new JLabel("Giờ nhận phòng");
 		lblGioNhanPhong_1.setForeground(new Color(5, 74, 145));
@@ -265,10 +273,10 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		lblGioNhanPhong_1.setBounds(20, 55, 115, 25);
 		panel_3.add(lblGioNhanPhong_1);
 
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(143, 58, 255, 25);
-		panel_3.add(textField);
+		txtGioNhanPhong = new JTextField();
+		txtGioNhanPhong.setColumns(10);
+		txtGioNhanPhong.setBounds(143, 58, 255, 25);
+		panel_3.add(txtGioNhanPhong);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setForeground(Color.decode(hexColor_Blue1));
@@ -310,13 +318,45 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 				CardPhong cardPhong = new CardPhong(ph);
 				panel_Phong.add(cardPhong);
 				System.out.println(cardPhong.getPhong().getMaPhong());
-				
+
 				cardPhong.addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						if (e.getButton() == MouseEvent.BUTTON1) { // Kiểm tra nút chuột trái
-							
+
+						if (e.getButton() == MouseEvent.BUTTON1) {
+
+							HelpDate hDate = new HelpDate();
 							txtMaPhong.setText(cardPhong.getPhong().getMaPhong());
+							PhieuDatPhong pdp = null;
+							PhieuDatPhong_DAO PDP_DAO = new PhieuDatPhong_DAO();
+
+							if (!txtMaPhong.getText().trim().equals("")) {
+
+								pdp = PDP_DAO.layPhieuDatPhong_TheoMaPhong(txtMaPhong.getText());
+
+								System.out.println(pdp);
+								if (pdp == null) {
+									clearForm();
+								}
+								KhachHang kh = new KhachHang();
+								KhachHang_DAO DAO_KH = new KhachHang_DAO();
+								try {
+									kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+
+									if (kh != null) {
+
+										System.out.println(kh);
+										txtTenKhachHang.setText(kh.getHoTen());
+										txtSoDienThoai.setText(kh.getSoDienThoai());
+
+									}
+								} catch (Exception e2) {
+									// TODO: handle exception
+								}
+
+								txtGioNhanPhong.setText(hDate.chuyenDateThanhString(pdp.getThoiGianNhanPhong()));
+								txtGioDatPhong.setText(hDate.chuyenDateThanhString(pdp.getThoiGianDatPhong()));
+							}
 						}
 					}
 				});
@@ -354,6 +394,14 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	/**
 	 * dsPhong loadTrangThaiPhong
 	 **/
+
+	public void clearForm() {
+		txtSoDienThoai.setText("");
+		txtGioDatPhong.setText("");
+		txtGioNhanPhong.setText("");
+//		txtMaPhong.setText("");
+		txtTenKhachHang.setText("");
+	}
 
 	private void loadTrangThaiPhong() {
 //		int pt = phongDao.laySoLuongPhongTheoTrangThai(1);
