@@ -158,7 +158,7 @@ public class JFrame_ThuNgan extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		Panel_QLDP = new JPanel_QuanLyDatPhong();
+		Panel_QLDP = new JPanel_QuanLyDatPhong(nhanVien);
 		Panel_QLKH = new JPanel_QuanLyKhachHang();
 		Panel_QLKH.setBounds(0, 0, 1296, 672);
 
@@ -295,10 +295,18 @@ public class JFrame_ThuNgan extends JFrame {
 		mntmNewMenuItem_2 = new JMenuItem("Đăng xuất");
 		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		mnNewMenu.add(mntmNewMenuItem_2);
+		
+		JLabel lbl__userName = new JLabel(nhanVien.getHoTen());
+		lbl__userName.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lbl__userName.setForeground(new Color(255, 255, 255));
+		lbl__userName.setBounds(1198, 22, 176, 31);
+		
+		contentPane.add(lbl__userName);
 
 		Clock();
 
 	}
+	
 
 	public void menuClicked(JPanel panel) {
 		Panel_QLDP.setVisible(false);
