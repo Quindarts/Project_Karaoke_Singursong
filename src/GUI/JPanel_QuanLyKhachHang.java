@@ -29,7 +29,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-public class JPanel_QuanLyKhachHang extends JPanel {
+public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 
 	/**
 	 * Color
@@ -42,8 +42,10 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
+	
 	private JTable table_KhachHang;
 	private JTextField textField;
+	private JButton btnThemKhachHang;
 
 	/**
 	 * Rounded JPanel
@@ -130,27 +132,28 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 						"\u0110i\u1EC3m th\u01B0\u1EDFng", "Ghi ch\u00FA" }));
 		table_KhachHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		scrollPane.setViewportView(table_KhachHang);
-		
+
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.setBounds(1031, 10, 255, 615);
 		panel_Table.add(panel_1);
 
-		JButton btnThem = new JButton("Thêm");
-		btnThem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
-		btnThem.setForeground(Color.WHITE);
-		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnThem.setBackground(Color.decode(hexColor_Green));
-		btnThem.setBounds(10, 0, 125, 35);
-		panel.add(btnThem);
+		btnThemKhachHang = new JButton("Thêm");
+	
+		btnThemKhachHang.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
+		btnThemKhachHang.setForeground(Color.WHITE);
+		btnThemKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnThemKhachHang.setBackground(Color.decode(hexColor_Green));
+		btnThemKhachHang.setBounds(10, 0, 125, 35);
+		panel.add(btnThemKhachHang);
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
+		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/trash.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		btnXoa.setBackground(Color.decode(hexColor_Red));
@@ -166,17 +169,32 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		panel.add(btnLamMoi);
 
 		textField = new JTextField();
-		textField.setBounds(545, 1, 223, 34);
+		textField.setBounds(545, 0, 223, 34);
 		panel.add(textField);
 		textField.setColumns(10);
 
 		JButton btnTimKiem = new JButton("Tìm kiếm");
-		btnTimKiem.setBounds(415, 1, 123, 35);
+		btnTimKiem.setBounds(415, 0, 123, 35);
 		panel.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/search.png")));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
 		btnTimKiem.setForeground(Color.WHITE);
-		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 15));
+
+		// Add event:
+		btnThemKhachHang.addActionListener((ActionListener) this);
 
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object o = e.getSource();
+		if (o.equals(btnThemKhachHang)) {
+			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
+			modalTKH.setVisible(true);
+		}
+
+	}
+
 }

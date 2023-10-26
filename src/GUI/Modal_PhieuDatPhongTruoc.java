@@ -40,6 +40,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	private JTextField txtTenKH;
 	private JTextField txtTienCoc;
 	private JTextField txtNhanVien;
+	private JTextField textField;
 
 
 	/**
@@ -66,7 +67,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		JPanel panel = new JPanel();
 		panel.setBackground(new Color(255, 255, 255));
 		panel.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Th\u00F4ng tin \u0111\u1EB7t ph\u00F2ng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel.setBounds(22, 121, 417, 155);
+		panel.setBounds(22, 142, 417, 155);
 		panel_PDP.add(panel);
 		panel.setLayout(null);
 		
@@ -112,7 +113,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Th\u00F4ng tin kh\u00E1ch h\u00E0ng", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		panel_1.setBounds(449, 121, 413, 155);
+		panel_1.setBounds(449, 142, 413, 155);
 		panel_PDP.add(panel_1);
 		panel_1.setLayout(null);
 		
@@ -156,7 +157,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_2.setBackground(new Color(255, 255, 255));
-		panel_2.setBounds(22, 45, 840, 49);
+		panel_2.setBounds(22, 45, 840, 86);
 		panel_PDP.add(panel_2);
 		panel_2.setLayout(null);
 		
@@ -167,12 +168,12 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_2.add(lblTGDatPhong);
 		
 		JDateChooser dateChooser = new JDateChooser();
-		dateChooser.setBounds(147, 11, 157, 27);
+		dateChooser.setBounds(167, 11, 157, 27);
 		panel_2.add(dateChooser);
 		
 		txtGio = new JTextField();
 		txtGio.setEnabled(false);
-		txtGio.setBounds(305, 12, 55, 27);
+		txtGio.setBounds(325, 12, 55, 27);
 		panel_2.add(txtGio);
 		txtGio.setColumns(10);
 		
@@ -202,6 +203,22 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		txtNhanVien.setBounds(463, 11, 136, 27);
 		panel_2.add(txtNhanVien);
 		
+		JLabel lblThiGianNhn = new JLabel("Thời gian nhận phòng");
+		lblThiGianNhn.setForeground(Color.BLACK);
+		lblThiGianNhn.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblThiGianNhn.setBounds(10, 49, 149, 27);
+		panel_2.add(lblThiGianNhn);
+		
+		JDateChooser dateChooser_1 = new JDateChooser();
+		dateChooser_1.setBounds(167, 49, 157, 27);
+		panel_2.add(dateChooser_1);
+		
+		textField = new JTextField();
+		textField.setEnabled(false);
+		textField.setColumns(10);
+		textField.setBounds(325, 50, 55, 27);
+		panel_2.add(textField);
+		
 		JButton btnDatPhong = new JButton("Đặt phòng");
 		btnDatPhong.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -210,20 +227,20 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		btnDatPhong.setBackground(Color.decode(hexColor_Green));
 		btnDatPhong.setForeground(new Color(255, 255, 255));
 		btnDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnDatPhong.setBounds(762, 298, 100, 30);
+		btnDatPhong.setBounds(762, 308, 100, 30);
 		panel_PDP.add(btnDatPhong);
 		
 		JButton btnHy = new JButton("Hủy");
 		btnHy.setBackground(Color.decode(hexColor_Blue2));
 		btnHy.setForeground(new Color(255, 255, 255));
 		btnHy.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnHy.setBounds(652, 298, 100, 30);
+		btnHy.setBounds(652, 308, 100, 30);
 		panel_PDP.add(btnHy);
 		
-		JLabel lblPhiutPhng = new JLabel("PHIẾU ĐẶT PHÒNG");
+		JLabel lblPhiutPhng = new JLabel("PHIẾU ĐẶT PHÒNG TRƯỚC");
 		lblPhiutPhng.setForeground(new Color(5, 74, 145));
 		lblPhiutPhng.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblPhiutPhng.setBounds(22, 11, 173, 27);
+		lblPhiutPhng.setBounds(22, 11, 237, 27);
 		panel_PDP.add(lblPhiutPhng);
 
 	}

@@ -33,6 +33,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
+import javax.swing.JRadioButton;
 
 public class JFrame_ThuNgan extends JFrame {
 
@@ -238,16 +239,16 @@ public class JFrame_ThuNgan extends JFrame {
 		lblClock.setBounds(10, 11, 157, 24);
 		panel_DateTime.add(lblClock);
 		panel_DateTime.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
-		lblClock.setFont(new Font("Arial", Font.PLAIN, 16));
-		lblClock.setForeground(Color.BLACK);
+		lblClock.setFont(new Font("Arial", Font.BOLD, 16));
+		lblClock.setForeground(Color.decode(hexColor_Blue1));
 		lblClock.setHorizontalAlignment(SwingConstants.CENTER);
 		
 		lblDay = new JLabel("00/00/0000");
 		lblDay.setBounds(10, 33, 157, 24);
 		panel_DateTime.add(lblDay);
 		lblDay.setHorizontalAlignment(SwingConstants.CENTER);
-		lblDay.setForeground(Color.BLACK);
-		lblDay.setFont(new Font("Arial", Font.PLAIN, 15));
+		lblDay.setForeground(Color.decode(hexColor_Blue1));
+		lblDay.setFont(new Font("Arial", Font.BOLD, 16));
 	
 
 		panel_Function = new JPanel();
@@ -257,6 +258,10 @@ public class JFrame_ThuNgan extends JFrame {
 		panel_Function.setLayout(null);
 
 		panel_Function.add(Panel_QLDP);
+		
+		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
+		rdbtnNewRadioButton.setBounds(33, 75, 109, 23);
+		Panel_QLDP.add(rdbtnNewRadioButton);
 		panel_Function.add(Panel_QLKH);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -314,7 +319,7 @@ public class JFrame_ThuNgan extends JFrame {
 							hour = 0;
 						}
 					}
-					lblDay.setText(day + "/" + month + "/" + year);
+					lblDay.setText(String.format("%02d", day) + " / " + String.format("%02d", month+1)  + " / " +  String.format("%04d", year));
 					lblClock.setText(String.format("%02d", hour) + ":" + String.format("%02d", min) + ":" + String.format("%02d", sec)  );
 				}
 			}

@@ -35,7 +35,7 @@ public class main extends JFrame {
 					//Connect Database
 					try {
 						ConnectDB.getInstance().connect();
-						System.out.println("Connected!!!!");
+//						System.out.println("Connected!!!!");
 					}catch (SQLException e) {
 						e.printStackTrace();
 					}
