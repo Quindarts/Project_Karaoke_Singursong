@@ -111,18 +111,12 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JLabel lblTenPhong;
 	private JPanel panel_TraCuuPhong;
 	private JTable table_MatHang;
-//=======
-//	private JLabel lblGioDatPhong;
-//	private JLabel lblThucDon;
-//	private JPanel panel_ThanhToan;
-//	private JPanel panel_2;
-//	private JTable table;
-//>>>>>>> dev
+
 	private Object objPhong;
 
 	private Phong_DAO phongDao;
 	private TrangThaiPhong_DAO trangThaiPhongDao;
-//<<<<<<< HEAD
+
 	private JTextField txtLoaiPhong;
 	private JLabel lblThoiGianNhan;
 	private JLabel lblMatHang;
