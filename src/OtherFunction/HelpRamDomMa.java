@@ -45,7 +45,7 @@ public class HelpRamDomMa {
 			result = result + day + "" + month + "" + year + "" + "D";
 		}
 
-		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.length() - 3).equals("999")) {
+		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.trim().length() - 3).equals("999")) {
 			if (maFromData.trim().substring(0, 10).equals(result.substring(0, 10))) {
 				if (result.charAt(10) == maFromData.trim().charAt(10)) {
 					int count = Integer.parseInt(maFromData.trim().substring(maFromData.trim().length() - 3)) + 1;
@@ -64,7 +64,7 @@ public class HelpRamDomMa {
 	}
 
 	public static ArrayList<String> maToDaTaBase(String tenBang, String tenCot) {
-		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_Test";
+		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong";
 		String user = "sa";
 		String password = "230903";
 		String maHoaDon = "";

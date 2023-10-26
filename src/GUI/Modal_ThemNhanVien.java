@@ -5,24 +5,32 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
 import ConnectDB.ConnectDB;
 import DAO.LoaiNhanVien_DAO;
+import DAO.NhanVien_DAO;
 import Entity.LoaiNhanVien;
 import Entity.NhanVien;
+import OtherFunction.HelpRamDomKH;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -32,6 +40,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.UIManager;
 import java.awt.Font;
@@ -61,6 +70,10 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private JDateChooser dateChooser;
 
 	private JComboBox<String> comboBox_TrangThai;
+
+	private JLabel img_show_panel;
+
+	private String pathImg;
 
 	/**
 	 * Launch the application.
@@ -123,18 +136,30 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
-		JPanel Anh = new JPanel();
-		Anh.setBackground(new Color(192, 192, 192));
-		Anh.setBounds(0, 0, 179, 192);
-		pnl_Anh.add(Anh);
+		///
+		img_show_panel = new JLabel();
+		img_show_panel.setBounds(10, 10, 179, 192);
+		pnl_Anh.add(img_show_panel);
 
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
 		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btn_ChonAnh.setForeground(new Color(255, 255, 255));
+
 		btn_ChonAnh.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+			}
+
+			public ImageIcon ResizeImage(String ImagePath) {
+				ImageIcon MyImage = new ImageIcon(ImagePath);
+				Image img = MyImage.getImage();
+				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
+						Image.SCALE_SMOOTH);
+				ImageIcon image = new ImageIcon(newImg);
+				return image;
 			}
 		});
+
 		btn_ChonAnh.setBackground(new Color(0, 128, 255));
 		btn_ChonAnh.setBounds(0, 202, 179, 32);
 		pnl_Anh.add(btn_ChonAnh);
@@ -237,8 +262,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		pnl_ThongTin.add(pnl_GioiTinh);
 
 		btngr_GioiTinh = new ButtonGroup();
-		
-		
+
 		JLabel lbl_GioiTinh = new JLabel("Giới tính");
 		lbl_GioiTinh.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_GioiTinh.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -275,11 +299,10 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		comboBox_TrangThai = new JComboBox<String>();
 		comboBox_TrangThai.setBounds(125, 0, 225, 25);
 		pnl_TrangThai.add(comboBox_TrangThai);
-		
+
 		comboBox_TrangThai.addItem("Còn làm");
 		comboBox_TrangThai.addItem("Nghỉ việc");
 		comboBox_TrangThai.addItem("Nghỉ phép");
-		
 
 		JPanel pnl_SoDienThoai = new JPanel();
 		pnl_SoDienThoai.setBackground(Color.WHITE);
@@ -354,17 +377,22 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		Object o = e.getSource();
 		if (o.equals(btn_Them)) {
 
-			String anhThe = "";
+			String anhThe = pathImg;
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
 			boolean gioiTinh = btngr_GioiTinh.getSelection().equals("Nam");
 			String hoTen = txt_TenNhanVien.getText();
-			String maNhanVien = txt_MaNhanVien.getText();
 			Date ngaySinh = new Date((dateChooser).getDate().getTime());
-			LoaiNhanVien loaiNhanVien = new LoaiNhanVien();
+			LoaiNhanVien loaiNhanVien = null;
 			String soDienThoai = txt_SoDienThoai.getText();
 			String trangThai = "";
+			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt_SoDienThoai.getText());
 
+			String maNhanVien = helpRamDomKH.taoMa("NhanVien", "maNhanVien", "NV");
+			
+			txt_MaNhanVien.setText(maNhanVien);
+
+			
 			if (comboBox_TrangThai.getSelectedItem() == "Còn làm") {
 				trangThai = "ConLam";
 			}
@@ -375,18 +403,60 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 				trangThai = "NghiPhep";
 			}
 
-			if (cbox__loaiNhanVien.getSelectedItem() == "Thu Ngân") {
-				loaiNhanVien.setMaLoaiNhanVien("LNV001");
-				loaiNhanVien.setTenLoaiNhanVien("Thu Ngân");
-
-			} else if (cbox__loaiNhanVien.getSelectedItem() == "Quản Lý") {
-				loaiNhanVien.setMaLoaiNhanVien("LNV000");
-				loaiNhanVien.setTenLoaiNhanVien("Quản Lý");
-			}
-			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai,
-					CCCD, diaChi, trangThai, anhThe);
+			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString());
+			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
+					trangThai, anhThe);
 
 			System.out.println(nv.toString());
+			
+			try {
+				NhanVien_DAO DAO_NV = new NhanVien_DAO();
+				if(DAO_NV.taoNhanVien(nv)) {
+					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thành công");
+				}else {
+					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
+				}
+				
+				
+			} catch (Exception e2) {
+				// TODO: handle exception
+				JOptionPane.showConfirmDialog(null, "Tạo mới nhân viên thất bại, vui lòng thử lại");
+				e2.printStackTrace();
+			}
 		}
+	}
+
+	public String chooseFileEvent(String typeFile) {
+		JFileChooser file = new JFileChooser();
+		String path = "";
+		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+
+		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
+				"xls");
+		FileNameExtensionFilter filterExcel = new FileNameExtensionFilter("xlsx", "xls");
+
+		// Doc path image
+		if (typeFile.equals("image")) {
+			file.addChoosableFileFilter(filterImage);
+		}
+		// Doc path excel
+		else if (typeFile.equals("excel")) {
+			file.addChoosableFileFilter(filterExcel);
+		}
+
+		int result = file.showSaveDialog(null);
+		if (result == JFileChooser.APPROVE_OPTION) {
+
+			File selectedFile = file.getSelectedFile();
+			path = selectedFile.getAbsolutePath();
+			pathImg += path;
+			return path;
+		}
+
+		else if (result == JFileChooser.CANCEL_OPTION) {
+			System.out.println("Không tìm thấy file tải lên");
+			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
+		}
+		return path;
 	}
 }

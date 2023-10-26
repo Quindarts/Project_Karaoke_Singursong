@@ -20,6 +20,8 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.CompoundBorder;
 
 import GUI.JFrame_ThuNgan.RoundedTransparentBorder;
+import OtherFunction.HelpDate;
+
 import javax.swing.JTabbedPane;
 import javax.swing.UIManager;
 
@@ -48,16 +50,24 @@ import javax.swing.JToolBar;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.util.SystemOutLogger;
+
 import com.itextpdf.text.List;
 
+import DAO.KhachHang_DAO;
+import DAO.PhieuDatPhong_DAO;
 import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
+import Entity.KhachHang;
+import Entity.PhieuDatPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
 
 import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.border.EtchedBorder;
@@ -86,17 +96,30 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JTextField txtMaPhong;
 	private JTextField txtTenKhachHang;
 	private JTextField txtSoDienThoai;
+<<<<<<< HEAD
+=======
+	private JTextField txtGioDatPhong;
+>>>>>>> dev
 	private JLabel lblMaPhong;
 	private JLabel lblThongTinPhongHat;
 	private JLabel lblTenKhachHang;
 	private JLabel lblSDT;
+<<<<<<< HEAD
 	private JLabel lblTenPhong;
 	private JPanel panel_TraCuuPhong;
 	private JTable table_MatHang;
+=======
+	private JLabel lblGioDatPhong;
+	private JLabel lblThucDon;
+	private JPanel panel_ThanhToan;
+	private JPanel panel_2;
+	private JTable table;
+>>>>>>> dev
 	private Object objPhong;
 
 	private Phong_DAO phongDao;
 	private TrangThaiPhong_DAO trangThaiPhongDao;
+<<<<<<< HEAD
 	private JTextField txtLoaiPhong;
 	private JLabel lblThoiGianNhan;
 	private JTextField txtThoiGianNhan;
@@ -111,6 +134,10 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JLabel lblLoiPhng;
 	private JLabel lblMaPhong_2;
 	private JLabel lblTnPhng;
+=======
+	private JTextField txtGioNhanPhong;
+	private ArrayList<Phong> dsPhong;
+>>>>>>> dev
 
 	/**
 	 * Rounded JPanel
@@ -173,6 +200,17 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 
 		phongDao = new Phong_DAO();
 		trangThaiPhongDao = new TrangThaiPhong_DAO();
+		try {
+			dsPhong = phongDao.layTatCaPhong();
+			if (dsPhong != null) {
+				dsPhong.forEach(ph -> {
+					System.out.println(ph.toString());
+				});
+
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 
 		panel_PDP = new JPanel();
 		panel_PDP.setBorder(null);
@@ -208,6 +246,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		scrollPane.setBounds(10, 415, 418, 211);
 		panel_PDP.add(scrollPane);
 
+<<<<<<< HEAD
 		table_MatHang = new JTable();
 		table_MatHang.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "STT", "Tên mặt hàng",
 				"Số lượng", "Đơn giá", "" }));
@@ -227,10 +266,31 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		lblSDT = new JLabel("Số điện thoại");
 		lblSDT.setBounds(18, 11, 115, 25);
 		panel_TTKH.add(lblSDT);
+=======
+		table = new JTable();
+		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "STT", "T\u00EAn s\u1EA3n ph\u1EA9m",
+				"S\u1ED1 l\u01B0\u1EE3ng", "\u0110\u01A1n gi\u00E1" }));
+		scrollPane.setViewportView(table);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(10, 98, 418, 95);
+		panel_PDP.add(panel);
+		panel.setLayout(null);
+
+		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setBounds(143, 58, 255, 25);
+		panel.add(txtSoDienThoai);
+		txtSoDienThoai.setColumns(10);
+
+		lblSDT = new JLabel("Số điện thoại");
+		lblSDT.setBounds(18, 58, 115, 25);
+		panel.add(lblSDT);
+>>>>>>> dev
 		lblSDT.setForeground(Color.decode(hexColor_Blue1));
 		lblSDT.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
 		txtTenKhachHang = new JTextField();
+<<<<<<< HEAD
 		txtTenKhachHang.setEnabled(false);
 		txtTenKhachHang.setEditable(false);
 		txtTenKhachHang.setBounds(157, 47, 241, 25);
@@ -329,6 +389,44 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 				lblMatHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
 				lblMatHang.setBounds(10, 389, 115, 25);
 				panel_PDP.add(lblMatHang);
+=======
+		txtTenKhachHang.setBounds(143, 12, 255, 25);
+		panel.add(txtTenKhachHang);
+		txtTenKhachHang.setColumns(10);
+
+		lblTenKhachHang = new JLabel("Tên khách hàng");
+		lblTenKhachHang.setBounds(18, 11, 115, 25);
+		panel.add(lblTenKhachHang);
+		lblTenKhachHang.setForeground(Color.decode(hexColor_Blue1));
+		lblTenKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(10, 200, 418, 124);
+		panel_PDP.add(panel_3);
+		panel_3.setLayout(null);
+
+		lblGioDatPhong = new JLabel("Giờ đặt phòng");
+		lblGioDatPhong.setBounds(20, 11, 115, 25);
+		panel_3.add(lblGioDatPhong);
+		lblGioDatPhong.setForeground(Color.decode(hexColor_Blue1));
+		lblGioDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		txtGioDatPhong = new JTextField();
+		txtGioDatPhong.setBounds(143, 12, 255, 25);
+		panel_3.add(txtGioDatPhong);
+		txtGioDatPhong.setColumns(10);
+
+		JLabel lblGioNhanPhong_1 = new JLabel("Giờ nhận phòng");
+		lblGioNhanPhong_1.setForeground(new Color(5, 74, 145));
+		lblGioNhanPhong_1.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblGioNhanPhong_1.setBounds(20, 55, 115, 25);
+		panel_3.add(lblGioNhanPhong_1);
+
+		txtGioNhanPhong = new JTextField();
+		txtGioNhanPhong.setColumns(10);
+		txtGioNhanPhong.setBounds(143, 58, 255, 25);
+		panel_3.add(txtGioNhanPhong);
+>>>>>>> dev
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setForeground(Color.decode(hexColor_Blue1));
@@ -406,42 +504,62 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		/**
 		 * 
 		 * **/
-		ArrayList<Phong> dsPhongDemo = new ArrayList<Phong>();
-		dsPhongDemo.add(new Phong("P101", "Phong Thường 1", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("VIP102", "Phong VIP 1", new TrangThaiPhong("222", "Đang hát"),
-				"Tầng 1,bên trái từ phải sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P103", "Phong Thường 3", new TrangThaiPhong("333", "Đặt trước"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P104", "Phong Thường 4", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P105", "Phong Thường 5", new TrangThaiPhong("444", "Dọn Dẹp"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P101", "Phong Thường 1", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("VIP102", "Phong VIP 1", new TrangThaiPhong("222", "Đang hát"),
-				"Tầng 1,bên trái từ phải sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P103", "Phong Thường 3", new TrangThaiPhong("333", "Đặt trước"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P104", "Phong Thường 4", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P105", "Phong Thường 5", new TrangThaiPhong("444", "Dọn Dẹp"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P101", "Phong Thường 1", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("VIP102", "Phong VIP 1", new TrangThaiPhong("222", "Đang hát"),
-				"Tầng 1,bên trái từ phải sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P103", "Phong Thường 3", new TrangThaiPhong("333", "Đặt trước"),
-				"Tầng 1,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P104", "Phong Thường 4", new TrangThaiPhong("111", "Còn Trống"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
-		dsPhongDemo.add(new Phong("P105", "Phong Thường 5", new TrangThaiPhong("444", "Dọn Dẹp"),
-				"Tầng 2,bên phải từ trái sang", "đường hẹp, đi cẩn thận", "đang sử dụng"));
+		if (dsPhong != null) {
+			dsPhong.forEach(ph -> {
+				CardPhong cardPhong = new CardPhong(ph);
+				panel_Phong.add(cardPhong);
+				System.out.println(cardPhong.getPhong().getMaPhong());
 
+<<<<<<< HEAD
 		dsPhongDemo.forEach(ph -> {
 			CardPhong cardPhong = new CardPhong(ph);
 			panel_Phong.add(cardPhong);
 		});
+=======
+				cardPhong.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+
+						if (e.getButton() == MouseEvent.BUTTON1) {
+
+							HelpDate hDate = new HelpDate();
+							txtMaPhong.setText(cardPhong.getPhong().getMaPhong());
+							PhieuDatPhong pdp = null;
+							PhieuDatPhong_DAO PDP_DAO = new PhieuDatPhong_DAO();
+
+							if (!txtMaPhong.getText().trim().equals("")) {
+
+								pdp = PDP_DAO.layPhieuDatPhong_TheoMaPhong(txtMaPhong.getText());
+
+								System.out.println(pdp);
+								if (pdp == null) {
+									clearForm();
+								}
+								KhachHang kh = new KhachHang();
+								KhachHang_DAO DAO_KH = new KhachHang_DAO();
+								try {
+									kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+
+									if (kh != null) {
+
+										System.out.println(kh);
+										txtTenKhachHang.setText(kh.getHoTen());
+										txtSoDienThoai.setText(kh.getSoDienThoai());
+
+									}
+								} catch (Exception e2) {
+									// TODO: handle exception
+								}
+
+								txtGioNhanPhong.setText(hDate.chuyenDateThanhString(pdp.getThoiGianNhanPhong()));
+								txtGioDatPhong.setText(hDate.chuyenDateThanhString(pdp.getThoiGianDatPhong()));
+							}
+						}
+					}
+				});
+			});
+		}
+>>>>>>> dev
 
 		panel_ThucDon = new JPanel();
 
@@ -453,9 +571,20 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	}
 
 	/**
-	 * Demo loadTrangThaiPhong
+	 * dsPhong loadTrangThaiPhong
 	 **/
 
+<<<<<<< HEAD
+=======
+	public void clearForm() {
+		txtSoDienThoai.setText("");
+		txtGioDatPhong.setText("");
+		txtGioNhanPhong.setText("");
+//		txtMaPhong.setText("");
+		txtTenKhachHang.setText("");
+	}
+
+>>>>>>> dev
 	private void loadTrangThaiPhong() {
 //		int pt = phongDao.laySoLuongPhongTheoTrangThai(1);
 //		int pc = phongDao.laySoLuongPhongTheoTrangThai(2);
@@ -468,4 +597,8 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 //		lbTam.setText("Phòng tạm (" + pta + ")");
 
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> dev
 }

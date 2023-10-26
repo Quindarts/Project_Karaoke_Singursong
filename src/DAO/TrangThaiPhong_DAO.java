@@ -42,9 +42,30 @@ public class TrangThaiPhong_DAO {
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
-			String sql = "SELECT * FROM TrangThaiPhong WHERE maTrangThaiPhong = ?";
+			String sql = "SELECT * FROM TrangThaiPhong WHERE maTrangThai = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maTrThai);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maTrangThai = rs.getString("maTrangThai");
+				String tenTrangThai = rs.getString("tenTrangThai");
+				trangThaiPhong = new TrangThaiPhong(maTrangThai, tenTrangThai);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return trangThaiPhong;
+	}
+	
+	public TrangThaiPhong timTrangThaiPhong_TheoTenTrangThai(String xTenTrThai) {
+		TrangThaiPhong trangThaiPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM TrangThaiPhong WHERE tenTrangThai = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, xTenTrThai);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maTrangThai = rs.getString("maTrangThai");
