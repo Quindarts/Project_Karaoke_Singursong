@@ -309,7 +309,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 			dsPhong.forEach(ph -> {
 				CardPhong cardPhong = new CardPhong(ph);
 				panel_Phong.add(cardPhong);
-				System.out.println(cardPhong.getPhong().getMaPhong());
 				
 				cardPhong.addMouseListener(new MouseAdapter() {
 					@Override

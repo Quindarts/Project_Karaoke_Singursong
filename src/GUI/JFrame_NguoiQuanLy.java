@@ -90,7 +90,6 @@ public class JFrame_NguoiQuanLy extends JFrame {
 			g2d.fill(roundRect);
 			g2d.setColor(borderColor);
 			g2d.draw(roundRect);
-
 			g2d.dispose();
 		}
 
