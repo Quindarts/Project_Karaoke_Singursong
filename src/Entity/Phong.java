@@ -36,6 +36,8 @@ public class Phong {
 		// TODO Auto-generated constructor stub
 	}
 
+	
+
 	public Phong(String maPhong, String tenPhong, LoaiPhong loaiPhong, TrangThaiPhong trangThaiPhong, Date ngayTaoPhong,
 			String viTriPhong, String ghiChu, String tinhTrangPhong) {
 		super();
@@ -44,7 +46,9 @@ public class Phong {
 		this.loaiPhong = loaiPhong;
 		this.trangThaiPhong = trangThaiPhong;
 		this.ngayTaoPhong = ngayTaoPhong;
-
+		this.viTriPhong = viTriPhong;
+		this.ghiChu = ghiChu;
+		this.tinhTrangPhong = tinhTrangPhong;
 	}
 
 	public Phong(String maPhong) {

@@ -88,6 +88,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		panel_1.add(lbl__TenKH);
 
 		txt__MaKH = new JTextField();
+		txt__MaKH.setEditable(false);
 		txt__MaKH.setBounds(172, 67, 255, 25);
 		panel_1.add(txt__MaKH);
 		txt__MaKH.setColumns(10);

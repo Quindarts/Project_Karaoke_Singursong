@@ -30,7 +30,7 @@ public class DichVu_DAO {
 				int soLuong = rs.getInt("soLuong");
 				String donViTinh = rs.getString("donViTinh");
 				Double donGia = rs.getDouble("donGia");
-				String trangThai = rs.getString("trangThai");
+				boolean trangThai = rs.getBoolean("trangThai");
 				DichVu dichVu = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, donGia, trangThai);
 				danhSachDichVu.add(dichVu);
 			}
@@ -56,7 +56,7 @@ public class DichVu_DAO {
 				int soLuong = rs.getInt("soLuong");
 				String donViTinh = rs.getString("donViTinh");
 				Double donGia = rs.getDouble("donGia");
-				String trangThai = rs.getString("trangThai");
+				boolean trangThai = rs.getBoolean("trangThai");
 				dichVu = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, donGia, trangThai);
 			}
 		} catch (Exception e) {
@@ -84,7 +84,7 @@ public class DichVu_DAO {
 			statement.setInt(3, dichVu.getSoLuong());
 			statement.setString(4, dichVu.getDonViTinh());
 			statement.setDouble(5, dichVu.getDonGia());
-			statement.setString(6, dichVu.getTrangThai());
+			statement.setBoolean(6, dichVu.getTrangThai());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,7 +112,7 @@ public class DichVu_DAO {
 			statement.setInt(2, dichVu.getSoLuong());
 			statement.setString(3, dichVu.getDonViTinh());
 			statement.setDouble(4, dichVu.getDonGia());
-			statement.setString(5, dichVu.getTrangThai());
+			statement.setBoolean(5, dichVu.getTrangThai());
 			statement.setString(6, dichVu.getMaDichVu());
 			n = statement.executeUpdate();
 		} catch (Exception e) {

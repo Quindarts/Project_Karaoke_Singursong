@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import Entity.NhanVien;
 import GUI.JFrame_DangNhap.RoundedTransparentBorder;
 
 import java.awt.AlphaComposite;
@@ -63,12 +64,11 @@ public class JFrame_ThuNgan extends JFrame {
 	private JLabel lblMenu_PhieuDatPhong_1;
 	private JMenuItem mntmNewMenuItem_2;
 	private JLabel lblDay;
-	
+
 	private JLabel lblClock;
-	private int hour, min,sec;
+	private int hour, min, sec;
 	private JPanel panel_DateTime;
-
-
+	private NhanVien nhanVien;
 	/**
 	 * Rounded JPanel
 	 */
@@ -77,6 +77,7 @@ public class JFrame_ThuNgan extends JFrame {
 		private Color borderColor;
 		private Color backgroundColor;
 		private float alpha;
+		
 
 		public RoundedTransparentBorder(int cornerRadius, Color borderColor, Color backgroundColor, float alpha) {
 			this.cornerRadius = cornerRadius;
@@ -139,8 +140,13 @@ public class JFrame_ThuNgan extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * 
+	 * 
 	 */
-	public JFrame_ThuNgan() {
+	
+	public JFrame_ThuNgan(NhanVien nhanVien) {
+		this.nhanVien = nhanVien;
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1530, 800);
 		contentPane = new JPanel();
@@ -150,7 +156,6 @@ public class JFrame_ThuNgan extends JFrame {
 		setResizable(false);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
 
 		Panel_QLDP = new JPanel_QuanLyDatPhong();
 		Panel_QLKH = new JPanel_QuanLyKhachHang();
@@ -201,39 +206,39 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_QLKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblMenu_QLKhachHang.setBounds(10, 10, 166, 20);
 		panelMenu_QLKhachHang.add(lblMenu_QLKhachHang);
-		
+
 		panelMenu_QLKhachHang_1 = new JPanel();
 		panelMenu_QLKhachHang_1.setLayout(null);
 		panelMenu_QLKhachHang_1.setBackground(new Color(5, 74, 145));
 		panelMenu_QLKhachHang_1.setBounds(2, 195, 192, 45);
 		panel_Menu.add(panelMenu_QLKhachHang_1);
-		
+
 		lblMenu_PhieuDatPhong = new JLabel("PHIẾU ĐẶT PHÒNG");
 		lblMenu_PhieuDatPhong.setHorizontalAlignment(SwingConstants.LEFT);
 		lblMenu_PhieuDatPhong.setForeground(Color.WHITE);
 		lblMenu_PhieuDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblMenu_PhieuDatPhong.setBounds(10, 10, 166, 20);
 		panelMenu_QLKhachHang_1.add(lblMenu_PhieuDatPhong);
-		
+
 		panelMenu_QLKhachHang_2 = new JPanel();
 		panelMenu_QLKhachHang_2.setLayout(null);
 		panelMenu_QLKhachHang_2.setBackground(new Color(5, 74, 145));
 		panelMenu_QLKhachHang_2.setBounds(2, 241, 192, 45);
 		panel_Menu.add(panelMenu_QLKhachHang_2);
-		
+
 		lblMenu_PhieuDatPhong_1 = new JLabel("HÓA ĐƠN");
 		lblMenu_PhieuDatPhong_1.setHorizontalAlignment(SwingConstants.LEFT);
 		lblMenu_PhieuDatPhong_1.setForeground(Color.WHITE);
 		lblMenu_PhieuDatPhong_1.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblMenu_PhieuDatPhong_1.setBounds(10, 10, 166, 20);
 		panelMenu_QLKhachHang_2.add(lblMenu_PhieuDatPhong_1);
-		
+
 		panel_DateTime = new JPanel();
 		panel_DateTime.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_DateTime.setBounds(10, 11, 177, 65);
 		panel_Menu.add(panel_DateTime);
 		panel_DateTime.setLayout(null);
-		
+
 		lblClock = new JLabel("00:00:00");
 		lblClock.setBounds(10, 11, 157, 24);
 		panel_DateTime.add(lblClock);
@@ -241,14 +246,13 @@ public class JFrame_ThuNgan extends JFrame {
 		lblClock.setFont(new Font("Arial", Font.PLAIN, 16));
 		lblClock.setForeground(Color.BLACK);
 		lblClock.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		lblDay = new JLabel("00/00/0000");
 		lblDay.setBounds(10, 33, 157, 24);
 		panel_DateTime.add(lblDay);
 		lblDay.setHorizontalAlignment(SwingConstants.CENTER);
 		lblDay.setForeground(Color.BLACK);
 		lblDay.setFont(new Font("Arial", Font.PLAIN, 15));
-	
 
 		panel_Function = new JPanel();
 		panel_Function.setBackground(Color.decode(hexColor_Blue1));
@@ -258,32 +262,32 @@ public class JFrame_ThuNgan extends JFrame {
 
 		panel_Function.add(Panel_QLDP);
 		panel_Function.add(Panel_QLKH);
-		
+
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
 		menuBar.setBackground(Color.decode(hexColor_Blue1));
 		menuBar.setBounds(1405, 10, 90, 45);
 		contentPane.add(menuBar);
-		
+
 		JMenu mnNewMenu = new JMenu("");
 		mnNewMenu.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		mnNewMenu.setBackground(Color.decode(hexColor_Blue1));
 		mnNewMenu.setIcon(new ImageIcon(JFrame_ThuNgan.class.getResource("/icon/user.png")));
 		menuBar.add(mnNewMenu);
-		
+
 		JMenuItem mntmNewMenuItem = new JMenuItem("Tài khoản");
 		mntmNewMenuItem.setHorizontalAlignment(SwingConstants.LEFT);
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		mnNewMenu.add(mntmNewMenuItem);
-		
+
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Trợ giúp");
 		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		mnNewMenu.add(mntmNewMenuItem_1);
-		
+
 		mntmNewMenuItem_2 = new JMenuItem("Đăng xuất");
 		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		mnNewMenu.add(mntmNewMenuItem_2);
-		
+
 		Clock();
 
 	}
@@ -293,11 +297,11 @@ public class JFrame_ThuNgan extends JFrame {
 		Panel_QLKH.setVisible(false);
 		panel.setVisible(true);
 	}
-	
+
 	private void Clock() {
 		new Thread() {
 			public void run() {
-				while(true) {
+				while (true) {
 					Calendar ca = new GregorianCalendar();
 					hour = ca.get(Calendar.HOUR);
 					min = ca.get(Calendar.MINUTE);
@@ -307,15 +311,16 @@ public class JFrame_ThuNgan extends JFrame {
 					int day = ca.get(Calendar.DAY_OF_MONTH);
 					int month = ca.get(Calendar.MONTH);
 					int year = ca.get(Calendar.YEAR);
-					
-					if(AM_PM == 1) {
+
+					if (AM_PM == 1) {
 						hour = hour + 12;
-						if(hour == 24) {
+						if (hour == 24) {
 							hour = 0;
 						}
 					}
 					lblDay.setText(day + "/" + month + "/" + year);
-					lblClock.setText(String.format("%02d", hour) + ":" + String.format("%02d", min) + ":" + String.format("%02d", sec)  );
+					lblClock.setText(String.format("%02d", hour) + ":" + String.format("%02d", min) + ":"
+							+ String.format("%02d", sec));
 				}
 			}
 		}.start();

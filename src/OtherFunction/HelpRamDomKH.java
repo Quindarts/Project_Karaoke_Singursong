@@ -43,7 +43,7 @@ public class HelpRamDomKH {
 	}
 
 	public static ArrayList<String> maToDaTaBase(String tenBang, String tenCot) {
-		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_Test";
+		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong";
 		String user = "sa";
 		String password = "230903";
 		String maKhachHang = "";

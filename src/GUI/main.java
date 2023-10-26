@@ -44,16 +44,15 @@ public class main extends JFrame {
 					// Setup my app
 					FlatLightLaf.setup();
 
-//					app = new JFrame_DangNhap();
-//					app.setVisible(true);
+					app = new JFrame_DangNhap();
+					app.setVisible(true);
 
 
-					// DEMO component
+//					 DEMO component
 //					Components component_app = new Components();
 //					component_app.setVisible(true);
 					
-					thuNgan = new JFrame_ThuNgan();
-					thuNgan.setVisible(true);
+				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

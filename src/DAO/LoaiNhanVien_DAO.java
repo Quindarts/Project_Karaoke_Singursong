@@ -71,6 +71,35 @@ public class LoaiNhanVien_DAO {
 		return loaiNhanVien;
 	}
 	
+	public LoaiNhanVien layLoaiNhanVien_TheoTenLoaiNhanVien(String xTenLoaiNV) {
+		LoaiNhanVien loaiNhanVien = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM LoaiNhanVien WHERE tenLoaiNhanVien = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, xTenLoaiNV);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maLoaiNhanVien = rs.getString("maLoaiNhanVien");
+				String tenLoaiNhanVien = rs.getString("tenLoaiNhanVien");
+				loaiNhanVien = new LoaiNhanVien(maLoaiNhanVien, tenLoaiNhanVien);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return loaiNhanVien;
+	}
+	
+	
 	public boolean taoLoaiNhanVien(LoaiNhanVien loaiNhanVien) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
