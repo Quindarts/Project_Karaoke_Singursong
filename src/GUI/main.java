@@ -25,6 +25,7 @@ import OtherFunction.HelpXLSX;
 public class main extends JFrame {
 	
 	public static void main(String[] args) {
+		
 		EventQueue.invokeLater(new Runnable() {
 			private JFrame_DangNhap app;
 			private JFrame_ThuNgan thuNgan;
@@ -42,14 +43,16 @@ public class main extends JFrame {
 					
 					// Setup my app
 					FlatLightLaf.setup();
-					app = new JFrame_DangNhap();
-					app.setVisible(true);
+
+//					app = new JFrame_DangNhap();
+//					app.setVisible(true);
+
 
 					// DEMO component
-					Components component_app = new Components();
-					component_app.setVisible(true);
-					thuNgan = new JFrame_ThuNgan();
+//					Components component_app = new Components();
+//					component_app.setVisible(true);
 					
+					thuNgan = new JFrame_ThuNgan();
 					thuNgan.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

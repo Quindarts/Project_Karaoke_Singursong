@@ -50,14 +50,13 @@ import javax.swing.border.AbstractBorder;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 
-
-
 /**
  * JFrame_DangNhap NguyenNga ThienTu
  */
 public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListener {
 
 	private JPanel contentPane;
+
 	/**
 	 * Rounded JPanel
 	 */
@@ -111,7 +110,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	/**
 	 * Color
 	 */
-	
+
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
@@ -134,7 +133,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	 * Create the frame.
 	 */
 	public JFrame_DangNhap() {
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 874, 560);
 		contentPane = new JPanel();
@@ -145,7 +144,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		contentPane.setLayout(null);
 		setLocationRelativeTo(null);
 		setResizable(false);
-		
+
 		/**
 		 * Create JPanel for login (right).
 		 */
@@ -234,7 +233,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	}
 
 	/**
-	 * Event Button 
+	 * Event Button
 	 */
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
@@ -261,7 +260,8 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 
 					System.out.println(taiKhoanDangNhap.toString());
 					System.out.println("Đăng nhập thành công");
-					nhanVienDangNhap = NV_DAO.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
+					nhanVienDangNhap = NV_DAO
+							.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
 					System.out.println(nhanVienDangNhap.toString());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
 					System.out.println("Đăng nhập vào màn hình" + role);
@@ -307,19 +307,19 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

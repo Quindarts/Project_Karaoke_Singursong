@@ -13,7 +13,7 @@ import java.util.GregorianCalendar;
 import java.awt.Color;
 import java.awt.SystemColor;
 
-public class ClockForm extends JFrame {
+public class ClockForm extends JPanel {
 
 	private JPanel contentPane;
 	private JLabel lblClock;
@@ -27,12 +27,12 @@ public class ClockForm extends JFrame {
 	 * Create the frame.
 	 */
 	public ClockForm() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
 		setBounds(100, 100, 100, 100);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-		setContentPane(contentPane);
+		
 		contentPane.setLayout(null);
 		
 		lblClock = new JLabel("00:00:00");
@@ -50,6 +50,7 @@ public class ClockForm extends JFrame {
 		lblDay.setBounds(10, 10, 159, 45);
 		contentPane.add(lblDay);
 		Clock();
+		add(contentPane);
 	}
 	
 	private void Clock() {

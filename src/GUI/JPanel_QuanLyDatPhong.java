@@ -13,6 +13,8 @@ import java.awt.Graphics2D;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.CompoundBorder;
@@ -32,6 +34,7 @@ import javax.swing.JInternalFrame;
 import javax.swing.JScrollBar;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTree;
 import javax.swing.JSpinner;
 import javax.swing.JList;
@@ -44,7 +47,20 @@ import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
+
+import com.itextpdf.text.List;
+
+import DAO.Phong_DAO;
+import DAO.TrangThaiPhong_DAO;
+import Entity.Phong;
+import Entity.TrangThaiPhong;
+
 import javax.swing.ImageIcon;
+import java.awt.GridLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
 
 public class JPanel_QuanLyDatPhong extends JPanel {
 
@@ -76,9 +92,14 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JLabel lblGioNhanPhong;
 	private JLabel lblThucDon;
 	private JPanel panel_ThanhToan;
-	private JPanel panel;
 	private JPanel panel_2;
 	private JTable table;
+	private Object objPhong;
+
+	private Phong_DAO phongDao;
+	private TrangThaiPhong_DAO trangThaiPhongDao;
+	private JTextField textField;
+	private ArrayList<Phong> dsPhong;
 
 	/**
 	 * Rounded JPanel
@@ -139,10 +160,24 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		setBounds(0, 0, 1296, 672);
 		setLayout(null);
 
+		phongDao = new Phong_DAO();
+		trangThaiPhongDao = new TrangThaiPhong_DAO();
+		try {
+			dsPhong = phongDao.layTatCaPhong();
+			if (dsPhong != null) {
+				dsPhong.forEach(ph -> {
+					System.out.println(ph.toString());
+				});
+
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+
 		panel_PDP = new JPanel();
 		panel_PDP.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
-		panel_PDP.setBackground(Color.decode(hexColor_Blue1));
-		panel_PDP.setBounds(862, 0, 434, 522);
+		panel_PDP.setBackground(Color.WHITE);
+		panel_PDP.setBounds(862, 0, 434, 585);
 		add(panel_PDP);
 		panel_PDP.setLayout(null);
 
@@ -165,59 +200,75 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		lblThongTinPhongHat.setBounds(10, 10, 408, 34);
 		panel_PDP.add(lblThongTinPhongHat);
 
-		lblTenKhachHang = new JLabel("Tên khách hàng");
-		lblTenKhachHang.setForeground(Color.decode(hexColor_Blue1));
-		lblTenKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblTenKhachHang.setBounds(25, 110, 115, 25);
-		panel_PDP.add(lblTenKhachHang);
-
-		lblSDT = new JLabel("Số điện thoại");
-		lblSDT.setForeground(Color.decode(hexColor_Blue1));
-		lblSDT.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblSDT.setBounds(25, 155, 115, 25);
-		panel_PDP.add(lblSDT);
-
-		txtTenKhachHang = new JTextField();
-		txtTenKhachHang.setColumns(10);
-		txtTenKhachHang.setBounds(150, 110, 255, 25);
-		panel_PDP.add(txtTenKhachHang);
-
-		txtSoDienThoai = new JTextField();
-		txtSoDienThoai.setColumns(10);
-		txtSoDienThoai.setBounds(150, 155, 255, 25);
-		panel_PDP.add(txtSoDienThoai);
-
-		lblGioNhanPhong = new JLabel("Giờ nhận phòng");
-		lblGioNhanPhong.setForeground(Color.decode(hexColor_Blue1));
-		lblGioNhanPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblGioNhanPhong.setBounds(25, 200, 115, 25);
-		panel_PDP.add(lblGioNhanPhong);
-
-		txtGioNhanPhong = new JTextField();
-		txtGioNhanPhong.setColumns(10);
-		txtGioNhanPhong.setBounds(150, 200, 255, 25);
-		panel_PDP.add(txtGioNhanPhong);
-
 		lblThucDon = new JLabel("THỰC ĐƠN");
 		lblThucDon.setForeground(Color.decode(hexColor_Blue1));
 		lblThucDon.setHorizontalAlignment(SwingConstants.CENTER);
 		lblThucDon.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		lblThucDon.setBounds(10, 258, 408, 34);
+		lblThucDon.setBounds(10, 335, 408, 34);
 		panel_PDP.add(lblThucDon);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(8, 302, 418, 194);
+		scrollPane.setBounds(10, 380, 418, 194);
 		panel_PDP.add(scrollPane);
-		
+
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"STT", "T\u00EAn s\u1EA3n ph\u1EA9m", "S\u1ED1 l\u01B0\u1EE3ng", "\u0110\u01A1n gi\u00E1"
-			}
-		));
+		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "STT", "T\u00EAn s\u1EA3n ph\u1EA9m",
+				"S\u1ED1 l\u01B0\u1EE3ng", "\u0110\u01A1n gi\u00E1" }));
 		scrollPane.setViewportView(table);
+
+		JPanel panel = new JPanel();
+		panel.setBounds(10, 98, 418, 95);
+		panel_PDP.add(panel);
+		panel.setLayout(null);
+
+		txtSoDienThoai = new JTextField();
+		txtSoDienThoai.setBounds(143, 58, 255, 25);
+		panel.add(txtSoDienThoai);
+		txtSoDienThoai.setColumns(10);
+
+		lblSDT = new JLabel("Số điện thoại");
+		lblSDT.setBounds(18, 58, 115, 25);
+		panel.add(lblSDT);
+		lblSDT.setForeground(Color.decode(hexColor_Blue1));
+		lblSDT.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		txtTenKhachHang = new JTextField();
+		txtTenKhachHang.setBounds(143, 12, 255, 25);
+		panel.add(txtTenKhachHang);
+		txtTenKhachHang.setColumns(10);
+
+		lblTenKhachHang = new JLabel("Tên khách hàng");
+		lblTenKhachHang.setBounds(18, 11, 115, 25);
+		panel.add(lblTenKhachHang);
+		lblTenKhachHang.setForeground(Color.decode(hexColor_Blue1));
+		lblTenKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		JPanel panel_3 = new JPanel();
+		panel_3.setBounds(10, 200, 418, 124);
+		panel_PDP.add(panel_3);
+		panel_3.setLayout(null);
+
+		lblGioNhanPhong = new JLabel("Giờ nhận phòng");
+		lblGioNhanPhong.setBounds(20, 11, 115, 25);
+		panel_3.add(lblGioNhanPhong);
+		lblGioNhanPhong.setForeground(Color.decode(hexColor_Blue1));
+		lblGioNhanPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		txtGioNhanPhong = new JTextField();
+		txtGioNhanPhong.setBounds(143, 12, 255, 25);
+		panel_3.add(txtGioNhanPhong);
+		txtGioNhanPhong.setColumns(10);
+
+		JLabel lblGioNhanPhong_1 = new JLabel("Giờ nhận phòng");
+		lblGioNhanPhong_1.setForeground(new Color(5, 74, 145));
+		lblGioNhanPhong_1.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblGioNhanPhong_1.setBounds(20, 55, 115, 25);
+		panel_3.add(lblGioNhanPhong_1);
+
+		textField = new JTextField();
+		textField.setColumns(10);
+		textField.setBounds(143, 58, 255, 25);
+		panel_3.add(textField);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setForeground(Color.decode(hexColor_Blue1));
@@ -225,54 +276,96 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		tabbedPane.setBackground(Color.WHITE);
-		tabbedPane.putClientProperty("TabbedPane.selectedBackground", Color.white);
+		tabbedPane.putClientProperty("TabbedPane.showTabSeparators", true);
 		tabbedPane.setBounds(0, 0, 858, 672);
 		add(tabbedPane);
 
-		tabbedPane.putClientProperty("TabbedPane.selectedBackground", Color.white);
 		panel_PhongBan = new JPanel();
 		panel_PhongBan.setBackground(Color.WHITE);
 
-		tabbedPane.addTab("PHÒNG HÁT", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/door-open.png")), panel_PhongBan, null);
+		tabbedPane.addTab("PHÒNG HÁT", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/door-open.png")),
+				panel_PhongBan, null);
 		panel_PhongBan.setLayout(null);
-		
-		panel = new JPanel();
-		panel.setBounds(0, 80, 843, 552);
-		panel_PhongBan.add(panel);
-		panel.setLayout(null);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setVerticalAlignment(SwingConstants.TOP);
-		lblNewLabel.setBackground(Color.WHITE);
-		lblNewLabel.setIcon(new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/img/karaoke.png")));
-		lblNewLabel.setBounds(10, 10, 143, 128);
-		panel.add(lblNewLabel);
-		
+
 		panel_2 = new JPanel();
+		panel_2.setBackground(new Color(255, 255, 255));
 		panel_2.setBounds(0, 10, 843, 60);
 		panel_PhongBan.add(panel_2);
+
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 81, 833, 500);
+		scrollPane_1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		panel_PhongBan.add(scrollPane_1);
+
+		JPanel panel_Phong = new JPanel();
+		panel_Phong.setBackground(new Color(255, 255, 255));
+		scrollPane_1.setRowHeaderView(panel_Phong);
+		panel_Phong.setLayout(new GridLayout(3, 5, 6, 6));
+		/**
+		 * 
+		 * **/
+		if (dsPhong != null) {
+			dsPhong.forEach(ph -> {
+				CardPhong cardPhong = new CardPhong(ph);
+				panel_Phong.add(cardPhong);
+				System.out.println(cardPhong.getPhong().getMaPhong());
+				
+				cardPhong.addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseClicked(MouseEvent e) {
+						if (e.getButton() == MouseEvent.BUTTON1) { // Kiểm tra nút chuột trái
+							
+							txtMaPhong.setText(cardPhong.getPhong().getMaPhong());
+						}
+					}
+				});
+			});
+		}
 
 		panel_ThucDon = new JPanel();
 
 		panel_ThucDon.setBackground(Color.white);
-		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")), panel_ThucDon, null);
-		
+		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")),
+				panel_ThucDon, null);
+
 		panel_ThucDon.setLayout(null);
 
 		panel_ThanhToan = new JPanel();
-		panel_ThanhToan.setBounds(862, 528, 434, 144);
+		panel_ThanhToan.setBounds(862, 590, 434, 82);
 		panel_ThanhToan.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_ThanhToan.setBackground(Color.decode(hexColor_Blue1));
 		add(panel_ThanhToan);
 		panel_ThanhToan.setLayout(null);
-		
+
 		JButton btnThanhToan = new JButton("THANH TOÁN");
+		btnThanhToan.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnThanhToan.setIcon(new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/usd-circle.png")));
 		btnThanhToan.setBackground(Color.decode(hexColor_Orange));
 		btnThanhToan.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnThanhToan.setForeground(Color.white);
-		btnThanhToan.setBounds(133, 99, 155, 35);
+		btnThanhToan.setBounds(138, 36, 155, 35);
 		panel_ThanhToan.add(btnThanhToan);
+	}
+
+	/**
+	 * dsPhong loadTrangThaiPhong
+	 **/
+
+	private void loadTrangThaiPhong() {
+//		int pt = phongDao.laySoLuongPhongTheoTrangThai(1);
+//		int pc = phongDao.laySoLuongPhongTheoTrangThai(2);
+//		int pb = phongDao.laySoLuongPhongTheoTrangThai(4);
+//		int pta = phongDao.laySoLuongPhongTheoTrangThai(3);
+//
+//		lbPhongTrong.setText("Phòng trống (" + pt + ")");
+//		lbPhongCho.setText("Phòng chờ (" + pc + ")");
+//		lbphongBan.setText("Phòng đang sử dụng (" + pb + ")");
+//		lbTam.setText("Phòng tạm (" + pta + ")");
 
 	}
+
 }
