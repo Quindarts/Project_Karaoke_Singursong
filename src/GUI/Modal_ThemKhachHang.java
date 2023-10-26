@@ -186,8 +186,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		Object o = e.getSource();
 
 		if (o.equals(btn__Save)) {
-			
-
 			String tenKhachHang = txt__TenKH.getText();
 			String diaChi = txt__DiaChi.getText();
 			String sdt = txt__SDT.getText();
@@ -196,8 +194,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
 			
 			String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
-			txt__MaKH.setText(maKhachHang);
-			
+			txt__MaKH.setText(maKhachHang);		
 			int diemThuong = 0;
 			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 

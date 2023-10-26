@@ -43,6 +43,8 @@ import javax.swing.event.ListSelectionListener;
 
 public class JPanel_QuanLyKhachHang extends JPanel {
 
+	private Modal_ThemKhachHang modal_ThemKhachHang;
+	
 	/**
 	 * Color
 	 */
@@ -117,6 +119,8 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		setLayout(null);
 		setBounds(0, 0, 1296, 672);
 
+		modal_ThemKhachHang = new Modal_ThemKhachHang();
+		
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1296, 672);
 		panel.setBackground(Color.decode(hexColor_Blue1));
@@ -207,6 +211,14 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		btnThem.setBackground(Color.decode(hexColor_Green));
 		btnThem.setBounds(10, 0, 125, 35);
 		panel.add(btnThem);
+		btnThem.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {			
+				// TODO Auto-generated method stub
+				modal_ThemKhachHang.setVisible(true);
+			}
+		});
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
