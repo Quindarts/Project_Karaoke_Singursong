@@ -30,7 +30,7 @@ import Entity.HoaDon;
 
 import javax.swing.JButton;
 
-public class Frame_HoaDon extends JFrame {
+public class JFrame_HoaDon extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txt_MaHoaDon;
@@ -64,7 +64,7 @@ public class Frame_HoaDon extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Frame_HoaDon frame = new Frame_HoaDon();
+					JFrame_HoaDon frame = new JFrame_HoaDon();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -76,7 +76,7 @@ public class Frame_HoaDon extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Frame_HoaDon() {
+	public JFrame_HoaDon() {
 		
 		try {
 			ConnectDB.getInstance().connect();
