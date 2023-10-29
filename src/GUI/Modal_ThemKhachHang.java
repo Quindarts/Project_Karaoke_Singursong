@@ -155,9 +155,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nam.setBackground(new Color(255, 255, 255));
 
 		rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		rdbt__nam.setBounds(172, 209, 78, 21);
 		panel_1.add(rdbt__nam);
-
 		btngr__gioiTinh.add(rdbt__nam);
 
 		rdbt__nam.setActionCommand("Nam");
