@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.AbstractBorder;
 
 import GUI.JPanel_QuanLyDatPhong.RoundedTransparentBorder;
@@ -29,6 +30,7 @@ import Entity.KhachHang;
 import Entity.Phong;
 
 import javax.swing.JButton;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -71,6 +73,10 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 	private JTextField textField_1;
 	private JTextField txt_TuoiDen;
 	private JTextField txt_TuoiTu;
+	private JCheckBox chcbx_Nam;
+	private JCheckBox chcbx_Nu;
+	private JCheckBox chcbx_TatCa;
+	private ButtonGroup btnGr_LocTheoGioiTinh;
 
 	/**
 	 * Rounded JPanel
@@ -186,9 +192,8 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 					String diemThuong = model.getValueAt(row, 6).toString();
 					String ghiChu = model.getValueAt(row, 7).toString();
 					modal_ThemKhachHang.setVisible(true);
-					modal_ThemKhachHang.setModal_ThemKhachHang(maKhachHang, hoTen, gioiTinh, sdt, diaChi, ghiChu);
-					System.out.println(ngaySinh);
-					
+					modal_ThemKhachHang.setModal_ThemKhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, sdt, diaChi, ghiChu);
+
 				}
 			}
 
@@ -228,23 +233,28 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		lbl_Loc_GioTinh.setBounds(10, 10, 100, 16);
 		pnl_Loc_TheoGioiTinh.add(lbl_Loc_GioTinh);
 
-		JCheckBox chcbx_Nam = new JCheckBox("Nam");
+		chcbx_Nam = new JCheckBox("Nam");
 		chcbx_Nam.setBackground(new Color(255, 255, 255));
 		chcbx_Nam.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_Nam.setBounds(6, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nam);
 
-		JCheckBox chcbx_Nu = new JCheckBox("Nữ");
+		chcbx_Nu = new JCheckBox("Nữ");
 		chcbx_Nu.setBackground(new Color(255, 255, 255));
 		chcbx_Nu.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_Nu.setBounds(72, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nu);
 
-		JCheckBox chcbx_TatCa = new JCheckBox("Tất cả");
+		chcbx_TatCa = new JCheckBox("Tất cả");
 		chcbx_TatCa.setBackground(new Color(255, 255, 255));
 		chcbx_TatCa.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_TatCa.setBounds(138, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_TatCa);
+		
+		ButtonGroup btnGr_LocTheoGioiTinh = new ButtonGroup();
+		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
+		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
+		btnGr_LocTheoGioiTinh.add(chcbx_TatCa);
 
 		JLabel lbl_Loc = new JLabel("BỘ LỌC TÌM KIẾM");
 		lbl_Loc.setHorizontalAlignment(SwingConstants.CENTER);
@@ -360,25 +370,14 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 				modal_ThemKhachHang.setVisible(true);
 				model.fireTableDataChanged();
 				DocDuLieu();
-
 			}
 		});
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int row = table_KhachHang.getSelectedRow();
-				String maKhachHang = model.getValueAt(row, 0).toString();
-
-				KhachHang khachHang = new KhachHang(maKhachHang);
-				try {
-					DAO_KH.xoaKhachHang(khachHang);
-					String tenKhachHang = khachHang.getHoTen();
-					JOptionPane.showMessageDialog(null, "Xóa khách hàng " + tenKhachHang + " thành công");
-					model.removeRow(row);
-				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Xóa thất bại");
-				}
+				XoaKhachHang();
+				DocDuLieu();
 			}
 		});
 		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
@@ -428,18 +427,32 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			if (dsKH != null) {
 				dsKH.forEach(kh -> {
 					String gender;
-					if(kh.isGioiTinh()) {
+					if (kh.isGioiTinh()) {
 						gender = "Nam";
 					} else {
 						gender = "Nữ";
 					}
-					Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(),
-							kh.getDiaChi(), kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
+					Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
+							kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
 					model.addRow(rowData);
 				});
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không thể đọc dữ liệu");
+		}
+	}
+	
+	public void XoaKhachHang () {
+		int row = table_KhachHang.getSelectedRow();
+		String maKhachHang = model.getValueAt(row, 0).toString();
+		KhachHang khachHang = new KhachHang(maKhachHang);
+		try {
+			String tenKhachHang = DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang).getHoTen();
+			DAO_KH.xoaKhachHang(khachHang);
+			JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenKhachHang + "thành công");
+			model.removeRow(row);
+		} catch (Exception e2) {
+			JOptionPane.showMessageDialog(null, "Xóa thất bại");
 		}
 	}
 }

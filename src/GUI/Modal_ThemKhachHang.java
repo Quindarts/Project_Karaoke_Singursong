@@ -44,9 +44,9 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private JLabel lbl__TenKH;
 	private ButtonGroup btngr__gioiTinh;
 	private JTextField txt__SDT;
-	private Object dateNgaySinh;
+	private JDateChooser dateNgaySinh;
 
-	private final SimpleDateFormat ngaySinh = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private JButton btn__exit;
 	private JButton btn__Save;
 	private JTextArea txtA__GhiChu;
@@ -57,14 +57,10 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private JRadioButton rdbt__nu;
 	private JRadioButton rdbt__nam;
 
-
-
-
-
 	public Modal_ThemKhachHang() {
 
 		DAO_KH = new KhachHang_DAO();
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 950, 400);
 		contentPane = new JPanel();
@@ -101,7 +97,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		txt__MaKH.setBounds(172, 67, 255, 25);
 		panel_1.add(txt__MaKH);
 		txt__MaKH.setColumns(10);
-		
 
 		txt__TenKH = new JTextField();
 		txt__TenKH.setBounds(172, 112, 255, 25);
@@ -151,9 +146,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nu.setBounds(290, 209, 70, 21);
 		panel_1.add(rdbt__nu);
 		btngr__gioiTinh.add(rdbt__nu);
+		
 		rdbt__nam = new JRadioButton("Nam");
+		rdbt__nam.setSize(70, 21);
+		rdbt__nam.setLocation(172, 209);
 		rdbt__nam.setBackground(new Color(255, 255, 255));
-
 		rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		panel_1.add(rdbt__nam);
 		btngr__gioiTinh.add(rdbt__nam);
@@ -167,41 +164,47 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 16));
 
 		date_NgaySinh = new JDateChooser();
+		date_NgaySinh.setDateFormatString("yyyy-MM-dd");
 		date_NgaySinh.setBounds(172, 159, 255, 25);
 		panel_1.add(date_NgaySinh);
 
 		JPanel pnl_GhiChu = new JPanel();
-		pnl_GhiChu.setBorder(new LineBorder(new Color(0, 0, 0)));
+		pnl_GhiChu.setBackground(new Color(255, 255, 255));
+		pnl_GhiChu.setBorder(new LineBorder(new Color(192, 192, 192)));
 		pnl_GhiChu.setBounds(604, 159, 257, 74);
 		panel_1.add(pnl_GhiChu);
 		pnl_GhiChu.setLayout(null);
 
 		txtA__GhiChu = new JTextArea();
-		txtA__GhiChu.setForeground(new Color(192, 192, 192));
+		txtA__GhiChu.setForeground(new Color(0, 0, 0));
 		txtA__GhiChu.setBounds(1, 1, 255, 72);
 		pnl_GhiChu.add(txtA__GhiChu);
-		
+
 //---------------------------
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
 	}
-	
-	
-	
-	public void setModal_ThemKhachHang(String maKH, String tenKH, String gioiTinh, String soDienThoai, String diaChi,
-			String ghiChu) {
+
+	public void setModal_ThemKhachHang(String maKH, String tenKH, String gioiTinh, String ngaySinh, String soDienThoai,
+			String diaChi, String ghiChu) {
 		txt__MaKH.setText(maKH);
 		txt__TenKH.setText(tenKH);
 		txt__SDT.setText(soDienThoai);
 		txt__DiaChi.setText(diaChi);
+		java.util.Date ngaySinhStr;
+		try {
+			ngaySinhStr = dateFormat_YMD.parse(ngaySinh);
+			date_NgaySinh.setDate(ngaySinhStr);
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
 		txtA__GhiChu.setText(ghiChu);
-		if(gioiTinh.equals("Nam")) {
+		if (gioiTinh.equals("Nam")) {
 			rdbt__nam.setSelected(true);
 		} else {
 			rdbt__nu.setSelected(true);
 		}
-		
 	}
 
 	@Override
@@ -234,14 +237,14 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
 			try {
 				DAO_KH.taoKhachHang(kh);
-				JOptionPane.showMessageDialog(null, "Thêm Khách Hàng thành công");
+				JOptionPane.showMessageDialog(null, "Thêm khách hàng " + tenKhachHang + " thành công!");
 				setVisible(false);
 			} catch (Exception e2) {
 				// TODO: handle exception
-				JOptionPane.showMessageDialog(null, "Khách Hàng đã tồn tại");
+				JOptionPane.showMessageDialog(null, "Không thể thêm khách hàng!");
 			}
 		} else {
-			JOptionPane.showMessageDialog(null, "Khách Hàng đã tồn tại");
+			JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " đã tồn tại!");
 
 		}
 	}
