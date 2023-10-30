@@ -14,6 +14,7 @@ import Entity.KhachHang;
 import OtherFunction.HelpRamDomKH;
 import OtherFunction.HelpValidate;
 
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,6 +26,7 @@ import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.awt.Component;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -32,6 +34,9 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
@@ -109,14 +114,9 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		panel_1.add(lbl__TenKH);
 
 		txt__MaKH = new JTextField();
-<<<<<<< HEAD
 
-		txt__MaKH.setBounds(172, 70, 255, 25);
-
-=======
 		txt__MaKH.setEditable(false);
 		txt__MaKH.setBounds(172, 67, 255, 25);
->>>>>>> d3d45ce4ead67404f61feb00ca5c82596d3339ec
 		panel_1.add(txt__MaKH);
 		txt__MaKH.setColumns(10);
 
@@ -168,31 +168,9 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		lbl__SDT.setBounds(490, 70, 109, 25);
 		panel_1.add(lbl__SDT);
 
-<<<<<<< HEAD
-		Box verticalBox_1 = Box.createVerticalBox();
-		verticalBox_1.setBounds(641, 42, 0, 0);
-		panel_1.add(verticalBox_1);
 
-		Box horizontalBox_4 = Box.createHorizontalBox();
-		verticalBox_1.add(horizontalBox_4);
-
-		Box horizontalBox_2 = Box.createHorizontalBox();
-		verticalBox_1.add(horizontalBox_2);
-
-		Box horizontalBox_6 = Box.createHorizontalBox();
-		verticalBox_1.add(horizontalBox_6);
-
-		txtA__GhiChu = new JTextArea();
-		txtA__GhiChu.setWrapStyleWord(true);
-		txtA__GhiChu.setLineWrap(true);
-		txtA__GhiChu.setBounds(604, 150, 255, 72);
-		panel_1.add(txtA__GhiChu);
-
-		JRadioButton rdbt__nu = new JRadioButton("Nữ");
-=======
 		rdbt__nu = new JRadioButton("Nữ");
 		rdbt__nu.setBackground(new Color(255, 255, 255));
->>>>>>> d3d45ce4ead67404f61feb00ca5c82596d3339ec
 		rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		rdbt__nu.setBounds(290, 200, 70, 21);
 		panel_1.add(rdbt__nu);
@@ -203,10 +181,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nam.setLocation(172, 209);
 		rdbt__nam.setBackground(new Color(255, 255, 255));
 		rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-<<<<<<< HEAD
-		rdbt__nam.setBounds(172, 200, 78, 21);
-=======
->>>>>>> d3d45ce4ead67404f61feb00ca5c82596d3339ec
 		panel_1.add(rdbt__nam);
 		btngr__gioiTinh.add(rdbt__nam);
 
@@ -219,11 +193,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		panel_1.add(lbl__tieuDe);
 		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 17));
 
-<<<<<<< HEAD
-		dateChooser = new JDateChooser();
-		dateChooser.setBounds(172, 150, 255, 25);
-		panel_1.add(dateChooser);
-=======
+
 		date_NgaySinh = new JDateChooser();
 		date_NgaySinh.setDateFormatString("yyyy-MM-dd");
 		date_NgaySinh.setBounds(172, 159, 255, 25);
@@ -242,10 +212,10 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		pnl_GhiChu.add(txtA__GhiChu);
 
 //---------------------------
->>>>>>> d3d45ce4ead67404f61feb00ca5c82596d3339ec
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
+		
 	}
 
 	public void setModal_ThemKhachHang(String maKH, String tenKH, String gioiTinh, String ngaySinh, String soDienThoai,
@@ -275,13 +245,23 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		Object o = e.getSource();
 
 		if (o.equals(btn__Save)) {
-			themKhachHang();
-		}
-
+			if(txt__MaKH.getText().equals("")) {
+				themKhachHang();
+			}else {
+				capNhatKhachHang();
+				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
+				Panel.setJPanel_QuanLyKhachHang(true);
+			}
+		} 
+		
 		if (o.equals(btn__exit)) {
 			setVisible(false);
 		}
+		
 	}
+	
+
+	
 
 	public void themKhachHang() {
 		String tenKhachHang = txt__TenKH.getText();
@@ -295,8 +275,8 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		int diemThuong = 0;
 		boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 		KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong, ghiChu);
-		System.out.println(kh.toString());
 		if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
+			System.out.println(maKhachHang);
 			try {
 				DAO_KH.taoKhachHang(kh);
 				JOptionPane.showMessageDialog(null, "Thêm khách hàng " + tenKhachHang + " thành công!");
@@ -307,6 +287,31 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " đã tồn tại!");
+
+		}
+	}
+	
+	public void capNhatKhachHang() {
+		String tenKhachHang = txt__TenKH.getText();
+		String diaChi = txt__DiaChi.getText();
+		String sdt = txt__SDT.getText();
+		java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
+		String ghiChu = txtA__GhiChu.getText();
+		String maKhachHang = txt__MaKH.getText();
+		int diemThuong = 0;
+		boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
+		KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong, ghiChu);
+		if (DAO_KH.capNhatKhachHang(kh)) {
+			try {
+				DAO_KH.capNhatKhachHang(kh);
+				JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
+				setVisible(false);
+			} catch (Exception e2) {
+				// TODO: handle exception
+				JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " Không đã tồn tại!");
 
 		}
 	}

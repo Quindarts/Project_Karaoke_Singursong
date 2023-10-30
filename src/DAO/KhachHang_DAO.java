@@ -170,8 +170,7 @@ public KhachHang layKhachHang_TheoSDT(String SDT) {
 		int n = 0;
 		try {
 			statement = con.prepareStatement(
-					"UPDATE KhachHang SET hoTen = ?, gioiTinh = ?, ngaySinh = ?, diaChi = ?, soDienThoai = ?, diemThuong = ?, ghiChu = ?"
-							+ " WHERE maKhachHang = ?");
+					"UPDATE KhachHang SET hoTen = ?, gioiTinh = ?, ngaySinh = ?, diaChi = ?, soDienThoai = ?, diemThuong = ?, ghiChu = ? WHERE maKhachHang = ?");
 			statement.setString(1, khachHang.getHoTen());
 			statement.setBoolean(2, khachHang.isGioiTinh());
 			statement.setDate(3, khachHang.getNgaySinh());
