@@ -364,6 +364,8 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 					ph = phong_DAO.timPhong_TheoMaPhong(txtMaPhong.getText().trim());
 					ph.setTrangThaiPhong(new TrangThaiPhong("OCP", "Đã đặt"));
 					
+					System.out.println(ph.getTrangThaiPhong().getTenTrangThai());
+					
 					if (phong_DAO.capNhatPhong(ph)) {
 						renderDanhSachPhong();
 						JOptionPane.showMessageDialog(null, "Đặt phòng thành công!", "Thành công",
