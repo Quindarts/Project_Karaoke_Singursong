@@ -91,12 +91,18 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
+	private Date ngaySinh_Tu;
+	private Date ngaySinh_Den;
 	private ButtonGroup btnGr_LocTheoGioiTinh;
+	private Date chkNgaySinh = new Date();
+	private Date ngaySinh = new Date();
+	long khoangTuoi;
 
 
 	private JButton btnThemKhachHang;
 
-//	private AbstractButton btnThem;
+	private AbstractButton btnThem;
+
 
 	/**
 	 * Rounded JPanel
@@ -381,28 +387,13 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		pnl_Loc_TheoTuoi.add(txt_TuoiTu);
 
 
-		JButton btnLoc = new JButton("Lọc");
-		btnLoc.setForeground(Color.WHITE);
-		btnLoc.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		btnLoc.setBackground(new Color(62, 124, 177));
-		btnLoc.setBounds(73, 570, 123, 35);
-		pnl_Loc.add(btnLoc);
-		btnLoc.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				LocDuLieu();
-			}
-		});
 
-		JButton btnThem = new JButton("Thêm");
-		btnThem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
-		btnThem.setForeground(Color.WHITE);
-		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnThem.setBackground(Color.decode(hexColor_Green));
-		btnThem.setBounds(10, 0, 125, 35);
-		panel.add(btnThem);
-
-
+//		btnThem.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				modal_ThemKhachHang.setVisible(true);
+//			}
+//		});
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
@@ -443,8 +434,11 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/search.png")));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
 		btnTimKiem.setForeground(Color.WHITE);
+
+
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		btnTimKiem.addActionListener(new ActionListener() {
+
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -558,6 +552,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 
 
 
+
 	public void LocDuLieu() {
 	    int loc_tuoiTu, loc_tuoiDen; // Lấy tuổi
 	    try {
@@ -618,6 +613,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 	}
 
 
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -629,7 +625,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		
 	}
-
 
 
 }
