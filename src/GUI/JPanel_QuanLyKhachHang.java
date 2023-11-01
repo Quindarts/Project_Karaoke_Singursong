@@ -546,6 +546,7 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 	    } catch (NumberFormatException e) {
 	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
 	        loc_tuoiTu = 0;
+	        txt_TuoiTu.setText("0");
 	    }    
 	    try {
 	        loc_tuoiDen = Integer.parseInt(txt_TuoiDen.getText().trim());
@@ -560,6 +561,7 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 	    } catch (NumberFormatException e) {
 	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
 	    	loc_diemThuongTu = 0;
+	    	txt_DiemThuongTu.setText("0");
 	    }
 	    try {  
 	        loc_diemThuongDen = Integer.parseInt(txt_DiemThuongDen.getText().trim());
