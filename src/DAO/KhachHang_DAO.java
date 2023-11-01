@@ -89,6 +89,50 @@ public class KhachHang_DAO {
 		}
 		return khachHang;
 	}
+	
+	public KhachHang layKhachHang_TheoSoDienThoai(String soDT) {
+		
+		KhachHang khachHang = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		
+		try {
+			String sql = "SELECT * FROM KhachHang WHERE soDienThoai = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, soDT);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				
+				String maKhachHang = rs.getString("maKhachHang");
+				String hoTen = rs.getString("hoTen");
+				Boolean gioiTinh = rs.getBoolean("gioiTinh");
+				java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+				String diaChi = rs.getString("diaChi");
+				String soDienThoai = rs.getString("soDienThoai");
+				int diemThuong = rs.getInt("diemThuong");
+				String ghiChu = rs.getString("ghiChu");
+				khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, diemThuong,
+						ghiChu);
+				
+			}
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+
+		} finally {
+			try {
+				
+				statement.close();
+				
+			} catch (Exception e2) {
+				
+				e2.printStackTrace();
+				
+			}
+		}
+		return khachHang;
+	}
 
 public KhachHang layKhachHang_TheoSDT(String SDT) {
 		
