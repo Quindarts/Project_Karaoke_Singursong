@@ -48,6 +48,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JCheckBox;
 import com.toedter.calendar.JDateChooser;
 
@@ -447,7 +448,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 	public void DocDuLieu() {
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		model.getDataVector().removeAllElements();
-		model.fireTableDataChanged();
+	
 		try {
 			dsKH = DAO_KH.layTatCaKhachHang();
 			if (dsKH != null) {
@@ -461,8 +462,10 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 					Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
 							kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
 					model.addRow(rowData);
-				});
+					table_KhachHang.setModel(model);
+				});	
 			}
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không thể đọc dữ liệu");
 		}
