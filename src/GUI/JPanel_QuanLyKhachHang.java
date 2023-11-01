@@ -84,12 +84,8 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
-	private Date ngaySinh_Tu;
-	private Date ngaySinh_Den;
 	private ButtonGroup btnGr_LocTheoGioiTinh;
-	private Date chkNgaySinh = new Date();
-	private Date ngaySinh = new Date();
-	long khoangTuoi;
+
 
 	/**
 	 * Rounded JPanel
@@ -366,6 +362,19 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		txt_TuoiTu.setBounds(40, 38, 70, 19);
 		pnl_Loc_TheoTuoi.add(txt_TuoiTu);
 
+		JButton btnLoc = new JButton("Lọc");
+		btnLoc.setForeground(Color.WHITE);
+		btnLoc.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnLoc.setBackground(new Color(62, 124, 177));
+		btnLoc.setBounds(73, 570, 123, 35);
+		pnl_Loc.add(btnLoc);
+		btnLoc.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LocDuLieu();
+			}
+		});
+
 		JButton btnThem = new JButton("Thêm");
 		btnThem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
 		btnThem.setForeground(Color.WHITE);
@@ -528,4 +537,67 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
+
+
+	public void LocDuLieu() {
+	    int loc_tuoiTu, loc_tuoiDen; // Lấy tuổi
+	    try {
+	        loc_tuoiTu = Integer.parseInt(txt_TuoiTu.getText().trim());
+	    } catch (NumberFormatException e) {
+	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
+	        loc_tuoiTu = 0;
+	    }    
+	    try {
+	        loc_tuoiDen = Integer.parseInt(txt_TuoiDen.getText().trim());
+	    } catch (NumberFormatException e) {
+	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối đa
+	        loc_tuoiDen = Integer.MAX_VALUE; // Lọc theo tất cả các tuổi
+	    }
+
+	    int loc_diemThuongTu, loc_diemThuongDen; // Lấy điểm thưởng
+	    try {
+	    	 loc_diemThuongTu = Integer.parseInt(txt_DiemThuongTu.getText().trim());
+	    } catch (NumberFormatException e) {
+	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
+	    	loc_diemThuongTu = 0;
+	    }
+	    try {  
+	        loc_diemThuongDen = Integer.parseInt(txt_DiemThuongDen.getText().trim());
+	    } catch (NumberFormatException e) {
+	        loc_diemThuongDen = Integer.MAX_VALUE; // Lọc theo tất cả điểm thưởng
+	    }
+
+	    // Kiểm tra nếu không chọn lọc theo giới tính thì mặc định là lọc tất cả
+	    boolean loc_nam = chcbx_Nam.isSelected();
+	    boolean loc_nu = chcbx_Nu.isSelected();
+	    boolean loc_tatCa = !loc_nam && !loc_nu; // Nếu cả nam và nữ đều không được chọn
+
+	    model.getDataVector().removeAllElements();
+	    boolean ketQuaLoc = false;
+
+	    for (KhachHang kh : DAO_KH.layTatCaKhachHang()) {
+	        String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
+	        Calendar ngayHienTai = Calendar.getInstance();
+	        Calendar cal = Calendar.getInstance();
+	        cal.setTime(kh.getNgaySinh());
+	        int tuoi = ngayHienTai.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
+	        int diemThuong = kh.getDiemThuong();
+
+	        if ((loc_tatCa || (loc_nam && kh.isGioiTinh()) || (loc_nu && !kh.isGioiTinh())) &&
+	            (loc_tuoiTu <= tuoi && tuoi <= loc_tuoiDen) &&
+	            (loc_diemThuongTu <= diemThuong && diemThuong <= loc_diemThuongDen)) {
+	            Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(),
+	                kh.getDiaChi(), kh.getSoDienThoai(), diemThuong, kh.getGhiChu() };
+	            model.addRow(rowData);
+	            ketQuaLoc = true;
+	        }
+	    }
+
+	    if (!ketQuaLoc) {
+	        JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
+	    }
+	}
+
+
+
 }
