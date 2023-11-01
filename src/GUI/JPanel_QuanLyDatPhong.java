@@ -15,6 +15,9 @@ import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.regex.Pattern;
 
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.CompoundBorder;
@@ -52,6 +55,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.util.SystemOutLogger;
 
+import com.ctc.wstx.shaded.msv_core.verifier.identity.Matcher;
 import com.itextpdf.text.List;
 
 import DAO.KhachHang_DAO;
@@ -70,6 +74,8 @@ import Entity.TrangThaiPhong;
 import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
@@ -100,8 +106,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JTextField txtMaPhong;
 	private JTextField txtTenKhachHang;
 	private JTextField txtSoDienThoai;
-
-
 
 	private JLabel lblMaPhong;
 	private JLabel lblThongTinPhongHat;
@@ -135,7 +139,8 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	private JTextField txtGioNhanPhong;
 	private JLabel lblLoaiPhong;
 	private JTextField txtTenPhong;
-
+	private JButton btnXacNhanDatPhong;
+	private JPanel panel_Phong;
 
 	/**
 	 * Rounded JPanel
@@ -197,20 +202,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		setBounds(0, 0, 1296, 672);
 		setLayout(null);
 
-		phongDao = new Phong_DAO();
-		trangThaiPhongDao = new TrangThaiPhong_DAO();
-		try {
-			dsPhong = phongDao.layTatCaPhong();
-			if (dsPhong != null) {
-				dsPhong.forEach(ph -> {
-					System.out.println(ph.toString());
-				});
-
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-
 		panel_PDP = new JPanel();
 		panel_PDP.setBorder(null);
 		panel_PDP.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
@@ -271,7 +262,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		txtTenKhachHang = new JTextField();
 
 		txtTenKhachHang.setEnabled(false);
-		txtTenKhachHang.setEditable(false);
 		txtTenKhachHang.setBounds(157, 47, 241, 25);
 		panel_TTKH.add(txtTenKhachHang);
 		txtTenKhachHang.setColumns(10);
@@ -347,20 +337,90 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		panel_PDP.add(lblThoiGianNhan);
 
 		txtGioNhanPhong = new JTextField();
-		txtGioNhanPhong.setText("dcdcdcdc");
-//		txtGioNhanPhong.setEnabled(false);
-//		txtGioNhanPhong.setEditable(false);
+		Calendar ca = new GregorianCalendar();
+		int day = ca.get(Calendar.DAY_OF_MONTH);
+		int month = ca.get(Calendar.MONTH);
+		int year = ca.get(Calendar.YEAR);
+
+		txtGioNhanPhong.setText(String.format("%02d", day) + "-" + String.format("%02d", month + 1) + "-"
+				+ String.format("%04d", year));
+		txtGioNhanPhong.setEnabled(false);
+		txtGioNhanPhong.setEditable(false);
 		txtGioNhanPhong.setColumns(10);
 		txtGioNhanPhong.setBounds(202, 87, 146, 19);
 		panel_PDP.add(txtGioNhanPhong);
 
-		JButton btnXacNhanDatPhong = new JButton("XÁC NHẬN");
+		btnXacNhanDatPhong = new JButton("XÁC NHẬN");
 		btnXacNhanDatPhong.setBounds(141, 630, 155, 35);
 		panel_PDP.add(btnXacNhanDatPhong);
 		btnXacNhanDatPhong.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String regexHoTen = "^[AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+ [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+(?: [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]*)*";
+				Pattern patternHoTen = Pattern.compile(regexHoTen);
+				java.util.regex.Matcher matcher = patternHoTen.matcher(txtTenKhachHang.getText().trim());
+				if(matcher.matches()) {
+					Phong_DAO phong_DAO = new Phong_DAO();
+					Phong ph = new Phong();
+					ph = phong_DAO.timPhong_TheoMaPhong(txtMaPhong.getText().trim());
+					ph.setTrangThaiPhong(new TrangThaiPhong("OCP", "Đã đặt"));
+					
+					System.out.println(ph.getTrangThaiPhong().getTenTrangThai());
+					
+					if (phong_DAO.capNhatPhong(ph)) {
+						renderDanhSachPhong();
+						JOptionPane.showMessageDialog(null, "Đặt phòng thành công!", "Thành công",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(null, "Đặt phòng không thành công!", "Không thành công",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Tên không đúng", "Không thành công",
+							JOptionPane.INFORMATION_MESSAGE);
+				}
+				
+					
 			}
 		});
+
+		txtSoDienThoai.addKeyListener(new KeyListener() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					txtTenKhachHang.setText("");
+					String regexSDT = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
+					Pattern patternSDT = Pattern.compile(regexSDT);
+					java.util.regex.Matcher matcher = patternSDT.matcher(txtSoDienThoai.getText().trim());
+					if (!matcher.matches()) {
+						JOptionPane.showMessageDialog(null, "Số điện thoại bạn nhập vào không đúng", "Thông báo lỗi",
+								JOptionPane.INFORMATION_MESSAGE);
+					} else {
+						txtTenKhachHang.setEnabled(true);
+					}
+
+					if (txtSoDienThoai.getText().trim() != "" && matcher.matches()) {
+						KhachHang_DAO KH_DAO = new KhachHang_DAO();
+						KhachHang kh = new KhachHang();
+						if (KH_DAO.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim()) != null) {
+							kh = KH_DAO.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim());
+							txtTenKhachHang.setText(kh.getHoTen());
+							txtTenKhachHang.setEnabled(false);
+						} else {
+							txtTenKhachHang.setEnabled(true);
+						}
+					}
+				}
+			}
+
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+		});
+
 //				btnXacNhanDatPhong.setIcon(new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/usd-circle.png")));
 		btnXacNhanDatPhong.setBackground(Color.decode(hexColor_Green));
 		btnXacNhanDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -446,26 +506,54 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		panel_PhongBan.add(scrollPane_1);
 
-		JPanel panel_Phong = new JPanel();
+		panel_Phong = new JPanel();
 		panel_Phong.setBackground(new Color(255, 255, 255));
 		scrollPane_1.setRowHeaderView(panel_Phong);
 		panel_Phong.setLayout(new GridLayout(3, 5, 6, 6));
 		/**
 		 * 
 		 * **/
+		renderDanhSachPhong();
+
+	}
+
+	public void clearForm() {
+		txtSoDienThoai.setText("");
+		txtGioNhanPhong.setText("");
+//		txtMaPhong.setText("");
+		txtTenPhong.setText("");
+		txtLoaiPhong.setText("");
+		txtTenKhachHang.setText("");
+		txtGiaPhong.setText("");
+	}
+
+	public void renderDanhSachPhong() {
+		panel_Phong.removeAll();
+		phongDao = new Phong_DAO();
+		trangThaiPhongDao = new TrangThaiPhong_DAO();
+		try {
+			dsPhong = phongDao.layTatCaPhong();
+			if (dsPhong != null) {
+				dsPhong.forEach(ph -> {
+					System.out.println(ph.toString());
+				});
+
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		if (dsPhong != null) {
 			dsPhong.forEach(ph -> {
 				CardPhong cardPhong = new CardPhong(ph);
 				panel_Phong.add(cardPhong);
 
 				cardPhong.addMouseListener(new MouseAdapter() {
-				
 
 					@Override
 					public void mouseClicked(MouseEvent e) {
-						
+
 						if (e.getButton() == MouseEvent.BUTTON1) {
-							
+
 							HelpDate hDate = new HelpDate();
 							txtMaPhong.setText(cardPhong.getPhong().getMaPhong());
 							PhieuDatPhong pdp = null;
@@ -475,8 +563,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 							if (!txtMaPhong.getText().trim().equals("")) {
 
 								pdp = PDP_DAO.layPhieuDatPhong_TheoMaPhong(txtMaPhong.getText());
-							
-								
+
 								if (pdp == null) {
 									clearForm();
 								}
@@ -489,8 +576,9 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 
 										txtTenKhachHang.setText(kh.getHoTen());
 										txtSoDienThoai.setText(kh.getSoDienThoai());
-										txtGioNhanPhong.setText(hDate.chuyenDateThanhString(pdp.getThoiGianNhanPhong()));
-									
+										txtGioNhanPhong
+												.setText(hDate.chuyenDateThanhString(pdp.getThoiGianNhanPhong()));
+
 									}
 								} catch (Exception e2) {
 									// TODO: handle exception
@@ -505,9 +593,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 								} catch (Exception e2) {
 									// TODO: handle exception
 								}
-						
-
-								
 
 							}
 						}
@@ -515,16 +600,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 				});
 			});
 		}
-	}
-
-	public void clearForm() {
-		txtSoDienThoai.setText("");
-		txtGioNhanPhong.setText("");
-//		txtMaPhong.setText("");
-		txtTenPhong.setText("");
-		txtLoaiPhong.setText("");
-		txtTenKhachHang.setText("");
-		txtGiaPhong.setText("");
 	}
 
 	private void loadTrangThaiPhong() {
