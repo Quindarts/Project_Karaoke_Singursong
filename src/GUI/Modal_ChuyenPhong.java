@@ -29,37 +29,35 @@ public class Modal_ChuyenPhong extends JFrame {
 
 	public Modal_ChuyenPhong(Phong phong) throws HeadlessException {
 		super();
+		getContentPane().setBackground(new Color(255, 255, 255));
 		this.phong = phong;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBackground(Color.white);
-		setSize(400, 200);
+		setSize(886, 360);
 		setTitle("Chuyển phòng");
 		setBackground(Color.white);
-		setLayout(new BorderLayout());
-		JLabel nameLabel = new JLabel(phong.getTenPhong());
-		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(nameLabel, BorderLayout.CENTER);
+		getContentPane().setLayout(new BorderLayout());
 	}
 
 
-	public Modal_ChuyenPhong(Phong phong, int width, int height, String title) {
-		super();
-		this.phong = phong;
-		this.width = width;
-		this.height = height;
-		this.title = title;
-		//
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBackground(Color.white);
-		setSize(400, 200);
-		setTitle("Chuyển phòng");
-		setBackground(Color.white);
-		setLayout(new BorderLayout());
-
-		JLabel nameLabel = new JLabel(phong.getTenPhong());
-
-		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(nameLabel, BorderLayout.CENTER);
-	}
+//	public Modal_ChuyenPhong(Phong phong, int width, int height, String title) {
+//		super();
+//		this.phong = phong;
+//		this.width = width;
+//		this.height = height;
+//		this.title = title;
+//		//
+//		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+//		setBackground(Color.white);
+//		setSize(400, 200);
+//		setTitle("Chuyển phòng");
+//		setBackground(Color.white);
+//		setLayout(new BorderLayout());
+//
+//		JLabel nameLabel = new JLabel(phong.getTenPhong());
+//
+//		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
+//		add(nameLabel, BorderLayout.CENTER);
+//	}
 
 }
