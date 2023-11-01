@@ -386,12 +386,12 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 
 		btnThemKhachHang = new JButton("Thêm");
 
-		btnThem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				modal_ThemKhachHang.setVisible(true);
-			}
-		});
+//		btnThem.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				modal_ThemKhachHang.setVisible(true);
+//			}
+//		});
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {

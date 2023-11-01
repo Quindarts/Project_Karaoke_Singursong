@@ -444,10 +444,15 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 
 		panel_PhongBan = new JPanel();
 		panel_PhongBan.setBackground(Color.WHITE);
+		panel_ThucDon = new JPanel();
+		panel_ThucDon.setBackground(Color.white);
 
 		tabbedPane.addTab("PHÒNG HÁT", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/door-open.png")),
 				panel_PhongBan, null);
 		panel_PhongBan.setLayout(null);
+		
+		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")),
+				panel_ThucDon, null);
 
 		panel_TraCuuPhong = new JPanel();
 		panel_TraCuuPhong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));

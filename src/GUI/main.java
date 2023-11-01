@@ -48,7 +48,7 @@ public class main extends JFrame {
 					app.setVisible(true);
 
 
-//					 DEMO component
+//					DEMO component
 //					Components component_app = new Components();
 //					component_app.setVisible(true);
 					
