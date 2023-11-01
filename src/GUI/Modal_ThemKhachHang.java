@@ -233,7 +233,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		int diemThuong = 0;
 		boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 		KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong, ghiChu);
-		System.out.println(kh.toString());
 		if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
 			try {
 				DAO_KH.taoKhachHang(kh);

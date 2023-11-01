@@ -18,7 +18,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -37,6 +41,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -69,14 +75,21 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 	private KhachHang_DAO DAO_KH;
 	private ArrayList<KhachHang> dsKH;
 	private DefaultTableModel model;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JRadioButton rdBtn_TimTheoMaKH;
+	private JRadioButton rdBtn_TimTheoSoDT;
+	private JTextField txt_DiemThuongTu;
+	private JTextField txt_DiemThuongDen;
 	private JTextField txt_TuoiDen;
 	private JTextField txt_TuoiTu;
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
+	private Date ngaySinh_Tu;
+	private Date ngaySinh_Den;
 	private ButtonGroup btnGr_LocTheoGioiTinh;
+	private Date chkNgaySinh = new Date();
+	private Date ngaySinh = new Date();
+	long khoangTuoi;
 
 	/**
 	 * Rounded JPanel
@@ -161,6 +174,11 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		table_KhachHang.setBackground(Color.WHITE);
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		table_KhachHang.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -143705667217047914L;
+
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false; // Đặt tất cả các ô không thể chỉnh sửa
@@ -192,7 +210,8 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 					String diemThuong = model.getValueAt(row, 6).toString();
 					String ghiChu = model.getValueAt(row, 7).toString();
 					modal_ThemKhachHang.setVisible(true);
-					modal_ThemKhachHang.setModal_ThemKhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, sdt, diaChi, ghiChu);
+					modal_ThemKhachHang.setModal_ThemKhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, sdt, diaChi,
+							ghiChu);
 
 				}
 			}
@@ -238,19 +257,40 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		chcbx_Nam.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_Nam.setBounds(6, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nam);
+		chcbx_Nam.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Tìm những hành khách có giới tính là nam
+
+			}
+		});
 
 		chcbx_Nu = new JCheckBox("Nữ");
 		chcbx_Nu.setBackground(new Color(255, 255, 255));
 		chcbx_Nu.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_Nu.setBounds(72, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nu);
+		chcbx_Nu.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Tìm những hành khách có giới tính là nữ
+
+			}
+		});
 
 		chcbx_TatCa = new JCheckBox("Tất cả");
 		chcbx_TatCa.setBackground(new Color(255, 255, 255));
 		chcbx_TatCa.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_TatCa.setBounds(138, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_TatCa);
-		
+		chcbx_TatCa.addItemListener(new ItemListener() {
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				// TODO Lấy toàn bộ khách hàng
+
+			}
+		});
+
 		ButtonGroup btnGr_LocTheoGioiTinh = new ButtonGroup();
 		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
 		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
@@ -262,41 +302,11 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		lbl_Loc.setBounds(10, 5, 235, 25);
 		pnl_Loc.add(lbl_Loc);
 
-		JPanel pnl_Loc_TheoNgaySinh = new JPanel();
-		pnl_Loc_TheoNgaySinh.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
-		pnl_Loc_TheoNgaySinh.setBackground(new Color(255, 255, 255));
-		pnl_Loc_TheoNgaySinh.setLayout(null);
-		pnl_Loc_TheoNgaySinh.setBounds(10, 115, 235, 97);
-		pnl_Loc.add(pnl_Loc_TheoNgaySinh);
-
-		JLabel lbl_Loc_NgaySinh = new JLabel("Ngày sinh");
-		lbl_Loc_NgaySinh.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		lbl_Loc_NgaySinh.setBounds(10, 10, 100, 16);
-		pnl_Loc_TheoNgaySinh.add(lbl_Loc_NgaySinh);
-
-		JLabel lbl_NgayBatDau = new JLabel("Từ :");
-		lbl_NgayBatDau.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lbl_NgayBatDau.setBounds(10, 40, 45, 13);
-		pnl_Loc_TheoNgaySinh.add(lbl_NgayBatDau);
-
-		JLabel lbl_NgayBatDau_1 = new JLabel("Đến :");
-		lbl_NgayBatDau_1.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		lbl_NgayBatDau_1.setBounds(10, 66, 45, 13);
-		pnl_Loc_TheoNgaySinh.add(lbl_NgayBatDau_1);
-
-		JDateChooser dateCh_NgayTu = new JDateChooser();
-		dateCh_NgayTu.setBounds(46, 35, 179, 19);
-		pnl_Loc_TheoNgaySinh.add(dateCh_NgayTu);
-
-		JDateChooser dateCh_NgayDen = new JDateChooser();
-		dateCh_NgayDen.setBounds(46, 60, 179, 19);
-		pnl_Loc_TheoNgaySinh.add(dateCh_NgayDen);
-
 		JPanel pnl_Loc_TheoDiemThuong = new JPanel();
 		pnl_Loc_TheoDiemThuong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		pnl_Loc_TheoDiemThuong.setBackground(new Color(255, 255, 255));
 		pnl_Loc_TheoDiemThuong.setLayout(null);
-		pnl_Loc_TheoDiemThuong.setBounds(10, 302, 235, 70);
+		pnl_Loc_TheoDiemThuong.setBounds(10, 195, 235, 70);
 		pnl_Loc.add(pnl_Loc_TheoDiemThuong);
 
 		JLabel lbl_Loc_DiemThuong = new JLabel("Điểm thưởng");
@@ -314,21 +324,21 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		lbl_DiemKetThuc_1.setBounds(120, 40, 45, 13);
 		pnl_Loc_TheoDiemThuong.add(lbl_DiemKetThuc_1);
 
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(155, 38, 70, 19);
-		pnl_Loc_TheoDiemThuong.add(textField);
+		txt_DiemThuongDen = new JTextField();
+		txt_DiemThuongDen.setColumns(10);
+		txt_DiemThuongDen.setBounds(155, 38, 70, 19);
+		pnl_Loc_TheoDiemThuong.add(txt_DiemThuongDen);
 
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(40, 38, 70, 19);
-		pnl_Loc_TheoDiemThuong.add(textField_1);
+		txt_DiemThuongTu = new JTextField();
+		txt_DiemThuongTu.setColumns(10);
+		txt_DiemThuongTu.setBounds(40, 38, 70, 19);
+		pnl_Loc_TheoDiemThuong.add(txt_DiemThuongTu);
 
 		JPanel pnl_Loc_TheoTuoi = new JPanel();
 		pnl_Loc_TheoTuoi.setLayout(null);
 		pnl_Loc_TheoTuoi.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		pnl_Loc_TheoTuoi.setBackground(Color.WHITE);
-		pnl_Loc_TheoTuoi.setBounds(10, 222, 235, 70);
+		pnl_Loc_TheoTuoi.setBounds(10, 115, 235, 70);
 		pnl_Loc.add(pnl_Loc_TheoTuoi);
 
 		JLabel lbl_Loc_Tuoi = new JLabel("Tuổi");
@@ -368,8 +378,6 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				modal_ThemKhachHang.setVisible(true);
-				model.fireTableDataChanged();
-				DocDuLieu();
 			}
 		});
 
@@ -414,9 +422,45 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
 		btnTimKiem.setForeground(Color.WHITE);
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnTimKiem.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (rdBtn_TimTheoMaKH.isSelected()) {
+					TimKhachHang_TheoMa();
+				}
+				if (rdBtn_TimTheoSoDT.isSelected()) {
+					TimKhachHang_TheoSoDT();
+				}
+			}
+		});
+
+		rdBtn_TimTheoMaKH = new JRadioButton("Mã khách hàng");
+		rdBtn_TimTheoMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		rdBtn_TimTheoMaKH.setHorizontalAlignment(SwingConstants.CENTER);
+		rdBtn_TimTheoMaKH.setBackground(new Color(255, 255, 255));
+		rdBtn_TimTheoMaKH.setBounds(774, 4, 125, 30);
+		panel.add(rdBtn_TimTheoMaKH);
+
+		rdBtn_TimTheoSoDT = new JRadioButton("Số điện thoại");
+		rdBtn_TimTheoSoDT.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		rdBtn_TimTheoSoDT.setHorizontalAlignment(SwingConstants.CENTER);
+		rdBtn_TimTheoSoDT.setBackground(Color.WHITE);
+		rdBtn_TimTheoSoDT.setBounds(901, 4, 125, 30);
+		panel.add(rdBtn_TimTheoSoDT);
+
+		ButtonGroup btnGr_TimTheoLoai = new ButtonGroup();
+		btnGr_TimTheoLoai.add(rdBtn_TimTheoMaKH);
+		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
 
 		DocDuLieu();
 
+	}
+
+	public void XoaDuLieuTrenTable() {
+		model = (DefaultTableModel) table_KhachHang.getModel();
+		model.getDataVector().removeAllElements();
 	}
 
 	public void DocDuLieu() {
@@ -426,12 +470,7 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			dsKH = DAO_KH.layTatCaKhachHang();
 			if (dsKH != null) {
 				dsKH.forEach(kh -> {
-					String gender;
-					if (kh.isGioiTinh()) {
-						gender = "Nam";
-					} else {
-						gender = "Nữ";
-					}
+					String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
 					Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
 							kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
 					model.addRow(rowData);
@@ -441,8 +480,8 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			JOptionPane.showMessageDialog(null, "Không thể đọc dữ liệu");
 		}
 	}
-	
-	public void XoaKhachHang () {
+
+	public void XoaKhachHang() {
 		int row = table_KhachHang.getSelectedRow();
 		String maKhachHang = model.getValueAt(row, 0).toString();
 		KhachHang khachHang = new KhachHang(maKhachHang);
@@ -453,6 +492,40 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			model.removeRow(row);
 		} catch (Exception e2) {
 			JOptionPane.showMessageDialog(null, "Xóa thất bại");
+		}
+	}
+
+	public void TimKhachHang_TheoMa() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = txt_TimKiem.getText().trim();
+		KhachHang kh_MaKH = DAO_KH.layKhachHang_TheoMaKhachHang(chuoiTimKiem);
+		try {
+			dsKH.add(kh_MaKH);
+			if (dsKH != null) {
+				String gender = kh_MaKH.isGioiTinh() ? "Nam" : "Nữ";
+				Object[] rowData = { kh_MaKH.getMaKhachHang(), kh_MaKH.getHoTen(), gender, kh_MaKH.getNgaySinh(),
+						kh_MaKH.getDiaChi(), kh_MaKH.getSoDienThoai(), kh_MaKH.getDiemThuong(), kh_MaKH.getGhiChu() };
+				model.addRow(rowData);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có mã: " + chuoiTimKiem);
+		}
+	}
+
+	public void TimKhachHang_TheoSoDT() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = txt_TimKiem.getText().trim();
+		KhachHang kh_SoDT = DAO_KH.layKhachHang_TheoSoDienThoai(chuoiTimKiem);
+		try {
+			dsKH.add(kh_SoDT);
+			if (dsKH != null) {
+				String gender = kh_SoDT.isGioiTinh() ? "Nam" : "Nữ";
+				Object[] rowData = { kh_SoDT.getMaKhachHang(), kh_SoDT.getHoTen(), gender, kh_SoDT.getNgaySinh(),
+						kh_SoDT.getDiaChi(), kh_SoDT.getSoDienThoai(), kh_SoDT.getDiemThuong(), kh_SoDT.getGhiChu() };
+				model.addRow(rowData);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
 }

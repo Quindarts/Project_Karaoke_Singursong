@@ -44,8 +44,8 @@ public class main extends JFrame {
 					// Setup my app
 					FlatLightLaf.setup();
 
-//					app = new JFrame_DangNhap();
-//					app.setVisible(true);
+					app = new JFrame_DangNhap();
+					app.setVisible(true);
 
 
 					// DEMO component
