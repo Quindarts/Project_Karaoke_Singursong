@@ -1,6 +1,7 @@
 package GUI;
 
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.border.AbstractBorder;
 
 import GUI.JPanel_QuanLyDatPhong.RoundedTransparentBorder;
@@ -9,7 +10,8 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 
-import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -21,19 +23,19 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import DAO.KhachHang_DAO;
+
 import DAO.LoaiNhanVien_DAO;
 import DAO.NhanVien_DAO;
-import Entity.KhachHang;
 import Entity.LoaiNhanVien;
-import Entity.LoaiPhong;
 import Entity.NhanVien;
-import Entity.Phong;
+
 
 import javax.swing.JButton;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
@@ -61,15 +63,19 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 	private String hexColor_Green = "#4BAC4D";
 
 	private JTable table_NhanVien;
-	private JTextField textField;
+	private JTextField txt_TimKiem;
 
 	private JButton btnThem;
+	private JButton btnLamMoi;
+	private JButton btnTimKiem;
 
-	private KhachHang_DAO DAO_KH;
-	private ArrayList<KhachHang> dsKH;
 	private NhanVien_DAO DAO_NV;
 	private ArrayList<NhanVien> dsNV;
 	private LoaiNhanVien_DAO DAO_LoaiNV;
+	private JRadioButton rdBtn_TimTheoMaKH;
+	private JRadioButton rdBtn_TimTheoSoDT;
+	private DefaultTableModel model;
+	private Modal_ThemNhanVien model_ThemNhanVien;
 
 	/**
 	 * Rounded JPanel
@@ -146,55 +152,55 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 
 		table_NhanVien = new JTable();
 		table_NhanVien.setBackground(Color.WHITE);
+		Object[] header = { "Mã nhân viên", "Loại nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh",
+				"Số điện thoại", "CCCD", "Địa chỉ", "Trạng thái", "Ảnh thẻ" };
 		table_NhanVien.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "Mã nhân viên", "Loại nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh",
-						"Số điện thoại", "CCCD", "Địa chỉ", "Trạng thái", "Ảnh thẻ" }));
+				header));
 		table_NhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 10, 1019, 615);
 		scrollPane.add(table_NhanVien);
 		scrollPane.setViewportView(table_NhanVien);
+		
+		model = (DefaultTableModel) table_NhanVien.getModel();
+		table_NhanVien.setModel(new DefaultTableModel(new Object[][] {}, header) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -143705667217047914L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Đặt tất cả các ô không thể chỉnh sửa
+			}
+		});
+		
+		
 
 		panel_Table.add(scrollPane);
 
-		DAO_NV = new NhanVien_DAO();
-		DAO_LoaiNV = new LoaiNhanVien_DAO();
-		DefaultTableModel model = (DefaultTableModel) table_NhanVien.getModel();
-		try {
-			dsNV = DAO_NV.layTatCaNhanVien();
-			if (dsNV != null) {
-				dsNV.forEach(nv -> {
-					LoaiNhanVien loaiNV = new LoaiNhanVien();
-					loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
-					String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
-					Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
-							gender , nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(), nv.getAnhThe()};
-
-					model.addRow(rowData);
-				});
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
 
 		table_NhanVien.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int row = table_NhanVien.getSelectedRow();
-//            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
-//        		date_KH.setDate((Date) model.getValueAt(row, 3));
-				String maKhachHang = model.getValueAt(row, 0).toString();
-				String hoTen = model.getValueAt(row, 1).toString();
-				String gioiTinh = model.getValueAt(row, 2).toString();
-				String ngaySinh = model.getValueAt(row, 3).toString();
-				String diaChi = model.getValueAt(row, 4).toString();
-				String sdt = model.getValueAt(row, 5).toString();
-				String diemThuong = model.getValueAt(row, 6).toString();
-				String ghiChu = model.getValueAt(row, 7).toString();
-				System.out.println(maKhachHang + "," + hoTen + "," + gioiTinh + "," + ngaySinh + "," + diaChi + ","
-						+ sdt + "," + diemThuong + "," + ghiChu);
-			}
 
+				if (e.getClickCount() == 2) {
+					int row = table_NhanVien.getSelectedRow();
+					String maNhanVien = model.getValueAt(row, 0).toString();
+					String loaiNhanVien = model.getValueAt(row, 1).toString();
+					String hoTen = model.getValueAt(row, 2).toString();
+					String gioiTinh = model.getValueAt(row, 3).toString();
+					String ngaySinh = model.getValueAt(row, 4).toString();
+					String sdt = model.getValueAt(row, 5).toString();
+					String cccd = model.getValueAt(row, 6).toString();
+					String diaChi = model.getValueAt(row, 7).toString();
+					String trangThai = model.getValueAt(row, 8).toString();
+					String anhThe = model.getValueAt(row, 9).toString();
+					model_ThemNhanVien = new Modal_ThemNhanVien();
+					model_ThemNhanVien.setVisible(true);
+					model_ThemNhanVien.setModal_ThemNhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, sdt, cccd, diaChi, trangThai, anhThe);
+				}
+			}
 			@Override
 			public void mousePressed(MouseEvent e) {
 			}
@@ -227,19 +233,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		btnThem.setBounds(10, 0, 125, 35);
 		panel.add(btnThem);
 
-		JButton btnXoa = new JButton("Xóa");
-		btnXoa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyNhanVien.class.getResource("/icon/trash.png")));
-		btnXoa.setForeground(Color.WHITE);
-		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnXoa.setBackground(Color.decode(hexColor_Red));
-		btnXoa.setBounds(145, 0, 125, 35);
-		panel.add(btnXoa);
-
-		JButton btnLamMoi = new JButton("Làm mới");
+		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(JPanel_QuanLyNhanVien.class.getResource("/icon/refresh.png")));
 		btnLamMoi.setForeground(Color.WHITE);
 		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -247,12 +241,12 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
 
-		textField = new JTextField();
-		textField.setBounds(545, 0, 223, 34);
-		panel.add(textField);
-		textField.setColumns(10);
+		txt_TimKiem = new JTextField();
+		txt_TimKiem.setBounds(545, 0, 223, 34);
+		panel.add(txt_TimKiem);
+		txt_TimKiem.setColumns(10);
 
-		JButton btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setBounds(415, 0, 123, 35);
 		panel.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyNhanVien.class.getResource("/icon/search.png")));
@@ -260,8 +254,32 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		btnTimKiem.setForeground(Color.WHITE);
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
+		rdBtn_TimTheoMaKH = new JRadioButton("Mã nhân viên");
+		rdBtn_TimTheoMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		rdBtn_TimTheoMaKH.setHorizontalAlignment(SwingConstants.CENTER);
+		rdBtn_TimTheoMaKH.setBackground(new Color(255, 255, 255));
+		rdBtn_TimTheoMaKH.setBounds(774, 4, 125, 30);
+		panel.add(rdBtn_TimTheoMaKH);
+
+		rdBtn_TimTheoSoDT = new JRadioButton("Số điện thoại");
+		rdBtn_TimTheoSoDT.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		rdBtn_TimTheoSoDT.setHorizontalAlignment(SwingConstants.CENTER);
+		rdBtn_TimTheoSoDT.setBackground(Color.WHITE);
+		rdBtn_TimTheoSoDT.setBounds(901, 4, 125, 30);
+		panel.add(rdBtn_TimTheoSoDT);
+
+		ButtonGroup btnGr_TimTheoLoai = new ButtonGroup();
+		btnGr_TimTheoLoai.add(rdBtn_TimTheoMaKH);
+		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
+		
 		// Add event:
 		btnThem.addActionListener((ActionListener) this);
+		btnLamMoi.addActionListener(this);
+		btnTimKiem.addActionListener(this);
+		
+		DAO_NV = new NhanVien_DAO();
+		DAO_LoaiNV = new LoaiNhanVien_DAO();
+		DocDuLieu();
 
 	}
 
@@ -270,10 +288,89 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
-			modalTKH.setVisible(true);
+			model_ThemNhanVien = new Modal_ThemNhanVien();
+			model_ThemNhanVien.setVisible(true);
+			DocDuLieu();
+		}
+		
+		if (o.equals(btnLamMoi)) {
+			DocDuLieu();
+		}
+		if (o.equals(btnTimKiem)) {
+			if(rdBtn_TimTheoMaKH.isSelected()) {
+				TimNhanVien_TheoMa();
+			}
+			else if (rdBtn_TimTheoSoDT.isSelected()) {
+				TimNhanVien_TheoSoDT();
+			}
 		}
 
 	}
+	
+	public void XoaDuLieuTrenTable() {
+		model = (DefaultTableModel) table_NhanVien.getModel();
+		model.getDataVector().removeAllElements();
+	}
 
+
+	public void DocDuLieu() {
+		model = (DefaultTableModel) table_NhanVien.getModel();
+		model.getDataVector().removeAllElements();	
+		try {
+			dsNV = DAO_NV.layTatCaNhanVien();
+			if (dsNV != null) {
+				dsNV.forEach(nv -> {
+					LoaiNhanVien loaiNV = new LoaiNhanVien();
+					loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+					String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+					Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
+							gender , nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(), nv.getAnhThe()};
+
+					model.addRow(rowData);
+				});
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	public void TimNhanVien_TheoMa() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = txt_TimKiem.getText().trim();
+		NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(chuoiTimKiem);
+		try {
+			dsNV.add(nv);
+			if (dsNV != null) {
+				LoaiNhanVien loaiNV = new LoaiNhanVien();
+				loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+				String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
+						gender , nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(), nv.getAnhThe()};
+
+				model.addRow(rowData);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có mã: " + chuoiTimKiem);
+		}
+	}
+	
+	public void TimNhanVien_TheoSoDT() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = txt_TimKiem.getText().trim();
+		NhanVien nv = DAO_NV.timNhanVien_TheoSoDienThoai(chuoiTimKiem);
+		try {
+			dsNV.add(nv);
+			if (dsNV != null) {
+				LoaiNhanVien loaiNV = new LoaiNhanVien();
+				loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+				String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
+						gender , nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(), nv.getAnhThe()};
+
+				model.addRow(rowData);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có mã: " + chuoiTimKiem);
+		}
+	}
 }
