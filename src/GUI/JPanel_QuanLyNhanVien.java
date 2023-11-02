@@ -22,8 +22,11 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import DAO.KhachHang_DAO;
+import DAO.LoaiNhanVien_DAO;
 import DAO.NhanVien_DAO;
 import Entity.KhachHang;
+import Entity.LoaiNhanVien;
+import Entity.LoaiPhong;
 import Entity.NhanVien;
 import Entity.Phong;
 
@@ -66,6 +69,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 	private ArrayList<KhachHang> dsKH;
 	private NhanVien_DAO DAO_NV;
 	private ArrayList<NhanVien> dsNV;
+	private LoaiNhanVien_DAO DAO_LoaiNV;
 
 	/**
 	 * Rounded JPanel
@@ -154,14 +158,17 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		panel_Table.add(scrollPane);
 
 		DAO_NV = new NhanVien_DAO();
+		DAO_LoaiNV = new LoaiNhanVien_DAO();
 		DefaultTableModel model = (DefaultTableModel) table_NhanVien.getModel();
 		try {
 			dsNV = DAO_NV.layTatCaNhanVien();
 			if (dsNV != null) {
 				dsNV.forEach(nv -> {
-
-					Object[] rowData = { nv.getMaNhanVien(), nv.getloaiNhanVien().getMaLoaiNhanVien(), nv.getHoTen(),
-							nv.isGioiTinh(), nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(), nv.getAnhThe()};
+					LoaiNhanVien loaiNV = new LoaiNhanVien();
+					loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+					String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+					Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
+							gender , nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(), nv.getAnhThe()};
 
 					model.addRow(rowData);
 				});
@@ -170,40 +177,40 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 			// TODO: handle exception
 		}
 
-//		table_NhanVien.addMouseListener(new MouseListener() {
-//			@Override
-//			public void mouseClicked(MouseEvent e) {
-//				int row = table_NhanVien.getSelectedRow();
-////            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
-////        		date_KH.setDate((Date) model.getValueAt(row, 3));
-//				String maKhachHang = model.getValueAt(row, 0).toString();
-//				String hoTen = model.getValueAt(row, 1).toString();
-//				String gioiTinh = model.getValueAt(row, 2).toString();
-//				String ngaySinh = model.getValueAt(row, 3).toString();
-//				String diaChi = model.getValueAt(row, 4).toString();
-//				String sdt = model.getValueAt(row, 5).toString();
-//				String diemThuong = model.getValueAt(row, 6).toString();
-//				String ghiChu = model.getValueAt(row, 7).toString();
-//				System.out.println(maKhachHang + "," + hoTen + "," + gioiTinh + "," + ngaySinh + "," + diaChi + ","
-//						+ sdt + "," + diemThuong + "," + ghiChu);
-//			}
-//
-//			@Override
-//			public void mousePressed(MouseEvent e) {
-//			}
-//
-//			@Override
-//			public void mouseReleased(MouseEvent e) {
-//			}
-//
-//			@Override
-//			public void mouseEntered(MouseEvent e) {
-//			}
-//
-//			@Override
-//			public void mouseExited(MouseEvent e) {
-//			}
-//		});
+		table_NhanVien.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table_NhanVien.getSelectedRow();
+//            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
+//        		date_KH.setDate((Date) model.getValueAt(row, 3));
+				String maKhachHang = model.getValueAt(row, 0).toString();
+				String hoTen = model.getValueAt(row, 1).toString();
+				String gioiTinh = model.getValueAt(row, 2).toString();
+				String ngaySinh = model.getValueAt(row, 3).toString();
+				String diaChi = model.getValueAt(row, 4).toString();
+				String sdt = model.getValueAt(row, 5).toString();
+				String diemThuong = model.getValueAt(row, 6).toString();
+				String ghiChu = model.getValueAt(row, 7).toString();
+				System.out.println(maKhachHang + "," + hoTen + "," + gioiTinh + "," + ngaySinh + "," + diaChi + ","
+						+ sdt + "," + diemThuong + "," + ghiChu);
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.WHITE);
