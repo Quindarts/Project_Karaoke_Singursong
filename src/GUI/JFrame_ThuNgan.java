@@ -208,7 +208,15 @@ public class JFrame_ThuNgan extends JFrame {
 		});
 		panelMenu_QLDatPhong.setBounds(2, 105, 192, 45);
 		panelMenu_QLDatPhong.setBackground(Color.decode(hexColor_Blue1));
+		
+		
+		
 		panel_Menu.add(panelMenu_QLDatPhong);
+		
+		
+		
+		
+		
 		panelMenu_QLDatPhong.setLayout(null);
 
 		JLabel lblMenu_QLDatPhong = new JLabel("QUẢN LÝ ĐẶT PHÒNG");
@@ -220,7 +228,9 @@ public class JFrame_ThuNgan extends JFrame {
 
 		panelMenu_QLKhachHang = new JPanel();
 		panelMenu_QLKhachHang.setBackground(Color.decode(hexColor_Blue1));
+
 		panelMenu_QLKhachHang.setBounds(2, 151, 192, 45);
+
 		panel_Menu.add(panelMenu_QLKhachHang);
 		panelMenu_QLKhachHang.setLayout(null);
 
@@ -365,12 +375,16 @@ public class JFrame_ThuNgan extends JFrame {
 		contentPane.add(panel_Function);
 		panel_Function.setLayout(null);
 
+
+
 		
 
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
 		rdbtnNewRadioButton.setBounds(33, 75, 109, 23);
 		Panel_QLDP.add(rdbtnNewRadioButton);
 		
+
+
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
@@ -437,6 +451,8 @@ public class JFrame_ThuNgan extends JFrame {
 
 	}
 
+	
+	
 	public void menuClicked(JPanel panel) {
 		Panel_QLDP.setVisible(false);
 		Panel_QLKH.setVisible(false);
@@ -464,6 +480,7 @@ public class JFrame_ThuNgan extends JFrame {
 	/**
 	 * Đồng hồ
 	 */
+
 	private void Clock() {
 		new Thread() {
 			public void run() {
