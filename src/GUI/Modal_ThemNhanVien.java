@@ -93,6 +93,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Modal_ThemNhanVien() {
+		
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 450);
 		contentPane = new JPanel();
@@ -282,15 +284,9 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		pnl_TrangThai.add(lbl_TrangThai);
 
 		String [] dsTrangThai = {"Còn làm","Nghỉ việc","Nghỉ phép"};
-		comboBox_TrangThai = new JComboBox<String>(dsTrangThai);
+		comboBox_TrangThai = new JComboBox(dsTrangThai);
 		comboBox_TrangThai.setBounds(125, 0, 225, 25);
 		pnl_TrangThai.add(comboBox_TrangThai);
-		
-		
-
-//		comboBox_TrangThai.addItem("Còn làm");
-//		comboBox_TrangThai.addItem("Nghỉ việc");
-//		comboBox_TrangThai.addItem("Nghỉ phép");
 
 		JPanel pnl_SoDienThoai = new JPanel();
 		pnl_SoDienThoai.setBackground(Color.WHITE);

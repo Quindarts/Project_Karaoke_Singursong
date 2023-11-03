@@ -50,6 +50,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JComboBox;
 
 public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 
@@ -85,15 +86,11 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
-	private JCheckBox chcbx_QuanLy;
-	private JCheckBox chcbx_ThuNgan;
-	private JCheckBox chcbx_TatCaLoaiNV;
-	private JCheckBox chcbx_TiepTan;
-	private JCheckBox chcbx_ConLam;
-	private JCheckBox chcbx_NghiPhep;
-	private JCheckBox chcbx_TatCaTrangThai;
-	private JCheckBox chcbx_NghiLam;
 	private JButton btnLoc;
+	private JComboBox<String> cb_Loc_LoaiTrangThai;
+	private JComboBox<String> cb_Loc_LoaiNV;
+	private LoaiNhanVien_DAO DAO_LNV;
+	private ArrayList<LoaiNhanVien> listLNV;
 
 	/**
 	 * Rounded JPanel
@@ -149,6 +146,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 	 * Create the panel.
 	 */
 	public JPanel_QuanLyNhanVien() {
+		
 		setBackground(Color.decode(hexColor_Blue1));
 		setLayout(null);
 		setBounds(0, 0, 1296, 672);
@@ -278,85 +276,51 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		pnl_Loc_TheoGioiTinh_1.setLayout(null);
 		pnl_Loc_TheoGioiTinh_1.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		pnl_Loc_TheoGioiTinh_1.setBackground(Color.WHITE);
-		pnl_Loc_TheoGioiTinh_1.setBounds(10, 195, 235, 90);
+		pnl_Loc_TheoGioiTinh_1.setBounds(10, 195, 235, 70);
 		pnl_Loc.add(pnl_Loc_TheoGioiTinh_1);
 
 		JLabel lbl_Loc_LoaiNV = new JLabel("Loại nhân viên");
 		lbl_Loc_LoaiNV.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lbl_Loc_LoaiNV.setBounds(10, 10, 100, 16);
 		pnl_Loc_TheoGioiTinh_1.add(lbl_Loc_LoaiNV);
+		
+		cb_Loc_LoaiNV = new JComboBox<String>();
+		cb_Loc_LoaiNV.setBounds(10, 30, 215, 25);
+		pnl_Loc_TheoGioiTinh_1.add(cb_Loc_LoaiNV);
+		DAO_LNV = new LoaiNhanVien_DAO();
+		try {
+			listLNV = DAO_LNV.layTatCaLoaiNhanVien();
+			if (listLNV != null) {
+				listLNV.forEach((lnv) -> {
+					cb_Loc_LoaiNV.addItem(lnv.getTenLoaiNhanVien());
+				});
+			}
 
-		chcbx_QuanLy = new JCheckBox("Quản lý");
-		chcbx_QuanLy.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_QuanLy.setBackground(Color.WHITE);
-		chcbx_QuanLy.setBounds(10, 35, 104, 21);
-		pnl_Loc_TheoGioiTinh_1.add(chcbx_QuanLy);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
 
-		chcbx_ThuNgan = new JCheckBox("Thu ngân");
-		chcbx_ThuNgan.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_ThuNgan.setBackground(Color.WHITE);
-		chcbx_ThuNgan.setBounds(10, 60, 100, 21);
-		pnl_Loc_TheoGioiTinh_1.add(chcbx_ThuNgan);
-
-		chcbx_TatCaLoaiNV = new JCheckBox("Tất cả");
-		chcbx_TatCaLoaiNV.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_TatCaLoaiNV.setBackground(Color.WHITE);
-		chcbx_TatCaLoaiNV.setBounds(129, 60, 64, 21);
-		pnl_Loc_TheoGioiTinh_1.add(chcbx_TatCaLoaiNV);
-
-		chcbx_TiepTan = new JCheckBox("Tiếp tân");
-		chcbx_TiepTan.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_TiepTan.setBackground(Color.WHITE);
-		chcbx_TiepTan.setBounds(129, 35, 100, 21);
-		pnl_Loc_TheoGioiTinh_1.add(chcbx_TiepTan);
-
-		ButtonGroup btnGr_LocTheoChucVu = new ButtonGroup();
-		btnGr_LocTheoChucVu.add(chcbx_QuanLy);
-		btnGr_LocTheoChucVu.add(chcbx_ThuNgan);
-		btnGr_LocTheoChucVu.add(chcbx_TiepTan);
-		btnGr_LocTheoChucVu.add(chcbx_TatCaLoaiNV);
 
 		JPanel pnl_Loc_TheoGioiTinh_1_1 = new JPanel();
 		pnl_Loc_TheoGioiTinh_1_1.setLayout(null);
 		pnl_Loc_TheoGioiTinh_1_1.setBorder(new EtchedBorder(EtchedBorder.RAISED, null, null));
 		pnl_Loc_TheoGioiTinh_1_1.setBackground(Color.WHITE);
-		pnl_Loc_TheoGioiTinh_1_1.setBounds(10, 295, 235, 90);
+		pnl_Loc_TheoGioiTinh_1_1.setBounds(10, 275, 235, 70);
 		pnl_Loc.add(pnl_Loc_TheoGioiTinh_1_1);
 
 		JLabel lbl_Loc_DiaChi = new JLabel("Trạng thái");
 		lbl_Loc_DiaChi.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lbl_Loc_DiaChi.setBounds(10, 10, 100, 16);
 		pnl_Loc_TheoGioiTinh_1_1.add(lbl_Loc_DiaChi);
+		
+		cb_Loc_LoaiTrangThai = new JComboBox<String>();
+		cb_Loc_LoaiTrangThai.setBounds(10, 30, 215, 25);
+		pnl_Loc_TheoGioiTinh_1_1.add(cb_Loc_LoaiTrangThai);
+		cb_Loc_LoaiTrangThai.addItem("Còn làm");
+		cb_Loc_LoaiTrangThai.addItem("Nghỉ làm");
+		cb_Loc_LoaiTrangThai.addItem("Nghỉ phép");
 
-		chcbx_ConLam = new JCheckBox("Còn làm");
-		chcbx_ConLam.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_ConLam.setBackground(Color.WHITE);
-		chcbx_ConLam.setBounds(10, 35, 104, 21);
-		pnl_Loc_TheoGioiTinh_1_1.add(chcbx_ConLam);
-
-		chcbx_NghiPhep = new JCheckBox("Nghỉ phép");
-		chcbx_NghiPhep.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_NghiPhep.setBackground(Color.WHITE);
-		chcbx_NghiPhep.setBounds(10, 60, 100, 21);
-		pnl_Loc_TheoGioiTinh_1_1.add(chcbx_NghiPhep);
-
-		chcbx_TatCaTrangThai = new JCheckBox("Tất cả");
-		chcbx_TatCaTrangThai.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_TatCaTrangThai.setBackground(Color.WHITE);
-		chcbx_TatCaTrangThai.setBounds(129, 60, 64, 21);
-		pnl_Loc_TheoGioiTinh_1_1.add(chcbx_TatCaTrangThai);
-
-		chcbx_NghiLam = new JCheckBox("Nghỉ làm");
-		chcbx_NghiLam.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		chcbx_NghiLam.setBackground(Color.WHITE);
-		chcbx_NghiLam.setBounds(129, 35, 100, 21);
-		pnl_Loc_TheoGioiTinh_1_1.add(chcbx_NghiLam);
-
-		ButtonGroup btnGr_LocTheoTrangThai = new ButtonGroup();
-		btnGr_LocTheoTrangThai.add(chcbx_ConLam);
-		btnGr_LocTheoTrangThai.add(chcbx_NghiPhep);
-		btnGr_LocTheoTrangThai.add(chcbx_NghiLam);
-		btnGr_LocTheoTrangThai.add(chcbx_TatCaTrangThai);
 
 		btnLoc = new JButton("Lọc");
 		btnLoc.setForeground(Color.WHITE);
@@ -616,17 +580,10 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		boolean loc_nu = chcbx_Nu.isSelected();
 		boolean loc_tatCa_GioiTinh = !loc_nam && !loc_nu; // Nếu cả nam và nữ đều không được chọn
 
-		boolean loc_TrangThai_ConLam = chcbx_ConLam.isSelected();
-		boolean loc_TrangThai_NghiLam = chcbx_NghiLam.isSelected();
-		boolean loc_TrangThai_NghiPhep = chcbx_NghiPhep.isSelected();
-		boolean loc_TrangThai_TatCa = !loc_TrangThai_ConLam && !loc_TrangThai_NghiLam && !loc_TrangThai_NghiPhep;
-
-		boolean loc_ChucVu_QuanLy = chcbx_QuanLy.isSelected();
-		boolean loc_ChucVu_ThuNgan = chcbx_ThuNgan.isSelected();
-		boolean loc_ChucVu_TiepTan = chcbx_TiepTan.isSelected();
-		boolean loc_ChucVu_TatCa = !loc_ChucVu_QuanLy && !loc_ChucVu_ThuNgan && !loc_ChucVu_TiepTan;
 
 		model.getDataVector().removeAllElements();
+		model_ThemNhanVien = new Modal_ThemNhanVien();
+		
 		boolean ketQuaLoc = false;
 
 		for (NhanVien nv : DAO_NV.layTatCaNhanVien()) {
@@ -635,18 +592,17 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 			Calendar cal = Calendar.getInstance();
 			cal.setTime(nv.getNgaySinh());
 			int tuoi = ngayHienTai.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
+			
 			LoaiNhanVien loaiNV = new LoaiNhanVien();
 			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+			String loc_LoaiNV = cb_Loc_LoaiNV.getSelectedItem().toString();
+			String loc_LoaiTrThai = cb_Loc_LoaiTrangThai.getSelectedItem().toString();
 			
-			
-			if ((loc_tatCa_GioiTinh || (loc_nam && nv.isGioiTinh()) || (loc_nu && !nv.isGioiTinh()))
-					&& (loc_tuoiTu <= tuoi && tuoi <= loc_tuoiDen)
-					&& ((loc_ChucVu_TatCa) || (loc_ChucVu_QuanLy && loaiNV.getTenLoaiNhanVien().equals("Quản lý"))
-							|| (loc_ChucVu_ThuNgan && loaiNV.getTenLoaiNhanVien().equals("Nhân viên thu ngân"))
-							|| (loc_ChucVu_TiepTan && loaiNV.getTenLoaiNhanVien().equals("Nhân viên tiếp tân")))
-					&& ((loc_TrangThai_TatCa) || (loc_TrangThai_ConLam && nv.getTrangThai().equals("Còn làm"))
-							|| (loc_TrangThai_NghiLam && nv.getTrangThai().equals("Nghỉ làm"))
-							|| (loc_TrangThai_NghiPhep && nv.getTrangThai().equals("Nghỉ phép")))) {
+			if ((loc_tatCa_GioiTinh || (loc_nam && nv.isGioiTinh()) || (loc_nu && !nv.isGioiTinh()))				
+					&& (loc_tuoiTu <= tuoi && tuoi <= loc_tuoiDen)				
+					&& (loaiNV.getTenLoaiNhanVien().equals(loc_LoaiNV))
+					&& (nv.getTrangThai().equals(loc_LoaiTrThai))				
+				) {
 				
 				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
 						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
@@ -660,5 +616,4 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
 		}
 	}
-
 }
