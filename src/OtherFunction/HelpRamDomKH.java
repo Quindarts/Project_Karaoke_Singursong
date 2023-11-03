@@ -36,7 +36,7 @@ public class HelpRamDomKH {
 				result = result.concat("0001");
 			}
 		} else {
-			result = "chưa đúng";
+			result = "";
 		}
 
 		return result;

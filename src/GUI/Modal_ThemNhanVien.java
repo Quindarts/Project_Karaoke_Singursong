@@ -37,6 +37,7 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -280,13 +281,16 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		lbl_TrangThai.setBounds(0, 0, 110, 25);
 		pnl_TrangThai.add(lbl_TrangThai);
 
-		comboBox_TrangThai = new JComboBox<String>();
+		String [] dsTrangThai = {"Còn làm","Nghỉ việc","Nghỉ phép"};
+		comboBox_TrangThai = new JComboBox<String>(dsTrangThai);
 		comboBox_TrangThai.setBounds(125, 0, 225, 25);
 		pnl_TrangThai.add(comboBox_TrangThai);
+		
+		
 
-		comboBox_TrangThai.addItem("Còn làm");
-		comboBox_TrangThai.addItem("Nghỉ việc");
-		comboBox_TrangThai.addItem("Nghỉ phép");
+//		comboBox_TrangThai.addItem("Còn làm");
+//		comboBox_TrangThai.addItem("Nghỉ việc");
+//		comboBox_TrangThai.addItem("Nghỉ phép");
 
 		JPanel pnl_SoDienThoai = new JPanel();
 		pnl_SoDienThoai.setBackground(Color.WHITE);
@@ -392,14 +396,12 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 				 break;
 			 }
 		 }
-		
+			 
 		 int soLuongTrangThai = comboBox_TrangThai.getItemCount();
-		 System.out.println(trangThai);
 		 for(int i= 0; i< soLuongTrangThai; i++) {
 			 String item = comboBox_TrangThai.getItemAt(i);
-			 if(trangThai.equals(item)) {
-				 comboBox_TrangThai.setSelectedItem(item);
-				
+			 if(item.equals(trangThai)) {
+				 comboBox_TrangThai.setSelectedItem(trangThai);	
 				 break;
 			 }
 		 }
@@ -427,38 +429,37 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		String anhThe = pathImg;
 		String CCCD = txt_CCCD.getText();
 		String diaChi = txt_DiaChi.getText();
-		boolean gioiTinh = btngr_GioiTinh.getSelection().equals("Nam");
+		boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
 		String hoTen = txt_TenNhanVien.getText();
 		Date ngaySinh = new Date((dateCh_NgaySinh).getDate().getTime());
 		LoaiNhanVien loaiNhanVien = null;
+		loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString());
 		String soDienThoai = txt_SoDienThoai.getText();
 		String trangThai = "";
+		
 		HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt_SoDienThoai.getText());
-
 		String maNhanVien = helpRamDomKH.taoMa("NhanVien", "maNhanVien", "NV");
-
 		txt_MaNhanVien.setText(maNhanVien);
 
-		if (comboBox_TrangThai.getSelectedItem() == "Còn làm") {
-			trangThai = "ConLam";
-		}
-		if (comboBox_TrangThai.getSelectedItem() == "Nghỉ việc") {
-			trangThai = "NghiViec";
-		}
-		if (comboBox_TrangThai.getSelectedItem() == "Nghỉ phép") {
-			trangThai = "NghiPhep";
-		}
-
-		loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString());
+		int soLuongTrangThai = comboBox_TrangThai.getItemCount();
+		 for(int i= 0; i< soLuongTrangThai; i++) {
+			 String item = comboBox_TrangThai.getItemAt(i);
+			 trangThai = comboBox_TrangThai.getSelectedItem().toString();
+			 if(item.equals(trangThai)) {
+				 trangThai = item;	
+				 break;
+			 }
+		 }
+		
+		
 		NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 				trangThai, anhThe);
-
-		System.out.println(nv.toString());
-
+		System.out.println(nv);
 		try {
 			NhanVien_DAO DAO_NV = new NhanVien_DAO();
 			if (DAO_NV.taoNhanVien(nv)) {
 				JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thành công");
+				setVisible(false);
 			} else {
 				JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
 			}

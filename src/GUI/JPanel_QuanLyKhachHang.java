@@ -91,11 +91,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
-	private Date ngaySinh_Tu;
-	private Date ngaySinh_Den;
 	private ButtonGroup btnGr_LocTheoGioiTinh;
-	private Date chkNgaySinh = new Date();
-	private Date ngaySinh = new Date();
+
 	long khoangTuoi;
 
 
@@ -549,8 +546,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
-
-
 
 
 	public void LocDuLieu() {
