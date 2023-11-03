@@ -270,6 +270,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 					System.out.println("Đăng nhập vào màn hình" + role);
 					thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
 					thuNgan.setVisible(true);
+					dispose();
 
 				}
 			}

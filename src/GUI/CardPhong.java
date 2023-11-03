@@ -54,7 +54,8 @@ public class CardPhong extends JPanel {
 		setBackground(Color.decode(hexColor_Blue4));
 		setLayout(new BorderLayout());
 
-		JLabel nameLabel = new JLabel(phong.getTenPhong());
+		JLabel nameLabel = new JLabel(phong.getMaPhong());
+		nameLabel.setForeground(Color.decode(hexColor_Blue1));
 
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(nameLabel, BorderLayout.CENTER);
