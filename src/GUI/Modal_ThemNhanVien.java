@@ -471,26 +471,22 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		String anhThe = pathImg;
 		String CCCD = txt_CCCD.getText();
 		String diaChi = txt_DiaChi.getText();
-		boolean gioiTinh = btngr_GioiTinh.getSelection().equals("Nam");
+		boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
 		String hoTen = txt_TenNhanVien.getText();
 		Date ngaySinh = new Date((dateCh_NgaySinh).getDate().getTime());
 		LoaiNhanVien loaiNhanVien = null;
 		String soDienThoai = txt_SoDienThoai.getText();
 		String trangThai = "";
-		HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt_SoDienThoai.getText());
-
-		String maNhanVien = helpRamDomKH.taoMa("NhanVien", "maNhanVien", "NV");
-
-		txt_MaNhanVien.setText(maNhanVien);
+		String maNhanVien = txt_MaNhanVien.getText().trim();
 
 		if (comboBox_TrangThai.getSelectedItem() == "Còn làm") {
-			trangThai = "ConLam";
+			trangThai = "Còn làm";
 		}
 		if (comboBox_TrangThai.getSelectedItem() == "Nghỉ việc") {
-			trangThai = "NghiViec";
+			trangThai = "Nghỉ việc";
 		}
 		if (comboBox_TrangThai.getSelectedItem() == "Nghỉ phép") {
-			trangThai = "NghiPhep";
+			trangThai = "Nghỉ phép";
 		}
 
 		loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString());
@@ -503,6 +499,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 			NhanVien_DAO DAO_NV = new NhanVien_DAO();
 			if (DAO_NV.capNhatNhanVien(nv)) {
 				JOptionPane.showMessageDialog(null, "Cập nhật nhân viên thành công");
+				setVisible(false);
 			} else {
 				JOptionPane.showMessageDialog(null, "Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại");
 			}

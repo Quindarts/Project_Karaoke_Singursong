@@ -249,8 +249,8 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 				themKhachHang();
 			}else {
 				capNhatKhachHang();
-				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
-				Panel.setJPanel_QuanLyKhachHang(true);
+//				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
+//				Panel.setJPanel_QuanLyKhachHang(true);
 			}
 		} 
 		
@@ -260,9 +260,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		
 	}
 	
-
-	
-
 	public void themKhachHang() {
 		String tenKhachHang = txt__TenKH.getText();
 		String diaChi = txt__DiaChi.getText();
