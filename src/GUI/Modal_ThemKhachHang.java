@@ -212,9 +212,13 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 
 		Object o = e.getSource();
 
-		if (o.equals(btn__Save)) {
+		if (o.equals(btn__Save) && !txt__MaKH.equals("")) {
 			themKhachHang();
 		}
+		else if (o.equals(btn__Save)) {
+			capNhatKhacHang();
+		}
+		
 
 		if (o.equals(btn__exit)) {
 			setVisible(false);
@@ -244,6 +248,33 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " đã tồn tại!");
+
+		}
+	}
+	
+	public void capNhatKhacHang() {
+		String tenKhachHang = txt__TenKH.getText();
+		String diaChi = txt__DiaChi.getText();
+		String sdt = txt__SDT.getText();
+		java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
+		String ghiChu = txtA__GhiChu.getText();
+		HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
+		String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
+		txt__MaKH.setText(maKhachHang);
+		int diemThuong = 0;
+		boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
+		KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong, ghiChu);
+		if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
+			try {
+				DAO_KH.capNhatKhachHang(kh);
+				JOptionPane.showMessageDialog(null, "Cập nhật thông tin khách hàng " + tenKhachHang + " thành công!");
+				setVisible(false);
+			} catch (Exception e2) {
+				// TODO: handle exception
+				JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " không tồn tại tồn tại!");
 
 		}
 	}

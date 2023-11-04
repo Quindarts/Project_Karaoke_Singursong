@@ -55,7 +55,7 @@ import javax.swing.SwingConstants;
 import javax.swing.JCheckBox;
 import com.toedter.calendar.JDateChooser;
 
-public class JPanel_QuanLyKhachHang extends JPanel {
+public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 
 	private Modal_ThemKhachHang modal_ThemKhachHang;
 
@@ -86,6 +86,17 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 	private JCheckBox chcbx_TatCa;
 	private ButtonGroup btnGr_LocTheoGioiTinh;
 
+	private JButton btnLoc;
+
+	private JButton btnThem;
+
+	private JButton btnXoa;
+
+	private JButton btnLamMoi;
+
+	private JButton btnTimKiem;
+
+	private ButtonGroup btnGr_TimTheoLoai;
 
 	/**
 	 * Rounded JPanel
@@ -257,7 +268,7 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Tìm những hành khách có giới tính là nam
-
+				LocDuLieu();
 			}
 		});
 
@@ -270,7 +281,7 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Tìm những hành khách có giới tính là nữ
-
+				LocDuLieu();
 			}
 		});
 
@@ -283,11 +294,11 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				// TODO Lấy toàn bộ khách hàng
-
+				LocDuLieu();
 			}
 		});
 
-		ButtonGroup btnGr_LocTheoGioiTinh = new ButtonGroup();
+		btnGr_LocTheoGioiTinh = new ButtonGroup();
 		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
 		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
 		btnGr_LocTheoGioiTinh.add(chcbx_TatCa);
@@ -362,20 +373,14 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		txt_TuoiTu.setBounds(40, 38, 70, 19);
 		pnl_Loc_TheoTuoi.add(txt_TuoiTu);
 
-		JButton btnLoc = new JButton("Lọc");
+		btnLoc = new JButton("Lọc");
 		btnLoc.setForeground(Color.WHITE);
 		btnLoc.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		btnLoc.setBackground(new Color(62, 124, 177));
 		btnLoc.setBounds(73, 570, 123, 35);
 		pnl_Loc.add(btnLoc);
-		btnLoc.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				LocDuLieu();
-			}
-		});
 
-		JButton btnThem = new JButton("Thêm");
+		btnThem = new JButton("Thêm");
 		btnThem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
 		btnThem.setForeground(Color.WHITE);
 		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -383,20 +388,7 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		btnThem.setBounds(10, 0, 125, 35);
 		panel.add(btnThem);
 
-		btnThem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				modal_ThemKhachHang.setVisible(true);
-			}
-		});
-
-		JButton btnXoa = new JButton("Xóa");
-		btnXoa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				XoaKhachHang();
-				DocDuLieu();
-			}
-		});
+		btnXoa = new JButton("Xóa");
 		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -404,46 +396,26 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		btnXoa.setBounds(145, 0, 125, 35);
 		panel.add(btnXoa);
 
-		JButton btnLamMoi = new JButton("Làm mới");
+		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/refresh.png")));
 		btnLamMoi.setForeground(Color.WHITE);
 		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		btnLamMoi.setBackground(Color.LIGHT_GRAY);
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
-		btnLamMoi.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				DocDuLieu();
-			}
-		});
-
+		
 		txt_TimKiem = new JTextField();
 		txt_TimKiem.setBounds(545, 1, 223, 34);
 		panel.add(txt_TimKiem);
 		txt_TimKiem.setColumns(10);
 
-		JButton btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setBounds(415, 1, 123, 35);
 		panel.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/search.png")));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
 		btnTimKiem.setForeground(Color.WHITE);
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		btnTimKiem.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				if (rdBtn_TimTheoMaKH.isSelected()) {
-					TimKhachHang_TheoMa();
-				}
-				if (rdBtn_TimTheoSoDT.isSelected()) {
-					TimKhachHang_TheoSoDT();
-				}
-			}
-		});
 
 		rdBtn_TimTheoMaKH = new JRadioButton("Mã khách hàng");
 		rdBtn_TimTheoMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -459,10 +431,16 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		rdBtn_TimTheoSoDT.setBounds(901, 4, 125, 30);
 		panel.add(rdBtn_TimTheoSoDT);
 
-		ButtonGroup btnGr_TimTheoLoai = new ButtonGroup();
+		btnGr_TimTheoLoai = new ButtonGroup();
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoMaKH);
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
 
+		btnLamMoi.addActionListener(this);
+		btnLoc.addActionListener(this);
+		btnThem.addActionListener(this);
+		btnTimKiem.addActionListener(this);
+		btnXoa.addActionListener(this);
+		
 		DocDuLieu();
 
 	}
@@ -538,68 +516,90 @@ public class JPanel_QuanLyKhachHang extends JPanel {
 		}
 	}
 
-
 	public void LocDuLieu() {
-	    int loc_tuoiTu, loc_tuoiDen; // Lấy tuổi
-	    try {
-	        loc_tuoiTu = Integer.parseInt(txt_TuoiTu.getText().trim());
-	    } catch (NumberFormatException e) {
-	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
-	        loc_tuoiTu = 0;
-	        txt_TuoiTu.setText("0");
-	    }    
-	    try {
-	        loc_tuoiDen = Integer.parseInt(txt_TuoiDen.getText().trim());
-	    } catch (NumberFormatException e) {
-	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối đa
-	        loc_tuoiDen = Integer.MAX_VALUE; // Lọc theo tất cả các tuổi
-	    }
+		boolean ketQuaLoc = false;
+		int loc_tuoiTu, loc_tuoiDen; // Lấy tuổi
+		try {
+			loc_tuoiTu = Integer.parseInt(txt_TuoiTu.getText().trim());
+		} catch (NumberFormatException e) {
+			// Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
+			loc_tuoiTu = 0;
+		}
+		try {
+			loc_tuoiDen = Integer.parseInt(txt_TuoiDen.getText().trim());
+		} catch (NumberFormatException e) {
+			// Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối đa
+			loc_tuoiDen = Integer.MAX_VALUE; // Lọc theo tất cả các tuổi
+		}
 
-	    int loc_diemThuongTu, loc_diemThuongDen; // Lấy điểm thưởng
-	    try {
-	    	 loc_diemThuongTu = Integer.parseInt(txt_DiemThuongTu.getText().trim());
-	    } catch (NumberFormatException e) {
-	        // Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
-	    	loc_diemThuongTu = 0;
-	    	txt_DiemThuongTu.setText("0");
-	    }
-	    try {  
-	        loc_diemThuongDen = Integer.parseInt(txt_DiemThuongDen.getText().trim());
-	    } catch (NumberFormatException e) {
-	        loc_diemThuongDen = Integer.MAX_VALUE; // Lọc theo tất cả điểm thưởng
-	    }
+		int loc_diemThuongTu, loc_diemThuongDen; // Lấy điểm thưởng
+		try {
+			loc_diemThuongTu = Integer.parseInt(txt_DiemThuongTu.getText().trim());
+		} catch (NumberFormatException e) {
+			// Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối thiểu
+			loc_diemThuongTu = 0;
+		}
+		try {
+			loc_diemThuongDen = Integer.parseInt(txt_DiemThuongDen.getText().trim());
+		} catch (NumberFormatException e) {
+			loc_diemThuongDen = Integer.MAX_VALUE; // Lọc theo tất cả điểm thưởng
+		}
 
-	    // Kiểm tra nếu không chọn lọc theo giới tính thì mặc định là lọc tất cả
-	    boolean loc_nam = chcbx_Nam.isSelected();
-	    boolean loc_nu = chcbx_Nu.isSelected();
-	    boolean loc_tatCa = !loc_nam && !loc_nu; // Nếu cả nam và nữ đều không được chọn
+		model.getDataVector().removeAllElements();
 
-	    model.getDataVector().removeAllElements();
-	    boolean ketQuaLoc = false;
+		for (KhachHang kh : DAO_KH.layTatCaKhachHang()) {
+			boolean kiemTra = true;
+			
+			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
+			Calendar ngayHienTai = Calendar.getInstance();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(kh.getNgaySinh());
+			int tuoi = ngayHienTai.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
+			int diemThuong = kh.getDiemThuong();
 
-	    for (KhachHang kh : DAO_KH.layTatCaKhachHang()) {
-	        String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
-	        Calendar ngayHienTai = Calendar.getInstance();
-	        Calendar cal = Calendar.getInstance();
-	        cal.setTime(kh.getNgaySinh());
-	        int tuoi = ngayHienTai.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
-	        int diemThuong = kh.getDiemThuong();
+			if ((chcbx_Nam.isSelected() && !gender.equals("Nam")) || (chcbx_Nu.isSelected() && !gender.equals("Nữ"))) {
+				kiemTra = false; // Kiểm tra giới tính được chọn
+			}
+			
+			if (tuoi < loc_tuoiTu || tuoi > loc_tuoiDen) {
+				kiemTra = false; // Kiểm tra độ tuổi được nhập
+			}
 
-	        if ((loc_tatCa || (loc_nam && kh.isGioiTinh()) || (loc_nu && !kh.isGioiTinh())) &&
-	            (loc_tuoiTu <= tuoi && tuoi <= loc_tuoiDen) &&
-	            (loc_diemThuongTu <= diemThuong && diemThuong <= loc_diemThuongDen)) {
-	            Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(),
-	                kh.getDiaChi(), kh.getSoDienThoai(), diemThuong, kh.getGhiChu() };
-	            model.addRow(rowData);
-	            ketQuaLoc = true;
-	        }
-	    }
+			if (diemThuong <= loc_diemThuongTu || diemThuong >= loc_diemThuongDen) {
+				kiemTra = false; // Kiểm  tra điểm thưởng được nhập
+			}
 
-	    if (!ketQuaLoc) {
-	        JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
-	    }
+			if (kiemTra) {
+				Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
+						kh.getSoDienThoai(), diemThuong, kh.getGhiChu() };
+				model.addRow(rowData);
+				ketQuaLoc = true;
+			}
+		}
+
+		if (!ketQuaLoc) {
+			JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
+		}
 	}
 
-
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		Object o = e.getSource();
+		if(o.equals(btnThem)) {
+			modal_ThemKhachHang.setVisible(true);
+		}
+		if(o.equals(btnXoa)) {
+			XoaKhachHang();
+			DocDuLieu();
+		}
+		if(o.equals(btnLamMoi)) {
+			DocDuLieu();
+		}
+		if(o.equals(btnLoc)) {
+			LocDuLieu();
+		}
+	}
 
 }
