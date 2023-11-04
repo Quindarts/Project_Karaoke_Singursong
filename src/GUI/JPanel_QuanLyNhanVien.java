@@ -39,6 +39,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -52,7 +54,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JComboBox;
 
-public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
+public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , ItemListener {
 
 	/**
 	 * Color
@@ -219,18 +221,21 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		chcbx_Nam.setBounds(6, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nam);
 
+
 		chcbx_Nu = new JCheckBox("Nữ");
 		chcbx_Nu.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_Nu.setBackground(Color.WHITE);
 		chcbx_Nu.setBounds(72, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nu);
 
+		
 		chcbx_TatCa = new JCheckBox("Tất cả");
 		chcbx_TatCa.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_TatCa.setBackground(Color.WHITE);
 		chcbx_TatCa.setBounds(138, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_TatCa);
 
+		
 		btnGr_LocTheoGioiTinh = new ButtonGroup();
 		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
 		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
@@ -435,6 +440,11 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		btnLamMoi.addActionListener(this);
 		btnTimKiem.addActionListener(this);
 		btnLoc.addActionListener(this);
+		cb_Loc_LoaiNV.addActionListener(this);
+		cb_Loc_LoaiTrangThai.addActionListener(this);
+		chcbx_Nam.addItemListener(this);
+		chcbx_Nu.addItemListener(this);
+		chcbx_TatCa.addItemListener(this);
 
 		DAO_NV = new NhanVien_DAO();
 		DAO_LoaiNV = new LoaiNhanVien_DAO();
@@ -467,7 +477,17 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		if (o.equals(btnLoc)) {
 			LocDuLieu();
 		}
+		if( o.equals(cb_Loc_LoaiNV)) LocDuLieu();
+		if( o.equals(cb_Loc_LoaiTrangThai)) LocDuLieu();
+		
 	}
+	
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		Object o = e.getItem();
+		if(o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))	LocDuLieu();
+	}
+
 
 	public void XoaDuLieuTrenTable() {
 		model = (DefaultTableModel) table_NhanVien.getModel();
@@ -633,7 +653,10 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener {
 		}
 
 		if (!ketQuaLoc) {
+			model.fireTableDataChanged();
 			JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
+			
 		}
 	}
-}
+
+}	

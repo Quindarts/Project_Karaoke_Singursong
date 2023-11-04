@@ -172,13 +172,13 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nu = new JRadioButton("Nữ");
 		rdbt__nu.setBackground(new Color(255, 255, 255));
 		rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		rdbt__nu.setBounds(290, 200, 70, 21);
+		rdbt__nu.setBounds(290, 203, 70, 21);
 		panel_1.add(rdbt__nu);
 		btngr__gioiTinh.add(rdbt__nu);
 		
 		rdbt__nam = new JRadioButton("Nam");
 		rdbt__nam.setSize(70, 21);
-		rdbt__nam.setLocation(172, 209);
+		rdbt__nam.setLocation(177, 203);
 		rdbt__nam.setBackground(new Color(255, 255, 255));
 		rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		panel_1.add(rdbt__nam);
