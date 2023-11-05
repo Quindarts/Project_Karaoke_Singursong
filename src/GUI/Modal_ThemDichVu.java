@@ -34,6 +34,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -56,6 +58,9 @@ public class Modal_ThemDichVu extends JFrame {
 	private String pathImg = "";
 	private HelpValidate valiDate;
 	private JTextField txt_soLuongDaSuDung;
+	private JDateChooser dateChooser_ngayNhap;
+	private JDateChooser dateChooser_ngayHetHan;
+	private JComboBox cbox_trangThai;
 
 	/**
 	 * Launch the application.
@@ -237,8 +242,8 @@ public class Modal_ThemDichVu extends JFrame {
 		lbl_TrangThai.setBounds(0, 0, 110, 25);
 		pnl_GiaTien_1.add(lbl_TrangThai);
 
-		JComboBox cbox_trangThai = new JComboBox();
-
+		cbox_trangThai = new JComboBox();
+		cbox_trangThai.addItem("Chọn trạng thái");
 		cbox_trangThai.addItem("Còn hàng");
 		cbox_trangThai.addItem("Hết hàng");
 
@@ -257,9 +262,11 @@ public class Modal_ThemDichVu extends JFrame {
 		lbl_NgayNhap.setBounds(0, 0, 110, 25);
 		pnl_GiaTien_2.add(lbl_NgayNhap);
 
-		JDateChooser dateChooser_ngayNhap = new JDateChooser();
+		dateChooser_ngayNhap = new JDateChooser();
 		dateChooser_ngayNhap.setBounds(155, 0, 195, 25);
 		pnl_GiaTien_2.add(dateChooser_ngayNhap);
+		Calendar cal = Calendar.getInstance();
+		dateChooser_ngayNhap.setDate(cal.getTime());
 
 		JPanel pnl_GiaTien_2_1 = new JPanel();
 		pnl_GiaTien_2_1.setLayout(null);
@@ -273,7 +280,7 @@ public class Modal_ThemDichVu extends JFrame {
 		lbl_NgayHetHan.setBounds(0, 0, 110, 25);
 		pnl_GiaTien_2_1.add(lbl_NgayHetHan);
 
-		JDateChooser dateChooser_ngayHetHan = new JDateChooser();
+		dateChooser_ngayHetHan = new JDateChooser();
 		dateChooser_ngayHetHan.setBounds(155, 0, 195, 25);
 		pnl_GiaTien_2_1.add(dateChooser_ngayHetHan);
 
@@ -322,48 +329,53 @@ public class Modal_ThemDichVu extends JFrame {
 		btn_Luu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				// Table Dich vu
-				String maDichVu = txt_maDichVu.getText();
-				String tenDichVu = txt_tenDichVu.getText();
-				int soLuong = Integer.parseInt(txt_SoLuong.getText());
-				String donViTinh = "VND";
+				if (ValueDate()) {
+					// Table Dich vu
+					String maThongTinDichVu = "DemoTTDV003";
+					txt_maDichVu.setText(maThongTinDichVu);
+					JOptionPane.showMessageDialog(null, "Hợp lệ");
 
-				boolean trangThai = cbox_trangThai.getSelectedItem().toString().trim().equals("Còn hàng");
-				double giaTien = Double.parseDouble(txt_GiaTien.getText());
-
-				// Table Thong tin dich vu
-				String maThongTinDichVu = "DemoTTDV003";
-				// maDichvu
-				// soLuong
-				int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
-				Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
-				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
-				String hinhA = pathImg;
-				String moTa = txtA_moTa.getText();
-
-				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);
-				ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, dv, soLuong, soLuongDaSuDung, ngayNhap,
-						ngayHetHan, moTa, hinhA);
-
-				System.out.println(dv.toString());
-				System.out.println(ttdv.toString());
-				try {
-					
-					DichVu_DAO DAO_DV = new DichVu_DAO();
-					ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
-					
-					if (DAO_DV.taoDichVu(dv) && DAO_TTDV.taoThongTinDichVu(ttdv)) {
-						JOptionPane.showMessageDialog(null, "Tạo dịch vụ thành công.");
-					}
-					else {
-						JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
-					}
-
-				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
+//					String maDichVu = txt_maDichVu.getText();
+//					String tenDichVu = txt_tenDichVu.getText();
+//					int soLuong = Integer.parseInt(txt_SoLuong.getText());
+//					String donViTinh = "VND";
+//
+//					boolean trangThai = cbox_trangThai.getSelectedItem().toString().trim().equals("Còn hàng");
+//					double giaTien = Double.parseDouble(txt_GiaTien.getText());
+//
+//					// Table Thong tin dich vu
+//					String maThongTinDichVu = "DemoTTDV003";
+//					// maDichvu
+//					// soLuong
+//					int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
+//					Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
+//					Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
+//					String hinhA = pathImg;
+//					String moTa = txtA_moTa.getText();
+//
+//					DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);
+//					ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, dv, soLuong, soLuongDaSuDung, ngayNhap,
+//							ngayHetHan, moTa, hinhA);
+//
+//					System.out.println(dv.toString());
+//					System.out.println(ttdv.toString());
+//					try {
+//
+//						DichVu_DAO DAO_DV = new DichVu_DAO();
+//						ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
+//
+//						if (DAO_DV.taoDichVu(dv) && DAO_TTDV.taoThongTinDichVu(ttdv)) {
+//							JOptionPane.showMessageDialog(null, "Tạo dịch vụ thành công.");
+//						} else {
+//							JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
+//						}
+//
+//					} catch (Exception e2) {
+//						JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
+//
+//					}
 
 				}
-
 			}
 		});
 	}
@@ -400,5 +412,127 @@ public class Modal_ThemDichVu extends JFrame {
 			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
 		}
 		return path;
+	}
+
+	public boolean ValueDate() {
+
+//		cbox_trangThai.addItem("Chọn trạng thái"); // Bổ sung dòng code này vào phần thiết kế giao điện
+//		Chuyển các biến dateChooser_ngayNhap, ngayHetHan, dateChooser_ngayHetHan, cbox_trangThai thành biến toàn cục;
+
+		String tenDichVu = txt_tenDichVu.getText().trim();
+		String giaTien = txt_GiaTien.getText().trim();
+		String soLuongTon = txt_SoLuong.getText().trim();
+		String soLuongDaDung = txt_soLuongDaSuDung.getText().trim();
+		Date ngayNhap = null;
+		Date ngayHetHan = null;
+		String chonTrThai = cbox_trangThai.getItemAt(0).toString().trim();
+		String trangThai = cbox_trangThai.getSelectedItem().toString().trim();
+
+		if (tenDichVu.equals("")) {
+			JOptionPane.showMessageDialog(null, "Tên dịch vụ không được rỗng!");
+			txt_tenDichVu.requestFocus();
+			return false;
+		} else if (!tenDichVu.matches("^[\\p{L}\\s']+( [\\p{L}\\s']+)? [\\p{L}\\s']+$")) {
+			txt_tenDichVu.requestFocus();
+			JOptionPane.showMessageDialog(null, "Tên dịch vụ không hợp lệ!");
+			return false;
+		}
+
+		if ((giaTien.length() > 0)) {
+			try {
+				int giTien = Integer.parseInt(giaTien);
+				if (!(giTien > 0)) {
+					JOptionPane.showMessageDialog(null, "Giá tiền không phải là số âm!");
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				txt_GiaTien.requestFocus();
+				JOptionPane.showMessageDialog(this, "Giá tiền phải là số");
+				return false;
+			}
+		} else {
+			txt_GiaTien.requestFocus();
+			JOptionPane.showMessageDialog(this, "Giá tiền không được rỗng");
+			return false;
+		}
+
+		if (trangThai.equals(chonTrThai)) {
+			JOptionPane.showMessageDialog(null, "Trạng thái chưa được chọn!");
+			return false;
+		}
+		
+		if ((soLuongTon.length() > 0)) {
+			try {
+				int slTon = Integer.parseInt(soLuongTon);
+				if (!(slTon > 0)) {
+					txt_SoLuong.requestFocus();
+					JOptionPane.showMessageDialog(null, "Số lượng tồn không phải là số âm!");
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				txt_SoLuong.requestFocus();
+				JOptionPane.showMessageDialog(this, "Số lượng tồn phải là số");
+				return false;
+			}
+		} else {
+			txt_SoLuong.requestFocus();
+			JOptionPane.showMessageDialog(this, "Số lượng tồn không được rỗng!");
+			return false;
+		}
+
+		if ((soLuongDaDung.length() > 0)) {
+			try {
+				int slDaDung = Integer.parseInt(soLuongDaDung);
+				if (!(slDaDung >= 0)) {
+					txt_soLuongDaSuDung.requestFocus();
+					JOptionPane.showMessageDialog(null, "Số lượng đã sử dụng phải là số âm!");
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				txt_soLuongDaSuDung.requestFocus();
+				JOptionPane.showMessageDialog(this, "Số lượng đã sử dụng phải là số");
+				return false;
+			}
+		} else {
+			txt_soLuongDaSuDung.requestFocus();
+			txt_soLuongDaSuDung.setText("0");
+			return false;
+		}
+
+		
+
+//		Đặt ngày nhập là ngày hiện tại, thêm đoạn code này vào code giao diện
+//		private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
+//		Calendar cal = Calendar.getInstance();
+//		dateChooser_ngayNhap.setDate(cal.getTime());
+
+		try {
+			ngayNhap = new Date(dateChooser_ngayNhap.getDate().getTime());
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Ngày nhập không được phép rỗng!");
+			return false;
+		}
+
+		try {
+			ngayHetHan = new Date(dateChooser_ngayHetHan.getDate().getTime());
+			ngayNhap = new Date(dateChooser_ngayNhap.getDate().getTime());
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(ngayNhap);
+			long khoangThoiGian = ngayHetHan.getTime() - ngayNhap.getTime();
+			int soNgay = (int) (khoangThoiGian / (24 * 60 * 60 * 1000));
+			System.out.println(soNgay);
+			if (soNgay <= 0) {
+				JOptionPane.showMessageDialog(null, "Ngày hết hạn phải cách sau ngày nhập ít nhất 1 ngày");
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Ngày hết hạn không được phép rỗng!");
+			return false;
+		}
+
+		return true;
 	}
 }

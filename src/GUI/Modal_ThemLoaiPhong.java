@@ -60,11 +60,11 @@ public class Modal_ThemLoaiPhong extends JFrame {
 
 			public void run() {
 				try {
-					
+
 					try {
 						ConnectDB.getInstance().connect();
 						System.out.println("Connected!!!!");
-					}catch (SQLException e) {
+					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 					Modal_ThemLoaiPhong frame = new Modal_ThemLoaiPhong();
@@ -259,24 +259,23 @@ public class Modal_ThemLoaiPhong extends JFrame {
 				String hinhA = pathImg;
 				double giaTien = Double.parseDouble(txt_GiaTien.getText());
 				String moTa = txtA_MoTa.getText();
-			
+
 				try {
 					LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
-					
+
 					if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) != null) {
 						JOptionPane.showMessageDialog(null, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
-						return ;
+						return;
 					}
-					
+
 					LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
 					System.out.println(loaiPhong);
 					if (DAO_LP.taoLoaiPhong(loaiPhong) == false) {
 						JOptionPane.showMessageDialog(null, "Tạo loại phòng thất bại, vui lòng thử lại.");
-						return ;
-					}else {
+						return;
+					} else {
 						JOptionPane.showMessageDialog(null, "Tạo loại phòng thành công.");
 					}
-					
 
 				} catch (Exception e2) {
 
@@ -318,5 +317,60 @@ public class Modal_ThemLoaiPhong extends JFrame {
 			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
 		}
 		return path;
+	}
+	
+	public boolean ValueDate() {
+		String tenLoaiPhong = txt_TenLoaiPhong.getText().toString().trim();
+		String giaTien = txt_GiaTien.getText().toString().trim();
+		String soLuongKhachToiDa = txt_SoLuongKhachToiDa.getText().toString().trim();
+		
+		if (tenLoaiPhong.equals("")) {
+			JOptionPane.showMessageDialog(null, "Tên dịch vụ không được rỗng!");
+			txt_TenLoaiPhong.requestFocus();
+			return false;
+		} else if (!tenLoaiPhong.matches("^[\\p{L}\\s']+( [\\p{L}\\s']+)? [\\p{L}\\s']+$")) {
+			txt_TenLoaiPhong.requestFocus();
+			JOptionPane.showMessageDialog(null, "Tên phòng không hợp lệ!");
+			return false;
+		}
+		
+		if ((giaTien.length() > 0)) {
+			try {
+				int giTien = Integer.parseInt(giaTien);
+				if (!(giTien >= 0)) {
+					txt_GiaTien.requestFocus();
+					JOptionPane.showMessageDialog(null, "Giá tiền không phải là số âm!");
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				txt_GiaTien.requestFocus();
+				JOptionPane.showMessageDialog(this, "Giá tiền phải là số");
+				return false;
+			}
+		} else {
+			txt_GiaTien.requestFocus();
+			JOptionPane.showMessageDialog(this, "Giá tiền không được để trống");
+			return false;
+		}
+		
+		if ((soLuongKhachToiDa.length() > 0)) {
+			try {
+				int slKhachToiDa = Integer.parseInt(soLuongKhachToiDa);
+				if (!(slKhachToiDa >= 0)) {
+					txt_SoLuongKhachToiDa.requestFocus();
+					JOptionPane.showMessageDialog(null, "Số lượng khách tối đa không phải là số âm!");
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				txt_SoLuongKhachToiDa.requestFocus();
+				JOptionPane.showMessageDialog(this, "Số lượng khách tối đa phải là số");
+				return false;
+			}
+		} else {
+			txt_SoLuongKhachToiDa.requestFocus();
+			JOptionPane.showMessageDialog(this, "Số lượng khách tối đa không được để trống");
+			return false;
+		}
+		return true;
 	}
 }

@@ -264,8 +264,8 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
-			modalTKH.setVisible(true);
+			Modal_ThemPhong modalTP = new Modal_ThemPhong();
+			modalTP.setVisible(true);
 		}
 
 	}

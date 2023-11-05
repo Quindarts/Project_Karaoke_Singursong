@@ -22,6 +22,7 @@ import java.awt.FlowLayout;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.awt.Component;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -131,70 +132,58 @@ public class Modal_ThemPhong extends JFrame {
 
 		btn__Save.addActionListener(new ActionListener() {
 			@Override
-			
-			
-			
-			
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				String maPhong = txt__MaPhong.getText();
-				String tenPhong = txt_TenPhong.getText();
-				java.sql.Date ngayTaoPhong = new java.sql.Date(date_NgayTaoPhong.getDate().getTime());
-				String viTriPhong = txt_ViTriPhong.getText().trim();
-				String ghiChu = txtA_GhiChu.getText().trim();
-				String tinhTrangPhong = cbBox_TinhTrangPhong_1.getSelectedItem().toString();
-
-				LoaiPhong lp = null;
-				TrangThaiPhong ttp = null;
-
-				if (DAO_P.timPhong_TheoMaLoaiPhong(maPhong) != null) {
-					JOptionPane.showMessageDialog(null, "Phòng này đã tồn tại.");
+				if (ValueDate()) {
+					
+					JOptionPane.showMessageDialog(null, "Hợp lệ");
+//				String maPhong = txt__MaPhong.getText();
+//				String tenPhong = txt_TenPhong.getText();
+//				java.sql.Date ngayTaoPhong = new java.sql.Date(date_NgayTaoPhong.getDate().getTime());
+//				String viTriPhong = txt_ViTriPhong.getText().trim();
+//				String ghiChu = txtA_GhiChu.getText().trim();
+//				String tinhTrangPhong = cbBox_TinhTrangPhong_1.getSelectedItem().toString();
+//				LoaiPhong lp = null;
+//				TrangThaiPhong ttp = null;
+//
+//				if (DAO_P.timPhong_TheoMaLoaiPhong(maPhong) != null) {
+//					JOptionPane.showMessageDialog(null, "Phòng này đã tồn tại.");
+//				}
+//				try {
+//					// Lay LoaiPhong
+//					lp = DAO_LP.layLoaiPhong_TheoTenLoaiPhong(cbBox_LoaiPhong.getSelectedItem().toString());
+//					if (lp == null) {
+//						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+//						return;
+//					}
+//
+//					// Lay Trangthaiphong
+//					ttp = DAO_TTP.timTrangThaiPhong_TheoTenTrangThai(cbBox_TrangThaiPhong.getSelectedItem().toString());
+//					if (ttp == null) {
+//						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+//						return;
+//					}
+//				} catch (Exception e2) {
+//					// TODO: handle exception
+//					e2.printStackTrace();
+//					JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+//				}
+//				Phong phong = new Phong(maPhong, tenPhong, lp, ttp, ngayTaoPhong, viTriPhong, ghiChu, tinhTrangPhong);
+//				System.out.println(phong.toString());
+//				try {
+//					if (DAO_P.taoPhong(phong)) {			
+//						JOptionPane.showMessageDialog(null, "Tạo phòng mới thành công!");
+//					} else {			
+//						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+//						return;
+//					}
+//				} catch (Exception e2) {
+//
+//					e2.printStackTrace();
+//				}
+//			}
 				}
-
-				try {
-					// Lay LoaiPhong
-					lp = DAO_LP.layLoaiPhong_TheoTenLoaiPhong(cbBox_LoaiPhong.getSelectedItem().toString());
-					if (lp == null) {
-						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-						return;
-					}
-
-					// Lay Trangthaiphong
-					ttp = DAO_TTP.timTrangThaiPhong_TheoTenTrangThai(cbBox_TrangThaiPhong.getSelectedItem().toString());
-					if (ttp == null) {
-						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-						return;
-					}
-
-				} catch (Exception e2) {
-					// TODO: handle exception
-					e2.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-				}
-
-				Phong phong = new Phong(maPhong, tenPhong, lp, ttp, ngayTaoPhong, viTriPhong, ghiChu, tinhTrangPhong);
-
-				System.out.println(phong.toString());
-				try {
-					if (DAO_P.taoPhong(phong)) {
-						
-						JOptionPane.showMessageDialog(null, "Tạo phòng mới thành công!");
-
-					} else {
-						
-						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-						return;
-					}
-
-				} catch (Exception e2) {
-
-					e2.printStackTrace();
-				}
-
 			}
-			
-			
-			
 		});
 
 		JLabel lbl_NgayTaoPhong = new JLabel("Ngày tạo phòng");
@@ -229,6 +218,8 @@ public class Modal_ThemPhong extends JFrame {
 		date_NgayTaoPhong = new JDateChooser();
 		date_NgayTaoPhong.setBounds(621, 115, 255, 25);
 		panel_1.add(date_NgayTaoPhong);
+		Calendar cal = Calendar.getInstance();
+		date_NgayTaoPhong.setDate(cal.getTime());
 
 		JPanel pnl_GhiChu = new JPanel();
 		pnl_GhiChu.setBackground(new Color(255, 255, 255));
@@ -262,6 +253,7 @@ public class Modal_ThemPhong extends JFrame {
 		cbBox_TrangThaiPhong.setBackground(Color.WHITE);
 		cbBox_TrangThaiPhong.setBounds(172, 218, 255, 25);
 		panel_1.add(cbBox_TrangThaiPhong);
+		cbBox_TrangThaiPhong.addItem("Chọn trạng thái phòng");
 		DAO_TTP = new TrangThaiPhong_DAO();
 		try {
 			listTTP = DAO_TTP.layTatCaTrangThaiPhong();
@@ -278,6 +270,7 @@ public class Modal_ThemPhong extends JFrame {
 		cbBox_LoaiPhong = new JComboBox<String>();
 		cbBox_LoaiPhong.setBackground(Color.WHITE);
 		cbBox_LoaiPhong.setBounds(172, 161, 255, 25);
+		cbBox_LoaiPhong.addItem("Chọn loại phòng");
 		panel_1.add(cbBox_LoaiPhong);
 
 		JLabel lbl_TinhTrangPhong = new JLabel("Tình trạng phòng");
@@ -288,6 +281,7 @@ public class Modal_ThemPhong extends JFrame {
 		cbBox_TinhTrangPhong_1 = new JComboBox<String>();
 		cbBox_TinhTrangPhong_1.setBackground(Color.WHITE);
 		cbBox_TinhTrangPhong_1.setBounds(172, 271, 255, 25);
+		cbBox_TinhTrangPhong_1.addItem("Chọn trạng thái phòng");
 		cbBox_TinhTrangPhong_1.addItem("Sửa chữa");
 		cbBox_TinhTrangPhong_1.addItem("Đang dọn dẹp");
 		cbBox_TinhTrangPhong_1.addItem("Chưa dọn dẹp");
@@ -307,5 +301,70 @@ public class Modal_ThemPhong extends JFrame {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
+	}
+
+	public boolean ValueDate() {
+		// Thêm đoạn code này vào thiết kế giao diện
+//		cbBox_LoaiPhong.addItem("Chọn loại phòng");
+//		cbBox_TrangThaiPhong.addItem("Chọn trạng thái phòng");
+//		cbBox_TinhTrangPhong_1.addItem("Chọn trạng thái phòng"); 
+//		Calendar cal = Calendar.getInstance(); 
+//		date_NgayTaoPhong.setDate(cal.getTime());
+
+		String maPhong = txt__MaPhong.getText().toString().trim();
+		String tenPhong = txt_TenPhong.getText().toString().trim();
+		String loaiPhong = cbBox_LoaiPhong.getSelectedItem().toString().trim();
+		String chonLoaiP = cbBox_LoaiPhong.getItemAt(0).toString().trim();
+		String trangThaiPhong = cbBox_TrangThaiPhong.getSelectedItem().toString().trim();
+		String chonTrThaiP = cbBox_TrangThaiPhong.getItemAt(0).toString().trim();
+		String tinhTrangPhong = cbBox_TinhTrangPhong_1.getSelectedItem().toString().trim();
+		String chonTTrangP = cbBox_TinhTrangPhong_1.getItemAt(0).toString().trim();
+		Date ngayTaoPhong = null;
+
+		if (tenPhong.equals("")) {
+			JOptionPane.showMessageDialog(null, "Tên dịch vụ không được rỗng!");
+			txt_TenPhong.requestFocus();
+			return false;
+		} else if (!tenPhong.matches("^[\\p{L}\\s']+( [\\p{L}\\s']+)? [\\p{L}\\s']+$")) {
+			txt_TenPhong.requestFocus();
+			JOptionPane.showMessageDialog(null, "Tên phòng không hợp lệ!");
+			return false;
+		}
+
+		if (loaiPhong.equals(chonLoaiP)) {
+			JOptionPane.showMessageDialog(null, "Chưa chọn loại phòng!");
+			cbBox_LoaiPhong.requestFocus();
+			return false;
+		}
+
+		if (trangThaiPhong.equals(chonTrThaiP)) {
+			JOptionPane.showMessageDialog(null, "Chưa chọn trạng thái phòng!");
+			cbBox_TrangThaiPhong.requestFocus();
+			return false;
+		}
+
+		if (tinhTrangPhong.equals(chonTTrangP)) {
+			JOptionPane.showMessageDialog(null, "Chưa chọn tình trạng phòng!");
+			cbBox_TinhTrangPhong_1.requestFocus();
+			return false;
+		}
+
+		try {
+			ngayTaoPhong = new Date(date_NgayTaoPhong.getDate().getTime());
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_MONTH, 0);
+			java.util.Date chkNgayTaoPhong = new java.util.Date(cal.getTimeInMillis());
+
+			if (!(ngayTaoPhong.before(chkNgayTaoPhong))) {
+				JOptionPane.showMessageDialog(null, "Ngày tạo phòng phải nhỏ hơn hoặc bằng ngày hiện tại!");
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Ngày tạo phòng không được phép rỗng!");
+			return false;
+		}
+
+		return true;
 	}
 }
