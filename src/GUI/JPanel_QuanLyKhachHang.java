@@ -101,7 +101,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 
 	private JButton btnThemKhachHang;
 
-	private AbstractButton btnThem;
+	private JButton btnThem;
 
 
 	/**
@@ -386,14 +386,21 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		txt_TuoiTu.setBounds(40, 38, 70, 19);
 		pnl_Loc_TheoTuoi.add(txt_TuoiTu);
 
+		btnThem = new JButton("Thêm");
 
+		btnThem.setIcon(new ImageIcon(JPanel_QuanLyNhanVien.class.getResource("/icon/add.png")));
+		btnThem.setForeground(Color.WHITE);
+		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnThem.setBackground(Color.decode(hexColor_Green));
+		btnThem.setBounds(10, 0, 125, 35);
+		panel.add(btnThem);
 
-//		btnThem.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				modal_ThemKhachHang.setVisible(true);
-//			}
-//		});
+		btnThem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				modal_ThemKhachHang.setVisible(true);
+			}
+		});
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {

@@ -247,6 +247,8 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		if (o.equals(btn__Save)) {
 			if(txt__MaKH.getText().equals("")) {
 				themKhachHang();
+				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
+				Panel.setJPanel_QuanLyKhachHang(true);
 			}else {
 				capNhatKhachHang();
 				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();

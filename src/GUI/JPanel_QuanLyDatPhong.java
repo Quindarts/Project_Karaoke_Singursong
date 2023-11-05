@@ -56,6 +56,7 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.poi.util.SystemOutLogger;
 
 import com.ctc.wstx.shaded.msv_core.verifier.identity.Matcher;
+import com.itextpdf.awt.geom.Dimension;
 import com.itextpdf.text.List;
 
 import DAO.KhachHang_DAO;
@@ -501,7 +502,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		panel_TraCuuPhong.add(lblTnPhng);
 
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(0, 94, 843, 498);
+		scrollPane_1.setBounds(0, 94, 806, 498);
 		scrollPane_1.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane_1.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
 		panel_PhongBan.add(scrollPane_1);
@@ -509,7 +510,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		panel_Phong = new JPanel();
 		panel_Phong.setBackground(new Color(255, 255, 255));
 		scrollPane_1.setRowHeaderView(panel_Phong);
-		panel_Phong.setLayout(new GridLayout(3, 5, 6, 6));
+		panel_Phong.setLayout(new GridLayout(3, 5, 6, 6));	
 		/**
 		 * 
 		 * **/

@@ -23,6 +23,8 @@ import GUI.JFrame_DangNhap.RoundedTransparentBorder;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -168,6 +170,9 @@ public class JFrame_ThuNgan extends JFrame {
 		setResizable(false);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
+		
+		Cursor pointingCursor = new Cursor(Cursor.HAND_CURSOR);
+
 
 		Panel_QLDP = new JPanel_QuanLyDatPhong(nhanVien);
 		Panel_QLKH = new JPanel_QuanLyKhachHang();
@@ -200,6 +205,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panel_Menu.setLayout(null);
 
 		panelMenu_QLDatPhong = new JPanel();
+		panelMenu_QLDatPhong.setCursor(pointingCursor);
 		panelMenu_QLDatPhong.addMouseListener(new PanelButtonMouseAdapter(panelMenu_QLDatPhong) {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -227,6 +233,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLDatPhong.add(lblMenu_QLDatPhong);
 
 		panelMenu_QLKhachHang = new JPanel();
+		panelMenu_QLKhachHang.setCursor(pointingCursor);
 		panelMenu_QLKhachHang.setBackground(Color.decode(hexColor_Blue1));
 
 		panelMenu_QLKhachHang.setBounds(2, 151, 192, 45);
@@ -242,6 +249,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLKhachHang.add(lblMenu_QLKhachHang);
 
 		panelMenu_QLPhieuDatPhong = new JPanel();
+		panelMenu_QLPhieuDatPhong.setCursor(pointingCursor);
 		panelMenu_QLPhieuDatPhong.setLayout(null);
 		panelMenu_QLPhieuDatPhong.setBackground(new Color(5, 74, 145));
 		panelMenu_QLPhieuDatPhong.setBounds(2, 197, 192, 45);
@@ -255,6 +263,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLPhieuDatPhong.add(lblMenu_PhieuDatPhong);
 
 		panelMenu_QLHoaDon = new JPanel();
+		panelMenu_QLHoaDon.setCursor(pointingCursor);
 		panelMenu_QLHoaDon.setLayout(null);
 		panelMenu_QLHoaDon.setBackground(new Color(5, 74, 145));
 		panelMenu_QLHoaDon.setBounds(2, 243, 192, 45);
@@ -292,6 +301,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lblDay.setFont(new Font("Arial", Font.BOLD, 16));
 
 		JPanel panelMenu_QLNhanVien = new JPanel();
+		panelMenu_QLNhanVien.setCursor(pointingCursor);
 		panelMenu_QLNhanVien.setLayout(null);
 		panelMenu_QLNhanVien.setBackground(new Color(5, 74, 145));
 		panelMenu_QLNhanVien.setBounds(2, 289, 192, 45);
@@ -305,6 +315,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLNhanVien.add(lblMenu_QLNhanVien);
 
 		JPanel panelMenu_QLLoaiPhong = new JPanel();
+		panelMenu_QLLoaiPhong.setCursor(pointingCursor);
 		panelMenu_QLLoaiPhong.setLayout(null);
 		panelMenu_QLLoaiPhong.setBackground(new Color(5, 74, 145));
 		panelMenu_QLLoaiPhong.setBounds(2, 335, 192, 45);
@@ -318,6 +329,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLLoaiPhong.add(lblMenu_QLLoaiPhong);
 
 		JPanel panelMenu_QLPhong = new JPanel();
+		panelMenu_QLPhong.setCursor(pointingCursor);
 		panelMenu_QLPhong.setLayout(null);
 		panelMenu_QLPhong.setBackground(new Color(5, 74, 145));
 		panelMenu_QLPhong.setBounds(2, 381, 192, 45);
@@ -331,6 +343,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLPhong.add(lblMenu_QLPhong);
 
 		JPanel panelMenu_QLDichVu = new JPanel();
+		panelMenu_QLDichVu.setCursor(pointingCursor);
 		panelMenu_QLDichVu.setLayout(null);
 		panelMenu_QLDichVu.setBackground(new Color(5, 74, 145));
 		panelMenu_QLDichVu.setBounds(2, 427, 192, 45);
@@ -344,6 +357,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLDichVu.add(lblMenu_QLDichVu);
 
 		JPanel panelMenu_QLKhuyenMai = new JPanel();
+		panelMenu_QLKhuyenMai.setCursor(pointingCursor);
 		panelMenu_QLKhuyenMai.setLayout(null);
 		panelMenu_QLKhuyenMai.setBackground(new Color(5, 74, 145));
 		panelMenu_QLKhuyenMai.setBounds(2, 473, 192, 45);
@@ -357,6 +371,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panelMenu_QLKhuyenMai.add(lblMenu_QLKhuyenMai);
 
 		JPanel panelMenu_BaoCaoThongKe = new JPanel();
+		panelMenu_BaoCaoThongKe.setCursor(pointingCursor);
 		panelMenu_BaoCaoThongKe.setLayout(null);
 		panelMenu_BaoCaoThongKe.setBackground(new Color(5, 74, 145));
 		panelMenu_BaoCaoThongKe.setBounds(2, 519, 192, 45);
@@ -412,9 +427,10 @@ public class JFrame_ThuNgan extends JFrame {
 		mnNewMenu.add(mntmNewMenuItem_2);
 
 		JLabel lbl__userName = new JLabel(nhanVien.getHoTen());
+		lbl__userName.setHorizontalAlignment(SwingConstants.RIGHT);
 		lbl__userName.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lbl__userName.setForeground(new Color(255, 255, 255));
-		lbl__userName.setBounds(1198, 22, 176, 31);
+		lbl__userName.setBounds(1228, 23, 176, 31);
 
 		contentPane.add(lbl__userName);
 
@@ -517,6 +533,7 @@ public class JFrame_ThuNgan extends JFrame {
 	 * */
 	private class PanelButtonMouseAdapter extends MouseAdapter {
 		JPanel panel;
+		boolean isPressed = false;
 
 		public PanelButtonMouseAdapter(JPanel panel) {
 			this.panel = panel;
@@ -539,7 +556,7 @@ public class JFrame_ThuNgan extends JFrame {
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
-			panel.setBackground(Color.decode(hexColor_Blue1));
+			panel.setBackground(Color.decode(hexColor_Red));
 		}
 		
 	}
