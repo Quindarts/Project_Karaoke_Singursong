@@ -212,8 +212,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 
 				if (e.getClickCount() == 2) {
 					int row = table_KhachHang.getSelectedRow();
-//	            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
-//	        		date_KH.setDate((Date) model.getValueAt(row, 3));
 					String maKhachHang = model.getValueAt(row, 0).toString();
 					String hoTen = model.getValueAt(row, 1).toString();
 					String gioiTinh = model.getValueAt(row, 2).toString();
@@ -552,24 +550,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 
 		model.getDataVector().removeAllElements();
 		boolean ketQuaLoc = false;
-//
-//		for (KhachHang kh : DAO_KH.layTatCaKhachHang()) {
-//			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
-//			Calendar ngayHienTai = Calendar.getInstance();
-//			Calendar cal = Calendar.getInstance();
-//			cal.setTime(kh.getNgaySinh());
-//			int tuoi = ngayHienTai.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
-//			int diemThuong = kh.getDiemThuong();
-//
-//			if ((loc_tatCa || (loc_nam && kh.isGioiTinh()) || (loc_nu && !kh.isGioiTinh()))
-//					&& (loc_tuoiTu <= tuoi && tuoi <= loc_tuoiDen)
-//					&& (loc_diemThuongTu <= diemThuong && diemThuong <= loc_diemThuongDen)) {
-//				Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
-//						kh.getSoDienThoai(), diemThuong, kh.getGhiChu() };
-//				model.addRow(rowData);
-//				ketQuaLoc = true;
-//			}
-//		}
 		
 		for (KhachHang kh : DAO_KH.layTatCaKhachHang()) {
 			boolean kiemTra = true;

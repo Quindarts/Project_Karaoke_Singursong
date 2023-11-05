@@ -260,8 +260,8 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
-			modalTKH.setVisible(true);
+			Modal_ThemDichVu modal_ThemDichVu = new Modal_ThemDichVu();
+			modal_ThemDichVu.setVisible(true);
 		}
 
 	}

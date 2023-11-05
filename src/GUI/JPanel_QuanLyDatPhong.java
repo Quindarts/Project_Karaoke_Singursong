@@ -358,14 +358,14 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 				String regexHoTen = "^[AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+ [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+(?: [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]*)*";
 				Pattern patternHoTen = Pattern.compile(regexHoTen);
 				java.util.regex.Matcher matcher = patternHoTen.matcher(txtTenKhachHang.getText().trim());
-				if(matcher.matches()) {
+				if (matcher.matches()) {
 					Phong_DAO phong_DAO = new Phong_DAO();
 					Phong ph = new Phong();
 					ph = phong_DAO.timPhong_TheoMaPhong(txtMaPhong.getText().trim());
 					ph.setTrangThaiPhong(new TrangThaiPhong("OCP", "Đã đặt"));
-					
+
 					System.out.println(ph.getTrangThaiPhong().getTenTrangThai());
-					
+
 					if (phong_DAO.capNhatPhong(ph)) {
 						renderDanhSachPhong();
 						JOptionPane.showMessageDialog(null, "Đặt phòng thành công!", "Thành công",
@@ -378,8 +378,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 					JOptionPane.showMessageDialog(null, "Tên không đúng", "Không thành công",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
-				
-					
+
 			}
 		});
 
@@ -450,7 +449,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		tabbedPane.addTab("PHÒNG HÁT", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/door-open.png")),
 				panel_PhongBan, null);
 		panel_PhongBan.setLayout(null);
-		
+
 		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")),
 				panel_ThucDon, null);
 

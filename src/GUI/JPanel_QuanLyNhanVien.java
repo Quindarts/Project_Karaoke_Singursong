@@ -355,6 +355,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 					} catch (Exception e2) {
 						anhThe = "";
 					}
+
 					model_ThemNhanVien = new Modal_ThemNhanVien();
 					model_ThemNhanVien.setVisible(true);
 					model_ThemNhanVien.setModal_ThemNhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, sdt,
@@ -658,5 +659,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 			
 		}
 	}
+	
 
+	
 }	
