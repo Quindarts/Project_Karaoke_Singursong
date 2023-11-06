@@ -66,6 +66,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 	private ArrayList<KhachHang> dsKH;
 	private LoaiPhong_DAO DAO_LP;
 	private ArrayList<LoaiPhong> dsLP;
+	private String[] rowData;
 
 	/**
 	 * Rounded JPanel
@@ -142,8 +143,23 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 
 		table_LoaiPhong = new JTable();
 		table_LoaiPhong.setBackground(Color.WHITE);
-		table_LoaiPhong.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã loại phòng",
-				"Tên loại phòng", "Số lượng khách tối đa", "Giá tiền", "Hình ảnh", "Mô tả" }));
+		rowData  =  new String[] { "Mã loại phòng",
+				"Tên loại phòng", "Số lượng khách tối đa", "Giá tiền", "Hình ảnh", "Mô tả" };
+		table_LoaiPhong.setModel(new DefaultTableModel(new Object[][] {},rowData));
+		
+		table_LoaiPhong.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -143705667217047914L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Đặt tất cả các ô không thể chỉnh sửa
+			}
+		});
+		
+		
 		table_LoaiPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 10, 1019, 615);

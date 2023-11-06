@@ -5,7 +5,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.DefaultTableModel;
 
 import com.formdev.flatlaf.json.ParseException;
 import com.toedter.calendar.JDateChooser;
@@ -27,11 +26,7 @@ import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-
-import java.util.EventObject;
-
 import java.util.ArrayList;
-
 import java.awt.Component;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -45,10 +40,9 @@ import java.awt.event.ComponentListener;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
-
-
 public class Modal_ThemKhachHang extends JFrame implements ActionListener {
-
+	
+	
 	/**
 	 * Color
 	 */
@@ -59,7 +53,8 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
-
+	
+	
 	private JPanel contentPane;
 	private JTextField txt__MaKH;
 	private JTextField txt__TenKH;
@@ -79,16 +74,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private KhachHang_DAO DAO_KH;
 	private JRadioButton rdbt__nu;
 	private JRadioButton rdbt__nam;
-
-	private boolean trangThaiThem = false;
-
-	public boolean isTrangThaiThem() {
-		return trangThaiThem;
-	}
-
-	public void setTrangThaiThem(boolean trangThaiThem) {
-		this.trangThaiThem = trangThaiThem;
-	}
 
 	public Modal_ThemKhachHang() {
 
@@ -203,8 +188,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nu.setActionCommand("Nu");
 
 		JLabel lbl__tieuDe = new JLabel("THÔNG TIN KHÁCH HÀNG");
-		lbl__tieuDe.setForeground(Color.decode(hexColor_Blue1));
-		;
+		lbl__tieuDe.setForeground(Color.decode(hexColor_Blue1));;
 		lbl__tieuDe.setBounds(43, 10, 849, 39);
 		panel_1.add(lbl__tieuDe);
 		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 17));
@@ -255,70 +239,18 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		}
 	}
 
-	public class LuuThongTinKhachHang extends EventObject {
-		private boolean thanhCong;
-
-		public LuuThongTinKhachHang(Object source, boolean success) {
-			super(source);
-			this.thanhCong = thanhCong;
-		}
-
-		public boolean isSuccess() {
-			return thanhCong;
-		}
-	}
-
-//	public interface Modal_ThemKhachHang extends EventListener {
-//	    void Modal_ThemKhachHang(Modal_ThemKhachHang event);
-//	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
 		Object o = e.getSource();
 
 		if (o.equals(btn__Save)) {
-			String tenKhachHang = txt__TenKH.getText();
-			String diaChi = txt__DiaChi.getText();
-			String sdt = txt__SDT.getText();
-			Date ngaySinh = new Date((dateChooser).getDate().getTime());
-			String ghiChu = txtA__GhiChu.getText();
-			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
-
-			String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
-			txt__MaKH.setText(maKhachHang);
-
-			int diemThuong = 0;
-			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
-
-			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
-					ghiChu);
-
-			System.out.println(kh.toString());
-
-			if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
-
-				try {
-					DAO_KH.taoKhachHang(kh);
-					JOptionPane.showMessageDialog(null, "Thêm Khách Hàng thành công");
-					
-					setVisible(false);
-					
-				} catch (Exception e2) {
-					// TODO: handle exception
-					JOptionPane.showMessageDialog(null, "Khách Hàng đã tồn tại");
-
-				}
-
-			} else {
-				JOptionPane.showMessageDialog(null, "Khách Hàng đã tồn tại");
-
 			if(txt__MaKH.getText().equals("")) {
 				themKhachHang();
 			}else {
 				capNhatKhachHang();
 				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
 				Panel.setJPanel_QuanLyKhachHang(true);
-
 			}
 		} 
 		
@@ -327,6 +259,9 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		}
 		
 	}
+	
+
+	
 
 	public void themKhachHang() {
 		String tenKhachHang = txt__TenKH.getText();

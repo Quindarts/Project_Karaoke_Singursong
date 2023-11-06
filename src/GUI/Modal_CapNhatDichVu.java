@@ -1,54 +1,37 @@
 package GUI;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
-import javax.swing.filechooser.FileNameExtensionFilter;
-
-import com.formdev.flatlaf.FlatLightLaf;
-
-import ConnectDB.ConnectDB;
-import DAO.DichVu_DAO;
-import DAO.LoaiPhong_DAO;
-import DAO.ThongTinDichVu_DAO;
-import Entity.DichVu;
-import Entity.LoaiPhong;
-import Entity.ThongTinDichVu;
-import OtherFunction.HelpRamDomMa;
-import OtherFunction.HelpValidate;
-
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
-import java.awt.Window;
-import java.awt.Color;
-import java.awt.Component;
-
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.awt.event.ActionEvent;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JRadioButton;
-import javax.swing.JSpinner;
-import javax.swing.JTextArea;
+
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 import com.toedter.calendar.JDateChooser;
 
-public class Modal_ThemDichVu extends JFrame {
+import DAO.DichVu_DAO;
+import DAO.ThongTinDichVu_DAO;
+import Entity.DichVu;
+import Entity.ThongTinDichVu;
+import OtherFunction.HelpValidate;
 
+public class Modal_CapNhatDichVu extends JFrame {
 	private JPanel contentPane;
 	private JTextField txt_maDichVu;
 	private JTextField txt_tenDichVu;
@@ -62,7 +45,6 @@ public class Modal_ThemDichVu extends JFrame {
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private JDateChooser dateChooser_ngayHetHan;
 	private JDateChooser dateChooser_ngayNhap;
-	private Date ngayNhap;
 
 	/**
 	 * Launch the application.
@@ -72,9 +54,9 @@ public class Modal_ThemDichVu extends JFrame {
 	 * Create the frame.
 	 */
 
-	public Modal_ThemDichVu() {
+	public Modal_CapNhatDichVu(String maDichVu, String tenDichVu, String soLuong, String donViTinh, String donGia,
+			String trangThai) {
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 450);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
@@ -89,7 +71,7 @@ public class Modal_ThemDichVu extends JFrame {
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
 
-		JLabel lbl_Title = new JLabel("Thêm dịch vụ mới");
+		JLabel lbl_Title = new JLabel("Cập nhật thông tin dịch vụ");
 		lbl_Title.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title.setBounds(0, 0, 237, 25);
 		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -114,14 +96,6 @@ public class Modal_ThemDichVu extends JFrame {
 				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
 			}
 
-			public ImageIcon ResizeImage(String ImagePath) {
-				ImageIcon MyImage = new ImageIcon(ImagePath);
-				Image img = MyImage.getImage();
-				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
-						Image.SCALE_SMOOTH);
-				ImageIcon image = new ImageIcon(newImg);
-				return image;
-			}
 		});
 		btn_ChonAnh.setBackground(new Color(0, 128, 255));
 		btn_ChonAnh.setBounds(0, 202, 179, 32);
@@ -296,6 +270,23 @@ public class Modal_ThemDichVu extends JFrame {
 		txtA_moTa.setBounds(127, 1, 223, 87);
 		pnl_GiaTien_1_1.add(txtA_moTa);
 
+		// Set value
+		ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
+		ThongTinDichVu ttdv = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(maDichVu);
+
+		dateChooser_ngayNhap.setDate(ttdv.getNgayNhap());
+		dateChooser_ngayHetHan.setDate(ttdv.getNgayHetHan());
+		txt_maDichVu.setText(maDichVu);
+		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));
+		txt_GiaTien.setText(donGia);
+
+		txt_SoLuong.setText(soLuong);
+
+		txt_soLuongDaSuDung.setText(soLuong);
+		txt_tenDichVu.setText(tenDichVu);
+
+		txtA_moTa.setText(ttdv.getMoTa());
+
 		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -307,7 +298,7 @@ public class Modal_ThemDichVu extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				// Table Dich vu
-
+				String maDichVu = txt_maDichVu.getText();
 				String tenDichVu = txt_tenDichVu.getText();
 				int soLuong = Integer.parseInt(txt_SoLuong.getText());
 				String donViTinh = "VND";
@@ -316,13 +307,7 @@ public class Modal_ThemDichVu extends JFrame {
 				double giaTien = Double.parseDouble(txt_GiaTien.getText());
 
 				// Table Thong tin dich vu
-				HelpRamDomMa helpMa = new HelpRamDomMa();
-				String maDichVu = helpMa.taoMa("DichVu", "maDichVu", "DV");
-				String maThongTinDichVu = helpMa.taoMa("ThongTinDichVu", "maThongTinDichVu", "TTDV");
-
-				txt_maDichVu.setText(maDichVu);
-				// maDichvu
-				// soLuong
+				ThongTinDichVu thongTinDichVuOld = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(maDichVu);
 				int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
 				Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
 				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
@@ -330,8 +315,8 @@ public class Modal_ThemDichVu extends JFrame {
 				String moTa = txtA_moTa.getText();
 
 				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);
-				ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, dv, soLuong, soLuongDaSuDung, ngayNhap,
-						ngayHetHan, moTa, hinhA);
+				ThongTinDichVu ttdv = new ThongTinDichVu(thongTinDichVuOld.getMaThongTinDichVu(), dv, soLuong,
+						soLuongDaSuDung, ngayNhap, ngayHetHan, moTa, hinhA);
 
 				System.out.println(dv.toString());
 				System.out.println(ttdv.toString());
@@ -340,41 +325,20 @@ public class Modal_ThemDichVu extends JFrame {
 					DichVu_DAO DAO_DV = new DichVu_DAO();
 					ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
 
-					if (DAO_DV.taoDichVu(dv) && DAO_TTDV.taoThongTinDichVu(ttdv)) {
-						JOptionPane.showMessageDialog(null, "Tạo dịch vụ thành công.");
+					if ((DAO_DV.capNhatDichVu(dv) >= 0) && DAO_TTDV.capNhatThongTinDichVu(ttdv) >= 0) {
+						JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thành công.");
+						setVisible(false);
 					} else {
-						JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
+						JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thất bại, vui lòng thử lại.");
 					}
 
 				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
+					JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thất bại, vui lòng thử lại.");
 
 				}
 
 			}
 		});
-	}
-
-	public void setModal_ThemDichVu(String maDichVu, String tenDichVu, String soLuong, String donViTinh, String donGia,
-			String trangThai) {
-		ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
-		ThongTinDichVu ttdv = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(maDichVu);
-
-		dateChooser_ngayNhap.setDate(ttdv.getNgayNhap());
-		dateChooser_ngayHetHan.setDate(ttdv.getNgayHetHan());
-		txt_maDichVu.setText(maDichVu);
-		;
-		txt_GiaTien.setText(donGia);
-		;
-		txt_SoLuong.setText(soLuong);
-		;
-		txt_soLuongDaSuDung.setText(soLuong);
-		txt_tenDichVu.setText(tenDichVu);
-		;
-		txtA_moTa.setText(ttdv.getMoTa());
-
-//		txtA_moTa;
-
 	}
 
 	public String chooseFileEvent(String typeFile) {
@@ -409,5 +373,13 @@ public class Modal_ThemDichVu extends JFrame {
 			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
 		}
 		return path;
+	}
+
+	public ImageIcon ResizeImage(String ImagePath) {
+		ImageIcon MyImage = new ImageIcon(ImagePath);
+		Image img = MyImage.getImage();
+		Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(), Image.SCALE_SMOOTH);
+		ImageIcon image = new ImageIcon(newImg);
+		return image;
 	}
 }
