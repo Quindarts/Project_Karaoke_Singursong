@@ -68,7 +68,6 @@ public class CardPhong extends JPanel {
 				}
 			}
 		});
-		
 
 	}
 
@@ -135,8 +134,10 @@ public class CardPhong extends JPanel {
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
-			JFrame chuyenPhongFrame = new Modal_ChuyenPhong(phong);
-			chuyenPhongFrame.setVisible(true);
+			Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong();
+			phieuChuyenPhong.setVisible(true);
+			phieuChuyenPhong.SetModal_PhieuChuyenPhong(hexColor_Blue1, hexColor_Blue1, hexColor_Blue1, hexColor_Blue1,
+					hexColor_Blue4, hexColor_Blue3, hexColor_Blue2, hexColor_Blue1);
 		});
 		menu.add(xemThongTinMenuItem);
 		menu.add(chuyenPhongMenuItem);

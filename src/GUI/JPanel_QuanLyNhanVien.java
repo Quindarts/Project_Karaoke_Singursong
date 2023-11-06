@@ -54,7 +54,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JComboBox;
 
-public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , ItemListener {
+public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, ItemListener {
 
 	/**
 	 * Color
@@ -221,21 +221,18 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		chcbx_Nam.setBounds(6, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nam);
 
-
 		chcbx_Nu = new JCheckBox("Nữ");
 		chcbx_Nu.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_Nu.setBackground(Color.WHITE);
 		chcbx_Nu.setBounds(72, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nu);
 
-		
 		chcbx_TatCa = new JCheckBox("Tất cả");
 		chcbx_TatCa.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_TatCa.setBackground(Color.WHITE);
 		chcbx_TatCa.setBounds(138, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_TatCa);
 
-		
 		btnGr_LocTheoGioiTinh = new ButtonGroup();
 		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
 		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
@@ -473,22 +470,25 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 				TimNhanVien_TheoSoDT();
 			} else if (rdBtn_TimTheoCCCD.isSelected()) {
 				TimNhanVien_TheoCCCD();
-			}
+			} else
+				TimNhanVien_TheoTenGanDung();
 		}
 		if (o.equals(btnLoc)) {
 			LocDuLieu();
 		}
-		if( o.equals(cb_Loc_LoaiNV)) LocDuLieu();
-		if( o.equals(cb_Loc_LoaiTrangThai)) LocDuLieu();
-		
+		if (o.equals(cb_Loc_LoaiNV))
+			LocDuLieu();
+		if (o.equals(cb_Loc_LoaiTrangThai))
+			LocDuLieu();
+
 	}
-	
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getItem();
-		if(o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))	LocDuLieu();
+		if (o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))
+			LocDuLieu();
 	}
-
 
 	public void XoaDuLieuTrenTable() {
 		model = (DefaultTableModel) table_NhanVien.getModel();
@@ -514,6 +514,30 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không thể đọc dữ liệu");
 		}
+	}
+
+	public ArrayList<NhanVien> TimNhanVien_TheoTenGanDung() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = txt_TimKiem.getText().trim();
+		dsNV = DAO_NV.timNhanVien_TheoTenGanDung(chuoiTimKiem);
+		try {
+			for (NhanVien nv : dsNV) {
+				if (dsNV != null) {
+					LoaiNhanVien loaiNV = new LoaiNhanVien();
+					loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+					String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+					Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
+							nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
+							nv.getAnhThe() };
+					model.addRow(rowData);
+				}
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có họ tên giống: " + chuoiTimKiem);
+		}
+		System.out.println(dsNV);
+
+		return dsNV;
 	}
 
 	public void TimNhanVien_TheoMa() {
@@ -584,7 +608,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		}
 	}
 
-	public void LamMoiBoLoc () {
+	public void LamMoiBoLoc() {
 		txt_TimKiem.setText("");
 		txt_TuoiDen.setText("");
 		txt_TuoiTu.setText("");
@@ -593,10 +617,10 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		btnGr_LocTheoGioiTinh.clearSelection();
 		btnGr_TimTheoLoai.clearSelection();
 	}
-	
+
 	public void LocDuLieu() {
 		boolean ketQuaLoc = false;
-		
+
 		int loc_tuoiTu, loc_tuoiDen; // Lấy tuổi
 		try {
 			loc_tuoiTu = Integer.parseInt(txt_TuoiTu.getText().trim());
@@ -608,7 +632,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		} catch (NumberFormatException e) {// Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối đa
 			loc_tuoiDen = Integer.MAX_VALUE; // Lọc theo tất cả các tuổi
 		}
-		
+
 		model.getDataVector().removeAllElements();
 		model_ThemNhanVien = new Modal_ThemNhanVien();
 		for (NhanVien nv : DAO_NV.layTatCaNhanVien()) {
@@ -631,11 +655,11 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 			if ((chcbx_Nam.isSelected() && !gender.equals("Nam")) || (chcbx_Nu.isSelected() && !gender.equals("Nữ"))) {
 				kiemTra = false; // Kiểm tra giới tính được chọn
 			}
-			
+
 			if (tuoi < loc_tuoiTu || tuoi > loc_tuoiDen) {
 				kiemTra = false; // Kiểm tra độ tuổi được nhập
-	        }
-			
+			}
+
 			if (!loc_LoaiNV.equals(chonLoaiNV) && !loaiNV.getTenLoaiNhanVien().equals(loc_LoaiNV)) {
 				kiemTra = false; // Kiểm tra loại nhân viên được chọn
 			}
@@ -656,10 +680,8 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		if (!ketQuaLoc) {
 			model.fireTableDataChanged();
 			JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
-			
+
 		}
 	}
-	
 
-	
-}	
+}

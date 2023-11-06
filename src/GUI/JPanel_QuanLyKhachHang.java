@@ -428,8 +428,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoMaKH);
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
 		
-
-
 		DocDuLieu();
 	}
 

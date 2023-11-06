@@ -519,7 +519,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 	public void clearForm() {
 		txtSoDienThoai.setText("");
 		txtGioNhanPhong.setText("");
-//		txtMaPhong.setText("");
 		txtTenPhong.setText("");
 		txtLoaiPhong.setText("");
 		txtTenKhachHang.setText("");

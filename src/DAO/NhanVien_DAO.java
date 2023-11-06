@@ -173,6 +173,51 @@ public class NhanVien_DAO {
 		}
 		return nhanVien;
 	}
+	
+	public ArrayList<NhanVien> timNhanVien_TheoTenGanDung(String tenNV) {
+
+//		String giaBanLK = "and giaBan Between ? and ?";
+//		String thuongHieuLK = "and tenNCC like N'%" + thuongHieu + "%'";
+//		String loaiLK = "and loaiLinhKien like N'%" + loai + "%'";
+//		String sql = "select * from LinhKien join NhaCungCap on LinhKien.maNCC=NhaCungCap.maNCC where tenLinhKien like N'%"
+//				+ ten + "%'" + loaiLK + thuongHieuLK + giaBanLK;
+
+		NhanVien nhanVien = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		ArrayList<NhanVien> dsNV = new ArrayList<NhanVien>();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM NhanVien WHERE hoTen like N'%" + tenNV.toString().trim()  +"%'";
+			statement = con.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maNhanVien = rs.getString("maNhanVien");
+				LoaiNhanVien loaiNhanVien = new LoaiNhanVien(rs.getString("maLoaiNhanVien"));
+				java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+				String hoTen = rs.getString("hoTen");
+				Boolean gioiTinh = rs.getBoolean("gioiTinh");
+				String soDienThoai = rs.getString("SoDienThoai");
+				String CCCD = rs.getString("CCCD");
+				String diaChi = rs.getString("diaChi");
+				String trangThai = rs.getString("trangThai");
+				String anhThe = rs.getString("anhThe");
+				nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
+						trangThai, anhThe);
+				dsNV.add(nhanVien);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return dsNV;
+	}
 
 	/**
 	 * TaoNhanVien
