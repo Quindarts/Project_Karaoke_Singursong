@@ -3,8 +3,10 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import ConnectDB.ConnectDB;
 import Entity.DichVu;
@@ -14,6 +16,55 @@ public class DichVu_DAO {
 	public DichVu_DAO() {
 		super();
 		// TODO Auto-generated constructor stub
+	}
+
+	public int soLuongDichVu() {
+		Connection con = new ConnectDB().getConnection();
+		int dem = 0;
+		try {
+			PreparedStatement statement = con.prepareStatement("select count(maDichVu) as Dem from DichVu");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				dem = rs.getInt("Dem");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dem;
+	}
+
+	public ArrayList<DichVu> phanTrangDichVu(int fn, int ln) {
+		Connection con = new ConnectDB().getConnection();
+		ArrayList<DichVu> list = new ArrayList<DichVu>();
+		PreparedStatement statement = null;
+
+		String sql = "select *from(select ROW_NUMBER() over (order by maDichVu)as STT,maDichVu,tenDichVu,soLuong,donViTinh,donGia,trangThai from DichVu) as PhanTrang where PhanTrang.STT Between ? and ?";
+
+		try {
+			statement = con.prepareStatement(sql);
+			statement.setInt(1, fn);
+			statement.setInt(2, ln);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+			
+				String maDichVu = rs.getString("maDichVu");
+				String tenDichVu = rs.getString("tenDichVu");
+				int soLuong = rs.getInt("soLuong");
+				String donViTinh = rs.getString("donViTinh");
+				Double donGia = rs.getDouble("donGia");
+				boolean trangThai = rs.getBoolean("trangThai");
+				DichVu dichVu = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, donGia, trangThai);
+				list.add(dichVu);
+			}
+			statement.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+
+		return list;
+
 	}
 
 	public ArrayList<DichVu> layTatCaDichVu() {
@@ -99,7 +150,7 @@ public class DichVu_DAO {
 		return n > 0;
 	}
 
-	public boolean capNhatDichVu(DichVu dichVu) {
+	public int capNhatDichVu(DichVu dichVu) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -125,7 +176,8 @@ public class DichVu_DAO {
 				e2.printStackTrace();
 			}
 		}
-		return n > 0;
+		System.out.println("SO Lan cap nhat:" + n);
+		return n;
 	}
 
 	public boolean xoaDichVu(DichVu dichVu) {
@@ -149,4 +201,5 @@ public class DichVu_DAO {
 		}
 		return n > 0;
 	}
+
 }
