@@ -10,21 +10,8 @@ public class TaiKhoan {
 	private NhanVien nhanVien;
 	private String tenDangNhap;
 	private String matKhau;
+	private String gmail;
 	private boolean trangThai;
-
-	/**
-	 * @param maNhanVien
-	 * @param tenDangNhap
-	 * @param matKhau
-	 * @param trangThai
-	 */
-	public TaiKhoan(NhanVien nhanVien, String tenDangNhap, String matKhau, boolean trangThai) {
-		super();
-		this.nhanVien = nhanVien;
-		this.tenDangNhap = tenDangNhap;
-		this.matKhau = matKhau;
-		this.trangThai = trangThai;
-	}
 
 	/**
 	 * @param maNhanVien
@@ -34,12 +21,42 @@ public class TaiKhoan {
 		this.nhanVien = nhanVien;
 	}
 
+	/**
+	 * @param nhanVien
+	 * @param tenDangNhap
+	 * @param matKhau
+	 * @param gmail
+	 * @param trangThai
+	 */
+	public TaiKhoan(NhanVien nhanVien, String tenDangNhap, String matKhau, String gmail, boolean trangThai) {
+		super();
+		this.nhanVien = nhanVien;
+		this.tenDangNhap = tenDangNhap;
+		this.matKhau = matKhau;
+		this.gmail = gmail;
+		this.trangThai = trangThai;
+	}
+
 	public TaiKhoan() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
+	public String getTenDangNhap() {
+		return tenDangNhap;
+	}
 
+	public void setTenDangNhap(String tenDangNhap) {
+		this.tenDangNhap = tenDangNhap;
+	}
+
+	public String getGmail() {
+		return gmail;
+	}
+
+	public void setGmail(String gmail) {
+		this.gmail = gmail;
+	}
 
 	public NhanVien getNhanVien() {
 		return nhanVien;
@@ -93,8 +110,10 @@ public class TaiKhoan {
 
 	@Override
 	public String toString() {
-		return "tenDangNhap [nhanVien=" + nhanVien + ", tenDangNhap=" + tenDangNhap + ", matKhau=" + matKhau
-				+ ", trangThai=" + trangThai + "]";
+		return "TaiKhoan [nhanVien=" + nhanVien + ", tenDangNhap=" + tenDangNhap + ", matKhau=" + matKhau + ", gmail="
+				+ gmail + ", trangThai=" + trangThai + "]";
 	}
+
+
 
 }

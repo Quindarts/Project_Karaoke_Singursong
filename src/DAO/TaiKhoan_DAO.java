@@ -59,9 +59,10 @@ public class TaiKhoan_DAO {
 			while (rs.next()) {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				tenDangNhap = rs.getString("tenDangNhap");
-				matKhau = rs.getString("matKhau");
+				matKhau = rs.getString("matKhau");	
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String gmail = rs.getString("gmail");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, gmail, trangThai);
 			}
 
 		} catch (SQLException e) {
@@ -85,7 +86,39 @@ public class TaiKhoan_DAO {
 				String tenDangNhap = rs.getString("tenDangNhap");
 				String matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String gmail = rs.getString("gmail");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, gmail, trangThai);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return taiKhoan;
+	}
+	
+	public TaiKhoan timTaiKhoan_TheoGmail(String gm) {
+		TaiKhoan taiKhoan = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM TaiKhoan where gmail = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, gm);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				String tenDangNhap = rs.getString("tenDangNhap");
+				String matKhau = rs.getString("matKhau");
+				Boolean trangThai = rs.getBoolean("trangThai");
+				String gmail = rs.getString("gmail");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, gmail, trangThai);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -114,7 +147,8 @@ public class TaiKhoan_DAO {
 				tenDangNhap = rs.getString("tenDangNhap");
 				matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String gmail = rs.getString("gmail");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, gmail, trangThai);
 			}
 		} catch (SQLException e) {
 			return null;
@@ -122,7 +156,7 @@ public class TaiKhoan_DAO {
 		return taiKhoan;
 	}
 
-	public TaiKhoan capNhatTaiKhoan_TheoMaNhanVien(String tenDangNhap, String maNhanVien, String matKhau) {
+	public TaiKhoan capNhatTaiKhoan_TheoMaNhanVien(String maNhanVien, String matKhau) {
 		Connection con = ConnectDB.getInstance().getConnection();
 		TaiKhoan taiKhoan = null;
 		try {
@@ -132,10 +166,33 @@ public class TaiKhoan_DAO {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
-				tenDangNhap = rs.getString("tenDangNhap");
+				String tenDangNhap = rs.getString("tenDangNhap");
 				matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String gmail = rs.getString("gmail");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, gmail, trangThai);
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return taiKhoan;
+	}
+	
+	public TaiKhoan capNhatTaiKhoan_TheoGmail(String gm, String matKhau) {
+		Connection con = ConnectDB.getInstance().getConnection();
+		TaiKhoan taiKhoan = null;
+		try {
+			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET  maKhau = ? WHERE gmail = ?");
+			statement.setString(1, matKhau);
+			statement.setString(2, gm);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				String tenDangNhap = rs.getString("tenDangNhap");
+				matKhau = rs.getString("matKhau");
+				Boolean trangThai = rs.getBoolean("trangThai");
+				String gmail = rs.getString("gmail");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, gmail, trangThai);
 			}
 		} catch (SQLException e) {
 			return null;
