@@ -170,13 +170,14 @@ public class JFrame_ThuNgan extends JFrame {
 		contentPane.setLayout(null);
 
 		Panel_QLDP = new JPanel_QuanLyDatPhong(nhanVien);
+		Panel_QLDP.setBounds(0, 0, 1296, 672);
 		Panel_QLKH = new JPanel_QuanLyKhachHang();
 		Panel_QLKH.setBounds(0, 0, 1296, 672);
 		Panel_BCTK = new JPanel_BaoCaoThongKe();
 		Panel_BCTK.setBounds(0, 0, 1296, 672);
 		Panel_QLDV = new JPanel_QuanLyDichVu();
 		Panel_QLDV.setBounds(0, 0, 1296, 672);
-		Panel_QLPDP = new JPanel_QuanLyPhieuDatPhong();
+		Panel_QLPDP = new JPanel_QuanLyPhieuDatPhong(nhanVien);
 		Panel_QLPDP.setBounds(0, 0, 1296, 672);
 		Panel_QLHD = new JPanel_QuanLyHoaDon();
 		Panel_QLHD.setBounds(0, 0, 1296, 672);

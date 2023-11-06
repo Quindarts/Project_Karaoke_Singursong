@@ -327,5 +327,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 
 }

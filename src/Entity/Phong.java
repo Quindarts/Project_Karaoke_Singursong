@@ -20,16 +20,6 @@ public class Phong {
 	private String ghiChu;
 	private String tinhTrangPhong;
 
-	public Phong(String maPhong, String tenPhong, TrangThaiPhong trangThaiPhong, String viTriPhong, String ghiChu,
-			String tinhTrangPhong) {
-		super();
-		this.maPhong = maPhong;
-		this.tenPhong = tenPhong;
-		this.trangThaiPhong = trangThaiPhong;
-		this.viTriPhong = viTriPhong;
-		this.ghiChu = ghiChu;
-		this.tinhTrangPhong = tinhTrangPhong;
-	}
 
 	public Phong() {
 		super();
@@ -49,6 +39,7 @@ public class Phong {
 		this.viTriPhong = viTriPhong;
 		this.ghiChu = ghiChu;
 		this.tinhTrangPhong = tinhTrangPhong;
+	
 	}
 
 	public Phong(String maPhong) {

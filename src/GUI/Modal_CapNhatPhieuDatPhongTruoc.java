@@ -1,61 +1,43 @@
 package GUI;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import com.toedter.calendar.JDateChooser;
 
-import ConnectDB.ConnectDB;
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
 import DAO.NhanVien_DAO;
 import DAO.PhieuDatPhong_DAO;
 import DAO.Phong_DAO;
-import DAO.TrangThaiPhong_DAO;
 import Entity.KhachHang;
 import Entity.LoaiPhong;
 import Entity.NhanVien;
 import Entity.PhieuDatPhong;
 import Entity.Phong;
-import Entity.TrangThaiPhong;
-import OtherFunction.HelpRamDomKH;
-import OtherFunction.HelpRamDomMa;
 
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import javax.swing.JTextArea;
 
-public class Modal_PhieuDatPhongTruoc extends JFrame {
+public class Modal_CapNhatPhieuDatPhongTruoc extends JFrame {
 
-	private static Modal_PhieuDatPhongTruoc frame;
 	private JPanel contentPane;
 	private JTextField txtGioDatPhong;
 
@@ -68,10 +50,11 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	private String hexColor_Green = "#4BAC4D";
 
 	private JTextField txtMaPDP;
-	private JTextField txtMaPhong;
+	private JTextField txtTenPhong;
 	private JTextField txtLoaiPhong;
 	private JTextField txtGiaPhong;
 	private JTextField txtSoDienThoai;
+
 	private JTextField txtTenKH;
 	private JTextField txtTienCoc;
 	private JTextField txtNhanVien;
@@ -88,54 +71,27 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	private Phong_DAO DAO_P;
 	private PhieuDatPhong pdp;
 	private KhachHang kh;
-
+	private NhanVien nhanVien;
 	private Phong p;
 	private LoaiPhong_DAO DAO_LP;
 	private LoaiPhong lp;
 	private JDateChooser date_DatPhong;
-	private JButton btnDatPhong;
+	private JButton btnLuu;
 	private JDateChooser date_NhanPhong;
 
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
-	private JTable table_DSPhong;
-	private ArrayList<Phong> dsP;
-	private TrangThaiPhong_DAO DAO_TTP;
-	private DefaultTableModel model;
-	private NhanVien nhanVien;
-	private String ma;
 	private JTextArea txtMoTa;
-	private String maPDP;
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			frame = new Modal_PhieuDatPhongTruoc(nhanVien);
-//			frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
-//			FlatLightLaf.setup();
-//			frame.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
 
 	/**
 	 * Create the panel.
 	 */
-	public Modal_PhieuDatPhongTruoc(NhanVien nhanVien) {
+	public Modal_CapNhatPhieuDatPhongTruoc(NhanVien nhanVien) {
 		this.nhanVien = nhanVien;
-		
-	
-//		try {
-//			ConnectDB.getInstance().connect();
-////			System.out.println("Connected!!!!");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		System.out.println("");
+		System.out.println(nhanVien.toString());
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 709);
+		setBounds(100, 100, 900, 512);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 //		contentPane.setBackground(Color.decode(hexColor_Blue1));
@@ -147,7 +103,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 		JPanel panel_PDP = new JPanel();
 		panel_PDP.setBackground(new Color(255, 255, 255));
-		panel_PDP.setBounds(0, 0, 884, 670);
+		panel_PDP.setBounds(0, 0, 884, 473);
 		contentPane.add(panel_PDP);
 		panel_PDP.setLayout(null);
 
@@ -157,11 +113,11 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Th\u00F4ng tin \u0111\u1EB7t ph\u00F2ng", TitledBorder.LEADING, TitledBorder.TOP, null,
 				new Color(0, 0, 0)));
-		panel.setBounds(22, 332, 417, 155);
+		panel.setBounds(22, 142, 417, 155);
 		panel_PDP.add(panel);
 		panel.setLayout(null);
 
-		JLabel lblTenPhong = new JLabel("Mã phòng");
+		JLabel lblTenPhong = new JLabel("Tên phòng");
 		lblTenPhong.setForeground(new Color(0, 0, 0));
 		lblTenPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lblTenPhong.setBounds(10, 25, 82, 27);
@@ -179,12 +135,12 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		lblLoaiPhong_1_1_1.setBounds(10, 105, 82, 27);
 		panel.add(lblLoaiPhong_1_1_1);
 
-		txtMaPhong = new JTextField();
-		txtMaPhong.setEnabled(false);
-		txtMaPhong.setEditable(false);
-		txtMaPhong.setColumns(10);
-		txtMaPhong.setBounds(102, 25, 294, 27);
-		panel.add(txtMaPhong);
+		txtTenPhong = new JTextField();
+		txtTenPhong.setEnabled(false);
+		txtTenPhong.setEditable(false);
+		txtTenPhong.setColumns(10);
+		txtTenPhong.setBounds(102, 25, 294, 27);
+		panel.add(txtTenPhong);
 
 		txtLoaiPhong = new JTextField();
 		txtLoaiPhong.setEnabled(false);
@@ -206,7 +162,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Th\u00F4ng tin kh\u00E1ch h\u00E0ng", TitledBorder.LEADING, TitledBorder.TOP, null,
 				new Color(0, 0, 0)));
-		panel_1.setBounds(449, 332, 413, 155);
+		panel_1.setBounds(449, 142, 413, 155);
 		panel_PDP.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -217,44 +173,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_1.add(lblSoDienThoai);
 
 		txtSoDienThoai = new JTextField();
-		txtSoDienThoai.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					txtTenKH.setText("");
-					String regexSDT = "^(0?)(3[2-9]|5[6|8|9]|7[0|6-9]|8[0-6|8|9]|9[0-4|6-9])[0-9]{7}$";
-					Pattern patternSDT = Pattern.compile(regexSDT);
-					java.util.regex.Matcher matcher = patternSDT.matcher(txtSoDienThoai.getText().trim());
-					if (!matcher.matches()) {
-						JOptionPane.showMessageDialog(null, "Số điện thoại bạn nhập vào không đúng", "Thông báo lỗi",
-								JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						txtTenKH.setEnabled(true);
-					}
-
-					if (txtSoDienThoai.getText().trim() != "" && matcher.matches()) {
-						KhachHang_DAO KH_DAO = new KhachHang_DAO();
-						KhachHang kh = new KhachHang();
-						if (KH_DAO.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim()) != null) {
-							kh = KH_DAO.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim());
-							txtTenKH.setText(kh.getHoTen());
-							txtTenKH.setEnabled(false);
-						} else {
-							txtTenKH.setEnabled(true);
-						}
-					}
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-
 		txtSoDienThoai.setColumns(10);
 		txtSoDienThoai.setBounds(120, 25, 276, 27);
 		panel_1.add(txtSoDienThoai);
@@ -299,9 +217,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_2.add(lblTGDatPhong);
 
 		date_DatPhong = new JDateChooser();
-		date_DatPhong.setEnabled(false);
-		date_DatPhong.setDateFormatString("yyyy-MM-dd  h:mm:ss a");
-		date_DatPhong.setDate(new java.util.Date());
 		date_DatPhong.setBounds(167, 11, 157, 27);
 		panel_2.add(date_DatPhong);
 
@@ -323,19 +238,16 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		lblMaPDP.setBounds(622, 11, 82, 27);
 		panel_2.add(lblMaPDP);
 
-		
-
 		txtMaPDP = new JTextField();
-		txtMaPDP.setText(maPDP);
+		txtMaPDP.setEditable(false);
+		txtMaPDP.setEnabled(false);
 		txtMaPDP.setBounds(688, 11, 140, 27);
 		panel_2.add(txtMaPDP);
 		txtMaPDP.setColumns(10);
 
 		txtNhanVien = new JTextField();
-
 		txtNhanVien.setEnabled(false);
 		txtNhanVien.setEditable(false);
-		txtNhanVien.setText(nhanVien.getHoTen());
 		txtNhanVien.setColumns(10);
 		txtNhanVien.setBounds(463, 11, 136, 27);
 		panel_2.add(txtNhanVien);
@@ -347,7 +259,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_2.add(lblThiGianNhn);
 
 		date_NhanPhong = new JDateChooser();
-		date_NhanPhong.setDateFormatString("yyyy-MM-dd  h:mm:ss a");
 		date_NhanPhong.setBounds(167, 49, 157, 27);
 		panel_2.add(date_NhanPhong);
 
@@ -357,31 +268,41 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		textField.setBounds(325, 50, 55, 27);
 		panel_2.add(textField);
 
-		JLabel lblLoiPhng = new JLabel("Loại phòng");
-		lblLoiPhng.setForeground(Color.BLACK);
-		lblLoiPhng.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblLoiPhng.setBounds(390, 50, 82, 27);
-		panel_2.add(lblLoiPhng);
+		btnLuu = new JButton("Lưu");
+		btnLuu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				capNhat();
+			}
+		});
+		btnLuu.setBackground(Color.decode(hexColor_Green));
+		btnLuu.setForeground(new Color(255, 255, 255));
+		btnLuu.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnLuu.setBounds(652, 432, 100, 30);
+		panel_PDP.add(btnLuu);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(463, 50, 136, 27);
-		panel_2.add(comboBox);
+		JButton btnHy = new JButton("Hủy");
+		btnHy.setBackground(Color.decode(hexColor_Blue2));
+		btnHy.setForeground(new Color(255, 255, 255));
+		btnHy.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnHy.setBounds(762, 432, 100, 30);
+		panel_PDP.add(btnHy);
 
-		JButton btnNewButton = new JButton("Tìm kiếm");
-		btnNewButton.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnNewButton.setBounds(688, 49, 140, 27);
-		panel_2.add(btnNewButton);
+		JLabel lblPhiutPhng = new JLabel("CẬP NHẬT PHIẾU ĐẶT PHÒNG TRƯỚC");
+		lblPhiutPhng.setForeground(new Color(5, 74, 145));
+		lblPhiutPhng.setFont(new Font("Segoe UI", Font.BOLD, 17));
+		lblPhiutPhng.setBounds(22, 11, 327, 27);
+		panel_PDP.add(lblPhiutPhng);
 
 		JLabel lblLoaiPhong_1_1_1_1 = new JLabel("Mô tả");
 		lblLoaiPhong_1_1_1_1.setForeground(Color.BLACK);
 		lblLoaiPhong_1_1_1_1.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblLoaiPhong_1_1_1_1.setBounds(32, 491, 82, 27);
+		lblLoaiPhong_1_1_1_1.setBounds(32, 301, 82, 27);
 		panel_PDP.add(lblLoaiPhong_1_1_1_1);
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(new Color(255, 255, 255));
 		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_3.setBounds(22, 519, 840, 68);
+		panel_3.setBounds(22, 329, 840, 68);
 		panel_PDP.add(panel_3);
 		panel_3.setLayout(null);
 
@@ -389,108 +310,76 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		txtMoTa.setBounds(10, 11, 820, 46);
 		panel_3.add(txtMoTa);
 
-		btnDatPhong = new JButton("Đặt phòng");
-		btnDatPhong.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				taoPhieu();
-			}
-		});
+	}
 
-		btnDatPhong.setBackground(Color.decode(hexColor_Green));
-		btnDatPhong.setForeground(new Color(255, 255, 255));
-		btnDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnDatPhong.setBounds(652, 629, 100, 30);
-		panel_PDP.add(btnDatPhong);
-
-		JButton btnHy = new JButton("Hủy");
-		btnHy.setBackground(Color.decode(hexColor_Blue2));
-		btnHy.setForeground(new Color(255, 255, 255));
-		btnHy.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnHy.setBounds(762, 629, 100, 30);
-		panel_PDP.add(btnHy);
-
-		JLabel lblPhiutPhng = new JLabel("PHIẾU ĐẶT PHÒNG TRƯỚC");
-		lblPhiutPhng.setForeground(new Color(5, 74, 145));
-		lblPhiutPhng.setFont(new Font("Segoe UI", Font.BOLD, 17));
-		lblPhiutPhng.setBounds(22, 11, 237, 27);
-		panel_PDP.add(lblPhiutPhng);
-
-		JPanel panel_DSPhongTrong = new JPanel();
-		panel_DSPhongTrong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_DSPhongTrong.setBounds(22, 136, 840, 185);
-		panel_PDP.add(panel_DSPhongTrong);
-		panel_DSPhongTrong.setLayout(null);
-
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 820, 163);
-		panel_DSPhongTrong.add(scrollPane);
-
-		table_DSPhong = new JTable();
-		table_DSPhong.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				int row = table_DSPhong.getSelectedRow();
-				txtMaPhong.setText(model.getValueAt(row, 0).toString());
-				txtLoaiPhong.setText(model.getValueAt(row, 1).toString());
-				txtGiaPhong.setText(model.getValueAt(row, 3).toString());
-				txtTienCoc.setText(model.getValueAt(row, 3).toString());
-
-			}
-		});
-		table_DSPhong.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "Mã phòng", "Loại phòng", "Trạng thái", "Giá phòng/Giờ" }));
-		DAO_P = new Phong_DAO();
-		DAO_LP = new LoaiPhong_DAO();
-		DAO_TTP = new TrangThaiPhong_DAO();
-
-		dsP = new ArrayList<Phong>();
-		model = (DefaultTableModel) table_DSPhong.getModel();
-		try {
-			dsP = DAO_P.layTatCaPhong();
-			if (dsP != null) {
-				dsP.forEach(p -> {
-					LoaiPhong lp = new LoaiPhong();
-					TrangThaiPhong ttp = new TrangThaiPhong();
-					ttp = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai());
-					lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
-					Object[] rowData = { p.getMaPhong(), p.getLoaiPhong().getMaLoaiPhong(), ttp.getTenTrangThai(),
-							lp.getGiaTien() };
-
-					model.addRow(rowData);
-				});
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		scrollPane.setViewportView(table_DSPhong);
+	public void capNhat() {
+//		try {
+//			if(Invalid()) {
+//				String maPDP = txtMaPDP.getText();
+//				
+//				String tenPhong  = txtTenPhong.getText();
+//				String tenNV =  txtNhanVien.getText();
+//				String tenKH =  txtTenKH.getText();
+//				Date tgDatPhong= date_DatPhong.getDate();
+////				Date tgDatNhanPhong= date_DatPhong.getDate();
+////				Double tienCoc = Double.parseDouble(txtTienCoc.getText());
+////				String mota = txtMoTa.getText();
+//
+////				pdp = new PhieuDatPhong(maPDP, p, nv, kh, null, null, ABORT, null, mota);
+////				try {
+////					if(kh_bus.update(kh)) {
+//////						JOptionPane.showMessageDialog(null, "Cập nhật thành công");
+////						lblthongbao.setText("Cập nhật thành công");
+////						XoahetDuLieutrenTable();
+////						DocDuLieutrenSQL();
+////					}
+////				} catch (Exception e) {
+////					// TODO: handle exception
+////				}
+////			}
+////			
+////		} catch (Exception e) {
+////			// TODO: handle exception
+////			lblthongbao.setText("Chưa chọn dữ liệu cập nhật");
+////		}
 
 	}
 
-	public void taoPhieu() {
-		HelpRamDomMa help = new HelpRamDomMa();
-		maPDP = help.taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-//		String maPDP = txtMaPDP.getText().trim();
-		String maPhong = txtMaPhong.getText().toString().trim();
-		Phong p = new Phong(maPhong);
-		NhanVien nv = new NhanVien(nhanVien.getMaNhanVien());
-		KhachHang_DAO DAO_KH = new KhachHang_DAO();
-		KhachHang kh = DAO_KH.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim());
-		java.sql.Date tgDatPhong = new java.sql.Date(date_DatPhong.getDate().getTime());
-		java.sql.Date tgNhanPhong = new java.sql.Date(date_NhanPhong.getDate().getTime());
-		Double tienCoc = Double.parseDouble(txtTienCoc.getText());
-		String moTa = txtMoTa.getText().trim();
+	private boolean Invalid() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public void HienThongTinTheoMaPDP(String ma) {
 		DAO_PDP = new PhieuDatPhong_DAO();
-		PhieuDatPhong pdp = new PhieuDatPhong(maPDP, p, nv, kh, tgDatPhong, tgNhanPhong, tienCoc, "Chờ nhận phòng", moTa);
-		
-		if(DAO_PDP.taoPhieuDatPhong(pdp)){
-			JOptionPane.showMessageDialog(null, "Thêm phiếu thành công");
-		}
-		else {
-			JOptionPane.showMessageDialog(null, "Thất bại");
-		}
-		
-		
-		
-		
+		DAO_KH = new KhachHang_DAO();
+		DAO_NV = new NhanVien_DAO();
+		DAO_P = new Phong_DAO();
+		DAO_LP = new LoaiPhong_DAO();
+
+		KhachHang kh = new KhachHang();
+		NhanVien nv = new NhanVien();
+		Phong p = new Phong();
+		LoaiPhong lp = new LoaiPhong();
+
+		pdp = DAO_PDP.layPhieuDatPhong_TheoMaPhieuDat(ma);
+		p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());
+		kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+		nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
+		lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+
+		txtMaPDP.setText(pdp.getMaPhieuDat());
+		txtLoaiPhong.setText(p.getLoaiPhong().getMaLoaiPhong());
+		txtNhanVien.setText(nv.getHoTen());
+		txtTenKH.setText(kh.getHoTen());
+		txtSoDienThoai.setText(kh.getSoDienThoai());
+		txtGiaPhong.setText(Double.toString(lp.getGiaTien()));
+		txtTenPhong.setText(p.getTenPhong());
+		txtTienCoc.setText(Double.toString(pdp.getTienCoc()));
+		date_DatPhong.setDate(pdp.getThoiGianDatPhong());
+		date_NhanPhong.setDate(pdp.getThoiGianNhanPhong());
+//		txtTinhTrangPhieu.setText(pdp.getTrangThai().getTrangThai());
+		txtMoTa.setText(pdp.getMoTa());
+//		txtMaKH.setText(kh.getMaKhachHang());
 	}
 }

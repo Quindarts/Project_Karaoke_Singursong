@@ -87,8 +87,8 @@ public class Components extends JFrame implements ActionListener {
 			modalTP.setVisible(true);
 		}
 		if(o.equals(btnPhieuDatPhong)) {
-			Modal_PhieuDatPhongTruoc modalPDP = new Modal_PhieuDatPhongTruoc();
-			modalPDP.setVisible(true);
+//			Modal_PhieuDatPhongTruoc modalPDP = new Modal_PhieuDatPhongTruoc();
+//			modalPDP.setVisible(true);
 		
 		}
 	}

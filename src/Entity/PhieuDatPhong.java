@@ -8,6 +8,7 @@ import java.util.Objects;
  * @author THANH CUONG
  *
  */
+
 public class PhieuDatPhong {
 	private String maPhieuDat;
 	private Phong phong;
@@ -16,6 +17,7 @@ public class PhieuDatPhong {
 	private Date thoiGianDatPhong;
 	private Date thoiGianNhanPhong;
 	private double tienCoc;
+	
 	private String trangThai;
 	private String moTa;
 	public PhieuDatPhong() {
@@ -27,21 +29,21 @@ public class PhieuDatPhong {
 	 * @param phong
 	 * @param nhanVien
 	 * @param khachHang
-	 * @param thoiGianDatPhong
-	 * @param thoiGianNhanPhong
+	 * @param tgDatPhong
+	 * @param tgNhanPhong
 	 * @param tienCoc
 	 * @param trangThai
 	 * @param moTa
 	 */
-	public PhieuDatPhong(String maPhieuDat, Phong phong, NhanVien nhanVien, KhachHang khachHang, Date thoiGianDatPhong,
-			Date thoiGianNhanPhong, double tienCoc, String trangThai, String moTa) {
+	public PhieuDatPhong(String maPhieuDat, Phong phong, NhanVien nhanVien, KhachHang khachHang, java.util.Date tgDatPhong,
+			java.util.Date tgNhanPhong, double tienCoc, String trangThai, String moTa) {
 		super();
 		this.maPhieuDat = maPhieuDat;
 		this.phong = phong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
-		this.thoiGianDatPhong = thoiGianDatPhong;
-		this.thoiGianNhanPhong = thoiGianNhanPhong;
+		this.thoiGianDatPhong =  (Date) tgDatPhong;
+		this.thoiGianNhanPhong =  (Date) tgNhanPhong;
 		this.tienCoc = tienCoc;
 		this.trangThai = trangThai;
 		this.moTa = moTa;
@@ -125,5 +127,7 @@ public class PhieuDatPhong {
 				+ ", khachHang=" + khachHang + ", thoiGianDatPhong=" + thoiGianDatPhong + ", thoiGianNhanPhong="
 				+ thoiGianNhanPhong + ", tienCoc=" + tienCoc + ", trangThai=" + trangThai + ", moTa=" + moTa + "]";
 	}
+	
+	
 	
 }
