@@ -103,10 +103,7 @@ public class HelpRamDomMa {
 		System.out.println(maHoaDon);
 		System.out.println(maPhieuDat);
 		System.out.println(maPhieuDat2);
-<<<<<<< HEAD
 
-=======
->>>>>>> dev
 	}
 
 }
