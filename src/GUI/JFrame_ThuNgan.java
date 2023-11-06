@@ -17,6 +17,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import DAO.DichVu_DAO;
+import DAO.Phong_DAO;
 import Entity.NhanVien;
 import GUI.JFrame_DangNhap.RoundedTransparentBorder;
 
@@ -35,9 +37,11 @@ import javax.swing.JMenuItem;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 public class JFrame_ThuNgan extends JFrame {
 
+	private static final DichVu_DAO DAO_DV = null;
 	/**
 	 * Khai báo JPanel
 	 */
@@ -81,6 +85,13 @@ public class JFrame_ThuNgan extends JFrame {
 	private int hour, min, sec;
 	private JPanel panel_DateTime;
 	private NhanVien nhanVien;
+	private JTextField txt_TongTrang;
+	private JLabel lblNewLabel;
+	private JButton btnTrangTruoc;
+	private JButton btnTrangCuoi;
+	private JButton btnTrangSau;
+	private JButton btnTrangDau;
+	private JTextField txtTrang;
 
 	/**
 	 * Rounded JPanel
@@ -135,20 +146,7 @@ public class JFrame_ThuNgan extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					JFrame_ThuNgan frame = new JFrame_ThuNgan();
-//					// Setup my app
-//					FlatLightLaf.setup();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
+
 
 	/**
 	 * Create the frame.
@@ -417,7 +415,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lbl__userName.setForeground(new Color(255, 255, 255));
 		lbl__userName.setBounds(1198, 22, 176, 31);
 
-		contentPane.add(lbl__userName);
+
 
 		Clock();
 		

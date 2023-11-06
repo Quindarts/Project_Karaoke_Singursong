@@ -9,9 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-
-
-
 public class HelpRamDomMa {
 
 	public static String taoMa(String tenBang, String maTao, String type) {
@@ -78,25 +75,25 @@ public class HelpRamDomMa {
 		String user = "sa";
 		String password = "230903";
 		String maHoaDon = "";
-		
-		 ArrayList<String> maCot = new ArrayList<>();
-        
-        try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
-        	String sql = "SELECT " + tenCot + " FROM " + tenBang;
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            ResultSet rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-            	maHoaDon = rs.getString(tenCot);           	
-            	maCot.add(maHoaDon);		
-            }
-               
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+		ArrayList<String> maCot = new ArrayList<>();
+
+		try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
+			String sql = "SELECT " + tenCot + " FROM " + tenBang;
+			PreparedStatement preparedStatement = con.prepareStatement(sql);
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				maHoaDon = rs.getString(tenCot);
+				maCot.add(maHoaDon);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return maCot;
 	}
-	
+
 	public static void main(String[] args) {
 
 		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
@@ -106,7 +103,10 @@ public class HelpRamDomMa {
 		System.out.println(maHoaDon);
 		System.out.println(maPhieuDat);
 		System.out.println(maPhieuDat2);
+<<<<<<< HEAD
 
+=======
+>>>>>>> dev
 	}
 
 }

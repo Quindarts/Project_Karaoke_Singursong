@@ -176,7 +176,6 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1296, 672);
 		panel.setBackground(Color.decode(hexColor_Blue1));
-//		panel.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		add(panel);
 		panel.setLayout(null);
 
@@ -187,7 +186,6 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		JPanel panel_Table = new JPanel();
 		panel_Table.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_Table.setBackground(Color.decode(hexColor_Blue1));
-//		panel_Table.setBackground(Color.WHITE);
 		panel_Table.setBounds(0, 37, 1296, 635);
 		panel.add(panel_Table);
 		panel_Table.setLayout(null);
