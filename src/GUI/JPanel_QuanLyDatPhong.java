@@ -533,7 +533,7 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 			dsPhong = phongDao.layTatCaPhong();
 			if (dsPhong != null) {
 				dsPhong.forEach(ph -> {
-					System.out.println(ph.toString());
+//					System.out.println(ph.toString());
 				});
 
 			}

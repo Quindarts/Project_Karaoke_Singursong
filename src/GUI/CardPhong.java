@@ -7,6 +7,8 @@ import java.awt.Graphics;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,7 +41,9 @@ public class CardPhong extends JPanel {
 	private String hexColor_Blue4 = "#DBE4EE";
 
 	private LoaiPhong loaiP;
-
+	private ArrayList<Phong> dsPhong;
+	private Calendar cal = Calendar.getInstance();
+	
 	/**
 	 * @param phong
 	 */
@@ -99,7 +103,6 @@ public class CardPhong extends JPanel {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		System.out.println(trangThaiP);
 
 		// Trong
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
@@ -136,8 +139,8 @@ public class CardPhong extends JPanel {
 		chuyenPhongMenuItem.addActionListener(e1 -> {
 			Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong();
 			phieuChuyenPhong.setVisible(true);
-			phieuChuyenPhong.SetModal_PhieuChuyenPhong(hexColor_Blue1, hexColor_Blue1, hexColor_Blue1, hexColor_Blue1,
-					hexColor_Blue4, hexColor_Blue3, hexColor_Blue2, hexColor_Blue1);
+			phieuChuyenPhong.SetModal_PhieuChuyenPhong("3", "4",
+					"5", "6", "7", "8");
 		});
 		menu.add(xemThongTinMenuItem);
 		menu.add(chuyenPhongMenuItem);

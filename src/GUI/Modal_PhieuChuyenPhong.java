@@ -68,6 +68,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	private Phong_DAO dao_Phong;
 	private LoaiPhong_DAO dao_LoaiPhong;
 	private TrangThaiPhong_DAO dao_TrangThaiPhong;
+	private JScrollPane scrollPane;
 
 	/**
 	 * Create the panel.
@@ -278,18 +279,28 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		panel_PDP.add(dsPhongTrongHienTai);
 		dsPhongTrongHienTai.setLayout(null);
 
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 23, 837, 171);
 		dsPhongTrongHienTai.add(scrollPane);
 
 		table = new JTable();
+		
 		table.setBackground(new Color(255, 255, 255));
 		table.setFont(new Font("Segoe UI", Font.PLAIN, 12));
 		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã phòng", "Tên phòng", "Loại phòng",
-				"Trạng thái", "Ngày tạo phòng", "Vị trí phòng", "Ghi chú", "Tình trạng phòng" }));
-		scrollPane.setViewportView(table);
-		model = (DefaultTableModel) table.getModel();
+				"Trạng thái", "Ngày tạo phòng", "Vị trí phòng", "Ghi chú", "Tình trạng phòng" }) {
+			private static final long serialVersionUID = -143705667217047914L;
 
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Đặt tất cả các ô không thể chỉnh sửa
+			}
+		}) ;
+		scrollPane.add(table);
+		scrollPane.setViewportView(table);
+		
+		
+		model = (DefaultTableModel) table.getModel();
 		btnDatPhong.addActionListener(this);
 		btnHy.addActionListener(this);
 		table.addMouseListener(this);
@@ -307,7 +318,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		}
 	}
 
-	public void SetModal_PhieuChuyenPhong(String ngayChuyenPhong, String ngayNhanPhong, String gioPhutChuyenPhong,
+	public void SetModal_PhieuChuyenPhong(String gioPhutChuyenPhong,
 			String gioPhutNhanPhong, String maPhieu, String tenNV, String soDT, String tenKH) {
 		txtMaPDP.setText(maPhieu);
 		txtNhanVien.setText(tenNV);
@@ -315,40 +326,42 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		txtTenKH.setText(tenKH);
 		java.util.Date ngayStr;
 
-		try {
-			ngayStr = dateFormat_YMD.parse(ngayNhanPhong);
-			date_NhanPhong.setDate(ngayStr);
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-
-		try {
-			ngayStr = dateFormat_YMD.parse(ngayNhanPhong);
-			date_ChuyenPhong.setDate(ngayStr);
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-
+//		try {
+//			ngayStr = dateFormat_YMD.parse(ngayNhanPhong);
+//			date_NhanPhong.setDate(ngayStr);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			e.printStackTrace();
+//		}
+//
+//		try {
+//			ngayStr = dateFormat_YMD.parse(ngayNhanPhong);
+//			date_ChuyenPhong.setDate(ngayStr);
+//		} catch (Exception e) {
+//			// TODO: handle exception
+//			e.printStackTrace();
+//		}
+		
 		dao_Phong = new Phong_DAO();
 		dao_LoaiPhong = new LoaiPhong_DAO();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
 
 		for (Phong ph : dao_Phong.layTatCaPhong()) {
 			LoaiPhong loaiPh = new LoaiPhong();
-			loaiPh = dao_LoaiPhong.layLoaiPhong_TheoMaLoaiPhong(ph.getMaPhong().toString().trim());
+			loaiPh = dao_LoaiPhong.layLoaiPhong_TheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
+			
 			TrangThaiPhong trThaiPh = new TrangThaiPhong();
-			trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoMaTrangThai(ph.getTrangThaiPhong().toString().trim());
-//			String trangThaiPhong = ph.getTrangThaiPhong().getTenTrangThai().toString().trim();
+			trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoMaTrangThai(ph.getTrangThaiPhong().getMaTrangThai());
+			String maTrangThai = trThaiPh.getMaTrangThai().toString().trim();
 
-			if ((trThaiPh.getMaTrangThai().toString().trim()).equals("VC")) {
+			if (maTrangThai.equals("VC")) {
 				Object[] rowData = { ph.getMaPhong(), ph.getTenPhong(), loaiPh.getTenLoaiPhong(),
 						trThaiPh.getTenTrangThai(), ph.getNgayTaoPhong(), ph.getViTriPhong(), ph.getGhiChu(),
 						ph.getTinhTrangPhong() };
 				model.addRow(rowData);
 			}
 		}
+		
 	}
 
 	@Override
