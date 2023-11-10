@@ -40,7 +40,6 @@ public class HelpRamDomMa {
 		} else {
 			result = result + day + "" + month + "" + year + "" + "D";
 		}
-		System.out.println(result);
 
 		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.trim().length() - 3).equals("999")) {
 			if (maFromData.trim().substring(0, 10).equals(result.substring(0, 10))) {
@@ -98,11 +97,11 @@ public class HelpRamDomMa {
 
 		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
 		String maPhieuDat = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
+//		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
 
 		System.out.println(maHoaDon);
 		System.out.println(maPhieuDat);
-		System.out.println(maPhieuDat2);
+//		System.out.println(maPhieuDat2);
 
 	}
 

@@ -10,6 +10,8 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -23,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
+import DAO.Phong_DAO;
 import Entity.KhachHang;
 import Entity.LoaiPhong;
 import Entity.Phong;
@@ -62,11 +65,16 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 
 	private JButton btnThem;
 
-	private KhachHang_DAO DAO_KH;
 	private ArrayList<KhachHang> dsKH;
 	private LoaiPhong_DAO DAO_LP;
 	private ArrayList<LoaiPhong> dsLP;
+
+	private Phong_DAO DAO_P;
+	private DefaultTableModel model;
+	private JButton btnLamMoi;
+
 	private String[] rowData;
+
 
 	/**
 	 * Rounded JPanel
@@ -143,23 +151,18 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 
 		table_LoaiPhong = new JTable();
 		table_LoaiPhong.setBackground(Color.WHITE);
-		rowData  =  new String[] { "Mã loại phòng",
-				"Tên loại phòng", "Số lượng khách tối đa", "Giá tiền", "Hình ảnh", "Mô tả" };
-		table_LoaiPhong.setModel(new DefaultTableModel(new Object[][] {},rowData));
-		
-		table_LoaiPhong.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -143705667217047914L;
 
+		table_LoaiPhong.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã loại phòng",
+				"Tên loại phòng", "Số lượng khách tối đa", "Giá tiền", "Hình ảnh", "Mô tả" })
+		{
 			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false; // Đặt tất cả các ô không thể chỉnh sửa
-			}
-		});
-		
-		
+            public boolean isCellEditable(int row, int column) {
+                // Ngăn chặn việc chỉnh sửa nội dung trong bảng, nhưng vẫn cho phép chọn dữ liệu
+                return false;
+            }
+		}
+				);
+
 		table_LoaiPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 10, 1019, 615);
@@ -168,39 +171,26 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 
 		panel_Table.add(scrollPane);
 
-		DAO_LP = new LoaiPhong_DAO();
-		DefaultTableModel model = (DefaultTableModel) table_LoaiPhong.getModel();
-		try {
-			dsLP = DAO_LP.layTatCaLoaiPhong();
-			if (dsLP != null) {
-				dsLP.forEach(lp -> {
-
-					Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
-							lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
-
-					model.addRow(rowData);
-				});
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
+		docDuLieu();
 
 		table_LoaiPhong.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int row = table_LoaiPhong.getSelectedRow();
-//            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
-//        		date_KH.setDate((Date) model.getValueAt(row, 3));
-				String maKhachHang = model.getValueAt(row, 0).toString();
-				String hoTen = model.getValueAt(row, 1).toString();
-				String gioiTinh = model.getValueAt(row, 2).toString();
-				String ngaySinh = model.getValueAt(row, 3).toString();
-				String diaChi = model.getValueAt(row, 4).toString();
-				String sdt = model.getValueAt(row, 5).toString();
-				String diemThuong = model.getValueAt(row, 6).toString();
-				String ghiChu = model.getValueAt(row, 7).toString();
-				System.out.println(maKhachHang + "," + hoTen + "," + gioiTinh + "," + ngaySinh + "," + diaChi + ","
-						+ sdt + "," + diemThuong + "," + ghiChu);
+				if(e.getClickCount() == 2) {
+					int row = table_LoaiPhong.getSelectedRow();
+
+					String maLoaiPhong = model.getValueAt(row, 0).toString();
+					String tenPhong = model.getValueAt(row, 1).toString();
+					String soLuong = model.getValueAt(row, 2).toString();
+					String giaTien = model.getValueAt(row, 3).toString();
+					String hinhAnh = model.getValueAt(row, 4).toString();
+					String moTa = model.getValueAt(row, 5).toString();
+	
+					Modal_ThemLoaiPhong modal_loaiPhong = new Modal_ThemLoaiPhong();
+					modal_loaiPhong.setVisible(true);
+					modal_loaiPhong.setModalThemLoaiPhong(maLoaiPhong, tenPhong, giaTien, soLuong, hinhAnh, moTa);
+					
+				}
 			}
 
 			@Override
@@ -237,7 +227,30 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
+
 			public void actionPerformed(ActionEvent e) {
+				int row = table_LoaiPhong.getSelectedRow();
+				String maLP = model.getValueAt(row, 0).toString();
+				LoaiPhong lp = new LoaiPhong(maLP);
+				try {
+					Phong p = new Phong();
+					DAO_P = new Phong_DAO();
+					
+					ArrayList<Phong> dsP = DAO_P.timPhongTheoMaLoaiPhong(maLP);
+					
+					
+					for( Phong value : dsP) {
+						DAO_P.xoaPhong(value);
+					}
+					
+					DAO_LP = new LoaiPhong_DAO();
+					String tenLoaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP).getTenLoaiPhong();	
+					DAO_LP.xoaLoaiPhong(lp);
+					JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
+					model.removeRow(row);
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Xóa thất bại");
+				}
 			}
 		});
 		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyLoaiPhong.class.getResource("/icon/trash.png")));
@@ -247,7 +260,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 		btnXoa.setBounds(145, 0, 125, 35);
 		panel.add(btnXoa);
 
-		JButton btnLamMoi = new JButton("Làm mới");
+		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(JPanel_QuanLyLoaiPhong.class.getResource("/icon/refresh.png")));
 		btnLamMoi.setForeground(Color.WHITE);
 		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -270,7 +283,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 
 		// Add event:
 		btnThem.addActionListener((ActionListener) this);
-
+		btnLamMoi.addActionListener(this);
 	}
 
 	@Override
@@ -278,10 +291,36 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
-			modalTKH.setVisible(true);
+			Modal_ThemLoaiPhong modal_laoPhong = new Modal_ThemLoaiPhong();
+			modal_laoPhong.setVisible(true);
+		}
+		
+		if(o.equals(btnLamMoi)) {
+			docDuLieu();
 		}
 
+	}
+	
+	public void docDuLieu() {
+		model = (DefaultTableModel) table_LoaiPhong.getModel();
+		model.getDataVector().removeAllElements();
+		
+		DAO_LP = new LoaiPhong_DAO();
+		
+		try {
+			dsLP = DAO_LP.layTatCaLoaiPhong();
+			if (dsLP != null) {
+				dsLP.forEach(lp -> {
+
+					Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
+							lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
+
+					model.addRow(rowData);
+				});
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 
 }

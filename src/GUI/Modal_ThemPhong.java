@@ -22,11 +22,14 @@ import java.awt.FlowLayout;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.regex.Pattern;
 import java.awt.Component;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
 import java.awt.Font;
 import java.awt.Color;
+
+import com.ctc.wstx.shaded.msv_core.verifier.identity.Matcher;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JScrollPane;
 import java.awt.Choice;
@@ -39,6 +42,7 @@ import DAO.TrangThaiPhong_DAO;
 import Entity.LoaiPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
+import OtherFunction.HelpRamDomMaPhong;
 
 import javax.swing.JComboBox;
 import javax.swing.border.BevelBorder;
@@ -61,14 +65,16 @@ public class Modal_ThemPhong extends JFrame {
 	private LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
 	private TrangThaiPhong_DAO DAO_TTP = new TrangThaiPhong_DAO();
 	private JTextField txt_TenPhong;
-	private JTextField txt_ViTriPhong;
 	private JTextArea txtA_GhiChu;
 	private ArrayList<LoaiPhong> listLP;
 	private JComboBox<String> cbBox_LoaiPhong;
 	private JComboBox<String> cbBox_TrangThaiPhong;
 	private ArrayList<TrangThaiPhong> listTTP;
-	private final SimpleDateFormat ngaySinh = new SimpleDateFormat("yyyy-MM-dd");
+	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private JComboBox<String> cbBox_TinhTrangPhong_1;
+	private JButton btn__Save;
+	private JComboBox<String> cbBox_viTriPhong;
+	
 
 	public Modal_ThemPhong() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -81,7 +87,7 @@ public class Modal_ThemPhong extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setBounds(22, 0, 926, 358);
+		panel_1.setBounds(20, 0, 926, 358);
 		contentPane.add(panel_1);
 
 		/****/
@@ -98,6 +104,7 @@ public class Modal_ThemPhong extends JFrame {
 		panel_1.add(lbl__TenPhong);
 
 		txt__MaPhong = new JTextField();
+		txt__MaPhong.setEnabled(false);
 		txt__MaPhong.setBounds(172, 65, 255, 25);
 		panel_1.add(txt__MaPhong);
 		txt__MaPhong.setColumns(10);
@@ -107,7 +114,7 @@ public class Modal_ThemPhong extends JFrame {
 		lbl__MaPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl__MaPhong);
 
-		JButton btn__exit = new JButton("Bỏ qua");
+		JButton btn__exit = new JButton("Thoát");
 		btn__exit.setBounds(763, 304, 96, 30);
 		panel_1.add(btn__exit);
 
@@ -125,72 +132,21 @@ public class Modal_ThemPhong extends JFrame {
 		lbl__GhiChu.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl__GhiChu);
 
-		JButton btn__Save = new JButton("Lưu");
+		btn__Save = new JButton("Lưu");
 		btn__Save.setBounds(642, 304, 96, 30);
 		panel_1.add(btn__Save);
 
 		btn__Save.addActionListener(new ActionListener() {
 			@Override
 			
-			
-			
-			
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				String maPhong = txt__MaPhong.getText();
-				String tenPhong = txt_TenPhong.getText();
-				java.sql.Date ngayTaoPhong = new java.sql.Date(date_NgayTaoPhong.getDate().getTime());
-				String viTriPhong = txt_ViTriPhong.getText().trim();
-				String ghiChu = txtA_GhiChu.getText().trim();
-				String tinhTrangPhong = cbBox_TinhTrangPhong_1.getSelectedItem().toString();
-
-				LoaiPhong lp = null;
-				TrangThaiPhong ttp = null;
-
-				if (DAO_P.timPhong_TheoMaLoaiPhong(maPhong) != null) {
-					JOptionPane.showMessageDialog(null, "Phòng này đã tồn tại.");
+//				 TODO Auto-generated method stub
+				
+				if(txt__MaPhong.getText().equals("")) {
+					themPhong();
+				}else {
+					capNhatPhong();
 				}
-
-				try {
-					// Lay LoaiPhong
-					lp = DAO_LP.layLoaiPhong_TheoTenLoaiPhong(cbBox_LoaiPhong.getSelectedItem().toString());
-					if (lp == null) {
-						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-						return;
-					}
-
-					// Lay Trangthaiphong
-					ttp = DAO_TTP.timTrangThaiPhong_TheoTenTrangThai(cbBox_TrangThaiPhong.getSelectedItem().toString());
-					if (ttp == null) {
-						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-						return;
-					}
-
-				} catch (Exception e2) {
-					// TODO: handle exception
-					e2.printStackTrace();
-					JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-				}
-
-				Phong phong = new Phong(maPhong, tenPhong, lp, ttp, ngayTaoPhong, viTriPhong, ghiChu, tinhTrangPhong);
-
-				System.out.println(phong.toString());
-				try {
-					if (DAO_P.taoPhong(phong)) {
-						
-						JOptionPane.showMessageDialog(null, "Tạo phòng mới thành công!");
-
-					} else {
-						
-						JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
-						return;
-					}
-
-				} catch (Exception e2) {
-
-					e2.printStackTrace();
-				}
-
 			}
 			
 			
@@ -248,11 +204,6 @@ public class Modal_ThemPhong extends JFrame {
 		txt_TenPhong.setBounds(172, 111, 255, 25);
 		panel_1.add(txt_TenPhong);
 
-		txt_ViTriPhong = new JTextField();
-		txt_ViTriPhong.setColumns(10);
-		txt_ViTriPhong.setBounds(621, 65, 255, 25);
-		panel_1.add(txt_ViTriPhong);
-
 		JLabel lbl_TrangThaiPhong = new JLabel("Trạng thái phòng");
 		lbl_TrangThaiPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lbl_TrangThaiPhong.setBounds(43, 214, 119, 27);
@@ -293,6 +244,16 @@ public class Modal_ThemPhong extends JFrame {
 		cbBox_TinhTrangPhong_1.addItem("Chưa dọn dẹp");
 		cbBox_TinhTrangPhong_1.addItem("Đang hoạt động");
 		panel_1.add(cbBox_TinhTrangPhong_1);
+		
+		cbBox_viTriPhong = new JComboBox<String>();
+		cbBox_viTriPhong.setBackground(Color.WHITE);
+		cbBox_viTriPhong.setBounds(621, 67, 255, 25);
+		cbBox_viTriPhong.addItem("Lầu 1");
+		cbBox_viTriPhong.addItem("Lầu 2");
+		cbBox_viTriPhong.addItem("Lầu 3");
+		cbBox_viTriPhong.addItem("Lầu 4");
+		cbBox_viTriPhong.addItem("Lầu 5");
+		panel_1.add(cbBox_viTriPhong);
 
 		DAO_LP = new LoaiPhong_DAO();
 		try {
@@ -306,6 +267,146 @@ public class Modal_ThemPhong extends JFrame {
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+		}
+	}
+	
+	public void setModal_ThemPhong(String maPhong, String tenPhong, String loaiPhong, String trangThai,String tinhTrang, String viTri, String ngayTao, String ghiChu) {
+		txt__MaPhong.setText(maPhong);
+		txt_TenPhong.setText(tenPhong);
+		cbBox_LoaiPhong.setSelectedItem(loaiPhong);
+		cbBox_TinhTrangPhong_1.setSelectedItem(tinhTrang);
+		cbBox_TrangThaiPhong.setSelectedItem(trangThai);
+//		txt_ViTriPhong.setText(viTri);
+		txtA_GhiChu.setText(ghiChu);
+		
+		java.util.Date ngayTaotr;
+		try {
+			ngayTaotr = dateFormat_YMD.parse(ngayTao);
+			date_NgayTaoPhong.setDate(ngayTaotr);
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void themPhong() {
+		String maPhong = txt__MaPhong.getText();
+		String tenPhong = txt_TenPhong.getText();
+		java.sql.Date ngayTaoPhong = new java.sql.Date(date_NgayTaoPhong.getDate().getTime());
+		String viTriPhong = cbBox_viTriPhong.getSelectedItem().toString();
+		String ghiChu = txtA_GhiChu.getText().trim();
+		String tinhTrangPhong = cbBox_TinhTrangPhong_1.getSelectedItem().toString();
+		
+		Pattern pattern = Pattern.compile("\\d+");
+	    java.util.regex.Matcher matcher = pattern.matcher(viTriPhong);
+
+	    StringBuilder result = new StringBuilder();
+	       while (matcher.find()) {
+	            result.setLength(0); // Xóa nội dung trước đó
+	            result.append(matcher.group());
+	       }
+
+//	      --------
+	    maPhong = HelpRamDomMaPhong.taoMa(String.valueOf(result));
+	       
+
+		LoaiPhong lp = null;
+		TrangThaiPhong ttp = null;
+
+		if (DAO_P.timPhong_TheoMaLoaiPhong(maPhong) != null) {
+			JOptionPane.showMessageDialog(null, "Phòng này đã tồn tại.");
+		}
+
+		try {
+			// Lay LoaiPhong
+			lp = DAO_LP.layLoaiPhong_TheoTenLoaiPhong(cbBox_LoaiPhong.getSelectedItem().toString());
+			if (lp == null) {
+				JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+				return;
+			}
+
+			// Lay Trangthaiphong
+			ttp = DAO_TTP.timTrangThaiPhong_TheoTenTrangThai(cbBox_TrangThaiPhong.getSelectedItem().toString());
+			if (ttp == null) {
+				JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+				return;
+			}
+
+		} catch (Exception e2) {
+			// TODO: handle exception
+			e2.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+		}
+
+		Phong phong = new Phong(maPhong, tenPhong, lp, ttp, ngayTaoPhong, viTriPhong, ghiChu, tinhTrangPhong);
+
+		System.out.println(phong.toString());
+		try {
+			if (DAO_P.taoPhong(phong)) {
+				
+				JOptionPane.showMessageDialog(null, "Tạo phòng mới thành công!");
+
+			} else {
+				
+				JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
+				return;
+			}
+
+		} catch (Exception e2) {
+
+			e2.printStackTrace();
+		}
+	}
+	
+	public void capNhatPhong() {
+		String maPhong = txt__MaPhong.getText();
+		String tenPhong = txt_TenPhong.getText();
+		java.sql.Date ngayTaoPhong = new java.sql.Date(date_NgayTaoPhong.getDate().getTime());
+		String viTriPhong = cbBox_viTriPhong.getSelectedItem().toString();
+		String ghiChu = txtA_GhiChu.getText().trim();
+		String tinhTrangPhong = cbBox_TinhTrangPhong_1.getSelectedItem().toString();
+		
+		LoaiPhong lp = null;
+		TrangThaiPhong ttp = null;
+
+		if (DAO_P.timPhong_TheoMaLoaiPhong(maPhong) != null) {
+			JOptionPane.showMessageDialog(null, "Phòng này đã tồn tại.");
+		}
+
+		try {
+			// Lay LoaiPhong
+			lp = DAO_LP.layLoaiPhong_TheoTenLoaiPhong(cbBox_LoaiPhong.getSelectedItem().toString());
+			if (lp == null) {
+				JOptionPane.showMessageDialog(null, "Cập nhật phòng thất bại, vui lòng thử lại.");
+				return;
+			}
+
+			// Lay Trangthaiphong
+			ttp = DAO_TTP.timTrangThaiPhong_TheoTenTrangThai(cbBox_TrangThaiPhong.getSelectedItem().toString());
+			if (ttp == null) {
+				JOptionPane.showMessageDialog(null, "Cập nhật phòng thất bại, vui lòng thử lại.");
+				return;
+			}
+
+		} catch (Exception e2) {
+			// TODO: handle exception
+			e2.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Cập nhật phòng thất bại, vui lòng thử lại.");
+		}
+
+		Phong phong = new Phong(maPhong, tenPhong, lp, ttp, ngayTaoPhong, viTriPhong, ghiChu, tinhTrangPhong);
+
+		System.out.println(phong.toString());
+		try {
+			if (DAO_P.capNhatPhong(phong)) {
+				JOptionPane.showMessageDialog(null, "Cập nhật phòng thành công!");
+			} else {
+				JOptionPane.showMessageDialog(null, "Cập nhật phòng thất bại, vui lòng thử lại.");
+				return;
+			}
+		} catch (Exception e2) {
+
+			e2.printStackTrace();
 		}
 	}
 }

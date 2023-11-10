@@ -284,6 +284,7 @@ public class HoaDon_DAO {
 		return n > 0;
 	}
 	
+	
 	public boolean xoaHoaDon(HoaDon hoaDon) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();

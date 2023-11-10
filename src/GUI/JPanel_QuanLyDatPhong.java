@@ -859,10 +859,10 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 											cardPhong.getPhong().getMaPhong().toString().trim(),
 											table_DanhSachPhong) == true) {
 
-										System.out.print(cardPhong.getPhong().toString());
+							
 										int count = table_DanhSachPhong.getRowCount() + 1;
 
-										System.out.println(count);
+							
 										model_TableDSPhong.addRow(
 												new Object[] { count, cardPhong.getPhong().getMaPhong().toString(),
 														cardPhong.getPhong().getTenPhong().toString(),

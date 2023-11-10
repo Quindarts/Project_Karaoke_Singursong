@@ -21,6 +21,8 @@ import javax.swing.SwingUtilities;
 
 import DAO.LoaiPhong_DAO;
 import DAO.TrangThaiPhong_DAO;
+import Entity.HoaDon;
+import Entity.KhachHang;
 import Entity.LoaiPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
@@ -33,7 +35,6 @@ import java.awt.Font;
  * 
  */
 public class CardPhong extends JPanel {
-	private Phong phong;
 	private int width = 150;
 	private int height = 150;
 
@@ -42,7 +43,10 @@ public class CardPhong extends JPanel {
 	private String hexColor_Blue3 = "#81A4CD";
 	private String hexColor_Blue4 = "#DBE4EE";
 
+	private Phong phong;
 	private LoaiPhong loaiP;
+	private HoaDon hoaDon;
+	private KhachHang khachHang;
 	private boolean selectDatPhong;
 	private JCheckBox cbox_DatPhong;
 
@@ -74,7 +78,6 @@ public class CardPhong extends JPanel {
 		cbox_DatPhong.setForeground(new Color(51, 153, 255));
 		cbox_DatPhong.setBounds(0, 0, 150, 21);
 
-		System.out.println(phong.getTrangThaiPhong().getMaTrangThai());
 
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 			add(cbox_DatPhong);
@@ -128,7 +131,6 @@ public class CardPhong extends JPanel {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		System.out.println(trangThaiP);
 
 		// Trong
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
@@ -158,6 +160,7 @@ public class CardPhong extends JPanel {
 		JMenuItem xemThongTinMenuItem = new JMenuItem("Xem thông tin phòng");
 		JMenuItem chuyenPhongMenuItem = new JMenuItem("Chuyển phòng");
 		JMenuItem datPhongMenuItem = new JMenuItem("Đặt phòng hát ngay");
+		JMenuItem traPhongMenuItem = new JMenuItem("Trả phòng");
 		xemThongTinMenuItem.addActionListener(e1 -> {
 			JOptionPane.showMessageDialog(this, "Thông tin phòng...");
 		});
@@ -171,9 +174,23 @@ public class CardPhong extends JPanel {
 			JFrame chuyenPhongFrame = new Modal_ChuyenPhong(phong);
 			chuyenPhongFrame.setVisible(true);
 		});
+		
+		traPhongMenuItem.addActionListener(e1 -> {
+			hoaDon = new HoaDon();
+			khachHang = new KhachHang();
+			loaiP = new LoaiPhong();
+			
+			
+			Modal_ThanhToan thanhToan = new Modal_ThanhToan(hoaDon, phong, loaiP, khachHang);
+			thanhToan.setVisible(true);
+		});
 		menu.add(xemThongTinMenuItem);
 		menu.add(chuyenPhongMenuItem);
 		menu.add(datPhongMenuItem);
+		if(phong.getTrangThaiPhong().getMaTrangThai().trim().equals("OC")) {
+			menu.add(traPhongMenuItem);
+		}
+		
 		menu.show(this, e.getX(), e.getY());
 	}
 }

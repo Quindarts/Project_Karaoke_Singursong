@@ -15,19 +15,23 @@ import ConnectDB.ConnectDB;
 import DAO.LoaiPhong_DAO;
 import Entity.LoaiPhong;
 import OtherFunction.HelpValidate;
+import io.jsonwebtoken.io.IOException;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Window;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
@@ -38,8 +42,9 @@ import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
+import javax.imageio.ImageIO;
 
-public class Modal_ThemLoaiPhong extends JFrame {
+public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField txt_MaLoaiPhong;
@@ -50,33 +55,11 @@ public class Modal_ThemLoaiPhong extends JFrame {
 	private JLabel img_show_panel;
 	private String pathImg = "";
 	private HelpValidate valiDate;
+	private JButton btn_Luu;
 
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			private Modal_ThemLoaiPhong app;
-
-			public void run() {
-				try {
-					
-					try {
-						ConnectDB.getInstance().connect();
-						System.out.println("Connected!!!!");
-					}catch (SQLException e) {
-						e.printStackTrace();
-					}
-					Modal_ThemLoaiPhong frame = new Modal_ThemLoaiPhong();
-					FlatLightLaf.setup();
-					app = new Modal_ThemLoaiPhong();
-					app.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
@@ -104,36 +87,15 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		pnl_TieuDe.add(lbl_Title);
 
 		JPanel pnl_Anh = new JPanel();
+		pnl_Anh.setBorder(new LineBorder(new Color(0, 0, 255)));
 		pnl_Anh.setBackground(Color.WHITE);
-		pnl_Anh.setBounds(26, 95, 179, 234);
+		pnl_Anh.setBounds(26, 95, 179, 197);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
 		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 179, 192);
+		img_show_panel.setBounds(10, 10, 159, 178);
 		pnl_Anh.add(img_show_panel);
-
-		JButton btn_ChonAnh = new JButton("Chọn ảnh");
-		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_ChonAnh.setForeground(new Color(255, 255, 255));
-
-		btn_ChonAnh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-			}
-
-			public ImageIcon ResizeImage(String ImagePath) {
-				ImageIcon MyImage = new ImageIcon(ImagePath);
-				Image img = MyImage.getImage();
-				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
-						Image.SCALE_SMOOTH);
-				ImageIcon image = new ImageIcon(newImg);
-				return image;
-			}
-		});
-		btn_ChonAnh.setBackground(new Color(0, 128, 255));
-		btn_ChonAnh.setBounds(0, 202, 179, 32);
-		pnl_Anh.add(btn_ChonAnh);
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
@@ -210,9 +172,9 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		pnl_txtA_MoTa.setLayout(null);
 		pnl_txtA_MoTa.setBackground(Color.WHITE);
 
-		JTextArea txtA_MoTa = new JTextArea();
-		txtA_MoTa.setBounds(2, 2, 255, 65);
-		pnl_txtA_MoTa.add(txtA_MoTa);
+		txtA_Mota = new JTextArea();
+		txtA_Mota.setBounds(2, 2, 255, 65);
+		pnl_txtA_MoTa.add(txtA_Mota);
 		pnl_txtA_MoTa.setBorder(new LineBorder(new Color(192, 192, 192)));
 
 		JPanel pnl_GiaTien = new JPanel();
@@ -232,15 +194,37 @@ public class Modal_ThemLoaiPhong extends JFrame {
 		txt_GiaTien.setBounds(125, 0, 225, 25);
 		pnl_GiaTien.add(txt_GiaTien);
 
-		JButton btn_Luu = new JButton("Lưu");
+		btn_Luu = new JButton("Lưu");
 		btn_Luu.setBounds(562, 204, 90, 30);
 		pnl_ThongTin.add(btn_Luu);
 		btn_Luu.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-		JButton btn_BoQua = new JButton("Bỏ qua");
+		JButton btn_BoQua = new JButton("Thoát");
 		btn_BoQua.setBounds(665, 204, 90, 30);
 		pnl_ThongTin.add(btn_BoQua);
 		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		
+				JButton btn_ChonAnh = new JButton("Chọn ảnh");
+				btn_ChonAnh.setBounds(26, 297, 179, 32);
+				contentPane.add(btn_ChonAnh);
+				btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
+				btn_ChonAnh.setForeground(new Color(255, 255, 255));
+				
+						btn_ChonAnh.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+							}
+				
+							public ImageIcon ResizeImage(String ImagePath) {
+								ImageIcon MyImage = new ImageIcon(ImagePath);
+								Image img = MyImage.getImage();
+								Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
+										Image.SCALE_SMOOTH);
+								ImageIcon image = new ImageIcon(newImg);
+								return image;
+							}
+						});
+						btn_ChonAnh.setBackground(new Color(0, 128, 255));
 
 		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -251,39 +235,7 @@ public class Modal_ThemLoaiPhong extends JFrame {
 			}
 		});
 
-		btn_Luu.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String maLoaiPhong = txt_MaLoaiPhong.getText();
-				String tenLoaiPong = txt_TenLoaiPhong.getText();
-				int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-				String hinhA = pathImg;
-				double giaTien = Double.parseDouble(txt_GiaTien.getText());
-				String moTa = txtA_MoTa.getText();
-			
-				try {
-					LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
-					
-					if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) != null) {
-						JOptionPane.showMessageDialog(null, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
-						return ;
-					}
-					
-					LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
-					System.out.println(loaiPhong);
-					if (DAO_LP.taoLoaiPhong(loaiPhong) == false) {
-						JOptionPane.showMessageDialog(null, "Tạo loại phòng thất bại, vui lòng thử lại.");
-						return ;
-					}else {
-						JOptionPane.showMessageDialog(null, "Tạo loại phòng thành công.");
-					}
-					
-
-				} catch (Exception e2) {
-
-				}
-
-			}
-		});
+		btn_Luu.addActionListener(this);
 	}
 
 	public String chooseFileEvent(String typeFile) {
@@ -318,5 +270,121 @@ public class Modal_ThemLoaiPhong extends JFrame {
 			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
 		}
 		return path;
+	}
+
+	public void setModalThemLoaiPhong(String maLP, String tenLP, String giaTien, String soLuong, String hinhAnh,
+			String moTa) {
+		txt_MaLoaiPhong.setText(maLP.trim());
+		txt_TenLoaiPhong.setText(tenLP);
+		txt_GiaTien.setText(giaTien);
+		txt_SoLuongKhachToiDa.setText(soLuong);
+		txtA_Mota.setText(moTa);
+//		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));	
+		if(!hinhAnh.equals("")) {
+			docAnh(hinhAnh);
+		} else {
+			docAnh("D:\\Hk1-3\\PTUD\\sourecode\\KaraokeSingUrSong\\src\\img\\noImage.jpg");
+		}
+		
+	}
+
+	public void docAnh(String hinhAnh) {	
+		ImageIcon imageIcon = new ImageIcon(hinhAnh);
+
+		int originalWidth = imageIcon.getIconWidth();
+		int originalHeight = imageIcon.getIconHeight();
+
+		int newWidth = 159;
+		int newHeight = 178;
+
+		BufferedImage originalImage = null;
+		
+		try {
+			originalImage = ImageIO.read(new File(hinhAnh));
+		} catch (java.io.IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+
+
+		Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+		ImageIcon scaledIcon = new ImageIcon(scaledImage);
+
+		img_show_panel.setIcon(scaledIcon);
+	}
+
+	public void themLoaiPhong() {
+		String maLoaiPhong = txt_MaLoaiPhong.getText();
+		String tenLoaiPong = txt_TenLoaiPhong.getText();
+		int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
+		String hinhA = pathImg;
+		double giaTien = Double.parseDouble(txt_GiaTien.getText());
+		String moTa = txtA_Mota.getText();
+
+		try {
+			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+
+			if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) != null) {
+				JOptionPane.showMessageDialog(null, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
+				return;
+			}
+
+			LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
+			System.out.println(loaiPhong);
+			if (DAO_LP.taoLoaiPhong(loaiPhong) == false) {
+				JOptionPane.showMessageDialog(null, "Tạo loại phòng thất bại, vui lòng thử lại.");
+				return;
+			} else {
+				JOptionPane.showMessageDialog(null, "Tạo loại phòng thành công.");
+			}
+
+		} catch (Exception e2) {
+
+		}
+	}
+
+	public void capNhatLoaiPhong() {
+		String maLoaiPhong = txt_MaLoaiPhong.getText();
+		String tenLoaiPong = txt_TenLoaiPhong.getText();
+		int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
+		String hinhA = pathImg;
+		double giaTien = Double.parseDouble(txt_GiaTien.getText());
+		String moTa = txtA_Mota.getText();
+
+		try {
+			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+
+//			if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) != null) {
+//				JOptionPane.showMessageDialog(null, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
+//				return ;
+//			}
+
+			LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
+			System.out.println(loaiPhong);
+			if (DAO_LP.capNhatLoaiPhong(loaiPhong) == false) {
+				JOptionPane.showMessageDialog(null, "Cập nhất loại phòng này thất bại, vui lòng thử lại.");
+				return;
+			} else {
+				JOptionPane.showMessageDialog(null, "Cập nhật loại phòng này thành công.");
+			}
+
+		} catch (Exception e2) {
+
+		}
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if (o.equals(btn_Luu)) {
+			if (txt_MaLoaiPhong.getText().equals("")) {
+				themLoaiPhong();
+			} else {
+				capNhatLoaiPhong();
+			}
+		}
+
 	}
 }

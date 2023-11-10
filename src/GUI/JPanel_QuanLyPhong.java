@@ -8,8 +8,11 @@ import GUI.JPanel_QuanLyDatPhong.RoundedTransparentBorder;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Event;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -24,9 +27,11 @@ import javax.swing.table.DefaultTableModel;
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
 import DAO.Phong_DAO;
+import DAO.TrangThaiPhong_DAO;
 import Entity.KhachHang;
 import Entity.LoaiPhong;
 import Entity.Phong;
+import Entity.TrangThaiPhong;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -35,6 +40,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -43,8 +50,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.JComboBox;
 
-public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
+public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemListener {
 
 	/**
 	 * Color
@@ -67,6 +75,9 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
 	private Phong_DAO DAO_P;
 	private ArrayList<Phong> dsP;
 	private LoaiPhong_DAO DAO_LP;
+	private DefaultTableModel model;
+	private JButton btnTimKiem;
+	private JComboBox<String> cbo_floor;
 
 
 	/**
@@ -147,7 +158,13 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
 		table_Phong.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "Mã phòng", "Tên phòng", "Loại phòng",
 						"Trạng thái", "Ngày tạo phòng", "Vị trí phòng",
-						"Ghi chú", "Tình trạng phòng" }) );
+						"Ghi chú", "Tình trạng phòng" }) {
+			@Override
+            public boolean isCellEditable(int row, int column) {
+                // Ngăn chặn việc chỉnh sửa nội dung trong bảng, nhưng vẫn cho phép chọn dữ liệu
+                return false;
+            }
+		});
 		table_Phong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 10, 1019, 615);
@@ -156,61 +173,73 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
 
 		panel_Table.add(scrollPane);
 
-		DAO_LP = new LoaiPhong_DAO();
-		DAO_P = new Phong_DAO();
-		DefaultTableModel model = (DefaultTableModel) table_Phong.getModel();
-		try {
-			dsP = DAO_P.layTatCaPhong();
-			if (dsP != null) {
-				dsP.forEach(p -> {
-					LoaiPhong lp = new LoaiPhong();
-					lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
-					Object[] rowData = {p.getMaPhong(), p.getTenPhong(), lp.getTenLoaiPhong(), p.getTrangThaiPhong().getMaTrangThai(), p.getNgayTaoPhong(), p.getViTriPhong(), p.getGhiChu(), p.getTinhTrangPhong()};
+//		--------
+		DocDuLieu();
+		
+		table_Phong.addMouseListener(new MouseListener() {
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if(e.getClickCount() == 2) {
+					int row = table_Phong.getSelectedRow();
 					
-					model.addRow(rowData);
-				});
+					String maPhong = model.getValueAt(row, 0).toString();
+					String tenPhong = model.getValueAt(row, 1).toString();
+					String loaiPhong = model.getValueAt(row, 2).toString();
+					String trangThai = model.getValueAt(row, 3).toString();
+					String ngayTao = model.getValueAt(row, 4).toString();
+					String viTri = model.getValueAt(row, 5).toString();
+					String ghiChu = model.getValueAt(row, 6).toString();
+					String tinhTrang = model.getValueAt(row, 7).toString();
+					
+					Modal_ThemPhong modal_ThemPhong = new Modal_ThemPhong();
+					modal_ThemPhong.setVisible(true);
+					modal_ThemPhong.setModal_ThemPhong(maPhong, tenPhong, loaiPhong, trangThai, tinhTrang, viTri, ngayTao, ghiChu);
+				}
 			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
-//		table_Phong.addMouseListener(new MouseListener() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//            	int row = table_Phong.getSelectedRow();
-////            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
-////        		date_KH.setDate((Date) model.getValueAt(row, 3));
-//            	String maKhachHang =  model.getValueAt(row, 0).toString();
-//            	String hoTen = model.getValueAt(row, 1).toString();
-//            	String gioiTinh = model.getValueAt(row, 2).toString();
-//            	String ngaySinh = model.getValueAt(row, 3).toString();
-//            	String diaChi = model.getValueAt(row, 4).toString();
-//            	String sdt = model.getValueAt(row, 5).toString();
-//            	String diemThuong = model.getValueAt(row, 6).toString();
-//            	String ghiChu = model.getValueAt(row, 7).toString();
-//               System.out.println(maKhachHang + "," + hoTen + "," + gioiTinh + "," + ngaySinh + "," + diaChi + "," + sdt + "," + diemThuong + "," + ghiChu );
-//            }
-//
-//            @Override
-//            public void mousePressed(MouseEvent e) {}
-//
-//            @Override
-//            public void mouseReleased(MouseEvent e) {}
-//
-//            @Override
-//            public void mouseEntered(MouseEvent e) {}
-//
-//            @Override
-//            public void mouseExited(MouseEvent e) {}
-//        });
-		
 
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
 
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.WHITE);
 		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.setBounds(1031, 10, 255, 615);
 		panel_Table.add(panel_1);
+		panel_1.setLayout(null);
+		
+		cbo_floor = new JComboBox<String>();
+		cbo_floor.setBounds(47, 28, 171, 36);
+		cbo_floor.addItem("Tất cả");
+		cbo_floor.addItem("Lầu 1");
+		cbo_floor.addItem("Lầu 2");
+		cbo_floor.addItem("Lầu 3");
+		cbo_floor.addItem("Lầu 4");
+		cbo_floor.addItem("Lầu 5");
+		panel_1.add(cbo_floor);
 
 		btnThem = new JButton("Thêm");
 	
@@ -224,6 +253,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				XoaPhong();
 			}
 		});
 		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyPhong.class.getResource("/icon/trash.png")));
@@ -240,13 +270,20 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
 		btnLamMoi.setBackground(Color.LIGHT_GRAY);
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
+		btnLamMoi.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				DocDuLieu();
+			}
+		});
+		
 
 		textField = new JTextField();
 		textField.setBounds(545, 0, 223, 34);
 		panel.add(textField);
 		textField.setColumns(10);
 
-		JButton btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setBounds(415, 0, 123, 35);
 		panel.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyPhong.class.getResource("/icon/search.png")));
@@ -256,18 +293,157 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener {
 
 		// Add event:
 		btnThem.addActionListener((ActionListener) this);
+		btnTimKiem.addActionListener(this);
+		cbo_floor.addItemListener(this);
 
 	}
+	
+
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
-			modalTKH.setVisible(true);
+//			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
+//			modalTKH.setVisible(true);
+			
+			Modal_ThemPhong modalTP = new Modal_ThemPhong();
+			modalTP.setVisible(true);
+		} else if(o.equals(btnTimKiem) && !textField.getText().equals("")) {
+			TimKhachHang_TheoMa();
 		}
 
+	}
+	
+	public void XoaPhong() {
+		int row = table_Phong.getSelectedRow();
+		String maPhong = model.getValueAt(row, 0).toString();
+		Phong phong = new Phong(maPhong);
+		try {
+			String tenPhong = DAO_P.timPhong_TheoMaPhong(maPhong).getTenPhong();	
+			DAO_P.xoaPhong(phong);
+			JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenPhong + "thành công");
+			model.removeRow(row);
+		} catch (Exception e2) {
+			JOptionPane.showMessageDialog(null, "Xóa thất bại");
+		}
+	}
+	
+	public void DocDuLieu() {
+		model = (DefaultTableModel) table_Phong.getModel();
+		model.getDataVector().removeAllElements();
+		
+		DAO_LP = new LoaiPhong_DAO();
+		DAO_P = new Phong_DAO();
+		
+		try {
+			dsP = DAO_P.layTatCaPhong();
+			if (dsP != null) {
+				dsP.forEach(p -> {
+					LoaiPhong lp = new LoaiPhong();
+					lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+					TrangThaiPhong_DAO DAO_trangThai = new TrangThaiPhong_DAO();
+					
+					TrangThaiPhong trangThai = new TrangThaiPhong();
+					
+					
+					trangThai = DAO_trangThai.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai().trim());
+					
+					Object[] rowData = {p.getMaPhong(), p.getTenPhong(), lp.getTenLoaiPhong(), trangThai.getTenTrangThai(), p.getNgayTaoPhong(), p.getViTriPhong(), p.getGhiChu(), p.getTinhTrangPhong()};
+					
+					model.addRow(rowData);
+				});
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	public void TimKhachHang_TheoMa() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = textField.getText().trim();
+		Phong ma_phong= DAO_P.timPhong_TheoMaPhong(chuoiTimKiem);
+
+		try {
+			dsP.add(ma_phong);
+			if (dsP != null) {
+				
+				LoaiPhong lp = new LoaiPhong();
+				lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(ma_phong.getLoaiPhong().getMaLoaiPhong());
+				TrangThaiPhong_DAO DAO_trangThai = new TrangThaiPhong_DAO();
+				
+				TrangThaiPhong trangThai = new TrangThaiPhong();
+				
+				
+				trangThai = DAO_trangThai.timTrangThaiPhong_TheoMaTrangThai(ma_phong.getTrangThaiPhong().getMaTrangThai().trim());
+				
+				Object[] rowData = {ma_phong.getMaPhong(), ma_phong.getTenPhong(), lp.getTenLoaiPhong(), trangThai.getTenTrangThai(), ma_phong.getNgayTaoPhong(), ma_phong.getViTriPhong(), ma_phong.getGhiChu(), ma_phong.getTinhTrangPhong()};
+				
+				model.addRow(rowData);
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có mã: " + chuoiTimKiem);
+		}
+	}
+
+
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		if (e.getStateChange() == ItemEvent.SELECTED) {
+            // Xử lý sự kiện khi một mục được chọn
+            String selectedOption = (String) cbo_floor.getSelectedItem();
+            
+            model = (DefaultTableModel) table_Phong.getModel();
+	    	model.getDataVector().removeAllElements();
+    		
+    		DAO_LP = new LoaiPhong_DAO();
+    		DAO_P = new Phong_DAO();
+    		
+    		try {
+    			
+    			dsP = DAO_P.timPhongTheoLau(selectedOption);
+    			if (dsP != null) {
+    				if(!dsP.isEmpty()) {
+    					dsP.forEach(p -> {
+        					LoaiPhong lp = new LoaiPhong();
+        					lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+        					TrangThaiPhong_DAO DAO_trangThai = new TrangThaiPhong_DAO();
+        					
+        					TrangThaiPhong trangThai = new TrangThaiPhong();
+        					
+        					
+        					trangThai = DAO_trangThai.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai().trim());
+        					
+        					Object[] rowData = {p.getMaPhong(), p.getTenPhong(), lp.getTenLoaiPhong(), trangThai.getTenTrangThai(), p.getNgayTaoPhong(), p.getViTriPhong(), p.getGhiChu(), p.getTinhTrangPhong()};
+        					
+        					model.addRow(rowData);
+        				});
+    				} else {
+    					model.getDataVector().removeAllElements();
+    				}
+    				
+    			} 
+    			
+    		} catch (Exception e1) {
+    		
+    		}
+    		
+    		if(selectedOption.equals("Tất cả")) {
+    			DocDuLieu();
+    		}
+        }
+		
+	}
+
+
+
+	private void clearTable(DefaultTableModel model_clear) {
+		// TODO Auto-generated method stub
+		model_clear.setRowCount(0);
+		System.out.println(312);
+		
 	}
 
 }
