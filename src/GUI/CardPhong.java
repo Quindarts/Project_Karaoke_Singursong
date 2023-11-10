@@ -62,7 +62,6 @@ public class CardPhong extends JPanel {
 	private LoaiPhong loaiP;
 	private KhachHang kh;
 	private NhanVien nv;
-	private Phong ph;
 	private PhieuDatPhong pdp;
 	private PhieuDatPhong phieu;
 	private ArrayList<Phong> dsPhong;
@@ -79,6 +78,7 @@ public class CardPhong extends JPanel {
 	private String sdtKH;
 	private LoaiPhong_DAO DAO_LP;
 	private TrangThaiPhong_DAO DAO_TTP;
+	private TrangThaiPhong_DAO dao_TrangThaiPhong;
 
 
 	/**
@@ -198,22 +198,20 @@ public class CardPhong extends JPanel {
 		phieu = new PhieuDatPhong();
 		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
 		dsPhong = DAO_P.layTatCaPhong();
+		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
 
 
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem xemThongTinMenuItem = new JMenuItem("Xem thông tin phòng");
 		JMenuItem chuyenPhongMenuItem = new JMenuItem("Chuyển phòng");
 		JMenuItem datPhongMenuItem = new JMenuItem("Đặt phòng hát ngay");
-		xemThongTinMenuItem.addActionListener(e1 -> {
-			JOptionPane.showMessageDialog(this, "Thông tin phòng...");
-		});
+		
 		datPhongMenuItem.addActionListener(e1 -> {
 			JOptionPane.showMessageDialog(this, "Bạn có chắc chắn đặt phòng này?");
 			setSelectDatPhong(true);
 			cbox_DatPhong.setSelected(isSelectDatPhong());
 		});
 		xemThongTinMenuItem.addActionListener(e1 -> {
-
 			try {
 				phong = DAO_P.timPhong_TheoMaPhong(phong.getMaPhong());
 				String anhPhong = "";
@@ -238,8 +236,7 @@ public class CardPhong extends JPanel {
 			
 			
 		});
-		chuyenPhongMenuItem.addActionListener(e1 -> {
-			
+		chuyenPhongMenuItem.addActionListener(e1 -> {		
 			try {
 				if (dsPhieuDatPhong != null)
 					for (PhieuDatPhong pdp : dsPhieuDatPhong) {
@@ -255,6 +252,11 @@ public class CardPhong extends JPanel {
 				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong();
 				phieuChuyenPhong.setVisible(true);
 				phieuChuyenPhong.SetModal_PhieuChuyenPhong(phieu.getThoiGianNhanPhong(), phieu.getMaPhieuDat(), tenNV, tenKH, sdtKH);
+				
+				// Cập nhật lại trạng thái phòng
+				TrangThaiPhong trThaiPh = new TrangThaiPhong();
+				trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");
+				DAO_P.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh.getMaTrangThai());
 
 			} catch (Exception e2) {
 				JOptionPane.showMessageDialog(null, "Phòng này chưa được đặt!");

@@ -6,6 +6,7 @@ import java.awt.Image;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import DAO.ThongTinDichVu_DAO;
@@ -34,9 +35,10 @@ public class CardDichVu extends JPanel {
 		this.dichVu = dichVu;
 		System.out.println(dichVu);
 
+
 		DAO_TTDV = new ThongTinDichVu_DAO();
 		this.ttdv = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(dichVu.getMaDichVu());
-
+		
 		setPreferredSize(new Dimension(width, height));
 		setLayout(null);
 
@@ -49,8 +51,8 @@ public class CardDichVu extends JPanel {
 		img_show_panel = new JLabel();
 		img_show_panel.setBounds(0, 0, 150, 150);
 
-		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));
-		main_card.add(img_show_panel);
+//		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));
+//		main_card.add(img_show_panel);
 
 		JLabel lbl_giaTien = new JLabel(Double.toString(dichVu.getDonGia()));
 		lbl_giaTien.setForeground(new Color(255, 69, 0));

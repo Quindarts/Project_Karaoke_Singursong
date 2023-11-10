@@ -217,6 +217,31 @@ public class Phong_DAO {
 		return n > 0;
 	}
 
+	public boolean capNhat_TranThaiPhong(String maPh, String trThPh) {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		int n = 0;
+		try {
+			statement = con.prepareStatement("UPDATE Phong SET maTrangThai=? " + " WHERE maPhong=?");
+			statement.setString(2, maPh);
+			statement.setString(1, trThPh);
+
+			n = statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return n > 0;
+	}
+
 	public boolean xoaPhong(Phong phong) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();

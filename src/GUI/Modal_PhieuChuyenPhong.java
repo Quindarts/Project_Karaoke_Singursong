@@ -327,6 +327,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		DAO_KH = new KhachHang_DAO();
 		DAO_PDP = new PhieuDatPhong_DAO();
 		DAO_NV = new NhanVien_DAO();
+		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
 		int row = table.getSelectedRow();
 
 		String maPDP = txtMaPDP.getText();
@@ -335,7 +336,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		Phong ph = null;
 		String maPhong = model.getValueAt(row, 0).toString();
 		ph = dao_Phong.timPhong_TheoMaPhong(maPhong);
-
+		
 		NhanVien nv = null;
 		String maNV = phieuDatPhong.getNhanVien().getMaNhanVien();
 		nv = DAO_NV.timNhanVien_TheoMaNhanVien(maNV);
@@ -343,6 +344,9 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		KhachHang kh = null;
 		String maKH = phieuDatPhong.getKhachHang().getMaKhachHang();
 		kh = DAO_KH.layKhachHang_TheoMaKhachHang(maKH);
+		
+		TrangThaiPhong trThaiPh = new TrangThaiPhong();
+		trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Đang sử dụng");
 
 		Date tgianDatPhong = null;
 		try {
@@ -372,6 +376,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 					JOptionPane.YES_NO_OPTION);
 			if (t == JOptionPane.YES_OPTION) {
 				if (DAO_PDP.capNhatPhieuDatPhong(phieuDatPhong)) {
+					dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh.getMaTrangThai());
 					JOptionPane.showMessageDialog(null,
 							"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
 					dispose();
