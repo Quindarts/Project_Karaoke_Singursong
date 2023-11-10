@@ -65,6 +65,8 @@ public class CardPhong extends JPanel {
 	private String tenNV;
 	private String tenKH;
 	private String sdtKH;
+	private LoaiPhong_DAO DAO_LP;
+	private TrangThaiPhong_DAO DAO_TTP;
 
 	/**
 	 * @param phong
@@ -149,24 +151,50 @@ public class CardPhong extends JPanel {
 	}
 
 	private void showPopupMenu(MouseEvent e) {
+		DAO_PDP = new PhieuDatPhong_DAO();
+		DAO_NV = new NhanVien_DAO();
+		DAO_P = new Phong_DAO();
+		DAO_KH = new KhachHang_DAO();
+		DAO_LP = new LoaiPhong_DAO();
+		DAO_TTP = new TrangThaiPhong_DAO();
+		nv = new NhanVien();
+		phieu = new PhieuDatPhong();
+		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
+		dsPhong = DAO_P.layTatCaPhong();
 
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem xemThongTinMenuItem = new JMenuItem("Xem thông tin phòng");
 		JMenuItem chuyenPhongMenuItem = new JMenuItem("Chuyển phòng");
 
 		xemThongTinMenuItem.addActionListener(e1 -> {
-			JOptionPane.showMessageDialog(this, "Thông tin phòng...");
+
+			try {
+				phong = DAO_P.timPhong_TheoMaPhong(phong.getMaPhong());
+				String anhPhong = "";
+				String tenPhong = phong.getTenPhong();
+				String viTriPhong = phong.getViTriPhong();		
+				String tinhTrang = phong.getTinhTrangPhong();
+				
+				LoaiPhong loaiP = null;
+				loaiP = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
+				String tenLoaiPhong = loaiP.getTenLoaiPhong();
+				String giaPhong = loaiP.getGiaTien()+"";			
+				
+				TrangThaiPhong trThaiP = null;
+				trThaiP = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(phong.getTrangThaiPhong().getMaTrangThai());
+				String trangThaiPhong = trThaiP.getTenTrangThai();
+				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong();
+				thongTinPhong.setVisible(true);
+				thongTinPhong.SetModal_XemThongTinPhong(anhPhong,tenPhong , tenLoaiPhong, viTriPhong, giaPhong, trangThaiPhong, tinhTrang);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+			
+			
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
-			DAO_PDP = new PhieuDatPhong_DAO();
-			DAO_NV = new NhanVien_DAO();
-			DAO_P = new Phong_DAO();
-			DAO_KH = new KhachHang_DAO();
-			nv = new NhanVien();
-			phieu = new PhieuDatPhong();
-			dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
-
+			
 			try {
 				if (dsPhieuDatPhong != null)
 					for (PhieuDatPhong pdp : dsPhieuDatPhong) {

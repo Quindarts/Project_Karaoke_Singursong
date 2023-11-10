@@ -194,7 +194,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Item
 				String nhanVien = model.getValueAt(row, 2).toString();
 				String khachHang = model.getValueAt(row, 3).toString();
 				String tongHoaDon = model.getValueAt(row, 4).toString();
-				System.out.println("Hóa đơn: " + maHoaDon + ngayXuatHoaDon + nhanVien + khachHang + tongHoaDon);
+//				System.out.println("Hóa đơn: " + maHoaDon + ngayXuatHoaDon + nhanVien + khachHang + tongHoaDon);
 			}
 
 			@Override

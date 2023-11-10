@@ -398,7 +398,6 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 
 		// Tính số giờ đã hát
 		long khoangCachThoiGian = date_ChuyenPhong.getDate().getTime() - date_NhanPhongBanDau.getDate().getTime();
-		System.out.println(date_ChuyenPhong.getDate().getTime());
 		double soGioDaHat = khoangCachThoiGian / (60 * 60 * 1000);
 		txt_SoGioDaHat.setText(soGioDaHat + "");
 
