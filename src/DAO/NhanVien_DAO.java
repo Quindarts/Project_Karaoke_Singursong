@@ -136,6 +136,43 @@ public class NhanVien_DAO {
 		}
 		return nhanVien;
 	}
+	
+	public NhanVien timNhanVien_TheoSoDienThoai(String soDT) {
+		NhanVien nhanVien = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM NhanVien WHERE soDienThoai = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, soDT);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maNhanVien = rs.getString("maNhanVien");
+				LoaiNhanVien loaiNhanVien = new LoaiNhanVien(rs.getString("maLoaiNhanVien"));
+				java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+				String hoTen = rs.getString("hoTen");
+				Boolean gioiTinh = rs.getBoolean("gioiTinh");
+				String soDienThoai = rs.getString("SoDienThoai");
+				String CCCD = rs.getString("CCCD");
+				String diaChi = rs.getString("diaChi");
+				String trangThai = rs.getString("trangThai");
+				String anhThe = rs.getString("anhThe");
+				nhanVien = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
+						trangThai, anhThe);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return nhanVien;
+	}
 
 	/**
 	 * TaoNhanVien

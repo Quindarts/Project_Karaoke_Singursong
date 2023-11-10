@@ -27,6 +27,17 @@ import Entity.TrangThaiPhong;
 import javax.swing.JCheckBox;
 import java.awt.Font;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+
+import DAO.KhachHang_DAO;
+import DAO.NhanVien_DAO;
+import DAO.PhieuDatPhong_DAO;
+import DAO.Phong_DAO;
+import Entity.KhachHang;
+import Entity.NhanVien;
+import Entity.PhieuDatPhong;
+
 /**
  * CardPhong
  * 
@@ -42,9 +53,31 @@ public class CardPhong extends JPanel {
 	private String hexColor_Blue3 = "#81A4CD";
 	private String hexColor_Blue4 = "#DBE4EE";
 
-	private LoaiPhong loaiP;
+	
 	private boolean selectDatPhong;
 	private JCheckBox cbox_DatPhong;
+	
+
+
+	private LoaiPhong loaiP;
+	private KhachHang kh;
+	private NhanVien nv;
+	private Phong ph;
+	private PhieuDatPhong pdp;
+	private PhieuDatPhong phieu;
+	private ArrayList<Phong> dsPhong;
+	private ArrayList<KhachHang> dsKhachHang;
+	private ArrayList<NhanVien> dsNhanVien;
+	private ArrayList<PhieuDatPhong> dsPhieuDatPhong;
+	private KhachHang_DAO DAO_KH;
+	private NhanVien_DAO DAO_NV;
+	private PhieuDatPhong_DAO DAO_PDP;
+	private Phong_DAO DAO_P;
+	private Calendar cal = Calendar.getInstance();
+	private String tenNV;
+	private String tenKH;
+	private String sdtKH;
+
 
 	/**
 	 * @param phong
@@ -168,8 +201,34 @@ public class CardPhong extends JPanel {
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
-			JFrame chuyenPhongFrame = new Modal_ChuyenPhong(phong);
-			chuyenPhongFrame.setVisible(true);
+			DAO_PDP = new PhieuDatPhong_DAO();
+			DAO_NV = new NhanVien_DAO();
+			DAO_P = new Phong_DAO();
+			DAO_KH = new KhachHang_DAO();
+			nv = new NhanVien();
+			phieu = new PhieuDatPhong();
+			dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
+
+			try {
+				if (dsPhieuDatPhong != null)
+					for (PhieuDatPhong pdp : dsPhieuDatPhong) {
+						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
+						nv = phieu.getNhanVien();
+						tenNV = DAO_NV.timNhanVien_TheoMaNhanVien(nv.getMaNhanVien()).getHoTen();
+						kh = phieu.getKhachHang();
+						tenKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getHoTen();
+						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();
+						if (phieu != null)
+							break;
+					}
+				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong();
+				phieuChuyenPhong.setVisible(true);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(phieu.getThoiGianNhanPhong(), phieu.getMaPhieuDat(), tenNV, tenKH, sdtKH);
+
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, "Phòng này chưa được đặt!");
+			}
+
 		});
 		menu.add(xemThongTinMenuItem);
 		menu.add(chuyenPhongMenuItem);

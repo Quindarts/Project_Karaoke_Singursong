@@ -12,6 +12,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import ConnectDB.ConnectDB;
 import DAO.LoaiNhanVien_DAO;
 import DAO.NhanVien_DAO;
+import Entity.KhachHang;
 import Entity.LoaiNhanVien;
 import Entity.NhanVien;
 import OtherFunction.HelpRamDomKH;
@@ -24,6 +25,7 @@ import java.awt.Image;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -33,7 +35,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -56,18 +61,20 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private JTextField txt_SoDienThoai;
 	private JTextField txt_DiaChi;
 	private JTextField txt_CCCD;
+	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 
 	private LoaiNhanVien_DAO DAO_LNV;
 
 	private ArrayList<LoaiNhanVien> listLNV;
 
 	private JButton btn_Them;
+	private JButton btn_BoQua;
 
 	private ButtonGroup btngr_GioiTinh;
 
 	private JComboBox<String> cbox__loaiNhanVien;
 
-	private JDateChooser dateChooser;
+	private JDateChooser dateCh_NgaySinh;
 
 	private JComboBox<String> comboBox_TrangThai;
 
@@ -75,38 +82,19 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 
 	private String pathImg;
 
+	private AbstractButton rdbtn_Nam;
+
+	private AbstractButton rdbtn_Nu;
+
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-
-			private Modal_ThemNhanVien app;
-
-			public void run() {
-				try {
-					ConnectDB.getInstance().connect();
-					System.out.println("Connected!!!!");
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-				try {
-					Modal_ThemNhanVien frame = new Modal_ThemNhanVien();
-					FlatLightLaf.setup();
-					app = new Modal_ThemNhanVien();
-					app.setVisible(true);
-
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
 	public Modal_ThemNhanVien() {
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 450);
 		contentPane = new JPanel();
@@ -204,15 +192,13 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		cbox__loaiNhanVien = new JComboBox();
 		cbox__loaiNhanVien.setBounds(125, 0, 225, 25);
 		pnl_ChucVu.add(cbox__loaiNhanVien);
+		cbox__loaiNhanVien.addItem("Chọn chức vụ");
 
 		DAO_LNV = new LoaiNhanVien_DAO();
 		try {
-
 			listLNV = DAO_LNV.layTatCaLoaiNhanVien();
 			if (listLNV != null) {
-
 				listLNV.forEach((lnv) -> {
-
 					cbox__loaiNhanVien.addItem(lnv.getTenLoaiNhanVien());
 				});
 			}
@@ -251,9 +237,10 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		lbl_NgaySinh.setBounds(0, 0, 110, 25);
 		pnl_NgaySinh.add(lbl_NgaySinh);
 
-		dateChooser = new JDateChooser();
-		dateChooser.setBounds(127, 0, 223, 25);
-		pnl_NgaySinh.add(dateChooser);
+		dateCh_NgaySinh = new JDateChooser();
+		dateCh_NgaySinh.setDateFormatString("yyyy-MM-dd");
+		dateCh_NgaySinh.setBounds(127, 0, 223, 25);
+		pnl_NgaySinh.add(dateCh_NgaySinh);
 
 		JPanel pnl_GioiTinh = new JPanel();
 		pnl_GioiTinh.setBackground(Color.WHITE);
@@ -269,20 +256,20 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		lbl_GioiTinh.setBounds(0, 0, 110, 25);
 		pnl_GioiTinh.add(lbl_GioiTinh);
 
-		JRadioButton rdbtn_Nam = new JRadioButton("Nam");
+		rdbtn_Nam = new JRadioButton("Nam");
 		rdbtn_Nam.setBackground(Color.WHITE);
 		rdbtn_Nam.setBounds(125, 0, 50, 25);
 		pnl_GioiTinh.add(rdbtn_Nam);
 
-		JRadioButton rdbtn_Nu = new JRadioButton("Nữ");
+		rdbtn_Nu = new JRadioButton("Nữ");
 		rdbtn_Nu.setBackground(Color.WHITE);
 		rdbtn_Nu.setBounds(190, 0, 50, 25);
 		pnl_GioiTinh.add(rdbtn_Nu);
 		rdbtn_Nam.setActionCommand("Nam");
 		rdbtn_Nu.setActionCommand("Nu");
+
 		btngr_GioiTinh.add(rdbtn_Nu);
 		btngr_GioiTinh.add(rdbtn_Nam);
-//
 
 		JPanel pnl_TrangThai = new JPanel();
 		pnl_TrangThai.setBackground(Color.WHITE);
@@ -296,13 +283,10 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		lbl_TrangThai.setBounds(0, 0, 110, 25);
 		pnl_TrangThai.add(lbl_TrangThai);
 
-		comboBox_TrangThai = new JComboBox<String>();
+		String[] dsTrangThai = { "Chọn trạng thái", "Còn làm", "Nghỉ việc", "Nghỉ phép" };
+		comboBox_TrangThai = new JComboBox(dsTrangThai);
 		comboBox_TrangThai.setBounds(125, 0, 225, 25);
 		pnl_TrangThai.add(comboBox_TrangThai);
-
-		comboBox_TrangThai.addItem("Còn làm");
-		comboBox_TrangThai.addItem("Nghỉ việc");
-		comboBox_TrangThai.addItem("Nghỉ phép");
 
 		JPanel pnl_SoDienThoai = new JPanel();
 		pnl_SoDienThoai.setBackground(Color.WHITE);
@@ -358,17 +342,65 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setBounds(50, 70, 179, 234);
 
-		btn_Them = new JButton("Thêm Nhân Viên");
+		btn_Them = new JButton("Lưu");
 		btn_Them.setForeground(Color.WHITE);
 		btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btn_Them.setBackground(new Color(0, 128, 255));
-		btn_Them.setBounds(795, 314, 179, 32);
+		btn_Them.setBounds(751, 314, 95, 32);
 		contentPane.add(btn_Them);
 
 		btn_Them.addActionListener(this);
 
 		contentPane.add(panel);
 
+		btn_BoQua = new JButton("Bỏ qua");
+		btn_BoQua.setForeground(Color.WHITE);
+		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_BoQua.setBackground(new Color(0, 128, 255));
+		btn_BoQua.setBounds(856, 314, 89, 32);
+		btn_BoQua.addActionListener(this);
+		contentPane.add(btn_BoQua);
+
+	}
+
+	public void setModal_ThemNhanVien(String maNhanVien, String loaiNhanVien, String hoTen, String gioiTinh,
+			String ngaySinh, String sdt, String cccd, String diaChi, String trangThai, String anhThe) {
+		txt_MaNhanVien.setText(maNhanVien);
+		txt_TenNhanVien.setText(hoTen);
+		txt_SoDienThoai.setText(sdt);
+		txt_DiaChi.setText(diaChi);
+		txt_CCCD.setText(cccd);
+		java.util.Date ngaySinhStr;
+//		img_show_panel.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource(anhThe)));
+
+		try {
+			ngaySinhStr = dateFormat_YMD.parse(ngaySinh);
+			dateCh_NgaySinh.setDate(ngaySinhStr);
+		} catch (java.text.ParseException e) {
+			e.printStackTrace();
+		}
+
+		if (gioiTinh.equals("Nam")) {
+			rdbtn_Nam.setSelected(true);
+		} else {
+			rdbtn_Nu.setSelected(true);
+		}
+
+		for (LoaiNhanVien loaiNV : DAO_LNV.layTatCaLoaiNhanVien()) {
+			if (loaiNhanVien.equals(loaiNV.getTenLoaiNhanVien().trim())) {
+				cbox__loaiNhanVien.setSelectedItem(loaiNhanVien);
+				break;
+			}
+		}
+
+		int soLuongTrangThai = comboBox_TrangThai.getItemCount();
+		for (int i = 0; i < soLuongTrangThai; i++) {
+			String item = comboBox_TrangThai.getItemAt(i);
+			if (item.equals(trangThai)) {
+				comboBox_TrangThai.setSelectedItem(trangThai);
+				break;
+			}
+		}
 	}
 
 	@Override
@@ -376,54 +408,222 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btn_Them)) {
+			if (txt_MaNhanVien.getText().equals("")) {
+				ThemNhanVien();
+			} else {
+				CapNhatNhanVien();
+			}
+		}
 
+		if (o.equals(btn_BoQua)) {
+			dispose();
+		}
+	}
+
+	public void ThemNhanVien() {
+		if (ValueDate()) {
 			String anhThe = pathImg;
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
-			boolean gioiTinh = btngr_GioiTinh.getSelection().equals("Nam");
+			boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
 			String hoTen = txt_TenNhanVien.getText();
-			Date ngaySinh = new Date((dateChooser).getDate().getTime());
+			Date ngaySinh = null;
+			try {
+				ngaySinh = new Date((dateCh_NgaySinh).getDate().getTime());
+			} catch (Exception e) {
+				// TODO: handle exception
+				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
+			}
 			LoaiNhanVien loaiNhanVien = null;
+			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString().trim());
 			String soDienThoai = txt_SoDienThoai.getText();
 			String trangThai = "";
-			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt_SoDienThoai.getText());
 
+			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt_SoDienThoai.getText());
 			String maNhanVien = helpRamDomKH.taoMa("NhanVien", "maNhanVien", "NV");
-			
 			txt_MaNhanVien.setText(maNhanVien);
 
-			
-			if (comboBox_TrangThai.getSelectedItem() == "Còn làm") {
-				trangThai = "ConLam";
-			}
-			if (comboBox_TrangThai.getSelectedItem() == "Nghỉ việc") {
-				trangThai = "NghiViec";
-			}
-			if (comboBox_TrangThai.getSelectedItem() == "Nghỉ phép") {
-				trangThai = "NghiPhep";
+			int soLuongTrangThai = comboBox_TrangThai.getItemCount();
+			for (int i = 0; i < soLuongTrangThai; i++) {
+				String item = comboBox_TrangThai.getItemAt(i);
+				trangThai = comboBox_TrangThai.getSelectedItem().toString();
+				if (item.equals(trangThai)) {
+					trangThai = item;
+					break;
+				}
 			}
 
-			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString());
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);
+			System.out.println(nv);
 
-			System.out.println(nv.toString());
-			
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
-				if(DAO_NV.taoNhanVien(nv)) {
+				if (DAO_NV.taoNhanVien(nv)) {
 					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thành công");
-				}else {
+					setVisible(false);
+				} else {
 					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
 				}
-				
-				
+
 			} catch (Exception e2) {
 				// TODO: handle exception
 				JOptionPane.showConfirmDialog(null, "Tạo mới nhân viên thất bại, vui lòng thử lại");
 				e2.printStackTrace();
 			}
 		}
+	}
+
+	public void CapNhatNhanVien() {
+		if (ValueDate()) {
+			String anhThe = pathImg;
+			String CCCD = txt_CCCD.getText();
+			String diaChi = txt_DiaChi.getText();
+			boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
+			String hoTen = txt_TenNhanVien.getText();
+			Date ngaySinh = null;
+			try {
+				ngaySinh = new Date((dateCh_NgaySinh).getDate().getTime());
+			} catch (Exception e) {
+				// TODO: handle exception
+				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
+			}
+			
+			
+			String soDienThoai = txt_SoDienThoai.getText();
+			String trangThai = "";
+			String maNhanVien = txt_MaNhanVien.getText().trim();
+	
+			int soLuongTrangThai = comboBox_TrangThai.getItemCount();
+			for (int i = 0; i < soLuongTrangThai; i++) {
+				String item = comboBox_TrangThai.getItemAt(i);
+				trangThai = comboBox_TrangThai.getSelectedItem().toString();
+				if (item.equals(trangThai)) {
+					trangThai = item;
+					break;
+				}
+			}
+			
+			LoaiNhanVien loaiNhanVien = null;
+			String loaiNV = "";
+			int soLuongLoaiNV = cbox__loaiNhanVien.getItemCount();
+			for (int i = 0; i < soLuongLoaiNV; i++) {
+				String item = cbox__loaiNhanVien.getItemAt(i);
+				loaiNV = cbox__loaiNhanVien.getSelectedItem().toString();
+				if (item.equals(loaiNV)) {
+					loaiNV = item;
+					break;
+				}
+			}
+			
+			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(loaiNV);
+			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
+					trangThai, anhThe);
+
+			System.out.println(nv.toString());
+
+			try {
+				NhanVien_DAO DAO_NV = new NhanVien_DAO();
+				if (DAO_NV.capNhatNhanVien(nv)) {
+					JOptionPane.showMessageDialog(null, "Cập nhật nhân viên thành công");
+					setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(null, "Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại");
+				}
+
+			} catch (Exception e2) {
+				// TODO: handle exception
+				JOptionPane.showConfirmDialog(null, "Cập nhật thông tin nhân viên thất bại, vui lòng thử lại");
+				e2.printStackTrace();
+			}
+		}
+	}
+
+	public boolean ValueDate() {
+		String tenNV = txt_TenNhanVien.getText().trim();
+		String chucVu = cbox__loaiNhanVien.getSelectedItem().toString().trim();
+		String chonChucVu = cbox__loaiNhanVien.getItemAt(0).toString().trim();
+		boolean gt_Nam = rdbtn_Nam.isSelected();
+		boolean gt_Nu = rdbtn_Nu.isSelected();
+		String trangThai = comboBox_TrangThai.getSelectedItem().toString().trim();
+		String chonTrangThai = comboBox_TrangThai.getItemAt(0).toString().trim();
+		String soDienThoai = txt_SoDienThoai.getText().trim();
+		String diaChi = txt_DiaChi.getText().trim();
+		String cccd = txt_CCCD.getText().trim();
+
+		if (txt_TenNhanVien.equals("")) {
+			txt_TenNhanVien.requestFocus();
+			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
+			return false;
+		} else if (!(tenNV.length() > 0
+				&& tenNV.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
+						+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
+						+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
+			System.out.println(tenNV);
+			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
+			txt_TenNhanVien.requestFocus();
+			return false;
+		}
+
+		try {
+			Date ngaySinh = new Date(dateCh_NgaySinh.getDate().getTime());
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_MONTH, -18);
+			java.util.Date chkNgaySinh = new java.util.Date(cal.getTimeInMillis());
+			if (!(ngaySinh.before(chkNgaySinh))) {
+				JOptionPane.showMessageDialog(null, "Nhân viên này chưa đủ 18 tuổi!");
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
+		}
+
+		if (!gt_Nam && !gt_Nu) {
+			JOptionPane.showMessageDialog(null, "Giới tính chưa được chọn!");
+			return false;
+		}
+
+		if (chucVu.equals(chonChucVu)) {
+			JOptionPane.showMessageDialog(null, "Chức vụ chưa được chọn!");
+			return false;
+		}
+
+		if (trangThai.equals(chonTrangThai)) {
+			JOptionPane.showMessageDialog(null, "Trạng thái chưa được chọn!");
+			return false;
+		}
+
+		if (soDienThoai.equals("")) {
+			txt_SoDienThoai.requestFocus();
+			JOptionPane.showMessageDialog(null, "Số điện thoại không được rỗng");
+			return false;
+		} else if (!(soDienThoai.length() > 0 && soDienThoai.matches("^(\\+84|0)(3|9|5|7|8)\\d{8}$"))) {
+			JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+			txt_SoDienThoai.requestFocus();
+			return false;
+		}
+
+		if (diaChi.equals("")) {
+			txt_DiaChi.requestFocus();
+			JOptionPane.showMessageDialog(null, "Địa chỉ không được rỗng");
+			return false;
+		} else if (!(diaChi.length() > 0 && diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
+			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+			txt_DiaChi.requestFocus();
+			return false;
+		}
+
+		if (cccd.equals("")) {
+			txt_CCCD.requestFocus();
+			JOptionPane.showMessageDialog(null, "Căn cước công dân không được rỗng");
+			return false;
+		} else if (!(cccd.length() > 0 && cccd.matches("^(([0-9]{9})|([0-9]{12}))$"))) {
+			JOptionPane.showMessageDialog(null, "CCCD / CMND không hợp lệ");
+			txt_CCCD.requestFocus();
+			return false;
+		}
+		return true;
 	}
 
 	public String chooseFileEvent(String typeFile) {
