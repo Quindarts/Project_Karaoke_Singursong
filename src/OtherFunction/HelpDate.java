@@ -1,19 +1,20 @@
 package OtherFunction;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class HelpDate {
 
-	public static String chuyenDateThanhString(Date date) {
+	public static String chuyenDateThanhString(Timestamp timestamp) {
 
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
 		String ngayThang;
 
-		if (date != null) {
-			ngayThang = simpleDateFormat.format(date);
+		if (timestamp != null) {
+			ngayThang = simpleDateFormat.format(timestamp);
 		} else {
 			ngayThang = "";
 		}

@@ -1,6 +1,7 @@
 package Entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
@@ -14,8 +15,8 @@ public class PhieuDatPhong {
 	private Phong phong;
 	private NhanVien nhanVien;
 	private KhachHang khachHang;
-	private Date thoiGianDatPhong;
-	private Date thoiGianNhanPhong;
+	private Timestamp thoiGianDatPhong;
+	private Timestamp thoiGianNhanPhong;
 	private double tienCoc;
 	
 	private String trangThai;
@@ -36,14 +37,14 @@ public class PhieuDatPhong {
 	 * @param moTa
 	 */
 	public PhieuDatPhong(String maPhieuDat, Phong phong, NhanVien nhanVien, KhachHang khachHang, java.util.Date tgDatPhong,
-			java.util.Date tgNhanPhong, double tienCoc, String trangThai, String moTa) {
+			java.sql.Timestamp tgNhanPhong, double tienCoc, String trangThai, String moTa) {
 		super();
 		this.maPhieuDat = maPhieuDat;
 		this.phong = phong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
-		this.thoiGianDatPhong =  (Date) tgDatPhong;
-		this.thoiGianNhanPhong =  (Date) tgNhanPhong;
+		this.thoiGianDatPhong =  (java.sql.Timestamp) tgDatPhong;
+		this.thoiGianNhanPhong =  (java.sql.Timestamp) tgNhanPhong;
 		this.tienCoc = tienCoc;
 		this.trangThai = trangThai;
 		this.moTa = moTa;
@@ -76,16 +77,16 @@ public class PhieuDatPhong {
 	public void setKhachHang(KhachHang khachHang) {
 		this.khachHang = khachHang;
 	}
-	public Date getThoiGianDatPhong() {
+	public Timestamp getThoiGianDatPhong() {
 		return thoiGianDatPhong;
 	}
-	public void setThoiGianDatPhong(Date thoiGianDatPhong) {
+	public void setThoiGianDatPhong(Timestamp thoiGianDatPhong) {
 		this.thoiGianDatPhong = thoiGianDatPhong;
 	}
-	public Date getThoiGianNhanPhong() {
+	public Timestamp getThoiGianNhanPhong() {
 		return thoiGianNhanPhong;
 	}
-	public void setThoiGianNhanPhong(Date thoiGianNhanPhong) {
+	public void setThoiGianNhanPhong(Timestamp thoiGianNhanPhong) {
 		this.thoiGianNhanPhong = thoiGianNhanPhong;
 	}
 	public double getTienCoc() {

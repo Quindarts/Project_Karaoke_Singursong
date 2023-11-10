@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.sql.Date;
 
@@ -36,14 +37,13 @@ public class PhieuDatPhong_DAO {
 				Phong phong = new Phong(rs.getString("maPhong"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
-				Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang,
 						thoiGianDatPhong, thoiGianNhanPhong, tienCoc, trangThai, moTa);
-				System.out.println(phieuDatPhong);
 				danhSachPhieuDatPhong.add(phieuDatPhong);
 
 			}
@@ -68,8 +68,8 @@ public class PhieuDatPhong_DAO {
 				Phong phong = new Phong(rs.getString("maPhong"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
-				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
@@ -104,8 +104,8 @@ public class PhieuDatPhong_DAO {
 				Phong phong = new Phong(rs.getString("maPhong"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
-				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
@@ -140,8 +140,8 @@ public class PhieuDatPhong_DAO {
 				Phong phong = new Phong(rs.getString("maPhong"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
-				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
@@ -176,8 +176,8 @@ public class PhieuDatPhong_DAO {
 				Phong phong = new Phong(rs.getString("maPhong"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
-				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
@@ -213,8 +213,167 @@ public class PhieuDatPhong_DAO {
 				Phong phong = new Phong(rs.getString("maPhong"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
-				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+				danhSachPhieuDatPhong.add(phieuDatPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachPhieuDatPhong;
+	}
+
+	public ArrayList<PhieuDatPhong> layPhieuDatPhong_TheoTenKhachHangvsSDT(String tenKH) {
+		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong "
+					+ "JOIN KhachHang ON PhieuDatPhong.maKhachHang = KhachHang.maKhachHang "
+					+ "WHERE KhachHang.hoTen LIKE ? OR KhachHang.soDienThoai LIKE ?";
+			;
+			statement = con.prepareStatement(sql);
+			statement.setString(1, "%" + tenKH + "%");
+			statement.setString(2, "%" + tenKH + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+				danhSachPhieuDatPhong.add(phieuDatPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachPhieuDatPhong;
+	}
+
+	public ArrayList<PhieuDatPhong> layPhieuDatPhong_TheoTenPhong(String tenP) {
+		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong "
+					+ "JOIN Phong ON PhieuDatPhong.maPhong = Phong.maPhong " + "WHERE Phong.tenPhong LIKE ?";
+			;
+			statement = con.prepareStatement(sql);
+			statement.setString(1, "%" + tenP + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+				danhSachPhieuDatPhong.add(phieuDatPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachPhieuDatPhong;
+	}
+	
+	public ArrayList<PhieuDatPhong> layPhieuDatPhong_TheoNgayNhan(String NgayNhan) {
+		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong WHERE thoiGianNhanPhong LIKE ?";
+			;
+			statement = con.prepareStatement(sql);
+			statement.setString(1, "%" + NgayNhan + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+				danhSachPhieuDatPhong.add(phieuDatPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachPhieuDatPhong;
+	}
+
+	public ArrayList<PhieuDatPhong> layPhieuDatPhongTuongDoi_TheoMaPhieuDatPhong(String ma) {
+		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong WHERE maPhieuDat LIKE ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, "%" + ma + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
@@ -246,8 +405,8 @@ public class PhieuDatPhong_DAO {
 			statement.setString(2, phieuDatPhong.getPhong().getMaPhong());
 			statement.setString(3, phieuDatPhong.getNhanVien().getMaNhanVien());
 			statement.setString(4, phieuDatPhong.getKhachHang().getMaKhachHang());
-			statement.setDate(5, phieuDatPhong.getThoiGianDatPhong());
-			statement.setDate(6, phieuDatPhong.getThoiGianNhanPhong());
+			statement.setTimestamp(5, phieuDatPhong.getThoiGianDatPhong());
+			statement.setTimestamp(6, phieuDatPhong.getThoiGianNhanPhong());
 			statement.setDouble(7, phieuDatPhong.getTienCoc());
 			statement.setString(8, phieuDatPhong.getTrangThai());
 			statement.setString(9, phieuDatPhong.getMoTa());
@@ -277,8 +436,8 @@ public class PhieuDatPhong_DAO {
 			statement.setString(1, phieuDatPhong.getPhong().getMaPhong());
 			statement.setString(2, phieuDatPhong.getNhanVien().getMaNhanVien());
 			statement.setString(3, phieuDatPhong.getKhachHang().getMaKhachHang());
-			statement.setDate(4, phieuDatPhong.getThoiGianDatPhong());
-			statement.setDate(5, phieuDatPhong.getThoiGianNhanPhong());
+			statement.setTimestamp(4, phieuDatPhong.getThoiGianDatPhong());
+			statement.setTimestamp(5, phieuDatPhong.getThoiGianNhanPhong());
 			statement.setDouble(6, phieuDatPhong.getTienCoc());
 			statement.setString(7, phieuDatPhong.getTrangThai());
 			statement.setString(8, phieuDatPhong.getMoTa());
@@ -296,6 +455,8 @@ public class PhieuDatPhong_DAO {
 		}
 		return n > 0;
 	}
+	
+	
 
 	public boolean HuyPhieuDatPhong(String maPDP) {
 		ConnectDB.getInstance();
@@ -303,7 +464,7 @@ public class PhieuDatPhong_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("UPDATE PhieuDatPhong SET TrangThai = 'Đã hủy' WHERE maPhieuDat = ?");
+			statement = con.prepareStatement("UPDATE PhieuDatPhong SET TrangThai = N'Đã hủy' WHERE maPhieuDat = ?");
 			statement.setString(1, maPDP);
 			n = statement.executeUpdate();
 		} catch (Exception e) {

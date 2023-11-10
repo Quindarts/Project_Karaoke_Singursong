@@ -40,13 +40,11 @@ public class HelpRamDomMa {
 		} else {
 			result = result + day + "" + month + "" + year + "" + "D";
 		}
-		System.out.println(result);
-
 		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.trim().length() - 3).equals("999")) {
 			if (maFromData.trim().substring(0, 10).equals(result.substring(0, 10))) {
 
-				String str_base = maFromData.substring(10);
-				
+				String str_base = maFromData.substring(11);
+				System.out.println(str_base);
 				String str_result  = "";
 				for (int i = 0; i < str_base.length(); i++) {
 					char c = str_base.charAt(i);

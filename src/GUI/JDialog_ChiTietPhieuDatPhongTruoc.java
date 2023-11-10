@@ -404,7 +404,7 @@ public class JDialog_ChiTietPhieuDatPhongTruoc extends JDialog {
 		lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 
 		txtMaPDP.setText(pdp.getMaPhieuDat());
-		txtLoaiPhong.setText(p.getLoaiPhong().getMaLoaiPhong());
+		txtLoaiPhong.setText(lp.getTenLoaiPhong());
 		txtNhanVien.setText(nv.getHoTen());
 		txtTenKH.setText(kh.getHoTen());
 		txtSoDienThoai.setText(kh.getSoDienThoai());

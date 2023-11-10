@@ -493,8 +493,8 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		txt__maPhong.setText(phong.getMaPhong());
 		txt__soDienThoai.setText(khachHang.getSoDienThoai());
 		txt__soGioHat.setText("5");
-		txt__thoiGianNhanPhong.setText(hDate.chuyenDateThanhString(hoaDon.getNgayLap()));
-		txt__thoiGianTraPhong.setText(hDate.chuyenDateThanhString(hoaDon.getThoiGianKetThuc()));
+//		txt__thoiGianNhanPhong.setText(hDate.chuyenDateThanhString(hoaDon.getNgayLap()));
+//		txt__thoiGianTraPhong.setText(hDate.chuyenDateThanhString(hoaDon.getThoiGianKetThuc()));
 		txt__tienCoc.setText("0");
 		txt__tienPhong.setText("400000");
 		txt__tongHoaDon.setText("500000");
