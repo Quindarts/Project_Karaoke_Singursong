@@ -1,3 +1,4 @@
+
 package GUI;
 
 import java.awt.EventQueue;
@@ -10,6 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import ConnectDB.ConnectDB;
 import DAO.LoaiPhong_DAO;
 import Entity.LoaiPhong;
 import OtherFunction.HelpValidate;
@@ -27,6 +29,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -46,7 +49,6 @@ public class Modal_ThemLoaiPhong extends JFrame {
 	private JTextArea txtA_Mota;
 	private JLabel img_show_panel;
 	private String pathImg = "";
-	private LoaiPhong_DAO DAO_LP;
 	private HelpValidate valiDate;
 
 	/**
@@ -58,6 +60,13 @@ public class Modal_ThemLoaiPhong extends JFrame {
 
 			public void run() {
 				try {
+					
+					try {
+						ConnectDB.getInstance().connect();
+						System.out.println("Connected!!!!");
+					}catch (SQLException e) {
+						e.printStackTrace();
+					}
 					Modal_ThemLoaiPhong frame = new Modal_ThemLoaiPhong();
 					FlatLightLaf.setup();
 					app = new Modal_ThemLoaiPhong();
@@ -247,18 +256,32 @@ public class Modal_ThemLoaiPhong extends JFrame {
 				String maLoaiPhong = txt_MaLoaiPhong.getText();
 				String tenLoaiPong = txt_TenLoaiPhong.getText();
 				int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-//				String hinhAnh = img_show_panel.getText();
 				String hinhA = pathImg;
 				double giaTien = Double.parseDouble(txt_GiaTien.getText());
 				String moTa = txtA_MoTa.getText();
-				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
-				System.out.println(loaiPhong);
+			
 				try {
-					DAO_LP.taoLoaiPhong(loaiPhong);
+					LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+					
+					if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) != null) {
+						JOptionPane.showMessageDialog(null, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
+						return ;
+					}
+					
+					LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
+					System.out.println(loaiPhong);
+					if (DAO_LP.taoLoaiPhong(loaiPhong) == false) {
+						JOptionPane.showMessageDialog(null, "Tạo loại phòng thất bại, vui lòng thử lại.");
+						return ;
+					}else {
+						JOptionPane.showMessageDialog(null, "Tạo loại phòng thành công.");
+					}
+					
+
 				} catch (Exception e2) {
-//					JOptionPane.showMessageDialog(null, "Trùng mã");
+
 				}
-				
+
 			}
 		});
 	}

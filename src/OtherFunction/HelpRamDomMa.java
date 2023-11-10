@@ -9,9 +9,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-
-
-
 public class HelpRamDomMa {
 
 	public static String taoMa(String tenBang, String maTao, String type) {
@@ -27,7 +24,6 @@ public class HelpRamDomMa {
 		int hour = currentTime.getHour();
 
 		ArrayList<String> column = maToDaTaBase(tenBang, maTao);
-		
 
 		if (!column.isEmpty()) {
 			maFromData = column.get(column.size() - 1);
@@ -44,15 +40,26 @@ public class HelpRamDomMa {
 		} else {
 			result = result + day + "" + month + "" + year + "" + "D";
 		}
+		System.out.println(result);
 
-		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.length() - 3).equals("999")) {
+		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.trim().length() - 3).equals("999")) {
 			if (maFromData.trim().substring(0, 10).equals(result.substring(0, 10))) {
-				if (result.charAt(10) == maFromData.trim().charAt(10)) {
-					int count = Integer.parseInt(maFromData.trim().substring(maFromData.trim().length() - 3)) + 1;
-					result = result + String.format("%03d", count);
-				} else {
-					result = result.concat("001");
+
+				String str_base = maFromData.substring(10);
+				
+				String str_result  = "";
+				for (int i = 0; i < str_base.length(); i++) {
+					char c = str_base.charAt(i);
+					if (c != '0') {
+						str_result = str_result + c;
+					}
+
 				}
+				int count = Integer.parseInt(str_result.trim()) + 1;
+				
+				result = result + String.format("%03d", count);
+			
+
 			} else {
 				result = result.concat("001");
 			}
@@ -64,36 +71,38 @@ public class HelpRamDomMa {
 	}
 
 	public static ArrayList<String> maToDaTaBase(String tenBang, String tenCot) {
-		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_Test";
+		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong";
 		String user = "sa";
 		String password = "230903";
 		String maHoaDon = "";
-		
-		 ArrayList<String> maCot = new ArrayList<>();
-        
-        try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
-        	String sql = "SELECT " + tenCot + " FROM " + tenBang;
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            ResultSet rs = preparedStatement.executeQuery();
 
-            while (rs.next()) {
-            	maHoaDon = rs.getString(tenCot);           	
-            	maCot.add(maHoaDon);		
-            }
-               
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+		ArrayList<String> maCot = new ArrayList<>();
+
+		try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
+			String sql = "SELECT " + tenCot + " FROM " + tenBang;
+			PreparedStatement preparedStatement = con.prepareStatement(sql);
+			ResultSet rs = preparedStatement.executeQuery();
+
+			while (rs.next()) {
+				maHoaDon = rs.getString(tenCot);
+				maCot.add(maHoaDon);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return maCot;
 	}
-	
+
 	public static void main(String[] args) {
 
 		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
 		String maPhieuDat = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
+		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
 
 		System.out.println(maHoaDon);
 		System.out.println(maPhieuDat);
+		System.out.println(maPhieuDat2);
 
 	}
 

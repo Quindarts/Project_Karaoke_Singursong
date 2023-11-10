@@ -14,12 +14,12 @@ public class DichVu {
 	private int soLuong;
 	private String donViTinh;
 	private double donGia;
-	private String trangThai;
+	private boolean trangThai;
 	public DichVu() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public DichVu(String maDichVu, String tenDichVu, int soLuong, String donViTinh, double donGia, String trangThai) {
+	public DichVu(String maDichVu, String tenDichVu, int soLuong, String donViTinh, double donGia, boolean trangThai) {
 		super();
 		this.maDichVu = maDichVu;
 		this.tenDichVu = tenDichVu;
@@ -62,10 +62,10 @@ public class DichVu {
 	public void setDonGia(double donGia) {
 		this.donGia = donGia;
 	}
-	public String getTrangThai() {
+	public boolean getTrangThai() {
 		return trangThai;
 	}
-	public void setTrangThai(String trangThai) {
+	public void setTrangThai(boolean trangThai) {
 		this.trangThai = trangThai;
 	}
 	@Override

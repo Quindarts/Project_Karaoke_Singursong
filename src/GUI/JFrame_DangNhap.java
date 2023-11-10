@@ -128,6 +128,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	private NhanVien_DAO NV_DAO;
 	private TaiKhoan taiKhoanDangNhap;
 	private TaiKhoan_DAO TK_DAO;
+	private JFrame_ThuNgan thuNgan;
 
 	/**
 	 * Create the frame.
@@ -179,10 +180,12 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		txtPassword.setBounds(133, 175, 219, 25);
 		panelLogin.add(txtPassword);
 		txtPassword.setColumns(10);
+		txtPassword.setText("123456");
 
 		txtUsername = new JTextField();
 		txtUsername.setColumns(10);
 		txtUsername.setBounds(133, 115, 219, 25);
+		txtUsername.setText("0935014256");
 		panelLogin.add(txtUsername);
 
 		btnLogin = new JButton("Đăng nhập");
@@ -265,6 +268,9 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 					System.out.println(nhanVienDangNhap.toString());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
 					System.out.println("Đăng nhập vào màn hình" + role);
+					thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
+					thuNgan.setVisible(true);
+					dispose();
 
 				}
 			}
@@ -321,5 +327,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		// TODO Auto-generated method stub
 
 	}
+	
+	
 
 }

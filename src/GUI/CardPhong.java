@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -22,6 +24,8 @@ import DAO.TrangThaiPhong_DAO;
 import Entity.LoaiPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
+import javax.swing.JCheckBox;
+import java.awt.Font;
 
 /**
  * CardPhong
@@ -30,8 +34,8 @@ import Entity.TrangThaiPhong;
  */
 public class CardPhong extends JPanel {
 	private Phong phong;
-	private int width = 157;
-	private int height = 157;
+	private int width = 150;
+	private int height = 150;
 
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
@@ -39,10 +43,13 @@ public class CardPhong extends JPanel {
 	private String hexColor_Blue4 = "#DBE4EE";
 
 	private LoaiPhong loaiP;
+	private boolean selectDatPhong;
+	private JCheckBox cbox_DatPhong;
 
 	/**
 	 * @param phong
 	 */
+
 	public CardPhong(Phong phong) {
 		this.phong = phong;
 
@@ -52,13 +59,35 @@ public class CardPhong extends JPanel {
 		 * tenPhong
 		 */
 		setBackground(Color.decode(hexColor_Blue4));
-		setLayout(new BorderLayout());
+		setLayout(null);
 
-		JLabel nameLabel = new JLabel(phong.getTenPhong());
-
+		JLabel nameLabel = new JLabel(phong.getMaPhong());
+		nameLabel.setBackground(new Color(5, 74, 145));
+		nameLabel.setBounds(0, 0, 150, 150);
+		nameLabel.setForeground(Color.decode(hexColor_Blue1));
+		nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		add(nameLabel, BorderLayout.CENTER);
+		add(nameLabel);
 
+		cbox_DatPhong = new JCheckBox("Đặt phòng này");
+		cbox_DatPhong.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		cbox_DatPhong.setForeground(new Color(51, 153, 255));
+		cbox_DatPhong.setBounds(0, 0, 150, 21);
+
+		System.out.println(phong.getTrangThaiPhong().getMaTrangThai());
+
+		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
+			add(cbox_DatPhong);
+			cbox_DatPhong.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						selectDatPhong = true;
+					} else {
+						selectDatPhong = false;
+					}
+				}
+			});
+		}
 		addMouseListener((MouseListener) new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -67,15 +96,15 @@ public class CardPhong extends JPanel {
 				}
 			}
 		});
-		
 
 	}
 
-	public CardPhong(Phong phong, int width, int height) {
-		super();
-		this.phong = phong;
-		this.width = width;
-		this.height = height;
+	public boolean isSelectDatPhong() {
+		return selectDatPhong;
+	}
+
+	public void setSelectDatPhong(boolean selectDatPhong) {
+		this.selectDatPhong = selectDatPhong;
 	}
 
 	public Phong getPhong() {
@@ -128,9 +157,14 @@ public class CardPhong extends JPanel {
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem xemThongTinMenuItem = new JMenuItem("Xem thông tin phòng");
 		JMenuItem chuyenPhongMenuItem = new JMenuItem("Chuyển phòng");
-
+		JMenuItem datPhongMenuItem = new JMenuItem("Đặt phòng hát ngay");
 		xemThongTinMenuItem.addActionListener(e1 -> {
 			JOptionPane.showMessageDialog(this, "Thông tin phòng...");
+		});
+		datPhongMenuItem.addActionListener(e1 -> {
+			JOptionPane.showMessageDialog(this, "Bạn có chắc chắn đặt phòng này?");
+			setSelectDatPhong(true);
+			cbox_DatPhong.setSelected(isSelectDatPhong());
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
@@ -139,6 +173,7 @@ public class CardPhong extends JPanel {
 		});
 		menu.add(xemThongTinMenuItem);
 		menu.add(chuyenPhongMenuItem);
+		menu.add(datPhongMenuItem);
 		menu.show(this, e.getX(), e.getY());
 	}
 }

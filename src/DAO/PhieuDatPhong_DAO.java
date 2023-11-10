@@ -5,14 +5,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.sql.Date;
 
 import ConnectDB.ConnectDB;
 import Entity.PhieuDatPhong;
+
 import Entity.Phong;
 import Entity.NhanVien;
 import Entity.KhachHang;
 
 public class PhieuDatPhong_DAO {
+
+//	private PhieuDatPhong phieuDatPhong;
 
 	public PhieuDatPhong_DAO() {
 		super();
@@ -32,14 +36,16 @@ public class PhieuDatPhong_DAO {
 				Phong phong = new Phong(rs.getString("maPhong"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
-				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
+				Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang,
 						thoiGianDatPhong, thoiGianNhanPhong, tienCoc, trangThai, moTa);
+				System.out.println(phieuDatPhong);
 				danhSachPhieuDatPhong.add(phieuDatPhong);
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -191,6 +197,44 @@ public class PhieuDatPhong_DAO {
 		return phieuDatPhong;
 	}
 
+	public ArrayList<PhieuDatPhong> layPhieuDatPhong_TheoTrangThaiPhieu(String ttp) {
+		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
+		PhieuDatPhong phieuDatPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM PhieuDatPhong WHERE trangThai = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, ttp);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Date thoiGianDatPhong = rs.getDate("thoiGianDatPhong");
+				java.sql.Date thoiGianNhanPhong = rs.getDate("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
+						thoiGianNhanPhong, tienCoc, trangThai, moTa);
+				danhSachPhieuDatPhong.add(phieuDatPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachPhieuDatPhong;
+	}
+
 	public boolean taoPhieuDatPhong(PhieuDatPhong phieuDatPhong) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -253,14 +297,14 @@ public class PhieuDatPhong_DAO {
 		return n > 0;
 	}
 
-	public boolean xoaPhieuDatPhong(PhieuDatPhong phieuDatPhong) {
+	public boolean HuyPhieuDatPhong(String maPDP) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("DELETE FROM PhieuDatPhong" + " WHERE maPhieuDat = ?");
-			statement.setString(1, phieuDatPhong.getMaPhieuDat());
+			statement = con.prepareStatement("UPDATE PhieuDatPhong SET TrangThai = 'Đã hủy' WHERE maPhieuDat = ?");
+			statement.setString(1, maPDP);
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -27,11 +27,11 @@ public class LoaiPhong_DAO {
 			while (rs.next()) {
 				String maLoaiPhong = rs.getString("maLoaiPhong");
 				String tenLoaiPhong = rs.getString("tenLoaiPhong");
-				int soLuongToiDa = rs.getInt("soLuongToiDa");
+				int soLuongKhachToiDa = rs.getInt("soLuongKhachToiDa");
 				Double giaTien = rs.getDouble("giaTien");
 				String hinhAnh = rs.getString("hinhAnh");
 				String moTa = rs.getString("moTa");
-				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, soLuongToiDa, giaTien, hinhAnh, moTa);
+				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, soLuongKhachToiDa, giaTien, hinhAnh, moTa);
 				danhSachLoaiPhong.add(loaiPhong);
 			}
 		} catch (Exception e) {
@@ -53,11 +53,43 @@ public class LoaiPhong_DAO {
 			while (rs.next()) {
 				String maLoaiPhong = rs.getString("maLoaiPhong");
 				String tenLoaiPhong = rs.getString("tenLoaiPhong");
-				int soLuongToiDa = rs.getInt("soLuongToiDa");
+				int soLuongKhachToiDa = rs.getInt("soLuongKhachToiDa");
 				Double giaTien = rs.getDouble("giaTien");
 				String hinhAnh = rs.getString("hinhAnh");
 				String moTa = rs.getString("moTa");
-				loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, soLuongToiDa, giaTien, hinhAnh, moTa);
+				loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, soLuongKhachToiDa, giaTien, hinhAnh, moTa);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return loaiPhong;
+	}
+	
+	public LoaiPhong layLoaiPhong_TheoTenLoaiPhong(String xtenLoaiPhong) {
+		LoaiPhong loaiPhong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM LoaiPhong WHERE tenLoaiPhong = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, xtenLoaiPhong);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maLoaiPhong = rs.getString("maLoaiPhong");
+				String tenLoaiPhong = rs.getString("tenLoaiPhong");
+				int soLuongKhachToiDa = rs.getInt("soLuongKhachToiDa");
+				Double giaTien = rs.getDouble("giaTien");
+				String hinhAnh = rs.getString("hinhAnh");
+				String moTa = rs.getString("moTa");
+				loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, soLuongKhachToiDa, giaTien, hinhAnh, moTa);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,7 +138,7 @@ public class LoaiPhong_DAO {
 		int n = 0;
 		try {
 			statement = con.prepareStatement(
-					"UPDATE LoaiPhong SET tenLoaiPhong = ?, soLuongToiDa = ?, giaTien = ?, hinhAnh = ?, moTa = ?"
+					"UPDATE LoaiPhong SET tenLoaiPhong = ?, soLuongKhachToiDa = ?, giaTien = ?, hinhAnh = ?, moTa = ?"
 							+ " WHERE maLoaiPhong = ?");		
 			statement.setString(1, loaiPhong.getTenLoaiPhong());
 			statement.setInt(2, loaiPhong.getSoLuongToiDa());

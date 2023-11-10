@@ -36,6 +36,5 @@
 	<classpathentry kind="lib" path="D:/IUH/Nam3_HK1/PhatTrienUngDung_Java/Exercises_Nhom09/SourceCode/KaraokeSingUrSong/libJAVA/twilio-java-sdk-7.0.0-rc-10.jar"/>
 	<classpathentry kind="lib" path="D:/IUH/Nam3_HK1/PhatTrienUngDung_Java/Exercises_Nhom09/SourceCode/KaraokeSingUrSong/libJAVA/woodstox-core-6.4.0.jar"/>
 	<classpathentry kind="lib" path="D:/IUH/Nam3_HK1/PhatTrienUngDung_Java/Exercises_Nhom09/SourceCode/KaraokeSingUrSong/libJAVA/xmlbeans-2.6.0.jar"/>
-
 	<classpathentry kind="output" path="bin"/>
 </classpath>

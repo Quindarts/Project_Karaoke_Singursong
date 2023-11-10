@@ -36,7 +36,7 @@ public class main extends JFrame {
 					//Connect Database
 					try {
 						ConnectDB.getInstance().connect();
-						System.out.println("Connected!!!!");
+//						System.out.println("Connected!!!!");
 					}catch (SQLException e) {
 						e.printStackTrace();
 					}
@@ -48,12 +48,11 @@ public class main extends JFrame {
 					app.setVisible(true);
 
 
-					// DEMO component
+//					DEMO component
 //					Components component_app = new Components();
 //					component_app.setVisible(true);
 					
-					thuNgan = new JFrame_ThuNgan();
-					thuNgan.setVisible(true);
+				
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

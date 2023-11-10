@@ -14,6 +14,7 @@ import Entity.KhachHang;
 import OtherFunction.HelpRamDomKH;
 import OtherFunction.HelpValidate;
 
+
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -25,6 +26,7 @@ import javax.swing.JTextField;
 import java.awt.FlowLayout;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.awt.Component;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -32,11 +34,27 @@ import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
 
 public class Modal_ThemKhachHang extends JFrame implements ActionListener {
-
+	
+	
+	/**
+	 * Color
+	 */
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
+	
+	
 	private JPanel contentPane;
 	private JTextField txt__MaKH;
 	private JTextField txt__TenKH;
@@ -62,15 +80,18 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		DAO_KH = new KhachHang_DAO();
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 950, 400);
+		setBounds(100, 100, 950, 336);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		contentPane = new JPanel();
+		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setBounds(5, 0, 926, 358);
+		panel_1.setBounds(5, 0, 926, 286);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -79,71 +100,79 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		//
 		JLabel lbl__NgaySinh = new JLabel("Ngày Sinh");
 		lbl__NgaySinh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl__NgaySinh.setBounds(43, 159, 96, 27);
+		lbl__NgaySinh.setBounds(43, 150, 96, 25);
 		panel_1.add(lbl__NgaySinh);
 
 		JLabel lbl__gioiTinh = new JLabel("Giới Tính");
 		lbl__gioiTinh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl__gioiTinh.setBounds(43, 206, 70, 27);
+		lbl__gioiTinh.setBounds(43, 200, 70, 27);
 		panel_1.add(lbl__gioiTinh);
 
 		lbl__TenKH = new JLabel("Tên Khách Hàng");
 		lbl__TenKH.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl__TenKH.setBounds(43, 111, 119, 25);
+		lbl__TenKH.setBounds(43, 110, 119, 25);
 		panel_1.add(lbl__TenKH);
 
 		txt__MaKH = new JTextField();
+
 		txt__MaKH.setEditable(false);
 		txt__MaKH.setBounds(172, 67, 255, 25);
 		panel_1.add(txt__MaKH);
 		txt__MaKH.setColumns(10);
 
 		txt__TenKH = new JTextField();
-		txt__TenKH.setBounds(172, 112, 255, 25);
+		txt__TenKH.setBounds(172, 110, 255, 25);
 		panel_1.add(txt__TenKH);
 		txt__TenKH.setColumns(50);
 
 		JLabel lbl__MaKH = new JLabel("Mã Khách Hàng");
 		lbl__MaKH.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl__MaKH.setBounds(43, 61, 119, 35);
+		lbl__MaKH.setBounds(43, 70, 119, 25);
 		panel_1.add(lbl__MaKH);
 
 		txt__SDT = new JTextField();
-		txt__SDT.setBounds(604, 71, 255, 25);
+		txt__SDT.setBounds(604, 70, 255, 25);
 		panel_1.add(txt__SDT);
 
 		txt__DiaChi = new JTextField();
-		txt__DiaChi.setBounds(604, 116, 255, 25);
+		txt__DiaChi.setBounds(604, 110, 255, 25);
 		panel_1.add(txt__DiaChi);
 		txt__DiaChi.setColumns(10);
 
 		btn__exit = new JButton("Thoát");
-		btn__exit.setBounds(763, 304, 96, 30);
+		btn__exit.setForeground(new Color(255, 255, 255));
+		btn__exit.setBackground(Color.decode(hexColor_Blue2));
+		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btn__exit.setBounds(739, 233, 125, 35);
 		panel_1.add(btn__exit);
 
 		JLabel lbl__GhiChu = new JLabel("Ghi Chú");
 		lbl__GhiChu.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl__GhiChu.setBounds(493, 155, 60, 37);
+		lbl__GhiChu.setBounds(493, 150, 60, 25);
 		panel_1.add(lbl__GhiChu);
 
 		btn__Save = new JButton("Lưu");
-		btn__Save.setBounds(642, 304, 96, 30);
+		btn__Save.setForeground(new Color(255, 255, 255));
+		btn__Save.setBackground(Color.decode(hexColor_Green));
+		btn__Save.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btn__Save.setBounds(604, 233, 125, 35);
 		panel_1.add(btn__Save);
 
 		JLabel lbl__DiaChi = new JLabel("Địa Chỉ");
 		lbl__DiaChi.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl__DiaChi.setBounds(493, 115, 49, 25);
+		lbl__DiaChi.setBounds(493, 110, 49, 25);
 		panel_1.add(lbl__DiaChi);
 
 		JLabel lbl__SDT = new JLabel("Số Điện Thoại");
 		lbl__SDT.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl__SDT.setBounds(489, 67, 109, 30);
+		lbl__SDT.setBounds(490, 70, 109, 25);
 		panel_1.add(lbl__SDT);
+
 
 		rdbt__nu = new JRadioButton("Nữ");
 		rdbt__nu.setBackground(new Color(255, 255, 255));
 		rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		rdbt__nu.setBounds(290, 209, 70, 21);
+		rdbt__nu.setBounds(290, 200, 70, 21);
 		panel_1.add(rdbt__nu);
 		btngr__gioiTinh.add(rdbt__nu);
 		
@@ -158,10 +187,12 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nam.setActionCommand("Nam");
 		rdbt__nu.setActionCommand("Nu");
 
-		JLabel lbl__tieuDe = new JLabel("Thêm Khách Hàng Mới");
+		JLabel lbl__tieuDe = new JLabel("THÔNG TIN KHÁCH HÀNG");
+		lbl__tieuDe.setForeground(Color.decode(hexColor_Blue1));;
 		lbl__tieuDe.setBounds(43, 10, 849, 39);
 		panel_1.add(lbl__tieuDe);
-		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 16));
+		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 17));
+
 
 		date_NgaySinh = new JDateChooser();
 		date_NgaySinh.setDateFormatString("yyyy-MM-dd");
@@ -184,6 +215,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
+		
 	}
 
 	public void setModal_ThemKhachHang(String maKH, String tenKH, String gioiTinh, String ngaySinh, String soDienThoai,
@@ -223,7 +255,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		if (o.equals(btn__exit)) {
 			setVisible(false);
 		}
+		
 	}
+	
+
+	
 
 	public void themKhachHang() {
 		String tenKhachHang = txt__TenKH.getText();
@@ -238,6 +274,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 		KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong, ghiChu);
 		if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
+			System.out.println(maKhachHang);
 			try {
 				DAO_KH.taoKhachHang(kh);
 				JOptionPane.showMessageDialog(null, "Thêm khách hàng " + tenKhachHang + " thành công!");
@@ -252,12 +289,9 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		}
 	}
 	
+
 	public void capNhatKhacHang() {
-		String tenKhachHang = txt__TenKH.getText();
-		String diaChi = txt__DiaChi.getText();
-		String sdt = txt__SDT.getText();
-		java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
-		String ghiChu = txtA__GhiChu.getText();
+
 		HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
 		String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
 		txt__MaKH.setText(maKhachHang);
@@ -279,3 +313,4 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		}
 	}
 }
+

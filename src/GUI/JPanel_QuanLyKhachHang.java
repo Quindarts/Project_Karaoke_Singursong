@@ -34,6 +34,7 @@ import Entity.KhachHang;
 import Entity.Phong;
 
 import javax.swing.JButton;
+import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -41,8 +42,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
+
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -52,10 +55,12 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.JCheckBox;
 import com.toedter.calendar.JDateChooser;
 
-public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
+
+public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 
 	private Modal_ThemKhachHang modal_ThemKhachHang;
 
@@ -70,7 +75,9 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
+
 	private JTable table_KhachHang;
+
 	private JTextField txt_TimKiem;
 	private KhachHang_DAO DAO_KH;
 	private ArrayList<KhachHang> dsKH;
@@ -97,6 +104,11 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 	private JButton btnTimKiem;
 
 	private ButtonGroup btnGr_TimTheoLoai;
+
+
+	private JButton btnThemKhachHang;
+
+
 
 	/**
 	 * Rounded JPanel
@@ -142,7 +154,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 			g2d.fill(roundRect);
 			g2d.setColor(borderColor);
 			g2d.draw(roundRect);
-
 			g2d.dispose();
 		}
 
@@ -179,6 +190,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 
 		table_KhachHang = new JTable();
 		table_KhachHang.setBackground(Color.WHITE);
+
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		table_KhachHang.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
 			/**
@@ -191,12 +203,15 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 				return false; // Đặt tất cả các ô không thể chỉnh sửa
 			}
 		});
+		
+
 
 		table_KhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 20, 1019, 615);
 		scrollPane.add(table_KhachHang);
 		scrollPane.setViewportView(table_KhachHang);
+
 		panel_Table.add(scrollPane);
 
 		DAO_KH = new KhachHang_DAO();
@@ -204,6 +219,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 		table_KhachHang.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+
 				if (e.getClickCount() == 2) {
 					int row = table_KhachHang.getSelectedRow();
 //	            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
@@ -222,6 +238,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 
 				}
 			}
+			
+			
 
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -239,6 +257,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 			public void mouseExited(MouseEvent e) {
 			}
 		});
+		
 
 		JPanel pnl_Loc = new JPanel();
 		pnl_Loc.setBackground(Color.WHITE);
@@ -390,6 +409,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 
 		btnXoa = new JButton("Xóa");
 		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
+
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		btnXoa.setBackground(Color.decode(hexColor_Red));
@@ -403,7 +423,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 		btnLamMoi.setBackground(Color.LIGHT_GRAY);
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
-		
+
 		txt_TimKiem = new JTextField();
 		txt_TimKiem.setBounds(545, 1, 223, 34);
 		panel.add(txt_TimKiem);
@@ -411,11 +431,29 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 
 		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setBounds(415, 1, 123, 35);
+
 		panel.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/search.png")));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
 		btnTimKiem.setForeground(Color.WHITE);
+
+
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+		btnTimKiem.addActionListener(new ActionListener() {
+
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				if (rdBtn_TimTheoMaKH.isSelected()) {
+					TimKhachHang_TheoMa();
+				}
+				if (rdBtn_TimTheoSoDT.isSelected()) {
+					TimKhachHang_TheoSoDT();
+				}
+			}
+		});
 
 		rdBtn_TimTheoMaKH = new JRadioButton("Mã khách hàng");
 		rdBtn_TimTheoMaKH.setFont(new Font("Segoe UI", Font.PLAIN, 13));
@@ -442,17 +480,19 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 		btnXoa.addActionListener(this);
 		
 		DocDuLieu();
-
 	}
+
 
 	public void XoaDuLieuTrenTable() {
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		model.getDataVector().removeAllElements();
 	}
 
+
 	public void DocDuLieu() {
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		model.getDataVector().removeAllElements();
+	
 		try {
 			dsKH = DAO_KH.layTatCaKhachHang();
 			if (dsKH != null) {
@@ -461,8 +501,10 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 					Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
 							kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
 					model.addRow(rowData);
-				});
+					table_KhachHang.setModel(model);
+				});	
 			}
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không thể đọc dữ liệu");
 		}
@@ -481,6 +523,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 			JOptionPane.showMessageDialog(null, "Xóa thất bại");
 		}
 	}
+
 
 	public void TimKhachHang_TheoMa() {
 		model.getDataVector().removeAllElements();
@@ -516,6 +559,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 		}
 	}
 
+<<<<<<< HEAD
 	public void LocDuLieu() {
 		boolean ketQuaLoc = false;
 		int loc_tuoiTu, loc_tuoiDen; // Lấy tuổi
@@ -601,5 +645,4 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener{
 			LocDuLieu();
 		}
 	}
-
 }

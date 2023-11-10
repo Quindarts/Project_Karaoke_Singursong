@@ -3,11 +3,14 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import ConnectDB.ConnectDB;
 import Entity.Phong;
+import Entity.DichVu;
 import Entity.LoaiPhong;
 import Entity.TrangThaiPhong;
 
@@ -27,12 +30,11 @@ public class Phong_DAO {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
-				
+
 				String maPhong = rs.getString("maPhong");
 				String tenPhong = rs.getString("tenPhong");
 				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
-				
-				
+
 				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
 				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
 				String viTriPhong = rs.getString("viTriPhong");
@@ -40,7 +42,7 @@ public class Phong_DAO {
 				String tinhTrangPhong = rs.getString("tinhTrangPhong");
 				Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
 						tinhTrangPhong);
-				
+
 				danhSachPhong.add(phong);
 			}
 		} catch (Exception e) {
@@ -83,7 +85,7 @@ public class Phong_DAO {
 		}
 		return phong;
 	}
-	
+
 	public Phong timPhong_TheoMaLoaiPhong(String maLoaiPh) {
 		Phong phong = null;
 		ConnectDB.getInstance();
@@ -153,7 +155,7 @@ public class Phong_DAO {
 		}
 		return phong;
 	}
-	
+
 	public boolean taoPhong(Phong phong) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -237,4 +239,58 @@ public class Phong_DAO {
 		}
 		return n > 0;
 	}
+
+	public int soLuongPhong() {
+		Connection con = new ConnectDB().getConnection();
+		int dem = 0;
+		try {
+			PreparedStatement statement = con.prepareStatement("select count(maPhong) as Dem from Phong");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				dem = rs.getInt("Dem");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return dem;
+	}
+
+	public ArrayList<Phong> phanTrangPhong(int fn, int ln) {
+		Connection con = new ConnectDB().getConnection();
+		ArrayList<Phong> danhSachPhong = new ArrayList<Phong>();
+		PreparedStatement statement = null;
+
+		String sql = "select *from(select ROW_NUMBER() over (order by maPhong)as STT,maPhong,tenPhong,maLoaiPhong,maTrangThai,ngayTaoPhong,viTriPhong,ghiChu,tinhTrangPhong from Phong) as PhanTrang where PhanTrang.STT Between ? and ?";
+
+		try {
+			statement = con.prepareStatement(sql);
+			statement.setInt(1, fn);
+			statement.setInt(2, ln);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String tenPhong = rs.getString("tenPhong");
+				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+
+				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
+				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
+				String viTriPhong = rs.getString("viTriPhong");
+				String ghiChu = rs.getString("ghiChu");
+				String tinhTrangPhong = rs.getString("tinhTrangPhong");
+				Phong phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
+						tinhTrangPhong);
+
+				danhSachPhong.add(phong);
+			}
+			statement.close();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+
+		}
+
+		return danhSachPhong;
+
+	}
+
 }

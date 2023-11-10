@@ -78,7 +78,7 @@ public class ThongTinDichVu_DAO {
 		}
 		return thongTinDichVu;
 	}
-	
+
 	public ThongTinDichVu timThongTinDichVu_TheoMaDichVu(String maDv) {
 		ThongTinDichVu thongTinDichVu = null;
 		ConnectDB.getInstance();
@@ -143,7 +143,7 @@ public class ThongTinDichVu_DAO {
 		return n > 0;
 	}
 
-	public boolean capNhatThongTinDichVu(ThongTinDichVu thongTinDichVu) {
+	public int capNhatThongTinDichVu(ThongTinDichVu thongTinDichVu) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -171,18 +171,39 @@ public class ThongTinDichVu_DAO {
 				e2.printStackTrace();
 			}
 		}
+
+		return n;
+	}
+
+	public boolean xoaThongTinDichVu_TheoMaDichVu(String maDichVu) {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		int n = 0;
+		try {
+			statement = con.prepareStatement("DELETE FROM ThongTinDichVu" + " WHERE maDichVu = ?");
+			statement.setString(1, maDichVu);
+			n = statement.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+		}
 		return n > 0;
 	}
-	
+
 	public boolean xoaThongTinDichVu(ThongTinDichVu thongTinDichVu) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement(
-					"DELETE FROM ThongTinDichVu"
-							+ " WHERE maThongTinDichVu = ?");
+			statement = con.prepareStatement("DELETE FROM ThongTinDichVu" + " WHERE maThongTinDichVu = ?");
 			statement.setString(1, thongTinDichVu.getMaThongTinDichVu());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
