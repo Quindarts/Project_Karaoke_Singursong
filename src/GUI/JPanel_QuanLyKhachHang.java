@@ -34,7 +34,6 @@ import Entity.KhachHang;
 import Entity.Phong;
 
 import javax.swing.JButton;
-import javax.swing.AbstractButton;
 import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
@@ -42,10 +41,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
-
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -55,12 +52,10 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.JCheckBox;
 import com.toedter.calendar.JDateChooser;
 
-
-public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
+public class JPanel_QuanLyKhachHang extends JPanel {
 
 	private Modal_ThemKhachHang modal_ThemKhachHang;
 
@@ -75,9 +70,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
-
 	private JTable table_KhachHang;
-
 	private JTextField txt_TimKiem;
 	private KhachHang_DAO DAO_KH;
 	private ArrayList<KhachHang> dsKH;
@@ -91,17 +84,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
-	private Date ngaySinh_Tu;
-	private Date ngaySinh_Den;
 	private ButtonGroup btnGr_LocTheoGioiTinh;
-	private Date chkNgaySinh = new Date();
-	private Date ngaySinh = new Date();
-	long khoangTuoi;
-
-
-	private JButton btnThemKhachHang;
-
-	private AbstractButton btnThem;
 
 
 	/**
@@ -148,6 +131,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 			g2d.fill(roundRect);
 			g2d.setColor(borderColor);
 			g2d.draw(roundRect);
+
 			g2d.dispose();
 		}
 
@@ -184,7 +168,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 
 		table_KhachHang = new JTable();
 		table_KhachHang.setBackground(Color.WHITE);
-
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		table_KhachHang.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
 			/**
@@ -197,15 +180,12 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 				return false; // Đặt tất cả các ô không thể chỉnh sửa
 			}
 		});
-		
-
 
 		table_KhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 20, 1019, 615);
 		scrollPane.add(table_KhachHang);
 		scrollPane.setViewportView(table_KhachHang);
-
 		panel_Table.add(scrollPane);
 
 		DAO_KH = new KhachHang_DAO();
@@ -213,7 +193,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		table_KhachHang.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
 				if (e.getClickCount() == 2) {
 					int row = table_KhachHang.getSelectedRow();
 //	            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
@@ -232,8 +211,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 
 				}
 			}
-			
-			
 
 			@Override
 			public void mousePressed(MouseEvent e) {
@@ -251,7 +228,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 			public void mouseExited(MouseEvent e) {
 			}
 		});
-		
 
 		JPanel pnl_Loc = new JPanel();
 		pnl_Loc.setBackground(Color.WHITE);
@@ -386,23 +362,42 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		txt_TuoiTu.setBounds(40, 38, 70, 19);
 		pnl_Loc_TheoTuoi.add(txt_TuoiTu);
 
+		JButton btnLoc = new JButton("Lọc");
+		btnLoc.setForeground(Color.WHITE);
+		btnLoc.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btnLoc.setBackground(new Color(62, 124, 177));
+		btnLoc.setBounds(73, 570, 123, 35);
+		pnl_Loc.add(btnLoc);
+		btnLoc.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LocDuLieu();
+			}
+		});
 
+		JButton btnThem = new JButton("Thêm");
+		btnThem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
+		btnThem.setForeground(Color.WHITE);
+		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnThem.setBackground(Color.decode(hexColor_Green));
+		btnThem.setBounds(10, 0, 125, 35);
+		panel.add(btnThem);
 
-//		btnThem.addActionListener(new ActionListener() {
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				modal_ThemKhachHang.setVisible(true);
-//			}
-//		});
+		btnThem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				modal_ThemKhachHang.setVisible(true);
+			}
+		});
 
 		JButton btnXoa = new JButton("Xóa");
 		btnXoa.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				XoaKhachHang();
-//				DocDuLieu();
+				DocDuLieu();
 			}
 		});
-		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/trash.png")));
+		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/add.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		btnXoa.setBackground(Color.decode(hexColor_Red));
@@ -417,6 +412,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
 		btnLamMoi.addActionListener(new ActionListener() {
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				DocDuLieu();
@@ -429,16 +425,13 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		txt_TimKiem.setColumns(10);
 
 		JButton btnTimKiem = new JButton("Tìm kiếm");
-		btnTimKiem.setBounds(415, 0, 123, 35);
+		btnTimKiem.setBounds(415, 1, 123, 35);
 		panel.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyKhachHang.class.getResource("/icon/search.png")));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
 		btnTimKiem.setForeground(Color.WHITE);
-
-
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		btnTimKiem.addActionListener(new ActionListener() {
-
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -471,19 +464,17 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
 
 		DocDuLieu();
-	}
 
+	}
 
 	public void XoaDuLieuTrenTable() {
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		model.getDataVector().removeAllElements();
 	}
 
-
 	public void DocDuLieu() {
 		model = (DefaultTableModel) table_KhachHang.getModel();
 		model.getDataVector().removeAllElements();
-	
 		try {
 			dsKH = DAO_KH.layTatCaKhachHang();
 			if (dsKH != null) {
@@ -492,10 +483,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 					Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
 							kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
 					model.addRow(rowData);
-					table_KhachHang.setModel(model);
-				});	
+				});
 			}
-			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không thể đọc dữ liệu");
 		}
@@ -514,7 +503,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Xóa thất bại");
 		}
 	}
-
 
 	public void TimKhachHang_TheoMa() {
 		model.getDataVector().removeAllElements();
@@ -549,8 +537,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
-
-
 
 
 	public void LocDuLieu() {
@@ -612,19 +598,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener {
 	    }
 	}
 
-
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	public void setJPanel_QuanLyKhachHang(boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 }
