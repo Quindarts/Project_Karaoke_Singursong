@@ -276,7 +276,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		chcbx_Nu.setBounds(72, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nu);
 		chcbx_Nu.addItemListener(this);
-		
+
 		chcbx_TatCa = new JCheckBox("Tất cả");
 		chcbx_TatCa.setBackground(new Color(255, 255, 255));
 		chcbx_TatCa.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -427,7 +427,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		btnGr_TimTheoLoai = new ButtonGroup();
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoMaKH);
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
-		
+
 		DocDuLieu();
 	}
 
@@ -462,10 +462,14 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		String maKhachHang = model.getValueAt(row, 0).toString();
 		KhachHang khachHang = new KhachHang(maKhachHang);
 		try {
-			String tenKhachHang = DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang).getHoTen();
-			DAO_KH.xoaKhachHang(khachHang);
-			JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenKhachHang + "thành công");
-			model.removeRow(row);
+			int t = JOptionPane.showConfirmDialog(null, "Xác nhận xóa khách hàng?", "Xác nhận",
+					JOptionPane.YES_NO_OPTION);
+			if (t == JOptionPane.YES_OPTION) {
+				String tenKhachHang = DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang).getHoTen();
+				DAO_KH.xoaKhachHang(khachHang);
+				JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenKhachHang + "thành công");
+				model.removeRow(row);
+			}
 		} catch (Exception e2) {
 			JOptionPane.showMessageDialog(null, "Xóa thất bại");
 		}
@@ -504,8 +508,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
-	
-	public void LamMoiBoLoc () {
+
+	public void LamMoiBoLoc() {
 		txt_DiemThuongDen.setText("");
 		txt_DiemThuongTu.setText("");
 		txt_TimKiem.setText("");
@@ -548,10 +552,10 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 
 		model.getDataVector().removeAllElements();
 		boolean ketQuaLoc = false;
-		
+
 		for (KhachHang kh : DAO_KH.layTatCaKhachHang()) {
 			boolean kiemTra = true;
-			
+
 			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
 			Calendar ngayHienTai = Calendar.getInstance();
 			Calendar cal = Calendar.getInstance();
@@ -562,15 +566,15 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 			if ((chcbx_Nam.isSelected() && !gender.equals("Nam")) || (chcbx_Nu.isSelected() && !gender.equals("Nữ"))) {
 				kiemTra = false; // Kiểm tra giới tính được chọn
 			}
-			
+
 			if (tuoi < loc_tuoiTu || tuoi > loc_tuoiDen) {
 				kiemTra = false; // Kiểm tra độ tuổi được nhập
-	        }
-			
+			}
+
 			if ((loc_diemThuongTu > diemThuong || diemThuong > loc_diemThuongDen)) {
 				kiemTra = false; // Kiểm tra điểm thưởng được nhập
 			}
-			
+
 			if (kiemTra) {
 				Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
 						kh.getSoDienThoai(), diemThuong, kh.getGhiChu() };
@@ -588,17 +592,17 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
-		if(o.equals(btnThem)) {
+		if (o.equals(btnThem)) {
 			modal_ThemKhachHang.setVisible(true);
 		}
-		if(o.equals(btnXoa)) {
+		if (o.equals(btnXoa)) {
 			XoaKhachHang();
 		}
-		if(o.equals(btnLamMoi)) {
+		if (o.equals(btnLamMoi)) {
 			DocDuLieu();
 			LamMoiBoLoc();
 		}
-		if(o.equals(btnLoc)) {
+		if (o.equals(btnLoc)) {
 			LocDuLieu();
 		}
 	}
@@ -612,9 +616,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 		Object o = e.getItem();
-		if(o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))	LocDuLieu();
+		if (o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))
+			LocDuLieu();
 	}
 
-
-	
 }

@@ -300,18 +300,22 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
 					ghiChu);
-			if (DAO_KH.capNhatKhachHang(kh)) {
-				try {
-					DAO_KH.capNhatKhachHang(kh);
-					JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
-					setVisible(false);
-				} catch (Exception e2) {
-					// TODO: handle exception
-					JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " Không đã tồn tại!");
+			int t = JOptionPane.showConfirmDialog(null, "Xác nhận cập nhật khách hàng?", "Xác nhận",
+					JOptionPane.YES_NO_OPTION);
+			if (t == JOptionPane.YES_OPTION) {
+				if (DAO_KH.capNhatKhachHang(kh)) {
+					try {
+						DAO_KH.capNhatKhachHang(kh);
+						JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
+						setVisible(false);
+					} catch (Exception e2) {
+						// TODO: handle exception
+						JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " Không đã tồn tại!");
 
+				}
 			}
 		}
 	}
@@ -324,17 +328,17 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		boolean gt_Nu = rdbt__nu.isSelected();
 		String ghiChu = txtA__GhiChu.getText().trim();
 
-//		if (txt__TenKH.equals("")) {
-//			txt__TenKH.requestFocus();
-//			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
-//			return false;
-//		} else if (!(tenKH.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
-//				+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
-//				+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
-//			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
-//			txt__TenKH.requestFocus();
-//			return false;
-//		}
+		if (txt__TenKH.equals("")) {
+			txt__TenKH.requestFocus();
+			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
+			return false;
+		} else if (!(tenKH.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
+				+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
+				+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
+			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
+			txt__TenKH.requestFocus();
+			return false;
+		}
 
 		try {
 			Date ngaySinh = new Date(date_NgaySinh.getDate().getTime());

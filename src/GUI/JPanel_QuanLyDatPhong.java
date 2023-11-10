@@ -260,7 +260,6 @@ public class JPanel_QuanLyDatPhong extends JPanel {
 		lblSDT.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
 		txtTenKhachHang = new JTextField();
-
 		txtTenKhachHang.setEnabled(false);
 		txtTenKhachHang.setBounds(157, 47, 241, 25);
 		panel_TTKH.add(txtTenKhachHang);
