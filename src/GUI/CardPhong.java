@@ -53,11 +53,8 @@ public class CardPhong extends JPanel {
 	private String hexColor_Blue3 = "#81A4CD";
 	private String hexColor_Blue4 = "#DBE4EE";
 
-	
 	private boolean selectDatPhong;
 	private JCheckBox cbox_DatPhong;
-	
-
 
 	private LoaiPhong loaiP;
 	private KhachHang kh;
@@ -79,7 +76,6 @@ public class CardPhong extends JPanel {
 	private LoaiPhong_DAO DAO_LP;
 	private TrangThaiPhong_DAO DAO_TTP;
 	private TrangThaiPhong_DAO dao_TrangThaiPhong;
-
 
 	/**
 	 * @param phong
@@ -200,12 +196,11 @@ public class CardPhong extends JPanel {
 		dsPhong = DAO_P.layTatCaPhong();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
 
-
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem xemThongTinMenuItem = new JMenuItem("Xem thông tin phòng");
 		JMenuItem chuyenPhongMenuItem = new JMenuItem("Chuyển phòng");
 		JMenuItem datPhongMenuItem = new JMenuItem("Đặt phòng hát ngay");
-		
+
 		datPhongMenuItem.addActionListener(e1 -> {
 			JOptionPane.showMessageDialog(this, "Bạn có chắc chắn đặt phòng này?");
 			setSelectDatPhong(true);
@@ -216,27 +211,27 @@ public class CardPhong extends JPanel {
 				phong = DAO_P.timPhong_TheoMaPhong(phong.getMaPhong());
 				String anhPhong = "";
 				String tenPhong = phong.getTenPhong();
-				String viTriPhong = phong.getViTriPhong();		
+				String viTriPhong = phong.getViTriPhong();
 				String tinhTrang = phong.getTinhTrangPhong();
-				
+
 				LoaiPhong loaiP = null;
 				loaiP = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
 				String tenLoaiPhong = loaiP.getTenLoaiPhong();
-				String giaPhong = loaiP.getGiaTien()+"";			
-				
+				String giaPhong = loaiP.getGiaTien() + "";
+
 				TrangThaiPhong trThaiP = null;
 				trThaiP = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(phong.getTrangThaiPhong().getMaTrangThai());
 				String trangThaiPhong = trThaiP.getTenTrangThai();
 				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong();
 				thongTinPhong.setVisible(true);
-				thongTinPhong.SetModal_XemThongTinPhong(anhPhong,tenPhong , tenLoaiPhong, viTriPhong, giaPhong, trangThaiPhong, tinhTrang);
+				thongTinPhong.SetModal_XemThongTinPhong(anhPhong, tenPhong, tenLoaiPhong, viTriPhong, giaPhong,
+						trangThaiPhong, tinhTrang);
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
-			
-			
+
 		});
-		chuyenPhongMenuItem.addActionListener(e1 -> {		
+		chuyenPhongMenuItem.addActionListener(e1 -> {
 			try {
 				if (dsPhieuDatPhong != null)
 					for (PhieuDatPhong pdp : dsPhieuDatPhong) {
@@ -251,8 +246,9 @@ public class CardPhong extends JPanel {
 					}
 				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong();
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(phieu.getThoiGianNhanPhong(), phieu.getMaPhieuDat(), tenNV, tenKH, sdtKH);
-				
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(phieu.getThoiGianNhanPhong(), phieu.getMaPhieuDat(), tenNV,
+						sdtKH, tenKH);
+
 				// Cập nhật lại trạng thái phòng
 				TrangThaiPhong trThaiPh = new TrangThaiPhong();
 				trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");

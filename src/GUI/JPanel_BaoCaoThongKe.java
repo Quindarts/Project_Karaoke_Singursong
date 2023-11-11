@@ -21,8 +21,12 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import DAO.HoaDon_DAO;
 import DAO.KhachHang_DAO;
+import DAO.NhanVien_DAO;
+import Entity.HoaDon;
 import Entity.KhachHang;
+import Entity.NhanVien;
 import Entity.Phong;
 
 import javax.swing.JButton;
@@ -54,15 +58,18 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
-	
-	private JTable table_KhachHang;
+
+	private JTable table_HoaDon;
 	private JTextField textField;
 
 	private JButton btnThemKhachHang;
 
 	private KhachHang_DAO DAO_KH;
+	private HoaDon_DAO DAO_HD;
+	private NhanVien_DAO DAO_NV;
 	private ArrayList<KhachHang> dsKH;
-
+	private ArrayList<HoaDon> dsHD;
+	private ArrayList<NhanVien> dsNV;
 
 	/**
 	 * Rounded JPanel
@@ -137,69 +144,64 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 		panel.add(panel_Table);
 		panel_Table.setLayout(null);
 
-		table_KhachHang = new JTable();
-		table_KhachHang.setBackground(Color.WHITE);
-		table_KhachHang.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "M\u00E3 kh\u00E1ch h\u00E0ng", "H\u1ECD t\u00EAn", "Gi\u1EDBi t\u00EDnh",
-						"Ng\u00E0y sinh", "\u0110\u1ECBa ch\u1EC9", "S\u1ED1 \u0111i\u1EC7n tho\u1EA1i",
-						"\u0110i\u1EC3m th\u01B0\u1EDFng", "Ghi ch\u00FA" }) );
-		table_KhachHang.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 10, 1019, 615);
-		scrollPane.add(table_KhachHang);
-		scrollPane.setViewportView(table_KhachHang);
+		table_HoaDon = new JTable();
+		table_HoaDon.setBackground(Color.WHITE);
+		table_HoaDon.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "Mã hóa đơn", "Ngày lập", "Khách hàng", "Nhân viên", "Tổng tiền" }));
+		table_HoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		JScrollPane scrollPane_HoaDon = new JScrollPane();
+		scrollPane_HoaDon.setBounds(10, 10, 1019, 615);
+		scrollPane_HoaDon.add(table_HoaDon);
+		scrollPane_HoaDon.setViewportView(table_HoaDon);
 
-		panel_Table.add(scrollPane);
+		panel_Table.add(scrollPane_HoaDon);
 
-		
-		DAO_KH = new KhachHang_DAO();
-		DefaultTableModel model = (DefaultTableModel) table_KhachHang.getModel();
+		dsHD = DAO_HD.layTatCaHoaDon();
+		DefaultTableModel model = (DefaultTableModel) table_HoaDon.getModel();
 		try {
-			dsKH = DAO_KH.layTatCaKhachHang();
-			if (dsKH != null) {
-				dsKH.forEach(kh -> {
-
-					Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), kh.isGioiTinh(), kh.getNgaySinh(),
-							kh.getDiaChi(), kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
+			
+					Object[] rowData = {  };
 
 					model.addRow(rowData);
-				});
-			}
+				
+			
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		table_KhachHang.addMouseListener(new MouseListener() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-            	int row = table_KhachHang.getSelectedRow();
+
+		table_HoaDon.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				int row = table_HoaDon.getSelectedRow();
 //            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
 //        		date_KH.setDate((Date) model.getValueAt(row, 3));
-            	String maKhachHang =  model.getValueAt(row, 0).toString();
-            	String hoTen = model.getValueAt(row, 1).toString();
-            	String gioiTinh = model.getValueAt(row, 2).toString();
-            	String ngaySinh = model.getValueAt(row, 3).toString();
-            	String diaChi = model.getValueAt(row, 4).toString();
-            	String sdt = model.getValueAt(row, 5).toString();
-            	String diemThuong = model.getValueAt(row, 6).toString();
-            	String ghiChu = model.getValueAt(row, 7).toString();
-               System.out.println(maKhachHang + "," + hoTen + "," + gioiTinh + "," + ngaySinh + "," + diaChi + "," + sdt + "," + diemThuong + "," + ghiChu );
-            }
+//            	String maKhachHang =  model.getValueAt(row, 0).toString();
+//            	String hoTen = model.getValueAt(row, 1).toString();
+//            	String gioiTinh = model.getValueAt(row, 2).toString();
+//            	String ngaySinh = model.getValueAt(row, 3).toString();
+//            	String diaChi = model.getValueAt(row, 4).toString();
+//            	String sdt = model.getValueAt(row, 5).toString();
+//            	String diemThuong = model.getValueAt(row, 6).toString();
+//            	String ghiChu = model.getValueAt(row, 7).toString();
+//               System.out.println(maKhachHang + "," + hoTen + "," + gioiTinh + "," + ngaySinh + "," + diaChi + "," + sdt + "," + diemThuong + "," + ghiChu );
+			}
 
-            @Override
-            public void mousePressed(MouseEvent e) {}
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
 
-            @Override
-            public void mouseReleased(MouseEvent e) {}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
 
-            @Override
-            public void mouseEntered(MouseEvent e) {}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+			}
 
-            @Override
-            public void mouseExited(MouseEvent e) {}
-        });
-		
-
+			@Override
+			public void mouseExited(MouseEvent e) {
+			}
+		});
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(Color.WHITE);
@@ -208,7 +210,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 		panel_Table.add(panel_1);
 
 		btnThemKhachHang = new JButton("Thêm");
-	
+
 		btnThemKhachHang.setIcon(new ImageIcon(JPanel_BaoCaoThongKe.class.getResource("/icon/add.png")));
 		btnThemKhachHang.setForeground(Color.WHITE);
 		btnThemKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 15));
