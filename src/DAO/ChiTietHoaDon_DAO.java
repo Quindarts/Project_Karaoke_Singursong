@@ -23,16 +23,15 @@ public class ChiTietHoaDon_DAO {
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
-			
+
 			String sql = "SELECT * FROM ChiTietHoaDon";
-			
+
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
 				Phong phong = new Phong(rs.getString("maPhong"));
-				int soGioHat = rs.getInt("soGioHat");
-				ChiTietHoaDon ctHoaDon = new ChiTietHoaDon(hoaDon, phong, soGioHat);
+				ChiTietHoaDon ctHoaDon = new ChiTietHoaDon(hoaDon, phong);
 				danhSachHoaDon.add(ctHoaDon);
 			}
 		} catch (Exception e) {
@@ -55,8 +54,7 @@ public class ChiTietHoaDon_DAO {
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
 				Phong phong = new Phong(rs.getString("maPhong"));
-				int soGioHat = rs.getInt("soGioHat");
-				ctHoaDon = new ChiTietHoaDon(hoaDon, phong, soGioHat);
+				ctHoaDon = new ChiTietHoaDon(hoaDon, phong);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,8 +82,8 @@ public class ChiTietHoaDon_DAO {
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
 				Phong phong = new Phong(rs.getString("maPhong"));
-				int soGioHat = rs.getInt("soGioHat");
-				ctHoaDon = new ChiTietHoaDon(hoaDon, phong, soGioHat);
+				ctHoaDon = new ChiTietHoaDon(hoaDon, phong);
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -101,6 +99,7 @@ public class ChiTietHoaDon_DAO {
 	}
 
 	public ChiTietHoaDon timCTHoaDon_TheoMaPhong(String maPhong) {
+
 		ChiTietHoaDon ctHoaDon = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -113,19 +112,21 @@ public class ChiTietHoaDon_DAO {
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
 				Phong phong = new Phong(rs.getString("maPhong"));
-				int soGioHat = rs.getInt("soGioHat");
-				ctHoaDon = new ChiTietHoaDon(hoaDon, phong, soGioHat);
+				ctHoaDon = new ChiTietHoaDon(hoaDon, phong);
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		} finally {
 			try {
+
 				statement.close();
 			} catch (Exception e2) {
 				e2.printStackTrace();
 			}
 		}
+
 		return ctHoaDon;
 	}
 
@@ -135,10 +136,10 @@ public class ChiTietHoaDon_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("INSERT INTO ChiTietHoaDon values(?,?,?)");
+			statement = con.prepareStatement("INSERT INTO ChiTietHoaDon values(?,?)");
 			statement.setString(1, ctHoaDon.getHoaDon().getMaHoaDon());
 			statement.setString(2, ctHoaDon.getPhong().getMaPhong());
-			statement.setDouble(3, ctHoaDon.getSoGioHat());
+
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -159,11 +160,9 @@ public class ChiTietHoaDon_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con
-					.prepareStatement("UPDATE ChiTietHoaDon SET soGioHat = ?" + " WHERE maHoaDon = ? AND maPhong = ?");
-			statement.setDouble(1, ctHoaDon.getSoGioHat());
-			statement.setString(2, ctHoaDon.getHoaDon().getMaHoaDon());
-			statement.setString(3, ctHoaDon.getPhong().getMaPhong());
+			statement = con.prepareStatement("UPDATE ChiTietHoaDon" + " WHERE maHoaDon = ? AND maPhong = ?");
+			statement.setString(1, ctHoaDon.getHoaDon().getMaHoaDon());
+			statement.setString(2, ctHoaDon.getPhong().getMaPhong());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

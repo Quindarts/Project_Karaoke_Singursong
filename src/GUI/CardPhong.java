@@ -9,6 +9,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -16,12 +17,24 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.table.DefaultTableModel;
 
+import org.apache.poi.ss.usermodel.Table;
+
+import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
+import DAO.NhanVien_DAO;
+import DAO.PhieuDatPhong_DAO;
+import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
+import Entity.HoaDon;
+import Entity.KhachHang;
 import Entity.LoaiPhong;
+import Entity.NhanVien;
+import Entity.PhieuDatPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
 import javax.swing.JCheckBox;
@@ -45,14 +58,42 @@ public class CardPhong extends JPanel {
 	private LoaiPhong loaiP;
 	private boolean selectDatPhong;
 	private JCheckBox cbox_DatPhong;
+	private DefaultTableModel model;
+	private JTable table;
+	private HoaDon hoaDon;
+	private KhachHang khachHang;
+	private PhieuDatPhong_DAO DAO_PDP;
+	private NhanVien_DAO DAO_NV;
+	private Phong_DAO DAO_P;
+	private KhachHang_DAO DAO_KH;
+	private LoaiPhong_DAO DAO_LP;
+	private TrangThaiPhong_DAO DAO_TTP;
+	private NhanVien nv;
+	private PhieuDatPhong phieu;
+	private ArrayList<PhieuDatPhong> dsPhieuDatPhong;
+	private ArrayList<Phong> dsPhong;
+	private TrangThaiPhong_DAO dao_TrangThaiPhong;
+	private String tenNV;
+	private KhachHang kh;
+	private String tenKH;
+	private String sdtKH;
 
 	/**
 	 * @param phong
 	 */
 
-	public CardPhong(Phong phong) {
+	public CardPhong(Phong phong, DefaultTableModel model, JTable table) {
 		this.phong = phong;
+		this.model = model;
+		this.table = table;
+		try {
 
+			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+			loaiP = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		setPreferredSize(new Dimension(width, height));
 
 		/**
@@ -74,27 +115,42 @@ public class CardPhong extends JPanel {
 		cbox_DatPhong.setForeground(new Color(51, 153, 255));
 		cbox_DatPhong.setBounds(0, 0, 150, 21);
 
-		System.out.println(phong.getTrangThaiPhong().getMaTrangThai());
-
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 			add(cbox_DatPhong);
 			cbox_DatPhong.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
+
 					if (e.getStateChange() == ItemEvent.SELECTED) {
 						selectDatPhong = true;
+						if (kiemTraTrungMaPhongTrongDSPhong(phong.getMaPhong().toString().trim(), table)) {
+							model.addRow(new Object[] { table.getRowCount() + 1, phong.getMaPhong().toString(),
+									phong.getTenPhong().toString(), Double.toString(loaiP.getGiaTien()) });
+						}
 					} else {
 						selectDatPhong = false;
+					}
+					if (e.getStateChange() != ItemEvent.SELECTED) {
+						cbox_DatPhong.setSelected(false);
+						String maP = getPhong().getMaPhong();
+						for (int i = 0; i < table.getRowCount(); i++) {
+							if (maP.trim().equals(table.getValueAt(i, 1).toString().trim())) {
+								model.removeRow(i);
+							}
+						}
+//						model.removeRow(ERROR)
 					}
 				}
 			});
 		}
 		addMouseListener((MouseListener) new MouseAdapter() {
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (SwingUtilities.isRightMouseButton(e)) {
 					showPopupMenu(e);
 				}
 			}
+
 		});
 
 	}
@@ -128,7 +184,6 @@ public class CardPhong extends JPanel {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		System.out.println(trangThaiP);
 
 		// Trong
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
@@ -154,26 +209,126 @@ public class CardPhong extends JPanel {
 
 	private void showPopupMenu(MouseEvent e) {
 
+		DAO_PDP = new PhieuDatPhong_DAO();
+		DAO_NV = new NhanVien_DAO();
+		DAO_P = new Phong_DAO();
+		DAO_KH = new KhachHang_DAO();
+		DAO_LP = new LoaiPhong_DAO();
+		DAO_TTP = new TrangThaiPhong_DAO();
+		nv = new NhanVien();
+		phieu = new PhieuDatPhong();
+		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
+		dsPhong = DAO_P.layTatCaPhong();
+		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
+
 		JPopupMenu menu = new JPopupMenu();
 		JMenuItem xemThongTinMenuItem = new JMenuItem("Xem thông tin phòng");
 		JMenuItem chuyenPhongMenuItem = new JMenuItem("Chuyển phòng");
 		JMenuItem datPhongMenuItem = new JMenuItem("Đặt phòng hát ngay");
-		xemThongTinMenuItem.addActionListener(e1 -> {
-			JOptionPane.showMessageDialog(this, "Thông tin phòng...");
+		JMenuItem themDichVuItem = new JMenuItem("Thêm dịch vụ");
+		JMenuItem traPhongMenuItem = new JMenuItem("Trả phòng");
+
+		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
+			themDichVuItem.setEnabled(false);
+			chuyenPhongMenuItem.setEnabled(false);
+			traPhongMenuItem.setEnabled(false);
+		}
+		traPhongMenuItem.addActionListener(e1 -> {
+			hoaDon = new HoaDon();
+			khachHang = new KhachHang();
+			loaiP = new LoaiPhong();
+
+			Modal_ThanhToan thanhToan = new Modal_ThanhToan(hoaDon, phong, loaiP, khachHang);
+			thanhToan.setVisible(true);
 		});
+		xemThongTinMenuItem.addActionListener(e1 -> {
+			try {
+				phong = DAO_P.timPhong_TheoMaPhong(phong.getMaPhong());
+				String anhPhong = "";
+				String tenPhong = phong.getTenPhong();
+				String viTriPhong = phong.getViTriPhong();
+				String tinhTrang = phong.getTinhTrangPhong();
+
+				LoaiPhong loaiP = null;
+				loaiP = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
+				String tenLoaiPhong = loaiP.getTenLoaiPhong();
+				String giaPhong = loaiP.getGiaTien() + "";
+
+				TrangThaiPhong trThaiP = null;
+				trThaiP = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(phong.getTrangThaiPhong().getMaTrangThai());
+				String trangThaiPhong = trThaiP.getTenTrangThai();
+				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong();
+				thongTinPhong.setVisible(true);
+				thongTinPhong.SetModal_XemThongTinPhong(anhPhong, tenPhong, tenLoaiPhong, viTriPhong, giaPhong,
+						trangThaiPhong, tinhTrang);
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
+		});
+
 		datPhongMenuItem.addActionListener(e1 -> {
 			JOptionPane.showMessageDialog(this, "Bạn có chắc chắn đặt phòng này?");
 			setSelectDatPhong(true);
 			cbox_DatPhong.setSelected(isSelectDatPhong());
+
+			model.addRow(new Object[] { 1, phong.getMaPhong().toString(), phong.getTenPhong().toString(),
+					Double.toString(loaiP.getGiaTien()) });
+
+		});
+
+		themDichVuItem.addActionListener(e1 -> {
+			JFrame modal_datDichVu = new Modal_DatDichVu(phong);
+			modal_datDichVu.setVisible(true);
+
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
-			JFrame chuyenPhongFrame = new Modal_ChuyenPhong(phong);
-			chuyenPhongFrame.setVisible(true);
+			try {
+				if (dsPhieuDatPhong != null)
+					for (PhieuDatPhong pdp : dsPhieuDatPhong) {
+						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
+						nv = phieu.getNhanVien();
+						tenNV = DAO_NV.timNhanVien_TheoMaNhanVien(nv.getMaNhanVien()).getHoTen();
+						kh = phieu.getKhachHang();
+						tenKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getHoTen();
+						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();
+						if (phieu != null)
+							break;
+					}
+				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong();
+				phieuChuyenPhong.setVisible(true);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(phieu.getThoiGianNhanPhong(), phieu.getMaPhieuDat(), tenNV,
+						sdtKH, tenKH);
+
+				// Cập nhật lại trạng thái phòng
+				TrangThaiPhong trThaiPh = new TrangThaiPhong();
+				trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");
+				DAO_P.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh.getMaTrangThai());
+
+			} catch (Exception e2) {
+				JOptionPane.showMessageDialog(null, "Phòng này chưa được đặt!");
+			}
+
 		});
+
 		menu.add(xemThongTinMenuItem);
 		menu.add(chuyenPhongMenuItem);
-		menu.add(datPhongMenuItem);
+		menu.add(traPhongMenuItem);
+//		menu.add(datPhongMenuItem);
+		menu.add(themDichVuItem);
+
 		menu.show(this, e.getX(), e.getY());
+	}
+
+	public boolean kiemTraTrungMaPhongTrongDSPhong(String code, JTable table) {
+		for (int row = 0; row < table.getRowCount(); row++) {
+			String roomCode = table.getValueAt(row, 1).toString();
+			System.out.println("rodd::::" + roomCode);
+			if (roomCode.trim().equals(code)) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

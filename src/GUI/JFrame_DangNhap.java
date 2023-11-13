@@ -120,7 +120,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	/**
 	 * Component
 	 */
-	private JTextField txtPassword;
+	private JPasswordField txtPassword;
 	private JTextField txtUsername;
 	private JPanel panelLogin;
 	private JButton btnLogin;
@@ -176,7 +176,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		lblPassword.setBounds(25, 175, 111, 25);
 		panelLogin.add(lblPassword);
 
-		txtPassword = new JTextField();
+		txtPassword = new JPasswordField();
 		txtPassword.setBounds(133, 175, 219, 25);
 		panelLogin.add(txtPassword);
 		txtPassword.setColumns(10);
@@ -185,7 +185,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		txtUsername = new JTextField();
 		txtUsername.setColumns(10);
 		txtUsername.setBounds(133, 115, 219, 25);
-		txtUsername.setText("0935014256");
+		txtUsername.setText("NV56920001");
 		panelLogin.add(txtUsername);
 
 		btnLogin = new JButton("Đăng nhập");
@@ -295,13 +295,13 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 
 		// Kt SĐT
 		if (tenDangNhap.length() == 0) {
-			JOptionPane.showMessageDialog(null, "Số điện thoại không được để trống !");
+			JOptionPane.showMessageDialog(null, "Tài khoản không được để trống !");
 			txtUsername.requestFocus();
 			txtUsername.selectAll();
 			return false;
 		} else {
-			if (!tenDangNhap.matches("[0-9]{10}")) {
-				JOptionPane.showMessageDialog(null, "Số điện thoại phải là chữ số và gồm 10 số !");
+			if (false) {
+				JOptionPane.showMessageDialog(null, "Tài khoản không thỏa mãn");
 				txtUsername.requestFocus();
 				txtUsername.selectAll();
 				return false;

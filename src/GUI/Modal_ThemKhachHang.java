@@ -14,7 +14,6 @@ import Entity.KhachHang;
 import OtherFunction.HelpRamDomKH;
 import OtherFunction.HelpValidate;
 
-
 import java.awt.BorderLayout;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -27,6 +26,7 @@ import java.awt.FlowLayout;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.awt.Component;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
@@ -41,8 +41,7 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 
 public class Modal_ThemKhachHang extends JFrame implements ActionListener {
-	
-	
+
 	/**
 	 * Color
 	 */
@@ -53,8 +52,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
-	
-	
+
 	private JPanel contentPane;
 	private JTextField txt__MaKH;
 	private JTextField txt__TenKH;
@@ -62,7 +60,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private JLabel lbl__TenKH;
 	private ButtonGroup btngr__gioiTinh;
 	private JTextField txt__SDT;
-	private JDateChooser dateNgaySinh;
 
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private JButton btn__exit;
@@ -74,6 +71,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private KhachHang_DAO DAO_KH;
 	private JRadioButton rdbt__nu;
 	private JRadioButton rdbt__nam;
+	private Calendar cal = Calendar.getInstance();
 
 	public Modal_ThemKhachHang() {
 
@@ -168,17 +166,16 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		lbl__SDT.setBounds(490, 70, 109, 25);
 		panel_1.add(lbl__SDT);
 
-
 		rdbt__nu = new JRadioButton("Nữ");
 		rdbt__nu.setBackground(new Color(255, 255, 255));
 		rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		rdbt__nu.setBounds(290, 200, 70, 21);
+		rdbt__nu.setBounds(290, 203, 70, 21);
 		panel_1.add(rdbt__nu);
 		btngr__gioiTinh.add(rdbt__nu);
-		
+
 		rdbt__nam = new JRadioButton("Nam");
 		rdbt__nam.setSize(70, 21);
-		rdbt__nam.setLocation(172, 209);
+		rdbt__nam.setLocation(177, 203);
 		rdbt__nam.setBackground(new Color(255, 255, 255));
 		rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		panel_1.add(rdbt__nam);
@@ -188,11 +185,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nu.setActionCommand("Nu");
 
 		JLabel lbl__tieuDe = new JLabel("THÔNG TIN KHÁCH HÀNG");
-		lbl__tieuDe.setForeground(Color.decode(hexColor_Blue1));;
+		lbl__tieuDe.setForeground(Color.decode(hexColor_Blue1));
+		;
 		lbl__tieuDe.setBounds(43, 10, 849, 39);
 		panel_1.add(lbl__tieuDe);
 		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 17));
-
 
 		date_NgaySinh = new JDateChooser();
 		date_NgaySinh.setDateFormatString("yyyy-MM-dd");
@@ -215,7 +212,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
-		
+
 	}
 
 	public void setModal_ThemKhachHang(String maKH, String tenKH, String gioiTinh, String ngaySinh, String soDienThoai,
@@ -245,74 +242,139 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		Object o = e.getSource();
 
 		if (o.equals(btn__Save)) {
-			if(txt__MaKH.getText().equals("")) {
+			if (txt__MaKH.getText().equals("")) {
 				themKhachHang();
-			}else {
+			} else {
 				capNhatKhachHang();
-				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
-				Panel.setJPanel_QuanLyKhachHang(true);
+//				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
+//				Panel.setJPanel_QuanLyKhachHang(true);
 			}
-		} 
-		
+		}
+
 		if (o.equals(btn__exit)) {
 			setVisible(false);
 		}
-		
-	}
-	
 
-	
+	}
 
 	public void themKhachHang() {
-		String tenKhachHang = txt__TenKH.getText();
-		String diaChi = txt__DiaChi.getText();
-		String sdt = txt__SDT.getText();
-		java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
-		String ghiChu = txtA__GhiChu.getText();
-		HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
-		String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
-		txt__MaKH.setText(maKhachHang);
-		int diemThuong = 0;
-		boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
-		KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong, ghiChu);
-		if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
-			System.out.println(maKhachHang);
-			try {
-				DAO_KH.taoKhachHang(kh);
-				JOptionPane.showMessageDialog(null, "Thêm khách hàng " + tenKhachHang + " thành công!");
-				setVisible(false);
-			} catch (Exception e2) {
-				// TODO: handle exception
-				JOptionPane.showMessageDialog(null, "Không thể thêm khách hàng!");
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " đã tồn tại!");
+		if (ValueDate()) {
+			String tenKhachHang = txt__TenKH.getText();
+			String diaChi = txt__DiaChi.getText();
+			String sdt = txt__SDT.getText();
+			java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
+			Date dt = (Date) cal.getTime();
+			String ghiChu = txtA__GhiChu.getText();
+			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
+			String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
+			txt__MaKH.setText(maKhachHang);
+			int diemThuong = 0;
+			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
+			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, dt, diaChi, sdt, diemThuong,
+					ghiChu);
+			if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
+				System.out.println(maKhachHang);
+				try {
+					DAO_KH.taoKhachHang(kh);
+					JOptionPane.showMessageDialog(null, "Thêm khách hàng " + tenKhachHang + " thành công!");
+					setVisible(false);
+				} catch (Exception e2) {
+					// TODO: handle exception
+					JOptionPane.showMessageDialog(null, "Không thể thêm khách hàng!");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " đã tồn tại!");
 
+			}
 		}
 	}
-	
-	public void capNhatKhachHang() {
-		String tenKhachHang = txt__TenKH.getText();
-		String diaChi = txt__DiaChi.getText();
-		String sdt = txt__SDT.getText();
-		java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
-		String ghiChu = txtA__GhiChu.getText();
-		String maKhachHang = txt__MaKH.getText();
-		int diemThuong = 0;
-		boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
-		KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong, ghiChu);
-		if (DAO_KH.capNhatKhachHang(kh)) {
-			try {
-				DAO_KH.capNhatKhachHang(kh);
-				JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
-				setVisible(false);
-			} catch (Exception e2) {
-				// TODO: handle exception
-				JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " Không đã tồn tại!");
 
+	public void capNhatKhachHang() {
+		if (ValueDate()) {
+			String tenKhachHang = txt__TenKH.getText();
+			String diaChi = txt__DiaChi.getText();
+			String sdt = txt__SDT.getText();
+			java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
+			String ghiChu = txtA__GhiChu.getText();
+			String maKhachHang = txt__MaKH.getText();
+			int diemThuong = 0;
+			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
+			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
+					ghiChu);
+			if (DAO_KH.capNhatKhachHang(kh)) {
+				try {
+					DAO_KH.capNhatKhachHang(kh);
+					JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
+					setVisible(false);
+				} catch (Exception e2) {
+					// TODO: handle exception
+					JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " Không đã tồn tại!");
+
+			}
 		}
+	}
+
+	public boolean ValueDate() {
+		String tenKH = txt__TenKH.getText().trim();
+		String soDienThoai = txt__SDT.getText().trim();
+		String diaChi = txt__DiaChi.getText().trim();
+		boolean gt_Nam = rdbt__nam.isSelected();
+		boolean gt_Nu = rdbt__nu.isSelected();
+		String ghiChu = txtA__GhiChu.getText().trim();
+
+//		if (txt__TenKH.equals("")) {
+//			txt__TenKH.requestFocus();
+//			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
+//			return false;
+//		} else if (!(tenKH.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
+//				+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
+//				+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
+//			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
+//			txt__TenKH.requestFocus();
+//			return false;
+//		}
+
+		try {
+			Date ngaySinh = new Date(date_NgaySinh.getDate().getTime());
+			Calendar cal = Calendar.getInstance();
+			cal.add(Calendar.DAY_OF_MONTH, -16);
+			java.util.Date chkNgaySinh = new java.util.Date(cal.getTimeInMillis());
+			if (!(ngaySinh.before(chkNgaySinh))) {
+				JOptionPane.showMessageDialog(null, "Khách hàng này chưa đủ 16 tuổi!");
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
+		}
+
+		if (!gt_Nam && !gt_Nu) {
+			JOptionPane.showMessageDialog(null, "Giới tính chưa được chọn!");
+			return false;
+		}
+
+//		if (soDienThoai.equals("")) {
+//			txt__SDT.requestFocus();
+//			JOptionPane.showMessageDialog(null, "Số điện thoại không được rỗng");
+//			return false;
+//		} else if (!(soDienThoai.matches("^(\\+84|0)(3|9|5|7|8)\\d{8}$"))) {
+//			JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+//			txt__SDT.requestFocus();
+//			return false;
+//		}
+
+//		if (diaChi.equals("")) {
+//			txt__DiaChi.requestFocus();
+//			JOptionPane.showMessageDialog(null, "Địa chỉ không được rỗng");
+//			return false;
+//		} else if (!(diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
+//			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+//			txt__DiaChi.requestFocus();
+//			return false;
+//		}
+		return true;
 	}
 }

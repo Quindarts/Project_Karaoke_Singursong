@@ -1,7 +1,8 @@
 package GUI;
 
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
@@ -11,15 +12,12 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
-
 import java.awt.Font;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
-import com.formdev.flatlaf.FlatLightLaf;
 import com.toedter.calendar.JDateChooser;
 
-import ConnectDB.ConnectDB;
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
 import DAO.NhanVien_DAO;
@@ -32,40 +30,28 @@ import Entity.NhanVien;
 import Entity.PhieuDatPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
-import OtherFunction.HelpRamDomKH;
-import OtherFunction.HelpRamDomMa;
 
 import javax.swing.JTextField;
-import javax.swing.SpinnerDateModel;
-import javax.swing.SpinnerModel;
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import java.awt.event.MouseAdapter;
-import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import javax.swing.JSpinner;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.regex.Pattern;
+import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
 
-public class Modal_PhieuDatPhongTruoc extends JFrame {
+public class Modal_CapNhatPhieuDatPhongTruoc extends JFrame implements ActionListener {
 
-	private static Modal_PhieuDatPhongTruoc frame;
 	private JPanel contentPane;
+	private JTextField txtGioDatPhong;
 
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
@@ -76,13 +62,14 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	private String hexColor_Green = "#4BAC4D";
 
 	private JTextField txtMaPDP;
-	private JTextField txtMaPhong;
 	private JTextField txtLoaiPhong;
 	private JTextField txtGiaPhong;
 	private JTextField txtSoDienThoai;
+
 	private JTextField txtTenKH;
 	private JTextField txtTienCoc;
 	private JTextField txtNhanVien;
+	private JTextField textField;
 
 	private ArrayList<PhieuDatPhong> dsPDP;
 	private ArrayList<KhachHang> dsKH;
@@ -95,57 +82,32 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	private Phong_DAO DAO_P;
 	private PhieuDatPhong pdp;
 	private KhachHang kh;
-
+	private NhanVien nhanVien;
 	private Phong p;
 	private LoaiPhong_DAO DAO_LP;
 	private LoaiPhong lp;
 	private JDateChooser date_DatPhong;
-	private JButton btnDatPhong;
+
 	private JDateChooser date_NhanPhong;
 
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
-	private JTable table_DSPhong;
-	private ArrayList<Phong> dsP;
-	private TrangThaiPhong_DAO DAO_TTP;
-	private DefaultTableModel model;
-	private NhanVien nhanVien;
-	private String ma;
 	private JTextArea txtMoTa;
+	private JTextField txtMaPhong;
 	private String maPDP;
-	private JTextField thoiGianBatDau;
-	private SpinnerDateModel dateModel;
-	private JSpinner spnThoiGianNhanPhong;
-	private JSpinner spnThoiGianDatPhong;
+	private JButton btnLuu;
+	private JTable table_DSPhong;
+	private TrangThaiPhong_DAO DAO_TTP;
+	private ArrayList<Phong> dsP;
+	private DefaultTableModel model;
+	private JButton btnTimKiem;
 	private JComboBox comboBox;
-	private JSpinner spnThoiGianTraPhong;
-	private JTextField txtGioHat;
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			frame = new Modal_PhieuDatPhongTruoc(nhanVien);
-//			frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
-//			FlatLightLaf.setup();
-//			frame.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	private AbstractButton btnThoat;
 
 	/**
 	 * Create the panel.
 	 */
-	public Modal_PhieuDatPhongTruoc(NhanVien nhanVien) {
+	public Modal_CapNhatPhieuDatPhongTruoc(NhanVien nhanVien) {
 		this.nhanVien = nhanVien;
-
-//		try {
-//			ConnectDB.getInstance().connect();
-////			System.out.println("Connected!!!!");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 900, 709);
@@ -170,7 +132,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Th\u00F4ng tin \u0111\u1EB7t ph\u00F2ng", TitledBorder.LEADING, TitledBorder.TOP, null,
 				new Color(0, 0, 0)));
-		panel.setBounds(22, 384, 417, 155);
+		panel.setBounds(22, 332, 417, 155);
 		panel_PDP.add(panel);
 		panel.setLayout(null);
 
@@ -193,15 +155,12 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel.add(lblLoaiPhong_1_1_1);
 
 		txtMaPhong = new JTextField();
-		txtMaPhong.setEnabled(false);
-		txtMaPhong.setEditable(false);
 		txtMaPhong.setColumns(10);
 		txtMaPhong.setBounds(102, 25, 294, 27);
 		panel.add(txtMaPhong);
 
 		txtLoaiPhong = new JTextField();
 		txtLoaiPhong.setEnabled(false);
-		txtLoaiPhong.setEditable(false);
 		txtLoaiPhong.setColumns(10);
 		txtLoaiPhong.setBounds(102, 65, 294, 27);
 		panel.add(txtLoaiPhong);
@@ -219,7 +178,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"Th\u00F4ng tin kh\u00E1ch h\u00E0ng", TitledBorder.LEADING, TitledBorder.TOP, null,
 				new Color(0, 0, 0)));
-		panel_1.setBounds(449, 384, 413, 155);
+		panel_1.setBounds(449, 332, 413, 155);
 		panel_PDP.add(panel_1);
 		panel_1.setLayout(null);
 
@@ -301,7 +260,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		JPanel panel_2 = new JPanel();
 		panel_2.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel_2.setBackground(new Color(255, 255, 255));
-		panel_2.setBounds(22, 45, 840, 120);
+		panel_2.setBounds(22, 45, 840, 86);
 		panel_PDP.add(panel_2);
 		panel_2.setLayout(null);
 
@@ -313,10 +272,16 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 		date_DatPhong = new JDateChooser();
 		date_DatPhong.setEnabled(false);
-		date_DatPhong.setDateFormatString("yyyy-MM-dd");
+		date_DatPhong.setDateFormatString("yyyy-MM-dd  h:mm:ss a");
 		date_DatPhong.setDate(new java.util.Date());
-		date_DatPhong.setBounds(167, 11, 108, 27);
+		date_DatPhong.setBounds(167, 11, 157, 27);
 		panel_2.add(date_DatPhong);
+
+		txtGioDatPhong = new JTextField();
+		txtGioDatPhong.setEnabled(false);
+		txtGioDatPhong.setBounds(325, 12, 55, 27);
+		panel_2.add(txtGioDatPhong);
+		txtGioDatPhong.setColumns(10);
 
 		JLabel lblNhanVien = new JLabel("Nhân viên");
 		lblNhanVien.setForeground(new Color(0, 0, 0));
@@ -352,9 +317,15 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_2.add(lblThiGianNhn);
 
 		date_NhanPhong = new JDateChooser();
-		date_NhanPhong.setDateFormatString("yyyy-MM-dd ");
-		date_NhanPhong.setBounds(167, 49, 108, 27);
+		date_NhanPhong.setDateFormatString("yyyy-MM-dd  h:mm:ss a");
+		date_NhanPhong.setBounds(167, 49, 157, 27);
 		panel_2.add(date_NhanPhong);
+
+		textField = new JTextField();
+		textField.setEnabled(false);
+		textField.setColumns(10);
+		textField.setBounds(325, 50, 55, 27);
+		panel_2.add(textField);
 
 		JLabel lblLoiPhng = new JLabel("Loại phòng");
 		lblLoiPhng.setForeground(Color.BLACK);
@@ -363,75 +334,24 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_2.add(lblLoiPhng);
 
 		comboBox = new JComboBox();
-		DAO_LP = new LoaiPhong_DAO();
-		ArrayList<LoaiPhong> dsLP = DAO_LP.layTatCaLoaiPhong();
-		for (LoaiPhong lp : dsLP) {
-			comboBox.addItem(lp.getMaLoaiPhong());
-			;
-		}
 		comboBox.setBounds(463, 50, 136, 27);
 		panel_2.add(comboBox);
 
-		JButton btnTimKiem = new JButton("Tìm kiếm");
-		btnTimKiem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LocPhongTrongTheoNgay();
-			}
-		});
+		btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnTimKiem.setBounds(688, 49, 140, 27);
 		panel_2.add(btnTimKiem);
 
-		dateModel = new SpinnerDateModel();
-		dateModel.setCalendarField(Calendar.MINUTE);
-
-		SpinnerDateModel dateModel1 = new SpinnerDateModel();
-		dateModel1.setCalendarField(Calendar.MINUTE);
-
-		spnThoiGianNhanPhong = new JSpinner(dateModel1);
-		JSpinner.DateEditor editor1 = new JSpinner.DateEditor(spnThoiGianNhanPhong, "HH:mm");
-		spnThoiGianNhanPhong.setEditor(editor1);
-		spnThoiGianNhanPhong.setBounds(285, 50, 65, 27);
-		panel_2.add(spnThoiGianNhanPhong);
-
-//		SpinnerDateModel dateModel3 = new SpinnerDateModel();
-//		dateModel3.setCalendarField(Calendar.MINUTE);
-//		spnThoiGianTraPhong = new JSpinner(dateModel3);
-//		JSpinner.DateEditor editor3 = new JSpinner.DateEditor(spnThoiGianTraPhong, "HH:mm");
-//		spnThoiGianTraPhong.setEditor(editor3);
-//		spnThoiGianTraPhong.setBounds(167, 86, 65, 27);
-//		panel_2.add(spnThoiGianTraPhong);
-
-		SpinnerDateModel dateModel2 = new SpinnerDateModel();
-		dateModel2.setCalendarField(Calendar.MINUTE);
-		spnThoiGianDatPhong = new JSpinner(dateModel2);
-		spnThoiGianDatPhong.setEnabled(false);
-		JSpinner.DateEditor editor2 = new JSpinner.DateEditor(spnThoiGianDatPhong, "HH:mm");
-		spnThoiGianDatPhong.setEditor(editor2);
-		spnThoiGianDatPhong.setBounds(285, 11, 65, 27);
-		panel_2.add(spnThoiGianDatPhong);
-
-		JLabel lblTraPhongDK = new JLabel("Số giờ hát dự kiến");
-		lblTraPhongDK.setForeground(Color.BLACK);
-		lblTraPhongDK.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblTraPhongDK.setBounds(10, 86, 160, 27);
-		panel_2.add(lblTraPhongDK);
-
-		txtGioHat = new JTextField();
-		txtGioHat.setBounds(167, 86, 108, 27);
-		panel_2.add(txtGioHat);
-		txtGioHat.setColumns(10);
-
 		JLabel lblLoaiPhong_1_1_1_1 = new JLabel("Mô tả");
 		lblLoaiPhong_1_1_1_1.setForeground(Color.BLACK);
 		lblLoaiPhong_1_1_1_1.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblLoaiPhong_1_1_1_1.setBounds(32, 543, 82, 27);
+		lblLoaiPhong_1_1_1_1.setBounds(32, 491, 82, 27);
 		panel_PDP.add(lblLoaiPhong_1_1_1_1);
 
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(new Color(255, 255, 255));
 		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_3.setBounds(22, 571, 840, 68);
+		panel_3.setBounds(22, 519, 840, 68);
 		panel_PDP.add(panel_3);
 		panel_3.setLayout(null);
 
@@ -439,32 +359,30 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		txtMoTa.setBounds(10, 11, 820, 46);
 		panel_3.add(txtMoTa);
 
-		btnDatPhong = new JButton("Đặt phòng");
-		btnDatPhong.addActionListener(new ActionListener() {
-			@Override
+		btnLuu = new JButton("Lưu");
+		btnLuu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// Lấy giá trị từ JDateChooser và JSpinner
-
-			}
-		});
-		btnDatPhong.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				taoPhieu();
+				capNhat();
 			}
 		});
 
-		btnDatPhong.setBackground(Color.decode(hexColor_Green));
-		btnDatPhong.setForeground(new Color(255, 255, 255));
-		btnDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnDatPhong.setBounds(652, 629, 100, 30);
-		panel_PDP.add(btnDatPhong);
+		btnLuu.setBackground(Color.decode(hexColor_Green));
+		btnLuu.setForeground(new Color(255, 255, 255));
+		btnLuu.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnLuu.setBounds(652, 629, 100, 30);
+		panel_PDP.add(btnLuu);
 
-		JButton btnHy = new JButton("Hủy");
-		btnHy.setBackground(Color.decode(hexColor_Blue2));
-		btnHy.setForeground(new Color(255, 255, 255));
-		btnHy.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnHy.setBounds(762, 629, 100, 30);
-		panel_PDP.add(btnHy);
+		btnThoat = new JButton("Thoát");
+		btnThoat.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+		btnThoat.setBackground(Color.decode(hexColor_Blue2));
+		btnThoat.setForeground(new Color(255, 255, 255));
+		btnThoat.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnThoat.setBounds(762, 629, 100, 30);
+		panel_PDP.add(btnThoat);
 
 		JLabel lblPhiutPhng = new JLabel("PHIẾU ĐẶT PHÒNG TRƯỚC");
 		lblPhiutPhng.setForeground(new Color(5, 74, 145));
@@ -474,7 +392,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 		JPanel panel_DSPhongTrong = new JPanel();
 		panel_DSPhongTrong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_DSPhongTrong.setBounds(22, 189, 840, 185);
+		panel_DSPhongTrong.setBounds(22, 136, 840, 185);
 		panel_PDP.add(panel_DSPhongTrong);
 		panel_DSPhongTrong.setLayout(null);
 
@@ -484,6 +402,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 		table_DSPhong = new JTable();
 		table_DSPhong.addMouseListener(new MouseAdapter() {
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = table_DSPhong.getSelectedRow();
@@ -503,7 +422,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		dsP = new ArrayList<Phong>();
 		model = (DefaultTableModel) table_DSPhong.getModel();
 		try {
-			dsP = DAO_P.timPhong_TheoMaTrangThai("VC");
+			dsP = DAO_P.layTatCaPhong();
 			if (dsP != null) {
 				dsP.forEach(p -> {
 					LoaiPhong lp = new LoaiPhong();
@@ -523,104 +442,86 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 	}
 
-	public void taoPhieu() {
+	public void capNhat() {
 
-		// Chuyển đổi giá trị thành java.sql.Timestamp
-		int soGioHat = Integer.parseInt(txtGioHat.getText());
-		Timestamp timestampNhanPhong = selectDateTime(date_NhanPhong, spnThoiGianNhanPhong);
-		Timestamp timestampDatPhong = selectDateTime(date_DatPhong, spnThoiGianDatPhong);
-
-		HelpRamDomMa help = new HelpRamDomMa();
-		maPDP = help.taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-
+		String maPDP = txtMaPDP.getText().trim();
 		String maPhong = txtMaPhong.getText().toString().trim();
 		Phong p = new Phong(maPhong);
 		NhanVien nv = new NhanVien(nhanVien.getMaNhanVien());
 		KhachHang_DAO DAO_KH = new KhachHang_DAO();
 		KhachHang kh = DAO_KH.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim());
-
+		java.sql.Timestamp tgDatPhong = new java.sql.Timestamp(date_DatPhong.getDate().getTime());
+		java.sql.Timestamp tgNhanPhong = new java.sql.Timestamp(date_NhanPhong.getDate().getTime());
 		Double tienCoc = Double.parseDouble(txtTienCoc.getText());
 		String moTa = txtMoTa.getText().trim();
 		DAO_PDP = new PhieuDatPhong_DAO();
-		PhieuDatPhong pdp = new PhieuDatPhong(maPDP, p, nv, kh, timestampDatPhong, timestampNhanPhong, tienCoc,
-				"Chờ nhận phòng", moTa);
+		PhieuDatPhong pdp = new PhieuDatPhong(maPDP, p, nv, kh, tgDatPhong, tgNhanPhong, tienCoc, "Chờ nhận phòng",
+				moTa);
 
-		if (DAO_PDP.taoPhieuDatPhong(pdp)) {
-			JOptionPane.showMessageDialog(null, "Thêm phiếu thành công");
-		} else {
-			JOptionPane.showMessageDialog(null, "Thất bại");
-		}
-	}
-
-	public void LocPhongTrongTheoNgay() {
-		int soGioHat = Integer.parseInt(txtGioHat.getText());
-		Timestamp timestampNhanPhong = selectDateTime(date_NhanPhong, spnThoiGianNhanPhong);
-		Timestamp timestampTraPhong = tinhGioTraPhongDKTheoSoGioHat(date_NhanPhong, spnThoiGianNhanPhong, soGioHat);
-		System.out.println(timestampTraPhong);
-		String lphong = (String) comboBox.getSelectedItem();
-		List<Phong> dsP = DAO_P.layDanhSachPhongTrongTheoNgayVaLoaiPhong(timestampTraPhong, timestampNhanPhong, lphong);
-		if (dsP != null) {
-			clearTable();
-			for (Phong p : dsP) {
-				LoaiPhong lp = new LoaiPhong();
-				TrangThaiPhong ttp = new TrangThaiPhong();
-				ttp = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai());
-				lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
-				Object[] rowData = { p.getMaPhong(), p.getLoaiPhong().getMaLoaiPhong(), ttp.getTenTrangThai(),
-						lp.getGiaTien() };
-
-				model.addRow(rowData);
-
+		if (pdp.getTrangThai().equals("Chờ nhận phòng")) {
+			if (DAO_PDP.capNhatPhieuDatPhong(pdp)) {
+				JOptionPane.showMessageDialog(this, "Cập nhật thành công");
+			} else {
+				JOptionPane.showMessageDialog(null, "Cập nhật thất bại");
 			}
+
 		} else {
-			JOptionPane.showMessageDialog(null, "Không tìm thấy");
-
+			JOptionPane.showMessageDialog(null, "Phiếu " + maPDP + "không thể cập nhật!");
 		}
+		
+
 	}
 
-	public Timestamp selectDateTime(JDateChooser date, JSpinner hour) {
-		Date selectedDate = date.getDate();
-		Date selectedTime = (Date) hour.getValue();
-
-		// Kết hợp ngày và giờ thành một giá trị java.util.Date
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(selectedTime);
-
-		Calendar selectedDateTime = Calendar.getInstance();
-		selectedDateTime.setTime(selectedDate);
-		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
-		selectedDateTime.set(Calendar.SECOND, 0);
-		selectedDateTime.set(Calendar.MILLISECOND, 0);
-
-		// Chuyển đổi giá trị thành java.sql.Timestamp
-		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
-		return timestamp;
+	private boolean Invalid() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
-	public Timestamp tinhGioTraPhongDKTheoSoGioHat(JDateChooser date, JSpinner hour, int soGioHat) {
-		Date selectedDate = date.getDate();
-		Date selectedTime = (Date) hour.getValue();
+	public void HienThongTinTheoMaPDP(String ma) {
+		DAO_PDP = new PhieuDatPhong_DAO();
+		DAO_KH = new KhachHang_DAO();
+		DAO_NV = new NhanVien_DAO();
+		DAO_P = new Phong_DAO();
+		DAO_LP = new LoaiPhong_DAO();
 
-		// Kết hợp ngày và giờ thành một giá trị java.util.Date
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(selectedTime);
-		calendar.add(Calendar.HOUR, soGioHat);
+		KhachHang kh = new KhachHang();
+		NhanVien nv = new NhanVien();
+		Phong p = new Phong();
+		LoaiPhong lp = new LoaiPhong();
 
-		Calendar selectedDateTime = Calendar.getInstance();
-		selectedDateTime.setTime(selectedDate);
-		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
-		selectedDateTime.set(Calendar.SECOND, 0);
-		selectedDateTime.set(Calendar.MILLISECOND, 0);
+		pdp = DAO_PDP.layPhieuDatPhong_TheoMaPhieuDat(ma);
+		p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());
+		kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+		nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
+		lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
 
-		// Chuyển đổi giá trị thành java.sql.Timestamp
-		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
-		return timestamp;
+		txtMaPDP.setText(pdp.getMaPhieuDat());
+		txtLoaiPhong.setText(p.getLoaiPhong().getMaLoaiPhong());
+		txtNhanVien.setText(nv.getHoTen());
+		txtTenKH.setText(kh.getHoTen());
+		txtSoDienThoai.setText(kh.getSoDienThoai());
+		txtGiaPhong.setText(Double.toString(lp.getGiaTien()));
+		txtMaPhong.setText(pdp.getPhong().getMaPhong());
+		txtTienCoc.setText(Double.toString(pdp.getTienCoc()));
+		date_DatPhong.setDate(pdp.getThoiGianDatPhong());
+		date_NhanPhong.setDate(pdp.getThoiGianNhanPhong());
+//		txtTinhTrangPhieu.setText(pdp.getTrangThai().getTrangThai());
+		txtMoTa.setText(pdp.getMoTa());
+//		txtMaKH.setText(kh.getMaKhachHang());
 	}
 
-	public void clearTable() {
-		DefaultTableModel model = (DefaultTableModel) table_DSPhong.getModel();
-		model.setRowCount(0);
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if(e.equals(btnLuu)) {
+			
+		}
+		if(e.equals(btnThoat)) {
+			
+		}
+		if(e.equals(btnTimKiem)) {
+			
+			
+		}
 	}
 }

@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import com.itextpdf.text.List;
+
 import ConnectDB.ConnectDB;
 import Entity.ChiTietDichVu;
 import Entity.HoaDon;
@@ -64,6 +66,32 @@ public class ChiTietDichVu_DAO {
 			}
 		}
 		return ctDichVu;
+	}
+
+	public ArrayList<ChiTietDichVu> layDanhSachChiTietDichVu_TheoMaHoaDon(String maHD) {
+		ArrayList<ChiTietDichVu> danhSachCTDichVu = new ArrayList<ChiTietDichVu>();
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM ChiTietDichVu where maHoaDon = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, maHD);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
+				DichVu_DAO DAO_DV = new DichVu_DAO();
+				DichVu dichVu = DAO_DV.layDichVu_TheoMaDichVu(rs.getString("maDichVu"));
+
+				int soLuong = rs.getInt("soLuong");
+				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dichVu, soLuong);
+				danhSachCTDichVu.add(ctDichVu);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return danhSachCTDichVu;
 	}
 
 	public ChiTietDichVu timCTDichVu_TheoMaHoaDon(String maHD) {
@@ -156,10 +184,10 @@ public class ChiTietDichVu_DAO {
 		int n = 0;
 		try {
 			statement = con
-					.prepareStatement("UPDATE ChiTietDichVu SET maDichVu = ?, soLuong = ?" + " WHERE maHoaDon = ?");
-			statement.setString(1, ctDichVu.getDichVu().getMaDichVu());
-			statement.setInt(2, ctDichVu.getSoLuong());
-			statement.setString(3, ctDichVu.getHoaDon().getMaHoaDon());
+					.prepareStatement("UPDATE ChiTietDichVu SET soLuong = ?" + " WHERE maHoaDon = ? and maDichVu = ?");
+			statement.setString(3, ctDichVu.getDichVu().getMaDichVu());
+			statement.setInt(1, ctDichVu.getSoLuong());
+			statement.setString(2, ctDichVu.getHoaDon().getMaHoaDon());
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {
@@ -202,6 +230,7 @@ public class ChiTietDichVu_DAO {
 	}
 
 	public boolean capNhatCTDichVu_TheoMaHoaDon_MaDichVu(ChiTietDichVu ctDichVu) {
+		
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -227,14 +256,14 @@ public class ChiTietDichVu_DAO {
 		return n > 0;
 	}
 
-	public boolean xoaCTDichVu_TheoMaHoaDon(ChiTietDichVu ctDichVu) {
+	public boolean xoaCTDichVu_TheoMaHoaDon(String hd) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("DELETE DELETE ChiTietDichVu" + " WHERE maHoaDon = ?");
-			statement.setString(1, ctDichVu.getHoaDon().getMaHoaDon());
+			statement = con.prepareStatement("DELETE ChiTietDichVu" + " WHERE maHoaDon = ?");
+			statement.setString(1, hd);
 			n = statement.executeUpdate();
 
 		} catch (Exception e) {

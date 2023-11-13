@@ -333,8 +333,6 @@ public class Modal_ThemDichVu extends JFrame {
 				ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, dv, soLuong, soLuongDaSuDung, ngayNhap,
 						ngayHetHan, moTa, hinhA);
 
-				System.out.println(dv.toString());
-				System.out.println(ttdv.toString());
 				try {
 
 					DichVu_DAO DAO_DV = new DichVu_DAO();

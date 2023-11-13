@@ -1,6 +1,7 @@
 package Entity;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Objects;
 
 /**
@@ -8,14 +9,16 @@ import java.util.Objects;
  * @author THANH CUONG
  *
  */
+
 public class PhieuDatPhong {
 	private String maPhieuDat;
 	private Phong phong;
 	private NhanVien nhanVien;
 	private KhachHang khachHang;
-	private Date thoiGianDatPhong;
-	private Date thoiGianNhanPhong;
+	private Timestamp thoiGianDatPhong;
+	private Timestamp thoiGianNhanPhong;
 	private double tienCoc;
+	
 	private String trangThai;
 	private String moTa;
 	public PhieuDatPhong() {
@@ -27,21 +30,21 @@ public class PhieuDatPhong {
 	 * @param phong
 	 * @param nhanVien
 	 * @param khachHang
-	 * @param thoiGianDatPhong
-	 * @param thoiGianNhanPhong
+	 * @param tgDatPhong
+	 * @param tgNhanPhong
 	 * @param tienCoc
 	 * @param trangThai
 	 * @param moTa
 	 */
-	public PhieuDatPhong(String maPhieuDat, Phong phong, NhanVien nhanVien, KhachHang khachHang, Date thoiGianDatPhong,
-			Date thoiGianNhanPhong, double tienCoc, String trangThai, String moTa) {
+	public PhieuDatPhong(String maPhieuDat, Phong phong, NhanVien nhanVien, KhachHang khachHang, java.util.Date tgDatPhong,
+			java.sql.Timestamp tgNhanPhong, double tienCoc, String trangThai, String moTa) {
 		super();
 		this.maPhieuDat = maPhieuDat;
 		this.phong = phong;
 		this.nhanVien = nhanVien;
 		this.khachHang = khachHang;
-		this.thoiGianDatPhong = thoiGianDatPhong;
-		this.thoiGianNhanPhong = thoiGianNhanPhong;
+		this.thoiGianDatPhong =  (java.sql.Timestamp) tgDatPhong;
+		this.thoiGianNhanPhong =  (java.sql.Timestamp) tgNhanPhong;
 		this.tienCoc = tienCoc;
 		this.trangThai = trangThai;
 		this.moTa = moTa;
@@ -74,16 +77,16 @@ public class PhieuDatPhong {
 	public void setKhachHang(KhachHang khachHang) {
 		this.khachHang = khachHang;
 	}
-	public Date getThoiGianDatPhong() {
+	public Timestamp getThoiGianDatPhong() {
 		return thoiGianDatPhong;
 	}
-	public void setThoiGianDatPhong(Date thoiGianDatPhong) {
+	public void setThoiGianDatPhong(Timestamp thoiGianDatPhong) {
 		this.thoiGianDatPhong = thoiGianDatPhong;
 	}
-	public Date getThoiGianNhanPhong() {
+	public Timestamp getThoiGianNhanPhong() {
 		return thoiGianNhanPhong;
 	}
-	public void setThoiGianNhanPhong(Date thoiGianNhanPhong) {
+	public void setThoiGianNhanPhong(Timestamp thoiGianNhanPhong) {
 		this.thoiGianNhanPhong = thoiGianNhanPhong;
 	}
 	public double getTienCoc() {
@@ -125,5 +128,7 @@ public class PhieuDatPhong {
 				+ ", khachHang=" + khachHang + ", thoiGianDatPhong=" + thoiGianDatPhong + ", thoiGianNhanPhong="
 				+ thoiGianNhanPhong + ", tienCoc=" + tienCoc + ", trangThai=" + trangThai + ", moTa=" + moTa + "]";
 	}
+	
+	
 	
 }

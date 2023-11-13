@@ -32,7 +32,6 @@ public class CardDichVu extends JPanel {
 	public CardDichVu(DichVu dichVu) {
 		setBackground(new Color(255, 255, 255));
 		this.dichVu = dichVu;
-		System.out.println(dichVu);
 
 		DAO_TTDV = new ThongTinDichVu_DAO();
 		this.ttdv = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(dichVu.getMaDichVu());

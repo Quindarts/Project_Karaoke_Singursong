@@ -31,7 +31,7 @@ public class KhuyenMai_DAO {
 				java.sql.Date ngayBatDau = rs.getDate("ngayBatDau");
 				java.sql.Date ngayKetThuc = rs.getDate("ngayKetThuc");
 				int tongSoLuong = rs.getInt("tongSoLuong");
-				Double chietKhau = rs.getDouble("chietKhau");
+				Double chietKhau = rs.getDouble("chieuKhau");
 				String moTa = rs.getString("moTa");
 				KhuyenMai khuyenMai = new KhuyenMai(maKhuyenMai, tenKhuyenMai, maGiamGia, ngayBatDau, ngayKetThuc,
 						tongSoLuong, chietKhau, moTa);

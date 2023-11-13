@@ -19,6 +19,15 @@ public class DichVu {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public DichVu(String maDichVu, String tenDichVu, int soLuong, double donGia) {
+		super();
+		this.maDichVu = maDichVu;
+		this.tenDichVu = tenDichVu;
+		this.soLuong = soLuong;
+		this.donGia = donGia;
+	}
+
 	public DichVu(String maDichVu, String tenDichVu, int soLuong, String donViTinh, double donGia, boolean trangThai) {
 		super();
 		this.maDichVu = maDichVu;

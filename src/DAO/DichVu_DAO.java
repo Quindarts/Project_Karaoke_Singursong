@@ -176,7 +176,7 @@ public class DichVu_DAO {
 				e2.printStackTrace();
 			}
 		}
-		System.out.println("SO Lan cap nhat:" + n);
+
 		return n;
 	}
 
