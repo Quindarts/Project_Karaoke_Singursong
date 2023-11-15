@@ -756,7 +756,6 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 
 	public void renderTableDichVu(String maP) {
 		XoaDuLieuTrenTable();
-		System.out.println(maP);
 
 		ChiTietHoaDon chiTietHD = new ChiTietHoaDon();
 		ChiTietHoaDon_DAO DAO_chiTietHD = new ChiTietHoaDon_DAO();
@@ -766,17 +765,33 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 		if (chiTietHD != null) {
 			chiTietDV = new ChiTietDichVu();
 			DAO_chiTietDV = new ChiTietDichVu_DAO();
-			chiTietDV = DAO_chiTietDV.timCTDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
+//			layDanhSachChiTietDichVu_TheoMaHoaDon
+			ArrayList<ChiTietDichVu> dsCTDV = new ArrayList<>();
+			dsCTDV = DAO_chiTietDV.layDanhSachChiTietDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
 
-			DichVu dv = new DichVu();
-			DichVu_DAO DAO_DV = new DichVu_DAO();
+			for (ChiTietDichVu value : dsCTDV) {
+	            System.out.println();
+	            
+	        	DichVu dv = new DichVu();
+				DichVu_DAO DAO_DV = new DichVu_DAO();
 
-			dv = DAO_DV.layDichVu_TheoMaDichVu(chiTietDV.getDichVu().getMaDichVu());
+				
+				
+				
+				dv = DAO_DV.layDichVu_TheoMaDichVu(value.getDichVu().getMaDichVu());
+				
+				
+				Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getSoLuong(), dv.getDonGia(),
+						dv.getSoLuong() * dv.getDonGia(), "cap nhat" };
 
-			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getSoLuong(), dv.getDonGia(),
-					dv.getSoLuong() * dv.getDonGia(), "cap nhat" };
+				modal_Dv.addRow(rowData);
+	            
+	        }
+			
+		
+			
 
-			modal_Dv.addRow(rowData);
+			
 
 		} else {
 			System.out.println("Phong nay ko co dich vu");
@@ -796,59 +811,59 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 
 		renderTableDichVu(maPhong);
 
-		phong = DAO_Phong.timPhong_TheoMaPhong(maPhong);
-		loaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
-
-		DAO_KH = new KhachHang_DAO();
-		khachHang = DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang);
-
-		phieuDat_maPhong = DAO_PhieuDat.layPhieuDatPhong_TheoMaPhong(maPhong);
-
-		Date currentDate = new Date();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-
-		String timeNhanPhong = sdf.format(phieuDat_maPhong.getThoiGianNhanPhong());
-		String curentTime = sdf.format(currentDate);
-
-		Calendar calendar1 = Calendar.getInstance();
-		calendar1.setTime(currentDate);
-
-		Calendar calendar2 = Calendar.getInstance();
-		calendar2.setTime(phieuDat_maPhong.getThoiGianNhanPhong());
-
-		long millisecondsDiff = calendar1.getTimeInMillis() - calendar2.getTimeInMillis();
-		long hourDiff = millisecondsDiff / (60 * 60 * 1000);
-		long remainingMilliseconds = millisecondsDiff % (60 * 60 * 1000);
-		long minDiff = remainingMilliseconds / (60 * 1000);
-
-		DecimalFormat df = new DecimalFormat("#.#");
-
-		int rowCount = table_DichVu.getRowCount();
-		int sum = 0;
-
-		for (int i = 0; i < rowCount; i++) {
-			// Lấy giá trị ở hàng i, cột columnIndex
-			Object value = table_DichVu.getValueAt(i, 4);
-
-			// Kiểm tra giá trị có phải là số hay không trước khi thêm vào tổng
-			if (value instanceof Number) {
-				sum += ((Number) value).intValue();
-			}
-		}
-
-		txt__maPhong.setText(maPhong);
-		txt__loaiPhong.setText(loaiPhong.getTenLoaiPhong());
-		txt_khachHang.setText(khachHang.getHoTen());
-		txt__soDienThoai.setText(khachHang.getSoDienThoai());
-		txt__thoiGianNhanPhong.setText(timeNhanPhong);
-		txt__thoiGianTraPhong.setText(curentTime);
-		txt__soGioHat.setText(String.valueOf(hourDiff) + ":" + String.valueOf(minDiff));
-		txt__giaPhong.setText(String.valueOf(loaiPhong.getGiaTien()));
-		txt__tienPhong.setText(df.format(loaiPhong.getGiaTien() * hourDiff + (minDiff * loaiPhong.getGiaTien() / 60)));
-		txt__tienCoc.setText(String.valueOf(phieuDat_maPhong.getTienCoc()));
-		txt__tienDichVu.setText(String.valueOf(sum));
-		txt__tienhoadonPhong
-				.setText(df.format(loaiPhong.getGiaTien() * hourDiff + (minDiff * loaiPhong.getGiaTien() / 60) + sum));
+//		phong = DAO_Phong.timPhong_TheoMaPhong(maPhong);
+//		loaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
+//
+//		DAO_KH = new KhachHang_DAO();
+//		khachHang = DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang);
+//
+//		phieuDat_maPhong = DAO_PhieuDat.layPhieuDatPhong_TheoMaPhong(maPhong);
+//
+//		Date currentDate = new Date();
+//		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+//
+//		String timeNhanPhong = sdf.format(phieuDat_maPhong.getThoiGianNhanPhong());
+//		String curentTime = sdf.format(currentDate);
+//
+//		Calendar calendar1 = Calendar.getInstance();
+//		calendar1.setTime(currentDate);
+//
+//		Calendar calendar2 = Calendar.getInstance();
+//		calendar2.setTime(phieuDat_maPhong.getThoiGianNhanPhong());
+//
+//		long millisecondsDiff = calendar1.getTimeInMillis() - calendar2.getTimeInMillis();
+//		long hourDiff = millisecondsDiff / (60 * 60 * 1000);
+//		long remainingMilliseconds = millisecondsDiff % (60 * 60 * 1000);
+//		long minDiff = remainingMilliseconds / (60 * 1000);
+//
+//		DecimalFormat df = new DecimalFormat("#.#");
+//
+//		int rowCount = table_DichVu.getRowCount();
+//		int sum = 0;
+//
+//		for (int i = 0; i < rowCount; i++) {
+//			// Lấy giá trị ở hàng i, cột columnIndex
+//			Object value = table_DichVu.getValueAt(i, 4);
+//
+//			// Kiểm tra giá trị có phải là số hay không trước khi thêm vào tổng
+//			if (value instanceof Number) {
+//				sum += ((Number) value).intValue();
+//			}
+//		}
+//
+//		txt__maPhong.setText(maPhong);
+//		txt__loaiPhong.setText(loaiPhong.getTenLoaiPhong());
+//		txt_khachHang.setText(khachHang.getHoTen());
+//		txt__soDienThoai.setText(khachHang.getSoDienThoai());
+//		txt__thoiGianNhanPhong.setText(timeNhanPhong);
+//		txt__thoiGianTraPhong.setText(curentTime);
+//		txt__soGioHat.setText(String.valueOf(hourDiff) + ":" + String.valueOf(minDiff));
+//		txt__giaPhong.setText(String.valueOf(loaiPhong.getGiaTien()));
+//		txt__tienPhong.setText(df.format(loaiPhong.getGiaTien() * hourDiff + (minDiff * loaiPhong.getGiaTien() / 60)));
+//		txt__tienCoc.setText(String.valueOf(phieuDat_maPhong.getTienCoc()));
+//		txt__tienDichVu.setText(String.valueOf(sum));
+//		txt__tienhoadonPhong
+//				.setText(df.format(loaiPhong.getGiaTien() * hourDiff + (minDiff * loaiPhong.getGiaTien() / 60) + sum));
 
 	}
 

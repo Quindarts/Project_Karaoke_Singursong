@@ -100,11 +100,12 @@ public class TaiKhoan_DAO {
 		return taiKhoan;
 	}
 
-	public TaiKhoan capNhatTaiKhoan_TheoTenDangNhap(String tenDangNhap, String maNhanVien, String matKhau) {
+	public boolean capNhatTaiKhoan_TheoTenDangNhap(String tenDangNhap, String matKhau) {
 		Connection con = ConnectDB.getInstance().getConnection();
+		int n = 0;
 		TaiKhoan taiKhoan = null;
 		try {
-			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET  maKhau = ? WHERE tenDangNhap = ?");
+			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET  matKhau = ? WHERE tenDangNhap = ?");
 			statement.setString(1, matKhau);
 			statement.setString(2, tenDangNhap);
 
@@ -115,11 +116,13 @@ public class TaiKhoan_DAO {
 				matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
 				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				n++;
+				System.out.println("đã thực hiện đổi mật khẩu");
 			}
 		} catch (SQLException e) {
-			return null;
+			return n > 0;
 		}
-		return taiKhoan;
+		return n > 0;
 	}
 
 	public TaiKhoan capNhatTaiKhoan_TheoMaNhanVien(String tenDangNhap, String maNhanVien, String matKhau) {
@@ -141,5 +144,29 @@ public class TaiKhoan_DAO {
 			return null;
 		}
 		return taiKhoan;
+	}
+	
+	public TaiKhoan timTaiKhoan_TheoTenDangNhap(String tenDangNhap) {
+		Connection con = ConnectDB.getInstance().getConnection();
+		TaiKhoan taiKhoan = null;
+		try {
+			PreparedStatement statement = con
+					.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ?");
+			statement.setString(1, tenDangNhap);
+			ResultSet rs = statement.executeQuery();
+
+			while (rs.next()) {
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				tenDangNhap = rs.getString("tenDangNhap");
+				String matKhau = rs.getString("matKhau");
+				Boolean trangThai = rs.getBoolean("trangThai");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+			}
+
+		} catch (SQLException e) {
+			return null;
+		}
+		return taiKhoan;
+		
 	}
 }

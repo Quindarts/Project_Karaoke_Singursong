@@ -4,8 +4,11 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -18,6 +21,7 @@ import javax.swing.border.EmptyBorder;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import DAO.DichVu_DAO;
+import DAO.NhanVien_DAO;
 import DAO.Phong_DAO;
 import Entity.NhanVien;
 import GUI.JFrame_DangNhap.RoundedTransparentBorder;
@@ -92,6 +96,9 @@ public class JFrame_ThuNgan extends JFrame {
 	private JButton btnTrangSau;
 	private JButton btnTrangDau;
 	private JTextField txtTrang;
+	
+	private NhanVien_DAO NV_DAO;
+	private MouseListener menuClickListener;
 
 	/**
 	 * Rounded JPanel
@@ -155,7 +162,7 @@ public class JFrame_ThuNgan extends JFrame {
 	 */
 
 	public JFrame_ThuNgan(NhanVien nhanVien) {
-		this.nhanVien = nhanVien;
+//		this.nhanVien = nhanVien;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1530, 800);
@@ -418,9 +425,6 @@ public class JFrame_ThuNgan extends JFrame {
 
 		Clock();
 		
-		/**
-		 * 
-		 **/
 		panel_Function.add(Panel_QLDP);
 		panel_Function.add(Panel_QLKH);
 		panel_Function.add(Panel_BCTK);
@@ -432,6 +436,11 @@ public class JFrame_ThuNgan extends JFrame {
 		panel_Function.add(Panel_QLP);
 		panel_Function.add(Panel_QLNV);
 		
+		
+		
+		
+		
+		
 		/**
 		 * addMouseListener
 		 **/
@@ -442,11 +451,41 @@ public class JFrame_ThuNgan extends JFrame {
 		addMenuClickListener(panelMenu_QLDichVu, Panel_QLDV);
 		addMenuClickListener(panelMenu_QLKhuyenMai, Panel_QLKM);
 		addMenuClickListener(panelMenu_QLLoaiPhong, Panel_QLLP);
-		addMenuClickListener(panelMenu_QLNhanVien, Panel_QLNV);
+	
 		addMenuClickListener(panelMenu_QLPhong, Panel_QLP);
 		addMenuClickListener(panelMenu_QLDatPhong, Panel_QLDP);
 		addMenuClickListener(panelMenu_BaoCaoThongKe, Panel_BCTK);
-
+		
+		
+		if(nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			addMenuClickListener(panelMenu_QLNhanVien, Panel_QLNV);
+			System.out.println("nay laf quan ly");
+		 } else {
+			 
+			 System.out.println("Không phải quản lý nhân viên");
+		 }
+		
+		
+		mntmNewMenuItem_2.addActionListener((ActionListener) new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	System.out.println(nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000"));
+                setVisible(false);
+                JFrame_DangNhap dangnhap = new JFrame_DangNhap();
+                dangnhap.setVisible(true);
+               
+            }
+        });
+		
+		mntmNewMenuItem.addActionListener((ActionListener) new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+            	Modal_TrangCaNhan canhan = new Modal_TrangCaNhan(nhanVien);
+            	canhan.setVisible(true);
+               
+            }
+        });
+		
 	}
 
 	
