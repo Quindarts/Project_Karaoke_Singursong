@@ -33,6 +33,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.net.URL;
 import java.sql.SQLException;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -64,7 +65,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public Modal_ThemLoaiPhong() {
+	public Modal_ThemLoaiPhong(String hinhAnh) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1024, 450);
 		contentPane = new JPanel();
@@ -96,6 +97,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		img_show_panel = new JLabel();
 		img_show_panel.setBounds(10, 10, 159, 178);
 		pnl_Anh.add(img_show_panel);
+		
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
@@ -228,13 +230,24 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 
 		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dispose(); // Dựa vào Frame chứ nó nó để fix
-//				TrangChu tc = new TrangChu();
-//				tc.setVisible(true);
-//				setVisible(false);
+				dispose();
 			}
 		});
 
+//		File file = new File(hinhAnh);
+//        String fileName = file.getName();
+//        String relativePath = "/img" + File.separator + fileName;
+//        relativePath = relativePath.replace(File.separator, "/");
+//	
+//        System.out.println(relativePath);
+//        
+//		ImageIcon originalIcon = new ImageIcon(Modal_ThemLoaiPhong.class.getResource(relativePath));
+//		Image originalImage = originalIcon.getImage();
+//		Image resizedImage = originalImage.getScaledInstance(159, 176, Image.SCALE_SMOOTH);
+//		ImageIcon resizedIcon = new ImageIcon(resizedImage);
+//		
+//		img_show_panel.setIcon(resizedIcon);
+		
 		btn_Luu.addActionListener(this);
 	}
 
@@ -280,12 +293,14 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		txt_SoLuongKhachToiDa.setText(soLuong);
 		txtA_Mota.setText(moTa);
 //		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));	
+		
 		if(!hinhAnh.equals("")) {
-			docAnh(hinhAnh);
+			docAnh(hinhAnh);			
 		} else {
 			docAnh("D:\\Hk1-3\\PTUD\\sourecode\\KaraokeSingUrSong\\src\\img\\noImage.jpg");
 		}
 		
+	
 	}
 
 	public void docAnh(String hinhAnh) {	

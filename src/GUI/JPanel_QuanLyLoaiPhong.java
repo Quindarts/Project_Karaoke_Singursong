@@ -186,7 +186,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 					String hinhAnh = model.getValueAt(row, 4).toString();
 					String moTa = model.getValueAt(row, 5).toString();
 	
-					Modal_ThemLoaiPhong modal_loaiPhong = new Modal_ThemLoaiPhong();
+					Modal_ThemLoaiPhong modal_loaiPhong = new Modal_ThemLoaiPhong(hinhAnh);
 					modal_loaiPhong.setVisible(true);
 					modal_loaiPhong.setModalThemLoaiPhong(maLoaiPhong, tenPhong, giaTien, soLuong, hinhAnh, moTa);
 					
@@ -291,7 +291,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			Modal_ThemLoaiPhong modal_laoPhong = new Modal_ThemLoaiPhong();
+			Modal_ThemLoaiPhong modal_laoPhong = new Modal_ThemLoaiPhong("");
 			modal_laoPhong.setVisible(true);
 		}
 		

@@ -30,6 +30,7 @@ import DAO.ThongTinDichVu_DAO;
 import Entity.DichVu;
 import Entity.ThongTinDichVu;
 import OtherFunction.HelpValidate;
+import javax.swing.border.LineBorder;
 
 public class Modal_CapNhatDichVu extends JFrame {
 	private JPanel contentPane;
@@ -78,28 +79,15 @@ public class Modal_CapNhatDichVu extends JFrame {
 		pnl_TieuDe.add(lbl_Title);
 
 		JPanel pnl_Anh = new JPanel();
+		pnl_Anh.setBorder(new LineBorder(new Color(0, 0, 255)));
 		pnl_Anh.setBackground(Color.WHITE);
-		pnl_Anh.setBounds(26, 95, 179, 234);
+		pnl_Anh.setBounds(26, 95, 179, 201);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
 		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 179, 192);
+		img_show_panel.setBounds(10, 10, 159, 176);
 		pnl_Anh.add(img_show_panel);
-
-		JButton btn_ChonAnh = new JButton("Chọn ảnh");
-		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_ChonAnh.setForeground(new Color(255, 255, 255));
-
-		btn_ChonAnh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-			}
-
-		});
-		btn_ChonAnh.setBackground(new Color(0, 128, 255));
-		btn_ChonAnh.setBounds(0, 202, 179, 32);
-		pnl_Anh.add(btn_ChonAnh);
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
@@ -277,7 +265,14 @@ public class Modal_CapNhatDichVu extends JFrame {
 		dateChooser_ngayNhap.setDate(ttdv.getNgayNhap());
 		dateChooser_ngayHetHan.setDate(ttdv.getNgayHetHan());
 		txt_maDichVu.setText(maDichVu);
-		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));
+		
+		ImageIcon originalIcon = new ImageIcon(Modal_CapNhatDichVu.class.getResource(ttdv.getHinhAnh()));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(159, 176, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);
+		
+		img_show_panel.setIcon(resizedIcon);
+		
 		txt_GiaTien.setText(donGia);
 
 		txt_SoLuong.setText(soLuong);
@@ -286,6 +281,20 @@ public class Modal_CapNhatDichVu extends JFrame {
 		txt_tenDichVu.setText(tenDichVu);
 
 		txtA_moTa.setText(ttdv.getMoTa());
+		
+				JButton btn_ChonAnh = new JButton("Chọn ảnh");
+				btn_ChonAnh.setBounds(26, 299, 179, 32);
+				contentPane.add(btn_ChonAnh);
+				btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
+				btn_ChonAnh.setForeground(new Color(255, 255, 255));
+				
+						btn_ChonAnh.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+							}
+				
+						});
+						btn_ChonAnh.setBackground(new Color(0, 128, 255));
 
 		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -311,7 +320,13 @@ public class Modal_CapNhatDichVu extends JFrame {
 				int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
 				Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
 				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
-				String hinhA = pathImg;
+				
+				File file = new File(pathImg);
+		        String fileName = file.getName();
+		        String relativePath = "/img" + File.separator + fileName;
+		        relativePath = relativePath.replace(File.separator, "/");
+		        String hinhA = relativePath;
+		        
 				String moTa = txtA_moTa.getText();
 
 				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);
@@ -367,7 +382,6 @@ public class Modal_CapNhatDichVu extends JFrame {
 		}
 
 		else if (result == JFileChooser.CANCEL_OPTION) {
-			System.out.println("Không tìm thấy file tải lên");
 			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
 		}
 		return path;
