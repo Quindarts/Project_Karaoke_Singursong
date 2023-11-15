@@ -102,6 +102,15 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 
 	// Entity
 	private HoaDon hoaDon;
+
+	public HoaDon getHoaDon() {
+		return hoaDon;
+	}
+
+	public void setHoaDon(HoaDon hoaDon) {
+		this.hoaDon = hoaDon;
+	}
+
 	private KhachHang khachHang;
 	private LoaiPhong loaiPhong;
 	private Phong phong;
@@ -113,9 +122,13 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 
 	private PhieuDatPhong phieuDat_maPhong;
 	private JTextField txt__tienhoadonPhong;
-	private Phong_DAO DAO_Phong;
+
+	private Phong_DAO DAO_P;
 	private LoaiPhong_DAO DAO_LP;
+	private ChiTietHoaDon_DAO DAO_CTHD;
+	private HoaDon_DAO DAO_HD;
 	private PhieuDatPhong_DAO DAO_PhieuDat;
+
 	private JTextField txt__loaiPhong;
 	private KhachHang_DAO DAO_KH;
 	private ChiTietDichVu chiTietDV;
@@ -126,6 +139,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 	private final DecimalFormat dcf = new DecimalFormat("#,##0 VND");
+	private DefaultTableModel modelPhong;
 
 	/**
 	 * Launch the application.
@@ -185,6 +199,14 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 		this.khachHang = khachHang;
 		this.phong = phong;
 		this.loaiPhong = loaiPhong;
+
+		try {
+			DAO_HD = new HoaDon_DAO();
+			hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
+			setHoaDon(hoaDon);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 //		System.out.println(hoaDon.toString());
 //		System.out.println(khachHang.toString());
@@ -535,8 +557,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 		table_DichVu = new JTable();
 		table_DichVu.setBackground(Color.WHITE);
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "ID", "T\u00EAn m\u1EB7t h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng", "\u0110\u01A1n gi\u00E1",
-						"Th\u00E0nh ti\u1EC1n", "C\u1EADp nh\u1EADt" }));
+				new String[] { "STT", "Mặt hàng", "Đơn giá", "Số lượng", "Thành tiền" }));
 
 		table_DichVu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
@@ -569,13 +590,13 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 		scrollPane_1.setBounds(0, 45, 534, 241);
 		panel_Table_Phong.add(scrollPane_1);
 
-		table_Phong = new JTable(modal_Phong);
-		table_Phong.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "M\u00E3 ph\u00F2ng",
-				"M\u00E3 kh\u00E1ch h\u00E0ng", "S\u1ED1 l\u01B0\u1EE3ng", "gi\u00E1 ti\u1EC1n", "action" }) {
+		table_Phong = new JTable();
+		table_Phong.setModel(modelPhong = new DefaultTableModel(new Object[][] {},
+				new String[] { "STT", "Loại phòng", "Tên phòng", "Số giờ hát", "Giá phòng", "Thành tiền", "Action" }) {
 			@Override
 			public Class<?> getColumnClass(int columnIndex) {
 				// Xác định loại dữ liệu của cột "Action" là Boolean.class (checkbox)
-				if (columnIndex == 4) {
+				if (columnIndex == 6) {
 					return Boolean.class;
 				}
 				// Các cột khác sẽ sử dụng loại dữ liệu mặc định (Object)
@@ -585,7 +606,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				// Ngăn chặn sự kiện chỉnh sửa trên 3 cột đầu tiên (index 0, 1, 2)
-				return column >= 4;
+				return column >= 5;
 			}
 		});
 
@@ -635,6 +656,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 		txt__tienKhachDua.addActionListener(this);
 
 		renderTablePhong();
+	
 	}
 
 	@Override
@@ -716,42 +738,36 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 			// dcf.format()
 			if (comparison < 0) {
 				txt__tienThoiLai.setText(tienTong.toString());
-			} 
-			else {
+			} else {
 				// Nhân kết quả cho 5%
 				BigDecimal percentage = new BigDecimal("0.05");
 				BigDecimal finalTongTien = tienTong.multiply(percentage);
-				
+
 				txt__tienThoiLai.setText(dcf.format(finalTongTien));
 			}
 		}
 	}
 
 	public void renderTablePhong() {
-		DAO_PhieuDat = new PhieuDatPhong_DAO();
-		DAO_Phong = new Phong_DAO();
+		int sttCTHD = 1;
+		DAO_CTHD = new ChiTietHoaDon_DAO();
+		DAO_P = new Phong_DAO();
+		DAO_HD = new HoaDon_DAO();
 		DAO_LP = new LoaiPhong_DAO();
-
-		phieuDat_maPhong = new PhieuDatPhong();
-
-		ArrayList<PhieuDatPhong> listPhieuDat = new ArrayList<>();
-
-		phieuDat_maPhong = DAO_PhieuDat.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
-		listPhieuDat = DAO_PhieuDat.layTatCaPhieuDatPhong();
-
-		for (PhieuDatPhong value : listPhieuDat) {
-			if (phieuDat_maPhong.getKhachHang().getMaKhachHang().equals(value.getKhachHang().getMaKhachHang())) {
-				phong = DAO_Phong.timPhong_TheoMaPhong(value.getPhong().getMaPhong());
-				loaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
-
-				Object[] rowData = { value.getPhong().getMaPhong(), value.getKhachHang().getMaKhachHang(),
-						loaiPhong.getSoLuongToiDa(), loaiPhong.getGiaTien(), true };
-
-				modal_Phong.addRow(rowData);
-
+		ArrayList<ChiTietHoaDon> dsCTHD = DAO_CTHD.timCTHoaDon_TheoMaHoaDon(getHoaDon().getMaHoaDon());
+		System.out.println(hoaDon.getMaHoaDon());
+		System.out.println(dsCTHD);
+		if (dsCTHD != null) {
+			for (ChiTietHoaDon cthd : dsCTHD) {
+				Phong p = DAO_P.timPhong_TheoMaPhong(cthd.getPhong().getMaPhong());
+				LoaiPhong lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+				HoaDon hd = DAO_HD.layHoaDon_TheoMaHoaDon(hoaDon.getMaHoaDon());
+				System.out.println(hd);
+				Object[] rowData = { sttCTHD++, lp.getTenLoaiPhong(), p.getTenPhong(), hd.tinhGioHat(), lp.getGiaTien(),
+						cthd.thanhTien(hd.tinhGioHat()) };
+				modelPhong.addRow(rowData);
 			}
 		}
-
 	}
 
 	public void renderTableDichVu(String maP) {
@@ -773,8 +789,8 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 
 			dv = DAO_DV.layDichVu_TheoMaDichVu(chiTietDV.getDichVu().getMaDichVu());
 
-			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getSoLuong(), dv.getDonGia(),
-					dv.getSoLuong() * dv.getDonGia(), "cap nhat" };
+			Object[] rowData = {"1", dv.getTenDichVu(), dv.getDonGia(),dv.getSoLuong(),
+					dv.getSoLuong() * dv.getDonGia()};
 
 			modal_Dv.addRow(rowData);
 
@@ -783,6 +799,31 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 		}
 
 	}
+
+//		ChiTietHoaDon chiTietHD = new ChiTietHoaDon();
+//		ChiTietHoaDon_DAO DAO_chiTietHD = new ChiTietHoaDon_DAO();
+//		chiTietHD = DAO_chiTietHD.timCTHoaDon_TheoMaPhong(maP);
+//
+//		if (chiTietHD != null) {
+//			chiTietDV = new ChiTietDichVu();
+//			DAO_chiTietDV = new ChiTietDichVu_DAO();
+//			chiTietDV = DAO_chiTietDV.timCTDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
+//
+//			DichVu dv = new DichVu();
+//			DichVu_DAO DAO_DV = new DichVu_DAO();
+//
+//			dv = DAO_DV.layDichVu_TheoMaDichVu(chiTietDV.getDichVu().getMaDichVu());
+//
+//			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getSoLuong(), dv.getDonGia(),
+//					dv.getSoLuong() * dv.getDonGia(), "cap nhat" };
+//
+//			modal_Dv.addRow(rowData);
+//
+//		} else {
+//			System.out.println("Phong nay ko co dich vu");
+//		}
+
+//	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -796,7 +837,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener, MouseList
 
 		renderTableDichVu(maPhong);
 
-		phong = DAO_Phong.timPhong_TheoMaPhong(maPhong);
+		phong = DAO_P.timPhong_TheoMaPhong(maPhong);
 		loaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
 
 		DAO_KH = new KhachHang_DAO();

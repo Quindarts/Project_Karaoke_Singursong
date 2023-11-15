@@ -41,12 +41,10 @@ public class HelpRamDomMa {
 			result = result + day + "" + month + "" + year + "" + "D";
 		}
 		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.trim().length() - 3).equals("999")) {
-			System.out.println(maFromData.trim().substring(0, 10));
-			System.out.println(result.substring(0, 10).trim());
-			if (maFromData.trim().substring(0, 10).equals(result.substring(0, 10).trim())) {
+
+			if (maFromData.trim().substring(0, 11).equals(result.substring(0, 11).trim())) {
 
 				String str_base = maFromData.substring(11);
-				System.out.println(str_base);
 				String str_result = "";
 				for (int i = 0; i < str_base.length(); i++) {
 					char c = str_base.charAt(i);
@@ -74,11 +72,18 @@ public class HelpRamDomMa {
 		String user = "sa";
 		String password = "230903";
 		String maHoaDon = "";
-
+		String sql = "";
+		if (tenBang.trim().equals("HoaDon")) {
+			sql = "SELECT TOP 1 * " + " FROM  " + "  " + tenBang + "  " + tenCot + "  " + " ORDER BY ngayLap DESC";
+		}
+		if (tenBang.trim().equals("PhieuDatPhong")) {
+			sql = "SELECT TOP 1 * " + " FROM  " + "  " + tenBang + "  " + tenCot + "  "
+					+ " ORDER BY thoiGianDatPhong DESC";
+		}
 		ArrayList<String> maCot = new ArrayList<>();
 
 		try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
-			String sql = "SELECT " + tenCot + " FROM " + tenBang;
+
 			PreparedStatement preparedStatement = con.prepareStatement(sql);
 			ResultSet rs = preparedStatement.executeQuery();
 
@@ -86,6 +91,7 @@ public class HelpRamDomMa {
 				maHoaDon = rs.getString(tenCot);
 				maCot.add(maHoaDon);
 			}
+			System.out.println(maCot);
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -96,13 +102,9 @@ public class HelpRamDomMa {
 	public static void main(String[] args) {
 
 //		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
-		String maPhieuDat = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-
-//		System.out.println(maHoaDon);
+		String maPhieuDat = taoMa("HoaDon", "maHoaDon", "HD");
+		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "HD");
 		System.out.println(maPhieuDat);
-		System.out.println(maPhieuDat2);
-
 	}
 
 }

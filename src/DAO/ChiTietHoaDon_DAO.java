@@ -69,7 +69,9 @@ public class ChiTietHoaDon_DAO {
 		return ctHoaDon;
 	}
 
-	public ChiTietHoaDon timCTHoaDon_TheoMaHoaDon(String maHD) {
+	public ArrayList<ChiTietHoaDon> timCTHoaDon_TheoMaHoaDon(String maHD) {
+		ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<ChiTietHoaDon>();
+		Phong_DAO p_DAO = new Phong_DAO();
 		ChiTietHoaDon ctHoaDon = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -81,8 +83,9 @@ public class ChiTietHoaDon_DAO {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
-				Phong phong = new Phong(rs.getString("maPhong"));
+				Phong phong = p_DAO.timPhong_TheoMaPhong(rs.getString("maPhong"));
 				ctHoaDon = new ChiTietHoaDon(hoaDon, phong);
+				dsCTHD.add(ctHoaDon);
 
 			}
 		} catch (Exception e) {
@@ -95,8 +98,9 @@ public class ChiTietHoaDon_DAO {
 				e2.printStackTrace();
 			}
 		}
-		return ctHoaDon;
+		return dsCTHD;
 	}
+
 
 	public ChiTietHoaDon timCTHoaDon_TheoMaPhong(String maPhong) {
 

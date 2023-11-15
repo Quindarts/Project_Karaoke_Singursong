@@ -16,8 +16,10 @@ import javax.swing.border.EtchedBorder;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import DAO.NhanVien_DAO;
+import DAO.Phong_DAO;
 import DAO.TaiKhoan_DAO;
 import Entity.NhanVien;
+import Entity.Phong;
 import Entity.TaiKhoan;
 
 import javax.swing.UIManager;
@@ -43,6 +45,7 @@ import java.awt.event.KeyListener;
 import java.awt.geom.RoundRectangle2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 import javax.swing.*;
@@ -269,6 +272,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
 					System.out.println("Đăng nhập vào màn hình" + role);
 					thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
+					
 					thuNgan.setVisible(true);
 					dispose();
 
@@ -281,6 +285,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	/**
 	 * @return validateTaiKhoan
 	 */
+
 	public boolean validateTaiKhoan() {
 		String tenDangNhap = txtUsername.getText();
 		String matKhau = txtPassword.getText();

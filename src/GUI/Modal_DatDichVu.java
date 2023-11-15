@@ -74,7 +74,7 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 	private HoaDon hoaDon;
 	private ChiTietDichVu_DAO DAO_CTDV;
 	private ArrayList<ChiTietDichVu> dsCTDV_HD;
-	
+
 	private JTextField txt_soLuongMonDat;
 	private JTextField txt_TinhTongDichVu;
 	private JTextField txt_tongTienMonDat;
@@ -295,10 +295,7 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-	
-		
-	
-		
+
 		txt_loaiPhong.setColumns(10);
 		txt_loaiPhong.setEditable(false);
 		txt_loaiPhong.setBounds(80, 6, 160, 19);
@@ -589,43 +586,40 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 
 	public void DocDlDichVuHoaDon() {
 		try {
-			DAO_PDP = new PhieuDatPhong_DAO();
+
 			DAO_HD = new HoaDon_DAO();
 			DAO_CTDV = new ChiTietDichVu_DAO();
-			phieuDat = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
 
-			if (phieuDat != null) {
-				hoaDon = DAO_HD.layHoaDon_TheoMaPhieuDat(phieuDat.getMaPhieuDat());
-				System.out.println(hoaDon.toString());
-				if (hoaDon != null) {
-					dsCTDV_HD = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hoaDon.getMaHoaDon());
+			hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
+			System.out.println(hoaDon.toString());
+			if (hoaDon != null) {
+				dsCTDV_HD = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hoaDon.getMaHoaDon());
 
-					if (dsCTDV_HD != null) {
-						dsCTDV_HD.forEach(ctdv -> {
-							// Lưu chi tiết dịch vụ
-							DichVu dv = ctdv.getDichVu();
-							// Cap nhat thanh tien moi
+				if (dsCTDV_HD != null) {
+					dsCTDV_HD.forEach(ctdv -> {
+						// Lưu chi tiết dịch vụ
+						DichVu dv = ctdv.getDichVu();
+						// Cap nhat thanh tien moi
 
-							double thanhTienMoi = dv.getDonGia() * ctdv.getSoLuong();
+						double thanhTienMoi = dv.getDonGia() * ctdv.getSoLuong();
 
-							String dcf_thanhTienMoi = dcf.format(thanhTienMoi);
+						String dcf_thanhTienMoi = dcf.format(thanhTienMoi);
 
-							Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), ctdv.getSoLuong(), dv.getDonGia(),
-									dcf_thanhTienMoi };
+						Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), ctdv.getSoLuong(), dv.getDonGia(),
+								dcf_thanhTienMoi };
 
-							// Cập nhật số lượng ở table dịch vụ
+						// Cập nhật số lượng ở table dịch vụ
 
-							for (int i = 0; i < tableDichVu.getRowCount(); i++) {
+						for (int i = 0; i < tableDichVu.getRowCount(); i++) {
 
-								if (dv.getMaDichVu().equals(tableDichVu.getValueAt(i, 0).toString())) {
+							if (dv.getMaDichVu().equals(tableDichVu.getValueAt(i, 0).toString())) {
 
-									tableDichVu.setValueAt(String.valueOf(dv.getSoLuong() - ctdv.getSoLuong()), i, 2);
-								}
+								tableDichVu.setValueAt(String.valueOf(dv.getSoLuong() - ctdv.getSoLuong()), i, 2);
 							}
-							model_dichVuDatPhong.addRow(rowData);
-						});
+						}
+						model_dichVuDatPhong.addRow(rowData);
+					});
 
-					}
 				}
 			}
 

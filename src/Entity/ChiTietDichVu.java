@@ -1,5 +1,7 @@
 package Entity;
 
+import java.util.ArrayList;
+
 /**
  * ChiTietDichVu
  */
@@ -50,6 +52,13 @@ public class ChiTietDichVu {
 	public void setSoLuong(int soLuong) {
 		this.soLuong = soLuong;
 	}
+
+	public double thanhTien() {
+		double giaDichVu = dichVu.getDonGia();
+		return giaDichVu * soLuong;
+	}
+	
+	
 
 	@Override
 	public String toString() {

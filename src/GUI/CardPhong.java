@@ -9,7 +9,9 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -24,6 +26,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.ss.usermodel.Table;
 
+import DAO.HoaDon_DAO;
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
 import DAO.NhanVien_DAO;
@@ -32,11 +35,14 @@ import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
 import Entity.HoaDon;
 import Entity.KhachHang;
+import Entity.KhuyenMai;
 import Entity.LoaiPhong;
 import Entity.NhanVien;
 import Entity.PhieuDatPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
+import OtherFunction.HelpRamDomMa;
+
 import javax.swing.JCheckBox;
 import java.awt.Font;
 
@@ -227,12 +233,44 @@ public class CardPhong extends JPanel {
 		JMenuItem datPhongMenuItem = new JMenuItem("Đặt phòng hát ngay");
 		JMenuItem themDichVuItem = new JMenuItem("Thêm dịch vụ");
 		JMenuItem traPhongMenuItem = new JMenuItem("Trả phòng");
+		JMenuItem nhanPhongMenuItem = new JMenuItem("Nhận phòng");
 
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 			themDichVuItem.setEnabled(false);
 			chuyenPhongMenuItem.setEnabled(false);
 			traPhongMenuItem.setEnabled(false);
+			nhanPhongMenuItem.setEnabled(false);
 		}
+		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("OC")) {
+			nhanPhongMenuItem.setEnabled(false);
+
+		}
+		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("OCP")) {
+			themDichVuItem.setEnabled(false);
+			traPhongMenuItem.setEnabled(false);
+			nhanPhongMenuItem.setEnabled(true);
+
+		}
+		nhanPhongMenuItem.addActionListener(e1 -> {
+			System.out.println("nhaaaaaaa");
+
+			PhieuDatPhong_DAO DAO_PDP = new PhieuDatPhong_DAO();
+			HoaDon_DAO DAO_HD = new HoaDon_DAO();
+			try {
+				PhieuDatPhong pdp = DAO_PDP.layThongTinPhieuDatTrangThai_DangCho_MaPhong(phong.getMaPhong());
+				System.out.println(pdp);
+				if (DAO_PDP.capNhatPhieuDatTrangThai_DaNhanPhong_MaPhieuDat(pdp.getMaPhieuDat())) {
+					datPhongTruoc(pdp);
+					DAO_P.capNhat_TranThaiPhong(pdp.getPhong().getMaPhong(), "OC");
+					JOptionPane.showMessageDialog(null, "Nhận phòng thành công");
+
+				}
+			} catch (Exception e2) {
+				// TODO: handle exception
+				e2.printStackTrace();
+			}
+
+		});
 		traPhongMenuItem.addActionListener(e1 -> {
 			hoaDon = new HoaDon();
 			khachHang = new KhachHang();
@@ -284,7 +322,9 @@ public class CardPhong extends JPanel {
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
+
 			try {
+
 				if (dsPhieuDatPhong != null)
 					for (PhieuDatPhong pdp : dsPhieuDatPhong) {
 						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
@@ -315,7 +355,7 @@ public class CardPhong extends JPanel {
 		menu.add(xemThongTinMenuItem);
 		menu.add(chuyenPhongMenuItem);
 		menu.add(traPhongMenuItem);
-//		menu.add(datPhongMenuItem);
+		menu.add(nhanPhongMenuItem);
 		menu.add(themDichVuItem);
 
 		menu.show(this, e.getX(), e.getY());
@@ -330,5 +370,36 @@ public class CardPhong extends JPanel {
 			}
 		}
 		return true;
+	}
+
+	public boolean datPhongTruoc(PhieuDatPhong pdp) {
+		PhieuDatPhong_DAO DAO_PDP = new PhieuDatPhong_DAO();
+		HoaDon_DAO DAO_HD = new HoaDon_DAO();
+		KhachHang_DAO DAO_KH = new KhachHang_DAO();
+		KhachHang kh = new KhachHang();
+		kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+
+		Double tienCoc = 0.0;
+		HelpRamDomMa help = new HelpRamDomMa();
+		String maHD = help.taoMa("HoaDon", "maHoaDon", "HD");
+		String maKhuyenMai = null;
+		System.out.println(maHD);
+		Date layNgayHienTai = new Date();
+		Timestamp timestampNhanPhong = new Timestamp(layNgayHienTai.getTime());
+		Timestamp timestampDatPhong = new Timestamp(layNgayHienTai.getTime());
+		try {
+
+			HoaDon hd = new HoaDon(maHD, kh, nv, pdp, new KhuyenMai(), timestampDatPhong, "Đang chờ thanh toán", null);
+			if (DAO_HD.taoHoaDon(hd)) {
+				
+				return true;
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
+		return false;
 	}
 }

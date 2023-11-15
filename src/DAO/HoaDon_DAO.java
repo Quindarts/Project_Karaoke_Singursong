@@ -1,3 +1,5 @@
+
+
 package DAO;
 
 import java.sql.Connection;
@@ -29,19 +31,19 @@ public class HoaDon_DAO {
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
-				
+
 				String maHoaDon = rs.getString("maHoaDon");
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				HoaDon hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
 				danhSachHoaDon.add(hoaDon);
-				
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -65,8 +67,8 @@ public class HoaDon_DAO {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
@@ -83,7 +85,7 @@ public class HoaDon_DAO {
 		}
 		return hoaDon;
 	}
-	
+
 	public HoaDon layHoaDon_TheoMaKhachHang(String maKH) {
 		HoaDon hoaDon = null;
 		ConnectDB.getInstance();
@@ -100,8 +102,8 @@ public class HoaDon_DAO {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
@@ -118,6 +120,7 @@ public class HoaDon_DAO {
 		}
 		return hoaDon;
 	}
+
 	public ArrayList<HoaDon> layHoaDon_TheoNhanVien(String nv) {
 		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
 		HoaDon hoaDon = null;
@@ -138,8 +141,8 @@ public class HoaDon_DAO {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
@@ -157,7 +160,7 @@ public class HoaDon_DAO {
 		}
 		return listHD;
 	}
-	
+
 	public ArrayList<HoaDon> layHoaDon_TheoKhachHang(String kh) {
 		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
 		HoaDon hoaDon = null;
@@ -179,8 +182,8 @@ public class HoaDon_DAO {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
@@ -198,6 +201,7 @@ public class HoaDon_DAO {
 		}
 		return listHD;
 	}
+
 	public HoaDon layHoaDon_TheoMaNhanVien(String maNV) {
 		HoaDon hoaDon = null;
 		ConnectDB.getInstance();
@@ -214,8 +218,8 @@ public class HoaDon_DAO {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
@@ -232,7 +236,41 @@ public class HoaDon_DAO {
 		}
 		return hoaDon;
 	}
-	
+
+	public HoaDon layHoaDon_DangChoThanhToan(String maPhong) {
+		HoaDon hoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "select * from ChiTietHoaDon CTHD\r\n" + "JOIN HoaDon HD ON HD.maHoaDon = CTHD.maHoaDon\r\n"
+					+ "where  maPhong ='" + maPhong + "'\r\n" + "AND HD.trangThai = N'Đang chờ thanh toán'\r\n"
+					+ "AND CAST(HD.ngayLap AS DATE) = CAST(GETDATE() AS DATE)";
+			statement = con.prepareStatement(sql);
+
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maHoaDon = rs.getString("maHoaDon");
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+//				PhieuDatPhong phieuDatPhong = null;
+//				if (rs.getString("maPhieuDat") != null || !rs.getString("maPhieuDat").trim().equals("")) {
+				PhieuDatPhong	phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
+//				}
+				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
+				String trangThai = rs.getString("trangThai");
+				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
+						thoiGianKetThuc);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return hoaDon;
+	}
+
 	public HoaDon layHoaDon_TheoMaPhieuDat(String maPhD) {
 		HoaDon hoaDon = null;
 		ConnectDB.getInstance();
@@ -249,8 +287,8 @@ public class HoaDon_DAO {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
@@ -267,8 +305,7 @@ public class HoaDon_DAO {
 		}
 		return hoaDon;
 	}
-	
-	
+
 	public HoaDon layHoaDon_TheoMaKhuyenMai(String maKhM) {
 		HoaDon hoaDon = null;
 		ConnectDB.getInstance();
@@ -285,8 +322,8 @@ public class HoaDon_DAO {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
-				java.sql.Date ngayLap = rs.getDate("ngayLap");
-				java.sql.Date thoiGianKetThuc = rs.getDate("thoiGianKetThuc");
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
@@ -308,17 +345,19 @@ public class HoaDon_DAO {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
+
 		int n = 0;
 		try {
+			String maPhieuDat = hoaDon.getPhieuDatPhong() != null ? hoaDon.getPhieuDatPhong().getMaPhieuDat() : null;
 			statement = con.prepareStatement("INSERT INTO HoaDon values(?,?,?,?,?,?,?,?)");
 			statement.setString(1, hoaDon.getMaHoaDon());
 			statement.setString(2, hoaDon.getKhachHang().getMaKhachHang());
 			statement.setString(3, hoaDon.getNhanVien().getMaNhanVien());
-			statement.setString(4, hoaDon.getPhieuDatPhong().getMaPhieuDat());
+			statement.setString(4, maPhieuDat);
 			statement.setString(5, hoaDon.getKhuyenMai().getMaKhuyenMai());
-			statement.setDate(6, hoaDon.getNgayLap());
+			statement.setTimestamp(6, hoaDon.getNgayLap());
 			statement.setString(7, hoaDon.getTrangThai());
-			statement.setDate(8, hoaDon.getThoiGianKetThuc());
+			statement.setTimestamp(8, hoaDon.getThoiGianKetThuc());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -339,16 +378,17 @@ public class HoaDon_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
+			String maPhieuDat = hoaDon.getPhieuDatPhong() != null ? hoaDon.getPhieuDatPhong().getMaPhieuDat() : null;
 			statement = con.prepareStatement(
 					"UPDATE HoaDon SET maKhachHang = ?, maNhanVien = ?, maPhieuDat = ?, maKhuyenMai = ?, ngayLap = ?, trangThai = ?, thoiGianKetThuc = ?"
-							+ " WHERE maHoaDon = ? ");		
+							+ " WHERE maHoaDon = ? ");
 			statement.setString(1, hoaDon.getKhachHang().getMaKhachHang());
 			statement.setString(2, hoaDon.getNhanVien().getMaNhanVien());
-			statement.setString(3, hoaDon.getPhieuDatPhong().getMaPhieuDat());
+			statement.setString(3, maPhieuDat);
 			statement.setString(4, hoaDon.getKhuyenMai().getMaKhuyenMai());
-			statement.setDate(5, hoaDon.getNgayLap());
+			statement.setTimestamp(5, hoaDon.getNgayLap());
 			statement.setString(6, hoaDon.getTrangThai());
-			statement.setDate(7, hoaDon.getThoiGianKetThuc());
+			statement.setTimestamp(7, hoaDon.getThoiGianKetThuc());
 			statement.setString(8, hoaDon.getMaHoaDon());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
@@ -363,15 +403,14 @@ public class HoaDon_DAO {
 		}
 		return n > 0;
 	}
-	
+
 	public boolean xoaHoaDon(HoaDon hoaDon) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement(
-					"DELETE FROM HoaDon" + "WHERE maHoaDon = ?");
+			statement = con.prepareStatement("DELETE FROM HoaDon" + "WHERE maHoaDon = ?");
 			statement.setString(1, hoaDon.getMaHoaDon());
 			n = statement.executeUpdate();
 		} catch (Exception e) {

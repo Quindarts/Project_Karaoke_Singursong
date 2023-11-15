@@ -532,6 +532,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 		HelpRamDomMa help = new HelpRamDomMa();
 		maPDP = help.taoMa("PhieuDatPhong", "maPhieuDat", "PD");
+		
 
 		String maPhong = txtMaPhong.getText().toString().trim();
 		Phong p = new Phong(maPhong);
@@ -542,9 +543,10 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		Double tienCoc = Double.parseDouble(txtTienCoc.getText());
 		String moTa = txtMoTa.getText().trim();
 		DAO_PDP = new PhieuDatPhong_DAO();
+		
 		PhieuDatPhong pdp = new PhieuDatPhong(maPDP, p, nv, kh, timestampDatPhong, timestampNhanPhong, tienCoc,
 				"Chờ nhận phòng", moTa);
-
+		System.out.println(pdp.toString());
 		if (DAO_PDP.taoPhieuDatPhong(pdp)) {
 			JOptionPane.showMessageDialog(null, "Thêm phiếu thành công");
 		} else {

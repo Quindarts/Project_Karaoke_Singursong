@@ -8,6 +8,7 @@ import GUI.JPanel_QuanLyDatPhong.RoundedTransparentBorder;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dialog;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -55,7 +56,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.JComboBox;
 import javax.swing.SwingConstants;
 
-public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener {
+public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, MouseListener {
 
 	/**
 	 * Color
@@ -83,6 +84,8 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener {
 
 	private DefaultTableModel model;
 	private JButton btnLamMoi;
+
+	private JDialog_ThongTinHoaDon dialog_TTHD;
 
 	/**
 	 * Rounded JPanel
@@ -158,7 +161,15 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener {
 		table_HoaDon = new JTable();
 		table_HoaDon.setBackground(Color.WHITE);
 		table_HoaDon.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã hóa đơn", "Tên khách hàng",
-				"Tên nhân viên", "Mã phiếu đặt", "Mã khuyến mãi", "Ngày lập", "Trạng thái", "Thời gian trả phòng" }));
+				"Tên nhân viên", "Mã phiếu đặt", "Mã khuyến mãi", "Ngày lập", "Trạng thái", "Thời gian trả phòng" }) {
+
+			private static final long serialVersionUID = -143705667217047914L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Đặt tất cả các ô không thể chỉnh sửa
+			}
+		});
 		table_HoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 10, 1019, 615);
@@ -329,17 +340,11 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener {
 		btnTimKiem.setForeground(Color.WHITE);
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
+		addEvent();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		Object o = e.getSource();
-		if (o.equals(btnLamMoi)) {
-			clearTable();
-			DocDuLieuTrenSQL();
-		}
-
 	}
 
 	public void clearTable() {
@@ -358,10 +363,19 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener {
 			for (HoaDon hd : dsHD) {
 				KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
 				NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
-				Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
-						hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
-						hd.getTrangThai(), hd.getThoiGianKetThuc() };
-				model.addRow(rowData);
+				if(hd.getPhieuDatPhong() != null) {
+					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+							hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+							hd.getTrangThai(), hd.getThoiGianKetThuc() };
+					model.addRow(rowData);
+				}else {
+					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+							null, hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+							hd.getTrangThai(), hd.getThoiGianKetThuc() };
+					model.addRow(rowData);
+				}
+			
+				
 
 			}
 		}
@@ -425,6 +439,57 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener {
 
 			JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object o = e.getSource();
+		if (o.equals(btnLamMoi)) {
+			clearTable();
+			DocDuLieuTrenSQL();
+		}
+
+		if (o.equals(table_HoaDon)) {
+			if (e.getClickCount() == 2) {
+				int row = table_HoaDon.getSelectedRow();
+				String maHD = model.getValueAt(row, 0).toString();
+				dialog_TTHD = new JDialog_ThongTinHoaDon();
+				dialog_TTHD.setVisible(true);
+				dialog_TTHD.HienThongTinTheoMaHD(maHD);
+
+			}
+		}
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void addEvent() {
+		btnLamMoi.addMouseListener(this);
+		table_HoaDon.addMouseListener(this);
+
 	}
 
 }

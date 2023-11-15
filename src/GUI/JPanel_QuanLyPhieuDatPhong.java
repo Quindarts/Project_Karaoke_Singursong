@@ -575,7 +575,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 		if (dsPDP != null) {
 			for (PhieuDatPhong pdp : dsPDP) {
-				DAO_PDP.capNhatTrangThaiPhieu(pdp);
+//				DAO_PDP.capNhatTrangThaiPhieu(pdp);
 				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
 				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
 				Phong p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());

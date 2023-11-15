@@ -1,5 +1,10 @@
 package Entity;
 
+import java.sql.Timestamp;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+
 public class ChiTietHoaDon {
 	private HoaDon hoaDon;
 	private Phong phong;
@@ -29,6 +34,12 @@ public class ChiTietHoaDon {
 
 	public void setPhong(Phong phong) {
 		this.phong = phong;
+	}
+
+	public double thanhTien(float soGioHat) {
+//		System.out.println("tt::" + getPhong().getLoaiPhong().getGiaTien());
+		return (double) getPhong().getLoaiPhong().getGiaTien() * soGioHat;
+
 	}
 
 	@Override
