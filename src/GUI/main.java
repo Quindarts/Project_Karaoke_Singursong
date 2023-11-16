@@ -40,7 +40,6 @@ public class main extends JFrame {
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-
 					// Setup my app
 					FlatLightLaf.setup();
 
@@ -54,6 +53,5 @@ public class main extends JFrame {
 		});
 
 	}
-
 
 }

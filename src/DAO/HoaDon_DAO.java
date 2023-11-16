@@ -241,28 +241,32 @@ public class HoaDon_DAO {
 		HoaDon hoaDon = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
+		
+		KhachHang_DAO DAO_KH = new KhachHang_DAO();
+		NhanVien_DAO DAO_NV = new NhanVien_DAO();
+		
 		PreparedStatement statement = null;
 		try {
-			String sql = "select * from ChiTietHoaDon CTHD\r\n" + "JOIN HoaDon HD ON HD.maHoaDon = CTHD.maHoaDon\r\n"
-					+ "where  maPhong ='" + maPhong + "'\r\n" + "AND HD.trangThai = N'Đang chờ thanh toán'\r\n"
-					+ "AND CAST(HD.ngayLap AS DATE) = CAST(GETDATE() AS DATE)";
+			String sql = " select * from HoaDon \r\n"
+					+ "WHERE\r\n"
+					+ " trangThai = N'Đang chờ thanh toán'\r\n"
+					+ "AND CAST(ngayLap AS DATE) = CAST(GETDATE() AS DATE)\r\n"
+					+ "AND ngayLap <= CONVERT(datetime, DATEADD(HOUR, 0, GETDATE()), 100)";
 			statement = con.prepareStatement(sql);
 
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maHoaDon = rs.getString("maHoaDon");
-				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
-				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
-//				PhieuDatPhong phieuDatPhong = null;
-//				if (rs.getString("maPhieuDat") != null || !rs.getString("maPhieuDat").trim().equals("")) {
+				KhachHang khachHang =DAO_KH.layKhachHang_TheoMaKhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = DAO_NV.timNhanVien_TheoMaNhanVien(rs.getString("maNhanVien"));
 				PhieuDatPhong	phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
-//				}
 				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
 				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
 				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
+				System.out.println(hoaDon);
 			}
 
 		} catch (Exception e) {

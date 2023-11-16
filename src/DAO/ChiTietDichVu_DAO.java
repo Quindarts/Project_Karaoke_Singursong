@@ -70,6 +70,7 @@ public class ChiTietDichVu_DAO {
 
 	public ArrayList<ChiTietDichVu> layDanhSachChiTietDichVu_TheoMaHoaDon(String maHD) {
 		ArrayList<ChiTietDichVu> danhSachCTDichVu = new ArrayList<ChiTietDichVu>();
+		DichVu_DAO DAO_DV = new DichVu_DAO();
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -80,11 +81,9 @@ public class ChiTietDichVu_DAO {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
-				DichVu_DAO DAO_DV = new DichVu_DAO();
-				DichVu dichVu = DAO_DV.layDichVu_TheoMaDichVu(rs.getString("maDichVu"));
-
+				DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(rs.getString("maDichVu"));
 				int soLuong = rs.getInt("soLuong");
-				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dichVu, soLuong);
+				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dv, soLuong);
 				danhSachCTDichVu.add(ctDichVu);
 			}
 
@@ -96,6 +95,7 @@ public class ChiTietDichVu_DAO {
 
 	public ChiTietDichVu timCTDichVu_TheoMaHoaDon(String maHD) {
 		ChiTietDichVu ctDichVu = null;
+		DichVu_DAO DAO_DV = new DichVu_DAO();
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -106,9 +106,10 @@ public class ChiTietDichVu_DAO {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
-				DichVu dichVu = new DichVu(rs.getString("maDichVu"));
+				
+				DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(rs.getString("maDichVu"));
 				int soLuong = rs.getInt("soLuong");
-				ctDichVu = new ChiTietDichVu(hoaDon, dichVu, soLuong);
+				ctDichVu = new ChiTietDichVu(hoaDon, dv, soLuong);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

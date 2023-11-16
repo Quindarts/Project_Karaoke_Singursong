@@ -54,11 +54,9 @@ public class ChiTietDichVu {
 	}
 
 	public double thanhTien() {
-		double giaDichVu = dichVu.getDonGia();
-		return giaDichVu * soLuong;
+		return (double) getSoLuong() * getDichVu().getDonGia();
+
 	}
-	
-	
 
 	@Override
 	public String toString() {

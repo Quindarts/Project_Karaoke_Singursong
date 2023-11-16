@@ -455,79 +455,6 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		tabbedPane.putClientProperty("TabbedPane.showTabSeparators", true);
 		tabbedPane.setBounds(0, 0, 858, 672);
 		add(tabbedPane);
-		panel_ThucDon = new JPanel();
-		panel_ThucDon.setBackground(Color.white);
-
-		// DANH SACH THUC DON
-		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")),
-				panel_ThucDon, null);
-		panel_ThucDon.setLayout(null);
-		panel_DanhSachThucDon = new JPanel();
-		panel_DanhSachThucDon.setBackground(new Color(255, 255, 255));
-		panel_DanhSachThucDon.setBounds(0, 44, 806, 510);
-		panel_ThucDon.add(panel_DanhSachThucDon);
-		panel_DanhSachThucDon.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
-
-		// panigation DICH VU
-
-		// btnTrangDauPhong
-		btnTrangDauDichVu = new JButton("");
-		btnTrangDauDichVu.setForeground(new Color(255, 255, 255));
-		btnTrangDauDichVu.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/skip_to_start_20px.png")));
-		btnTrangDauDichVu.setFocusPainted(false);
-		btnTrangDauDichVu.setBorder(null);
-		btnTrangDauDichVu.setBackground(Color.decode(hexColor_Blue3));
-		btnTrangDauDichVu.setBounds(70, 5, 20, 20);
-
-		// btnTrangSauPhong
-		btnTrangSauDichVu = new JButton("");
-		btnTrangSauDichVu.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/rewind_20px.png")));
-		btnTrangSauDichVu.setFocusPainted(false);
-		btnTrangSauDichVu.setBorder(null);
-		btnTrangSauDichVu.setBackground(Color.decode(hexColor_Blue3));
-		btnTrangSauDichVu.setBounds(95, 5, 20, 20);
-
-		// btnTrang Hientai
-		txtTrangDichVu = new JTextField();
-		txtTrangDichVu.setEditable(false);
-		txtTrangDichVu.setHorizontalAlignment(SwingConstants.CENTER);
-		txtTrangDichVu.setColumns(5);
-		txtTrangDichVu.setBounds(120, 5, 51, 19);
-
-		// btnTrangTruocPhong
-		btnTrangTruocDichVu = new JButton("");
-		btnTrangTruocDichVu
-				.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/fast_forward_20px.png")));
-		btnTrangTruocDichVu.setFocusPainted(false);
-		btnTrangTruocDichVu.setBorder(null);
-		btnTrangTruocDichVu.setBackground(Color.decode(hexColor_Blue3));
-		btnTrangTruocDichVu.setBounds(241, 5, 20, 20);
-
-		// btnTrangCuoiPhong
-		btnTrangCuoiDichVu = new JButton("");
-		btnTrangCuoiDichVu.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/end_20px.png")));
-		btnTrangCuoiDichVu.setFocusPainted(false);
-		btnTrangCuoiDichVu.setBorder(null);
-		btnTrangCuoiDichVu.setBackground(Color.decode(hexColor_Blue3));
-		btnTrangCuoiDichVu.setBounds(266, 5, 20, 20);
-		JPanel panel_panigationPhongDichVu = new JPanel();
-		panel_panigationPhongDichVu.setBackground(new Color(255, 255, 255));
-		panel_panigationPhongDichVu.setBounds(220, 564, 356, 31);
-		panel_panigationPhongDichVu.setLayout(null);
-
-		panel_panigationPhongDichVu.add(btnTrangDauDichVu);
-		panel_panigationPhongDichVu.add(btnTrangSauDichVu);
-		panel_panigationPhongDichVu.add(txtTrangDichVu);
-
-		lblNewLabelDichVu = new JLabel("/");
-		lblNewLabelDichVu.setBounds(176, 8, 4, 13);
-		panel_panigationPhongDichVu.add(lblNewLabelDichVu);
-
-		txt_TongTrangDichVu = new JTextField();
-		txt_TongTrangDichVu.setBounds(185, 5, 51, 19);
-		txt_TongTrangDichVu.setEditable(false);
-		panel_panigationPhongDichVu.add(txt_TongTrangDichVu);
-		txt_TongTrangDichVu.setColumns(5);
 
 		// CONNECT DAO_DV
 		DAO_DV = new DichVu_DAO();
@@ -537,11 +464,6 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 			soLuong = DAO_DV.soLuongDichVu() / 8 + 1;
 		}
-
-		txt_TongTrangDichVu.setText(Integer.toString(soLuong));
-		panel_panigationPhongDichVu.add(btnTrangTruocDichVu);
-		panel_panigationPhongDichVu.add(btnTrangCuoiDichVu);
-		panel_ThucDon.add(panel_panigationPhongDichVu);
 
 		panel_PhongBan = new JPanel();
 		panel_PhongBan.setBackground(Color.WHITE);
@@ -802,6 +724,89 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_PhongBan.add(panel_panigationPhong);
 		// Ban Dau
 
+		txt_soGioHatDukien.setEditable(false);
+		panel_ThucDon = new JPanel();
+		panel_ThucDon.setBackground(Color.white);
+
+		// DANH SACH THUC DON
+		tabbedPane.addTab("THỰC ĐƠN", new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/food-service.png")),
+				panel_ThucDon, null);
+		panel_ThucDon.setLayout(null);
+		panel_DanhSachThucDon = new JPanel();
+		panel_DanhSachThucDon.setBackground(new Color(255, 255, 255));
+		panel_DanhSachThucDon.setBounds(0, 44, 806, 510);
+		panel_ThucDon.add(panel_DanhSachThucDon);
+		panel_DanhSachThucDon.setLayout(new FlowLayout(FlowLayout.LEFT, 10, 10));
+
+
+
+		// panigation DICH VU
+
+		// btnTrangDauPhong
+		btnTrangDauDichVu = new JButton("");
+		btnTrangDauDichVu.setForeground(new Color(255, 255, 255));
+		btnTrangDauDichVu.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/skip_to_start_20px.png")));
+		btnTrangDauDichVu.setFocusPainted(false);
+		btnTrangDauDichVu.setBorder(null);
+		btnTrangDauDichVu.setBackground(Color.decode(hexColor_Blue3));
+		btnTrangDauDichVu.setBounds(70, 5, 20, 20);
+
+		// btnTrangSauPhong
+		btnTrangSauDichVu = new JButton("");
+		btnTrangSauDichVu.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/rewind_20px.png")));
+		btnTrangSauDichVu.setFocusPainted(false);
+		btnTrangSauDichVu.setBorder(null);
+		btnTrangSauDichVu.setBackground(Color.decode(hexColor_Blue3));
+		btnTrangSauDichVu.setBounds(95, 5, 20, 20);
+
+		// btnTrang Hientai
+		txtTrangDichVu = new JTextField();
+		txtTrangDichVu.setEditable(false);
+		txtTrangDichVu.setHorizontalAlignment(SwingConstants.CENTER);
+		txtTrangDichVu.setColumns(5);
+		txtTrangDichVu.setBounds(120, 5, 51, 19);
+
+		// btnTrangTruocPhong
+		btnTrangTruocDichVu = new JButton("");
+		btnTrangTruocDichVu
+				.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/fast_forward_20px.png")));
+		btnTrangTruocDichVu.setFocusPainted(false);
+		btnTrangTruocDichVu.setBorder(null);
+		btnTrangTruocDichVu.setBackground(Color.decode(hexColor_Blue3));
+		btnTrangTruocDichVu.setBounds(241, 5, 20, 20);
+
+		// btnTrangCuoiPhong
+		btnTrangCuoiDichVu = new JButton("");
+		btnTrangCuoiDichVu.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/end_20px.png")));
+		btnTrangCuoiDichVu.setFocusPainted(false);
+		btnTrangCuoiDichVu.setBorder(null);
+		btnTrangCuoiDichVu.setBackground(Color.decode(hexColor_Blue3));
+		btnTrangCuoiDichVu.setBounds(266, 5, 20, 20);
+		JPanel panel_panigationPhongDichVu = new JPanel();
+		panel_panigationPhongDichVu.setBackground(new Color(255, 255, 255));
+		panel_panigationPhongDichVu.setBounds(220, 564, 356, 31);
+		panel_panigationPhongDichVu.setLayout(null);
+
+		panel_panigationPhongDichVu.add(btnTrangDauDichVu);
+		panel_panigationPhongDichVu.add(btnTrangSauDichVu);
+		panel_panigationPhongDichVu.add(txtTrangDichVu);
+
+		lblNewLabelDichVu = new JLabel("/");
+		lblNewLabelDichVu.setBounds(176, 8, 4, 13);
+		panel_panigationPhongDichVu.add(lblNewLabelDichVu);
+
+		txt_TongTrangDichVu = new JTextField();
+		txt_TongTrangDichVu.setBounds(185, 5, 51, 19);
+		txt_TongTrangDichVu.setEditable(false);
+		panel_panigationPhongDichVu.add(txt_TongTrangDichVu);
+		txt_TongTrangDichVu.setColumns(5);
+
+		txt_TongTrangDichVu.setText(Integer.toString(soLuong));
+		panel_panigationPhongDichVu.add(btnTrangTruocDichVu);
+		panel_panigationPhongDichVu.add(btnTrangCuoiDichVu);
+		panel_ThucDon.add(panel_panigationPhongDichVu);
+
+
 //		capNhatTrangThaiPhongTrong();
 		denTrangDauPhong();
 
@@ -837,6 +842,11 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 			// TODO: handle exception
 		}
 
+		btnTrangCuoiDichVu.addActionListener(this);
+		btnTrangDauDichVu.addActionListener(this);
+		btnTrangSauDichVu.addActionListener(this);
+		btnTrangTruocDichVu.addActionListener(this);
+		
 		btnLamMoiDanhSachPhong.addActionListener(this);
 
 		// Event panigation
@@ -846,16 +856,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		btnTrangTruocPhong.addActionListener(this);
 		btnXacNhanDatPhong.addActionListener(this);
 
-		btnTrangCuoiDichVu.addActionListener(this);
-		btnTrangDauDichVu.addActionListener(this);
-		btnTrangSauDichVu.addActionListener(this);
-		btnTrangTruocDichVu.addActionListener(this);
-
 		btn_timKiem.addActionListener(this);
 		btn_lamMoi.addActionListener(this);
 		// Event panigation
-
-		txt_soGioHatDukien.setEditable(false);
 
 		cbo_trangThai.addActionListener(new ActionListener() {
 			@Override
@@ -866,6 +869,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 				}
 			}
 		});
+
 
 		// EVENT DAT PHONG
 		btnXacNhanDatPhong.addActionListener(new ActionListener() {
@@ -953,6 +957,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		Object o = e.getSource();
 		if (o.equals(btn_lamMoi)) {
 			clearFormTimKiem();
+			clearTablePhongDaDat();
 			denTrangDauPhong();
 		}
 
@@ -1006,6 +1011,11 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 	}
 
+	public void clearTablePhongDaDat() {
+		model_TableDSPhong = (DefaultTableModel) table_DanhSachPhong.getModel();
+		model_TableDSPhong.getDataVector().removeAllElements();
+	}
+
 	public void clearForm() {
 		txtSoDienThoai.setText("");
 		txtTenKhachHang.setText("");
@@ -1053,58 +1063,58 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 					@Override
 					public void mouseClicked(MouseEvent e) {
 
-						if (e.getButton() == MouseEvent.BUTTON1) {
-							txtSoDienThoai.setText("");
-							txtTenKhachHang.setText("");
-							txtGioNhanPhong.setText("");
-
-							HelpDate hDate = new HelpDate();
-							txtMaPhong.setText(cardPhong.getPhong().getMaPhong());
-							PhieuDatPhong pdp = null;
-							PhieuDatPhong_DAO PDP_DAO = new PhieuDatPhong_DAO();
-							LoaiPhong_DAO LP_DAO = new LoaiPhong_DAO();
-							LoaiPhong loaiPhong = null;
-							if (!txtMaPhong.getText().trim().equals("")) {
-
-								pdp = PDP_DAO.layPhieuDatPhong_TheoMaPhong(txtMaPhong.getText());
-
-								if (pdp == null) {
-									clearForm();
-								}
-								KhachHang kh = new KhachHang();
-								KhachHang_DAO DAO_KH = new KhachHang_DAO();
-								try {
-
-									kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
-									System.out
-											.println(cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim());
-									if (cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim().equals("OCP")
-											|| cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim()
-													.equals("OC")) {
-
-										txtTenKhachHang.setText(kh.getHoTen());
-										txtSoDienThoai.setText(kh.getSoDienThoai());
-
-//										txtGioNhanPhong
-//												.setText(hDate.chuyenDateThanhString(pdp.getThoiGianNhanPhong()));
-
-									}
-								} catch (Exception e2) {
-									// TODO: handle exception
-								}
-								try {
-									loaiPhong = LP_DAO.layLoaiPhong_TheoMaLoaiPhong(
-											cardPhong.getPhong().getLoaiPhong().getMaLoaiPhong());
-									txtTenPhong.setText(cardPhong.getPhong().getTenPhong());
-									txtLoaiPhong.setText(loaiPhong.getTenLoaiPhong());
-									txtGiaPhong.setText(String.valueOf(loaiPhong.getGiaTien()));
-								} catch (Exception e2) {
-									// TODO: handle exception
-									e2.printStackTrace();
-								}
-
-							}
-						}
+//						if (e.getButton() == MouseEvent.BUTTON1) {
+//							txtSoDienThoai.setText("");
+//							txtTenKhachHang.setText("");
+//							txtGioNhanPhong.setText("");
+//
+//							HelpDate hDate = new HelpDate();
+//							txtMaPhong.setText(cardPhong.getPhong().getMaPhong());
+//							PhieuDatPhong pdp = null;
+//							PhieuDatPhong_DAO PDP_DAO = new PhieuDatPhong_DAO();
+//							LoaiPhong_DAO LP_DAO = new LoaiPhong_DAO();
+//							LoaiPhong loaiPhong = null;
+//							if (!txtMaPhong.getText().trim().equals("")) {
+//
+//								pdp = PDP_DAO.layPhieuDatPhong_TheoMaPhong(txtMaPhong.getText());
+//
+//								if (pdp == null) {
+//									clearForm();
+//								}
+//								KhachHang kh = new KhachHang();
+//								KhachHang_DAO DAO_KH = new KhachHang_DAO();
+//								try {
+//
+//									kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+//									System.out
+//											.println(cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim());
+//									if (cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim().equals("OCP")
+//											|| cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim()
+//													.equals("OC")) {
+//
+//										txtTenKhachHang.setText(kh.getHoTen());
+//										txtSoDienThoai.setText(kh.getSoDienThoai());
+//
+////										txtGioNhanPhong
+////												.setText(hDate.chuyenDateThanhString(pdp.getThoiGianNhanPhong()));
+//
+//									}
+//								} catch (Exception e2) {
+//									// TODO: handle exception
+//								}
+//								try {
+//									loaiPhong = LP_DAO.layLoaiPhong_TheoMaLoaiPhong(
+//											cardPhong.getPhong().getLoaiPhong().getMaLoaiPhong());
+//									txtTenPhong.setText(cardPhong.getPhong().getTenPhong());
+//									txtLoaiPhong.setText(loaiPhong.getTenLoaiPhong());
+//									txtGiaPhong.setText(String.valueOf(loaiPhong.getGiaTien()));
+//								} catch (Exception e2) {
+//									// TODO: handle exception
+//									e2.printStackTrace();
+//								}
+//
+//							}
+//						}
 					}
 				});
 			});
@@ -1113,6 +1123,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	}
 
 	public void datPhongTaiQuay() {
+
 		Phong_DAO DAO_P = new Phong_DAO();
 		HoaDon_DAO DAO_HD = new HoaDon_DAO();
 		KhachHang_DAO DAO_KH = new KhachHang_DAO();
@@ -1148,6 +1159,10 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 			if (bienDem == soLuongPhong) {
 				JOptionPane.showMessageDialog(null, "Đặt phòng thành công");
+				clearForm();
+				clearFormTimKiem();
+				clearTablePhongDaDat();
+				xoaDLPhong();
 				denTrangDauPhong();
 
 			}

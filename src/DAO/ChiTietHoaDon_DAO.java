@@ -53,7 +53,9 @@ public class ChiTietHoaDon_DAO {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
-				Phong phong = new Phong(rs.getString("maPhong"));
+				Phong_DAO DAO_P = new Phong_DAO();
+				
+				Phong phong = DAO_P.timPhong_TheoMaPhong(rs.getString("maPhong"));
 				ctHoaDon = new ChiTietHoaDon(hoaDon, phong);
 			}
 		} catch (Exception e) {
@@ -108,14 +110,16 @@ public class ChiTietHoaDon_DAO {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
+		Phong_DAO DAO_P = new Phong_DAO();
+		HoaDon_DAO DAO_HD = new HoaDon_DAO();
 		try {
 			String sql = "SELECT * FROM ChiTietHoaDon WHERE maPhong = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maPhong);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				HoaDon hoaDon = new HoaDon(rs.getString("maHoaDon"));
-				Phong phong = new Phong(rs.getString("maPhong"));
+				HoaDon hoaDon = DAO_HD.layHoaDon_TheoMaHoaDon(rs.getString("maHoaDon"));
+				Phong phong =  DAO_P.timPhong_TheoMaPhong(rs.getString("maPhong"));
 				ctHoaDon = new ChiTietHoaDon(hoaDon, phong);
 
 			}

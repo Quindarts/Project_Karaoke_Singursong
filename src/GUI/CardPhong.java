@@ -26,6 +26,8 @@ import javax.swing.table.DefaultTableModel;
 
 import org.apache.poi.ss.usermodel.Table;
 
+import DAO.ChiTietDichVu_DAO;
+import DAO.ChiTietHoaDon_DAO;
 import DAO.HoaDon_DAO;
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
@@ -33,6 +35,7 @@ import DAO.NhanVien_DAO;
 import DAO.PhieuDatPhong_DAO;
 import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
+import Entity.ChiTietHoaDon;
 import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.KhuyenMai;
@@ -52,6 +55,7 @@ import java.awt.Font;
  * 
  */
 public class CardPhong extends JPanel {
+	private static final String DAO_CTHD = null;
 	private Phong phong;
 	private int width = 150;
 	private int height = 150;
@@ -83,6 +87,7 @@ public class CardPhong extends JPanel {
 	private KhachHang kh;
 	private String tenKH;
 	private String sdtKH;
+	private HoaDon_DAO DAO_HD;
 
 	/**
 	 * @param phong
@@ -252,19 +257,20 @@ public class CardPhong extends JPanel {
 
 		}
 		nhanPhongMenuItem.addActionListener(e1 -> {
-			System.out.println("nhaaaaaaa");
 
 			PhieuDatPhong_DAO DAO_PDP = new PhieuDatPhong_DAO();
 			HoaDon_DAO DAO_HD = new HoaDon_DAO();
 			try {
 				PhieuDatPhong pdp = DAO_PDP.layThongTinPhieuDatTrangThai_DangCho_MaPhong(phong.getMaPhong());
 				System.out.println(pdp);
-				if (DAO_PDP.capNhatPhieuDatTrangThai_DaNhanPhong_MaPhieuDat(pdp.getMaPhieuDat())) {
-					datPhongTruoc(pdp);
+
+				if (DAO_PDP.capNhatPhieuDatTrangThai_DaNhanPhong_MaPhieuDat(pdp.getMaPhieuDat()) && datPhong(pdp)) {
+
 					DAO_P.capNhat_TranThaiPhong(pdp.getPhong().getMaPhong(), "OC");
 					JOptionPane.showMessageDialog(null, "Nhận phòng thành công");
 
 				}
+
 			} catch (Exception e2) {
 				// TODO: handle exception
 				e2.printStackTrace();
@@ -272,12 +278,16 @@ public class CardPhong extends JPanel {
 
 		});
 		traPhongMenuItem.addActionListener(e1 -> {
-			hoaDon = new HoaDon();
-			khachHang = new KhachHang();
-			loaiP = new LoaiPhong();
+			try {
+				DAO_HD = new HoaDon_DAO();
+				hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
+				Modal_ThanhToan thanhToan = new Modal_ThanhToan(hoaDon, phong, loaiP, hoaDon.getKhachHang());
+				thanhToan.setVisible(true);
 
-			Modal_ThanhToan thanhToan = new Modal_ThanhToan(hoaDon, phong, loaiP, khachHang);
-			thanhToan.setVisible(true);
+			} catch (Exception e11) {
+				e11.printStackTrace();
+			}
+
 		});
 		xemThongTinMenuItem.addActionListener(e1 -> {
 			try {
@@ -364,7 +374,6 @@ public class CardPhong extends JPanel {
 	public boolean kiemTraTrungMaPhongTrongDSPhong(String code, JTable table) {
 		for (int row = 0; row < table.getRowCount(); row++) {
 			String roomCode = table.getValueAt(row, 1).toString();
-			System.out.println("rodd::::" + roomCode);
 			if (roomCode.trim().equals(code)) {
 				return false;
 			}
@@ -372,9 +381,12 @@ public class CardPhong extends JPanel {
 		return true;
 	}
 
-	public boolean datPhongTruoc(PhieuDatPhong pdp) {
+	public boolean datPhong(PhieuDatPhong pdp) {
+
 		PhieuDatPhong_DAO DAO_PDP = new PhieuDatPhong_DAO();
+
 		HoaDon_DAO DAO_HD = new HoaDon_DAO();
+
 		KhachHang_DAO DAO_KH = new KhachHang_DAO();
 		KhachHang kh = new KhachHang();
 		kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
@@ -383,15 +395,19 @@ public class CardPhong extends JPanel {
 		HelpRamDomMa help = new HelpRamDomMa();
 		String maHD = help.taoMa("HoaDon", "maHoaDon", "HD");
 		String maKhuyenMai = null;
-		System.out.println(maHD);
 		Date layNgayHienTai = new Date();
 		Timestamp timestampNhanPhong = new Timestamp(layNgayHienTai.getTime());
 		Timestamp timestampDatPhong = new Timestamp(layNgayHienTai.getTime());
 		try {
 
-			HoaDon hd = new HoaDon(maHD, kh, nv, pdp, new KhuyenMai(), timestampDatPhong, "Đang chờ thanh toán", null);
+			HoaDon hd = new HoaDon(maHD, kh, pdp.getNhanVien(), pdp, new KhuyenMai(), timestampDatPhong,
+					"Đang chờ thanh toán", null);
+			System.out.println(hd);
 			if (DAO_HD.taoHoaDon(hd)) {
-				
+				ChiTietHoaDon cthd = new ChiTietHoaDon(hd, getPhong());
+				ChiTietHoaDon_DAO DAO_CTHD = new ChiTietHoaDon_DAO();
+				DAO_CTHD.taoCTHoaDon(cthd);
+
 				return true;
 			}
 

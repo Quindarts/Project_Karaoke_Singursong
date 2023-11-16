@@ -37,7 +37,7 @@ public class ChiTietHoaDon {
 	}
 
 	public double thanhTien(float soGioHat) {
-//		System.out.println("tt::" + getPhong().getLoaiPhong().getGiaTien());
+
 		return (double) getPhong().getLoaiPhong().getGiaTien() * soGioHat;
 
 	}

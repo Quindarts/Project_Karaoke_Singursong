@@ -45,11 +45,14 @@ public class HelpRamDomMa {
 			if (maFromData.trim().substring(0, 11).equals(result.substring(0, 11).trim())) {
 
 				String str_base = maFromData.substring(11);
+
 				String str_result = "";
 				for (int i = 0; i < str_base.length(); i++) {
 					char c = str_base.charAt(i);
-					if (c != '0') {
+					if (c != '0' || str_result.length() > 0 && str_result.charAt(str_result.length() - 1) != '0') {
+
 						str_result = str_result + c;
+
 					}
 
 				}
@@ -103,8 +106,9 @@ public class HelpRamDomMa {
 
 //		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
 		String maPhieuDat = taoMa("HoaDon", "maHoaDon", "HD");
-		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "HD");
+//		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
 		System.out.println(maPhieuDat);
+//		System.out.println(maPhieuDat2);
 	}
 
 }

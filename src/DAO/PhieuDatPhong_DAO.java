@@ -576,8 +576,7 @@ public class PhieuDatPhong_DAO {
 				+ "      CAST(PD.thoiGianNhanPhong AS DATE) = CAST(GETDATE() AS DATE)\r\n"
 				+ "      AND PD.trangThai = N'Chờ nhận phòng'\r\n"
 				+ "      AND PD.thoiGianNhanPhong >= CONVERT(datetime, DATEADD(HOUR, 0, GETDATE()), 100)\r\n"
-				+ "	  	 AND P.maTrangThai <> N'OC'"
-				+ "      AND PD.tienCoc > 0 ;"
+
 				;
 
 		try {

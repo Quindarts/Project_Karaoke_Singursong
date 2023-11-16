@@ -186,6 +186,7 @@ public class Phong_DAO {
 		Phong phong = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
+		LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
 		PreparedStatement statement = null;
 		try {
 			String sql = "SELECT * FROM Phong WHERE maPhong = ?";
@@ -195,7 +196,7 @@ public class Phong_DAO {
 			while (rs.next()) {
 				String maPhong = rs.getString("maPhong");
 				String tenPhong = rs.getString("tenPhong");
-				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				LoaiPhong loaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(rs.getString("maLoaiPhong"));
 				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
 				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
 				String viTriPhong = rs.getString("viTriPhong");

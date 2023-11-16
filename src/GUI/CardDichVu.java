@@ -3,7 +3,9 @@ package GUI;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.util.ResourceBundle;
 
+import javax.print.DocFlavor.URL;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -28,6 +30,7 @@ public class CardDichVu extends JPanel {
 	private int height = 230;
 	private ThongTinDichVu_DAO DAO_TTDV;
 	private JLabel img_show_panel;
+	private ImageIcon originalIcon;
 
 	public CardDichVu(DichVu dichVu) {
 		setBackground(new Color(255, 255, 255));
@@ -47,8 +50,15 @@ public class CardDichVu extends JPanel {
 
 		img_show_panel = new JLabel();
 		img_show_panel.setBounds(0, 0, 150, 150);
-
-		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));
+		
+//		---mới 
+		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource(ttdv.getHinhAnh()));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);
+		
+		img_show_panel.setIcon(resizedIcon);
+		
 		main_card.add(img_show_panel);
 
 		JLabel lbl_giaTien = new JLabel(Double.toString(dichVu.getDonGia()));

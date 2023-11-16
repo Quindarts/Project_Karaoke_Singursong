@@ -29,10 +29,12 @@ import java.awt.Window;
 import java.awt.Color;
 import java.awt.Component;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -96,36 +98,15 @@ public class Modal_ThemDichVu extends JFrame {
 		pnl_TieuDe.add(lbl_Title);
 
 		JPanel pnl_Anh = new JPanel();
-		pnl_Anh.setBackground(Color.WHITE);
-		pnl_Anh.setBounds(26, 95, 179, 234);
+		pnl_Anh.setBorder(new LineBorder(new Color(0, 0, 255)));
+		pnl_Anh.setBackground(new Color(255, 255, 255));
+		pnl_Anh.setBounds(26, 95, 179, 198);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
 		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 179, 192);
+		img_show_panel.setBounds(10, 10, 159, 176);
 		pnl_Anh.add(img_show_panel);
-
-		JButton btn_ChonAnh = new JButton("Chọn ảnh");
-		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_ChonAnh.setForeground(new Color(255, 255, 255));
-
-		btn_ChonAnh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-			}
-
-			public ImageIcon ResizeImage(String ImagePath) {
-				ImageIcon MyImage = new ImageIcon(ImagePath);
-				Image img = MyImage.getImage();
-				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
-						Image.SCALE_SMOOTH);
-				ImageIcon image = new ImageIcon(newImg);
-				return image;
-			}
-		});
-		btn_ChonAnh.setBackground(new Color(0, 128, 255));
-		btn_ChonAnh.setBounds(0, 202, 179, 32);
-		pnl_Anh.add(btn_ChonAnh);
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
@@ -295,6 +276,28 @@ public class Modal_ThemDichVu extends JFrame {
 		txtA_moTa = new JTextArea();
 		txtA_moTa.setBounds(127, 1, 223, 87);
 		pnl_GiaTien_1_1.add(txtA_moTa);
+		
+				JButton btn_ChonAnh = new JButton("Chọn ảnh");
+				btn_ChonAnh.setBounds(26, 303, 179, 32);
+				contentPane.add(btn_ChonAnh);
+				btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
+				btn_ChonAnh.setForeground(new Color(255, 255, 255));
+				
+						btn_ChonAnh.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+							}
+				
+							public ImageIcon ResizeImage(String ImagePath) {
+								ImageIcon MyImage = new ImageIcon(ImagePath);
+								Image img = MyImage.getImage();
+								Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
+										Image.SCALE_SMOOTH);
+								ImageIcon image = new ImageIcon(newImg);
+								return image;
+							}
+						});
+						btn_ChonAnh.setBackground(new Color(0, 128, 255));
 
 		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -326,7 +329,13 @@ public class Modal_ThemDichVu extends JFrame {
 				int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
 				Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
 				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
-				String hinhA = pathImg;
+				
+				File file = new File(pathImg);
+		        String fileName = file.getName();
+		        String relativePath = "/img" + File.separator + fileName;
+		        relativePath = relativePath.replace(File.separator, "/");
+		        String hinhA = relativePath;
+		        
 				String moTa = txtA_moTa.getText();
 
 				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);
@@ -361,14 +370,10 @@ public class Modal_ThemDichVu extends JFrame {
 		dateChooser_ngayNhap.setDate(ttdv.getNgayNhap());
 		dateChooser_ngayHetHan.setDate(ttdv.getNgayHetHan());
 		txt_maDichVu.setText(maDichVu);
-		;
 		txt_GiaTien.setText(donGia);
-		;
 		txt_SoLuong.setText(soLuong);
-		;
 		txt_soLuongDaSuDung.setText(soLuong);
 		txt_tenDichVu.setText(tenDichVu);
-		;
 		txtA_moTa.setText(ttdv.getMoTa());
 
 //		txtA_moTa;
@@ -403,7 +408,7 @@ public class Modal_ThemDichVu extends JFrame {
 		}
 
 		else if (result == JFileChooser.CANCEL_OPTION) {
-			System.out.println("Không tìm thấy file tải lên");
+
 			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
 		}
 		return path;

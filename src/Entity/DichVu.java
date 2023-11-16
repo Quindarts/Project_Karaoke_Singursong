@@ -81,6 +81,9 @@ public class DichVu {
 	public int hashCode() {
 		return Objects.hash(maDichVu);
 	}
+	public double thanhTien() {
+		return (double) getSoLuong() * getDonGia();
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)

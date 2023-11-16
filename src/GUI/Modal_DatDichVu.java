@@ -468,7 +468,6 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 		if (o.equals(btn_xacNhan)) {
 
 			boolean checkresult = DAO_CTDV.xoaCTDichVu_TheoMaHoaDon(hoaDon.getMaHoaDon());
-			System.out.println(checkresult);
 			for (int i = 0; i < table_dvDatPhong.getRowCount(); i++) {
 
 				String maDichVu = table_dvDatPhong.getValueAt(i, 0).toString();
