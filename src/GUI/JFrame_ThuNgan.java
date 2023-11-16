@@ -200,7 +200,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panel_Menu.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_Menu.setBackground(Color.decode(hexColor_Blue1));
 //		panel_Menu.setBackground(Color.WHITE);
-		panel_Menu.setBounds(10, 64, 197, 672);
+		panel_Menu.setBounds(10, 45, 197, 672);
 		contentPane.add(panel_Menu);
 		panel_Menu.setLayout(null);
 
@@ -376,7 +376,7 @@ public class JFrame_ThuNgan extends JFrame {
 
 		panel_Function = new JPanel();
 		panel_Function.setBackground(Color.decode(hexColor_Blue1));
-		panel_Function.setBounds(210, 64, 1296, 672);
+		panel_Function.setBounds(210, 45, 1296, 675);
 		contentPane.add(panel_Function);
 		panel_Function.setLayout(null);
 
@@ -394,7 +394,7 @@ public class JFrame_ThuNgan extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
 		menuBar.setBackground(Color.decode(hexColor_Blue1));
-		menuBar.setBounds(1405, 10, 90, 45);
+		menuBar.setBounds(1405, 4, 90, 45);
 		contentPane.add(menuBar);
 
 		JMenu mnNewMenu = new JMenu("");

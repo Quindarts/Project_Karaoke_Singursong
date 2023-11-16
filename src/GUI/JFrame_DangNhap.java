@@ -117,7 +117,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	private JTextField txtUsername;
 	private JPanel panelLogin;
 	private JButton btnLogin;
-	private Component btnExit;
+	private JButton btnExit;
 	private NhanVien_DAO NV_DAO;
 	private TaiKhoan taiKhoanDangNhap;
 	private TaiKhoan_DAO TK_DAO;
@@ -158,7 +158,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 
 		panelLogin.add(lblTitleLogin);
 
-		JLabel lblUsername = new JLabel("Số điện thoại");
+		JLabel lblUsername = new JLabel("Mã nhân viên");
 		lblUsername.setForeground(Color.decode(hexColor_Blue1));
 		lblUsername.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblUsername.setBounds(25, 115, 111, 25);
@@ -167,11 +167,11 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		JLabel lblPassword = new JLabel("Mật khẩu");
 		lblPassword.setForeground(Color.decode(hexColor_Blue1));
 		lblPassword.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		lblPassword.setBounds(25, 175, 111, 25);
+		lblPassword.setBounds(25, 160, 111, 25);
 		panelLogin.add(lblPassword);
 
 		txtPassword = new JPasswordField();
-		txtPassword.setBounds(133, 175, 219, 25);
+		txtPassword.setBounds(133, 160, 219, 25);
 		txtPassword.setColumns(10);
 		txtPassword.setText("123456");
 		panelLogin.add(txtPassword);
@@ -186,26 +186,27 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		btnLogin.setForeground(Color.WHITE);
 		btnLogin.setBackground(Color.decode(hexColor_Blue1));
 		btnLogin.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnLogin.setBounds(25, 263, 327, 35);
+		btnLogin.setBounds(25, 264, 327, 35);
 		panelLogin.add(btnLogin);
 
 		btnExit = new JButton("Thoát");
 		btnExit.setForeground(Color.WHITE);
 		btnExit.setBackground(Color.decode(hexColor_Red));
 		btnExit.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnExit.setBounds(25, 318, 327, 35);
+		btnExit.setBounds(25, 320, 327, 35);
 		panelLogin.add(btnExit);
 		panelLogin.setBorder(new RoundedTransparentBorder(25, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 
 		JCheckBox CBHienMatKhau = new JCheckBox("Hiện mật khẩu");
 		CBHienMatKhau.setBackground(new Color(255, 255, 255));
 		CBHienMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-		CBHienMatKhau.setBounds(130, 205, 111, 21);
+		CBHienMatKhau.setBounds(133, 198, 111, 21);
 		panelLogin.add(CBHienMatKhau);
-		
+
 		lblForgotPass = new JLabel("Quên mật khẩu");
-		lblForgotPass.setForeground(new Color(0, 0, 255));
-		lblForgotPass.setBounds(130, 240, 111, 13);
+		lblForgotPass.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		lblForgotPass.setForeground(Color.decode(hexColor_Red));
+		lblForgotPass.setBounds(141, 443, 100, 13);
 		lblForgotPass.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		panelLogin.add(lblForgotPass);
 
@@ -231,8 +232,9 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		lblLogo.setBounds(-20, 10, 468, 472);
 		panelLogo.add(lblLogo);
 
-		 btnLogin.addActionListener(this);
-	     lblForgotPass.addMouseListener(this);
+		btnLogin.addActionListener(this);
+		btnExit.addActionListener(this);
+		lblForgotPass.addMouseListener(this);
 
 	}
 
@@ -269,11 +271,11 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 							.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
 					System.out.println("Đăng nhập vào màn hình" + role);
-					
+
 					System.out.println(nhanVienDangNhap.getTrangThai());
-					if(nhanVienDangNhap.getTrangThai().equals("Đang Làm")) {
+					if (nhanVienDangNhap.getTrangThai().equals("Đang Làm")) {
 						thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
-						thuNgan.setVisible(true);	
+						thuNgan.setVisible(true);
 					} else {
 						JOptionPane.showMessageDialog(null, "Bạn đã nghĩ làm !");
 					}
@@ -282,8 +284,13 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 				}
 			}
 		}
+		// BUTTON EXIT
+		if (o.equals(btnExit)) {
+			dispose();
+		}
 		
-
+		// CHECKBOX HIEN THI MAT KHAU
+		
 	}
 
 	/**
@@ -335,41 +342,41 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		// TODO Auto-generated method stub
 
 	}
-	
+
 //	--------------mouse event
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
 		JFrame_QuenMatKhau quenmk = new JFrame_QuenMatKhau();
-		
+
 		quenmk.setVisible(true);
-		JFrame_DangNhap dangnhap  = new JFrame_DangNhap();
+		JFrame_DangNhap dangnhap = new JFrame_DangNhap();
 		dangnhap.setVisible(false);
-		
+
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

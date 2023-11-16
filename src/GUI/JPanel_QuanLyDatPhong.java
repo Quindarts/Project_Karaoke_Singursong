@@ -100,6 +100,8 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.BoxLayout;
 import javax.swing.SpringLayout;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.border.LineBorder;
+import javax.swing.border.EmptyBorder;
 
 public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
@@ -124,26 +126,20 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	private JLabel lblThongTinPhongHat;
 	private JLabel lblTenKhachHang;
 	private JLabel lblSDT;
-	private JLabel lblTenPhong;
 	private JLabel lblThoiGianNhan;
 	private JLabel lblDanhSachPhong;
 	private JLabel lblSLKhach;
-	private JLabel lblGiaPhong;
 	private JLabel lblLoiPhng;
 	private JLabel lblTnPhng;
-	private JLabel lblLoaiPhong;
 
 	private JTable table_DanhSachPhong;
 
 	private Phong_DAO phongDao;
-	private JTextField txtLoaiPhong;
 	private JTextField txtTenNhanVienDat;
-	private JTextField txtGiaPhong;
 	private JTextField txtMaPhong;
 	private JTextField txtTenKhachHang;
 	private JTextField txtSoDienThoai;
 	private JTextField txtGioNhanPhong;
-	private JTextField txtTenPhong;
 	private JTextField txt_timKiem;
 
 	private JComboBox cbo_loaiPhong;
@@ -266,7 +262,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_PDP.setBorder(null);
 		panel_PDP.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_PDP.setBackground(Color.decode(hexColor_Blue1));
-		panel_PDP.setBounds(862, 0, 434, 672);
+		panel_PDP.setBounds(868, 0, 428, 672);
 		add(panel_PDP);
 		panel_PDP.setLayout(null);
 
@@ -294,7 +290,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_PDP.add(lblThongTinPhongHat);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 415, 418, 211);
+		scrollPane.setBounds(10, 249, 408, 233);
 
 		panel_PDP.add(scrollPane);
 
@@ -318,7 +314,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 		JPanel panel_TTKH = new JPanel();
 		panel_TTKH.setBackground(Color.decode(hexColor_Blue4));
-		panel_TTKH.setBounds(10, 119, 418, 120);
+		panel_TTKH.setBounds(10, 119, 408, 120);
 		panel_PDP.add(panel_TTKH);
 		panel_TTKH.setLayout(null);
 
@@ -359,51 +355,6 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		txtTenNhanVienDat.setText(nhanVien.getHoTen());
 		txtTenNhanVienDat.setBounds(157, 83, 241, 25);
 		panel_TTKH.add(txtTenNhanVienDat);
-
-		JPanel panel_TTPhong = new JPanel();
-		panel_TTPhong.setBackground(Color.decode(hexColor_Blue4));
-		panel_TTPhong.setBounds(10, 250, 418, 126);
-		panel_PDP.add(panel_TTPhong);
-		panel_TTPhong.setLayout(null);
-
-		lblTenPhong = new JLabel("Tên phòng");
-		lblTenPhong.setBounds(20, 10, 115, 25);
-		panel_TTPhong.add(lblTenPhong);
-		lblTenPhong.setForeground(Color.decode(hexColor_Blue1));
-		lblTenPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-
-		txtTenPhong = new JTextField();
-		txtTenPhong.setEditable(false);
-		txtTenPhong.setEnabled(false);
-		txtTenPhong.setBounds(158, 12, 240, 25);
-		panel_TTPhong.add(txtTenPhong);
-		txtTenPhong.setColumns(10);
-
-		lblLoaiPhong = new JLabel("Loại phòng");
-		lblLoaiPhong.setForeground(new Color(5, 74, 145));
-		lblLoaiPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblLoaiPhong.setBounds(20, 46, 105, 25);
-		panel_TTPhong.add(lblLoaiPhong);
-
-		txtLoaiPhong = new JTextField();
-		txtLoaiPhong.setEnabled(false);
-		txtLoaiPhong.setEditable(false);
-		txtLoaiPhong.setColumns(10);
-		txtLoaiPhong.setBounds(158, 48, 240, 25);
-		panel_TTPhong.add(txtLoaiPhong);
-
-		txtGiaPhong = new JTextField();
-		txtGiaPhong.setEnabled(false);
-		txtGiaPhong.setEditable(false);
-		txtGiaPhong.setColumns(10);
-		txtGiaPhong.setBounds(158, 84, 240, 25);
-		panel_TTPhong.add(txtGiaPhong);
-
-		lblGiaPhong = new JLabel("Giá phòng");
-		lblGiaPhong.setForeground(new Color(5, 74, 145));
-		lblGiaPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblGiaPhong.setBounds(20, 83, 115, 25);
-		panel_TTPhong.add(lblGiaPhong);
 
 		lblThoiGianNhan = new JLabel("Thời gian nhận phòng");
 		lblThoiGianNhan.setForeground(new Color(5, 74, 145));
@@ -453,7 +404,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
 		tabbedPane.setBackground(Color.WHITE);
 		tabbedPane.putClientProperty("TabbedPane.showTabSeparators", true);
-		tabbedPane.setBounds(0, 0, 858, 672);
+		tabbedPane.setBounds(0, 0, 868, 672);
 		add(tabbedPane);
 
 		// CONNECT DAO_DV
@@ -473,30 +424,32 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_PhongBan.setLayout(null);
 
 		panel_TraCuuPhong = new JPanel();
-		panel_TraCuuPhong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel_TraCuuPhong.setBorder(new EmptyBorder(0, 0, 0, 0));
 		panel_TraCuuPhong.setBackground(new Color(255, 255, 255));
-		panel_TraCuuPhong.setBounds(0, 10, 853, 77);
+		panel_TraCuuPhong.setBounds(8, 2, 833, 70);
 		panel_PhongBan.add(panel_TraCuuPhong);
 		panel_TraCuuPhong.setLayout(null);
 
 		cbo_loaiPhong = new JComboBox();
-		cbo_loaiPhong.setBounds(88, 10, 149, 22);
+		cbo_loaiPhong.setBounds(127, 12, 120, 22);
 		panel_TraCuuPhong.add(cbo_loaiPhong);
 
 		txt_timKiem = new JTextField();
-		txt_timKiem.setBounds(548, 12, 149, 20);
+		txt_timKiem.setBounds(536, 14, 120, 20);
 		panel_TraCuuPhong.add(txt_timKiem);
 		txt_timKiem.setText("");
 		txt_timKiem.setColumns(10);
 
 		btn_timKiem = new JButton("Tìm kiếm");
-		btn_timKiem.setBounds(707, 11, 89, 23);
+		btn_timKiem.setFont(new Font("Segoe UI", Font.BOLD, 10));
+		btn_timKiem.setBounds(726, 10, 89, 23);
 		btn_timKiem.setForeground(Color.white);
 		btn_timKiem.setBackground(Color.decode(hexColor_Green));
 		panel_TraCuuPhong.add(btn_timKiem);
 
 		btn_lamMoi = new JButton("Làm mới");
-		btn_lamMoi.setBounds(707, 35, 89, 23);
+		btn_lamMoi.setFont(new Font("Segoe UI", Font.BOLD, 10));
+		btn_lamMoi.setBounds(726, 44, 89, 23);
 		btn_lamMoi.setForeground(Color.white);
 		btn_lamMoi.setBackground(Color.decode(hexColor_Blue1));
 		panel_TraCuuPhong.add(btn_lamMoi);
@@ -504,39 +457,39 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		lblLoiPhng = new JLabel("Loại phòng");
 		lblLoiPhng.setForeground(new Color(5, 74, 145));
 		lblLoiPhng.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblLoiPhng.setBounds(0, 10, 90, 21);
+		lblLoiPhng.setBounds(10, 12, 90, 21);
 		panel_TraCuuPhong.add(lblLoiPhng);
 
 		lblTnPhng = new JLabel("Tên phòng");
 		lblTnPhng.setForeground(new Color(5, 74, 145));
 		lblTnPhng.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblTnPhng.setBounds(474, 10, 90, 21);
+		lblTnPhng.setBounds(462, 12, 90, 21);
 		panel_TraCuuPhong.add(lblTnPhng);
 
 		JLabel lblTrngThiPhng = new JLabel("Trạng thái phòng");
 		lblTrngThiPhng.setForeground(new Color(5, 74, 145));
 		lblTrngThiPhng.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblTrngThiPhng.setBounds(0, 42, 112, 21);
+		lblTrngThiPhng.setBounds(10, 44, 112, 21);
 		panel_TraCuuPhong.add(lblTrngThiPhng);
 
 		cbo_trangThai = new JComboBox();
-		cbo_trangThai.setBounds(117, 43, 120, 21);
+		cbo_trangThai.setBounds(127, 45, 120, 21);
 		panel_TraCuuPhong.add(cbo_trangThai);
 
 		txt_soGioHatDukien = new JTextField();
-		txt_soGioHatDukien.setBounds(373, 11, 53, 19);
+		txt_soGioHatDukien.setBounds(391, 13, 53, 19);
 		panel_TraCuuPhong.add(txt_soGioHatDukien);
 		txt_soGioHatDukien.setColumns(10);
 
 		JLabel lblSGiHt = new JLabel("Số giờ hát dự kiến");
 		lblSGiHt.setForeground(new Color(5, 74, 145));
 		lblSGiHt.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblSGiHt.setBounds(247, 10, 116, 21);
+		lblSGiHt.setBounds(265, 12, 116, 21);
 		panel_TraCuuPhong.add(lblSGiHt);
 
 		JPanel panel = new JPanel();
 		panel.setBackground(Color.WHITE);
-		panel.setBounds(238, 40, 100, 25);
+		panel.setBounds(257, 42, 100, 25);
 		panel_TraCuuPhong.add(panel);
 		panel.setLayout(null);
 
@@ -554,7 +507,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_2 = new JPanel();
 		panel_2.setBackground(Color.WHITE);
 		panel_2.setLayout(null);
-		panel_2.setBounds(336, 40, 100, 25);
+		panel_2.setBounds(355, 42, 100, 25);
 		panel_TraCuuPhong.add(panel_2);
 
 		panel_boxSLDaDat = new JPanel();
@@ -571,7 +524,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_4 = new JPanel();
 		panel_4.setBackground(Color.WHITE);
 		panel_4.setLayout(null);
-		panel_4.setBounds(431, 40, 133, 25);
+		panel_4.setBounds(450, 42, 133, 25);
 		panel_TraCuuPhong.add(panel_4);
 
 		panel_boxSLDangDung = new JPanel();
@@ -588,7 +541,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_6 = new JPanel();
 		panel_6.setBackground(Color.WHITE);
 		panel_6.setLayout(null);
-		panel_6.setBounds(561, 40, 136, 25);
+		panel_6.setBounds(580, 42, 136, 25);
 		panel_TraCuuPhong.add(panel_6);
 
 		panel_boxSLKhongPhucVu = new JPanel();
@@ -659,7 +612,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		txtTrang = new JTextField();
 		txtTrang.setEditable(false);
 		txtTrang.setHorizontalAlignment(SwingConstants.CENTER);
-		txtTrang.setColumns(5);
+		txtTrang.setColumns(2);
 		txtTrang.setBounds(482, 585, 30, 25);
 
 		// btnTrangTruocPhong
@@ -676,10 +629,11 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		btnTrangCuoiPhong.setFocusPainted(false);
 		btnTrangCuoiPhong.setBorder(null);
 		btnTrangCuoiPhong.setBackground(Color.decode(hexColor_Blue3));
+//		btnTrangCuoiPhong.setBackground(Color.WHITE);
 		btnTrangCuoiPhong.setBounds(559, 585, 30, 25);
 		JPanel panel_panigationPhong = new JPanel();
 		panel_panigationPhong.setBackground(new Color(255, 255, 255));
-		panel_panigationPhong.setBounds(228, 569, 356, 31);
+		panel_panigationPhong.setBounds(232, 565, 356, 31);
 
 		panel_panigationPhong.add(btnTrangDauPhong);
 		panel_panigationPhong.add(btnTrangSauPhong);
@@ -689,9 +643,10 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_panigationPhong.add(lblNewLabel);
 
 		txt_TongTrang = new JTextField();
+		txt_TongTrang.setHorizontalAlignment(SwingConstants.CENTER);
 		txt_TongTrang.setEditable(false);
 		panel_panigationPhong.add(txt_TongTrang);
-		txt_TongTrang.setColumns(5);
+		txt_TongTrang.setColumns(2);
 
 		Phong_DAO DAO_P1 = new Phong_DAO();
 		int soLuongPhong = DAO_P.soLuongPhong() / 15;
@@ -718,8 +673,8 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		fl_panel_Phong.setHgap(10);
 		panel_Phong.setLayout(fl_panel_Phong);
 		panel_Phong.setBackground(new Color(255, 255, 255));
-		panel_Phong.setSize(806, 490);
-		panel_Phong.setLocation(0, 84);
+		panel_Phong.setSize(843, 485);
+		panel_Phong.setLocation(10, 78);
 		panel_PhongBan.add(panel_Phong);
 		panel_PhongBan.add(panel_panigationPhong);
 		// Ban Dau
@@ -1020,9 +975,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		txtSoDienThoai.setText("");
 		txtTenKhachHang.setText("");
 		txtGioNhanPhong.setText("");
-		txtTenPhong.setText("");
-		txtLoaiPhong.setText("");
-		txtGiaPhong.setText("");
+//		txtTenPhong.setText("");
+//		txtLoaiPhong.setText("");
+//		txtGiaPhong.setText("");
 	}
 
 	public void xoaDLPhong() {
@@ -1410,9 +1365,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 									try {
 										loaiPhong = LP_DAO.layLoaiPhong_TheoMaLoaiPhong(
 												cardPhong.getPhong().getLoaiPhong().getMaLoaiPhong());
-										txtTenPhong.setText(cardPhong.getPhong().getTenPhong());
-										txtLoaiPhong.setText(loaiPhong.getTenLoaiPhong());
-										txtGiaPhong.setText(String.valueOf(loaiPhong.getGiaTien()));
+//										txtTenPhong.setText(cardPhong.getPhong().getTenPhong());
+//										txtLoaiPhong.setText(loaiPhong.getTenLoaiPhong());
+//										txtGiaPhong.setText(String.valueOf(loaiPhong.getGiaTien()));
 									} catch (Exception e2) {
 										// TODO: handle exception
 										e2.printStackTrace();

@@ -118,6 +118,9 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 	private String hexColor_Blue4 = "#DBE4EE";
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
+
+	
 	private JTextField txtUsername;
 	private JPanel panelLogin;
 	private JButton btnSave;
@@ -182,11 +185,11 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 		txtUsername.setBounds(133, 115, 219, 25);
 		panelLogin.add(txtUsername);
 
-		btnSave = new JButton("Gửi mã xác nhận");
+		btnSave = new JButton("Xác nhận");
 		btnSave.setForeground(Color.WHITE);
-		btnSave.setBackground(Color.decode(hexColor_Blue1));
+		btnSave.setBackground(Color.decode(hexColor_Green));
 		btnSave.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnSave.setBounds(25, 342, 327, 35);
+		btnSave.setBounds(25, 363, 327, 35);
 		panelLogin.add(btnSave);
 
 		btnExit = new JButton("Thoát");
