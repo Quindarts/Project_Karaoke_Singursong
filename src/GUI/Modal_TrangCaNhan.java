@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Window;
 import java.awt.Color;
 import java.awt.Component;
 
@@ -33,7 +34,11 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -54,8 +59,9 @@ import java.awt.Font;
 import com.toedter.calendar.JDayChooser;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.border.LineBorder;
+import javax.swing.JPasswordField;
 
-public class Modal_TrangCaNhan extends JFrame implements ActionListener {
+public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemListener {
 
 	private JPanel contentPane;
 
@@ -85,8 +91,10 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 
 	private AbstractButton rdbtn_Nu;
 	private JTextField txt_TrangThai;
-	private JTextField txt_Password;
 	private JTextField txt_chucVu;
+	private JPasswordField txt_Password;
+
+	private JCheckBox cboShowPassword;
 
 	/**
 	 * Launch the application.
@@ -155,7 +163,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		txt_MaNhanVien.setBounds(125, 0, 225, 25);
 		pnl_MaNhanVien.add(txt_MaNhanVien);
 		txt_MaNhanVien.setColumns(10);
-
+		
 		JPanel pnl_ChucVu = new JPanel();
 		pnl_ChucVu.setBackground(Color.WHITE);
 		pnl_ChucVu.setLayout(null);
@@ -307,16 +315,16 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		txt_CCCD.setColumns(10);
 		txt_CCCD.setBounds(125, 0, 225, 25);
 		pnl_CCCD.add(txt_CCCD);
+		
 
 		JLabel lbl_Password = new JLabel("Mật khẩu");
 		lbl_Password.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Password.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lbl_Password.setBounds(405, 185, 110, 25);
 		pnl_ThongTin.add(lbl_Password);
-
-		txt_Password = new JTextField();
-		txt_Password.setColumns(10);
-		txt_Password.setBounds(525, 185, 225, 25);
+		
+		txt_Password = new JPasswordField();
+		txt_Password.setBounds(526, 185, 198, 25);
 		pnl_ThongTin.add(txt_Password);
 
 		btn_Them = new JButton("Lưu");
@@ -386,10 +394,16 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		txt_DiaChi.setText(nhanvien.getDiaChi());
 		txt_CCCD.setText(nhanvien.getCCCD());
 		
+		
+		
 		TaiKhoan_DAO DAO_TK = new TaiKhoan_DAO();
 		TaiKhoan TK = new TaiKhoan();
 		TK = DAO_TK.timTaiKhoan_TheoMaNhanVien(nhanvien.getMaNhanVien());
-		txt_Password.setText(TK.getMatKhau());
+		txt_Password.setText(TK.getMatKhau().trim());
+		
+		cboShowPassword = new JCheckBox("");
+		cboShowPassword.setBounds(730, 185, 29, 25);
+		pnl_ThongTin.add(cboShowPassword);
 		
 		ImageIcon originalIcon = new ImageIcon(Modal_CapNhatDichVu.class.getResource(nhanvien.getAnhThe()));
 		Image originalImage = originalIcon.getImage();
@@ -397,6 +411,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);
 		
 		img_show_panel.setIcon(resizedIcon);
+		cboShowPassword.addItemListener(this);
 	}
 
 	@Override
@@ -585,4 +600,14 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		return path;
 	}
 
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getStateChange() == ItemEvent.SELECTED) {            
+            txt_Password.setEchoChar(cboShowPassword.isSelected() ? '\u0000' : '*');
+        } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+        	char echoChar = cboShowPassword.isSelected() ? '\u0000' : '*';
+        	txt_Password.setEchoChar(echoChar);
+        }
+	}
 }
