@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.Color;
 import java.awt.Component;
@@ -43,6 +44,7 @@ import javax.swing.JTextArea;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import javax.imageio.ImageIO;
+import javax.swing.border.EtchedBorder;
 
 public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 
@@ -56,6 +58,14 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	private String pathImg = "";
 	private HelpValidate valiDate;
 	private JButton btn_Luu;
+	
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
 
 	/**
 	 * Launch the application.
@@ -65,8 +75,14 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Modal_ThemLoaiPhong() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1024, 450);
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 1024, 350);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -76,30 +92,31 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 
 		JPanel pnl_TieuDe = new JPanel();
 		pnl_TieuDe.setBackground(Color.WHITE);
-		pnl_TieuDe.setBounds(26, 25, 230, 25);
+		pnl_TieuDe.setBounds(22, 11, 230, 25);
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
 
-		JLabel lbl_Title = new JLabel("Thêm loại phòng mới");
+		JLabel lbl_Title = new JLabel("THÊM LOẠI PHÒNG");
+		lbl_Title.setForeground(Color.decode(hexColor_Blue1));
 		lbl_Title.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title.setBounds(0, 0, 237, 25);
-		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		pnl_TieuDe.add(lbl_Title);
 
 		JPanel pnl_Anh = new JPanel();
-		pnl_Anh.setBorder(new LineBorder(new Color(0, 0, 255)));
+		pnl_Anh.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		pnl_Anh.setBackground(Color.WHITE);
-		pnl_Anh.setBounds(26, 95, 179, 197);
+		pnl_Anh.setBounds(26, 50, 179, 171);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
 		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 159, 178);
+		img_show_panel.setBounds(10, 10, 159, 150);
 		pnl_Anh.add(img_show_panel);
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
-		pnl_ThongTin.setBounds(224, 95, 765, 234);
+		pnl_ThongTin.setBounds(224, 50, 765, 234);
 		contentPane.add(pnl_ThongTin);
 		pnl_ThongTin.setLayout(null);
 
@@ -195,17 +212,24 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		pnl_GiaTien.add(txt_GiaTien);
 
 		btn_Luu = new JButton("Lưu");
-		btn_Luu.setBounds(562, 204, 90, 30);
+		btn_Luu.setBackground(Color.decode(hexColor_Orange));
+		btn_Luu.setIcon(new ImageIcon(Modal_ThemLoaiPhong.class.getResource("/icon/save_16px.png")));
+		btn_Luu.setForeground(new Color(255, 255, 255));
+		btn_Luu.setBounds(535, 204, 110, 30);
 		pnl_ThongTin.add(btn_Luu);
 		btn_Luu.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
 		JButton btn_BoQua = new JButton("Thoát");
-		btn_BoQua.setBounds(665, 204, 90, 30);
+		btn_BoQua.setBackground(Color.decode(hexColor_Blue2));
+		btn_BoQua.setIcon(new ImageIcon(Modal_ThemLoaiPhong.class.getResource("/icon/exit_16px.png")));
+		btn_BoQua.setForeground(new Color(255, 255, 255));
+		btn_BoQua.setBounds(655, 204, 110, 30);
 		pnl_ThongTin.add(btn_BoQua);
 		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		
 				JButton btn_ChonAnh = new JButton("Chọn ảnh");
-				btn_ChonAnh.setBounds(26, 297, 179, 32);
+				btn_ChonAnh.setIcon(new ImageIcon(Modal_ThemLoaiPhong.class.getResource("/icon/upload.png")));
+				btn_ChonAnh.setBounds(26, 252, 179, 32);
 				contentPane.add(btn_ChonAnh);
 				btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 				btn_ChonAnh.setForeground(new Color(255, 255, 255));
@@ -224,7 +248,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 								return image;
 							}
 						});
-						btn_ChonAnh.setBackground(new Color(0, 128, 255));
+						btn_ChonAnh.setBackground(Color.decode(hexColor_Green));
 
 		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

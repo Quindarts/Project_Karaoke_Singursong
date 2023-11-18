@@ -48,7 +48,7 @@ public class HelpForgotPwd {
 		}
 		
 		if(n > 0) {
-			HelpEmail.sendMail("nguyenthientu413@gmail.com", "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: " + newPwd);
+			HelpEmail.sendMail("nguyennga200x@gmail.com", "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: " + newPwd);
 		}
 		
 	}

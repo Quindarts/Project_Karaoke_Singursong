@@ -1,9 +1,6 @@
 package GUI;
-
 import java.awt.EventQueue;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 
@@ -21,8 +18,6 @@ import Entity.NhanVien;
 import Entity.TaiKhoan;
 import OtherFunction.HelpForgotPwd;
 
-import javax.swing.UIManager;
-import javax.swing.JTextField;
 import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Graphics;
@@ -31,14 +26,11 @@ import java.awt.Image;
 import java.awt.Insets;
 import java.awt.desktop.PrintFilesEvent;
 
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
-import javax.swing.JLabel;
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.RoundRectangle2D;
@@ -54,7 +46,7 @@ import java.awt.geom.RoundRectangle2D;
 /**
  * JFrame_DangNhap NguyenNga ThienTu
  */
-public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyListener {
+public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyListener, ItemListener {
 
 	private JPanel contentPane;
 
@@ -124,7 +116,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 	private JTextField txtUsername;
 	private JPanel panelLogin;
 	private JButton btnSave;
-	private Component btnExit;
+	private JButton btnExit;
 	private NhanVien_DAO NV_DAO;
 	private TaiKhoan taiKhoanDangNhap;
 	private TaiKhoan_DAO TK_DAO;
@@ -133,6 +125,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 	private JPasswordField txtPasswordRepeat;
 	private JTextField txtAccess;
 	private TaiKhoan tk;
+	private JCheckBox CBHienMatKhau;
 
 	/**
 	 * Create the frame.
@@ -168,7 +161,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 
 		panelLogin.add(lblTitleLogin);
 
-		JLabel lblUsername = new JLabel("Số điện thoại");
+		JLabel lblUsername = new JLabel("Mã nhân viên");
 		lblUsername.setForeground(Color.decode(hexColor_Blue1));
 		lblUsername.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblUsername.setBounds(25, 115, 111, 25);
@@ -185,7 +178,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 		txtUsername.setBounds(133, 115, 219, 25);
 		panelLogin.add(txtUsername);
 
-		btnSave = new JButton("Xác nhận");
+		btnSave = new JButton("Gửi mã xác nhận");
 		btnSave.setForeground(Color.WHITE);
 		btnSave.setBackground(Color.decode(hexColor_Green));
 		btnSave.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -205,6 +198,12 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 		lblPassword.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblPassword.setBounds(25, 235, 111, 25);
 		panelLogin.add(lblPassword);
+		
+		CBHienMatKhau = new JCheckBox("Hiện mật khẩu");
+		CBHienMatKhau.setBackground(new Color(255, 255, 255));
+		CBHienMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+		CBHienMatKhau.setBounds(133, 324, 111, 21);
+		panelLogin.add(CBHienMatKhau);
 
 		txtPassword = new JPasswordField();
 		txtPassword.setColumns(10);
@@ -253,7 +252,8 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 		panelLogo.add(lblLogo);
 
 		btnSave.addActionListener(this);
-
+		btnExit.addActionListener(this);
+		CBHienMatKhau.addItemListener(this);
 	}
 
 	/**
@@ -290,21 +290,28 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 			String passwordRepeat = new String(passwordRepeatChars);
 
 			if (password.equals(passwordRepeat) && (!password.equals("") && !passwordRepeat.equals(""))) {
-				System.out.println("đã đổi");
-
-				System.out.println(tk.gettenDangNhap());
-				System.out.println(tk.getNhanVien().getMaNhanVien());
-				System.out.println(password);
+//				System.out.println("đã đổi");
+//				System.out.println(tk.gettenDangNhap());
+//				System.out.println(tk.getNhanVien().getMaNhanVien());
+//				System.out.println(password);
 				TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password);
-				System.out.println(TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password));
+//				System.out.println(TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password));
 				if (!TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password)) {
-					System.out.println("đã vào được");
 					JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công");
+					setVisible(false);
+					JFrame_DangNhap dangNhap = new JFrame_DangNhap();
+					dangNhap.setVisible(true);
 				}
 
 			}
 		}
-
+		
+		Object o = e.getSource();
+		if (o.equals(btnExit)) {
+			JFrame_DangNhap dangNhap = new JFrame_DangNhap();
+			dangNhap.setVisible(true);
+			setVisible(false);
+		}
 	}
 
 	/**
@@ -355,5 +362,18 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getStateChange() == ItemEvent.SELECTED) {            
+            txtPassword.setEchoChar(CBHienMatKhau.isSelected() ? '\u0000' : '*');
+            txtPasswordRepeat.setEchoChar(CBHienMatKhau.isSelected() ? '\u0000' : '*');
+        } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+        	char echoChar = CBHienMatKhau.isSelected() ? '\u0000' : '*';
+            txtPassword.setEchoChar(echoChar);
+            txtPasswordRepeat.setEchoChar(echoChar);
+        }
 	}
 }

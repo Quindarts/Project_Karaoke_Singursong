@@ -108,7 +108,6 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 	private JButton btnThoat;
 	private JTextField txtMaKH;
 	private JPanel panel_button;
-	private JButton btnNhanPhong;
 	private JTable table_DichVu;
 	private JTextField txtTienKhachDua;
 	private JTextField txtTienThua;
@@ -225,7 +224,7 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		JLabel lblMKhch = new JLabel("Mã khách :");
 		lblMKhch.setBounds(268, 40, 86, 22);
 		panel_Detail.add(lblMKhch);
-		lblMKhch.setForeground(new Color(5, 74, 145));
+		lblMKhch.setForeground(new Color(0, 0, 0));
 		lblMKhch.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
 		txtMaKH = new JTextField();
@@ -237,7 +236,7 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		JLabel lblTnKhchHng = new JLabel("Tên khách :");
 		lblTnKhchHng.setBounds(268, 70, 86, 22);
 		panel_Detail.add(lblTnKhchHng);
-		lblTnKhchHng.setForeground(Color.decode(hexColor_Blue1));
+		lblTnKhchHng.setForeground(new Color(0, 0, 0));
 		lblTnKhchHng.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
 		txtTenKH = new JTextField();
@@ -249,7 +248,7 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		JLabel lblSinThoi = new JLabel("SDT :");
 		lblSinThoi.setBounds(268, 100, 86, 22);
 		panel_Detail.add(lblSinThoi);
-		lblSinThoi.setForeground(Color.decode(hexColor_Blue1));
+		lblSinThoi.setForeground(new Color(0, 0, 0));
 		lblSinThoi.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
 		txtSoDienThoai = new JTextField();
@@ -300,14 +299,6 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 			panel_button.setBounds(0, 772, 534, 56);
 			contentPanel.add(panel_button);
 			panel_button.setLayout(null);
-
-			btnNhanPhong = new JButton("Nhận phòng");
-			btnNhanPhong.setSelectedIcon(new ImageIcon(JDialog_ThongTinHoaDon.class.getResource("/icon/login.png")));
-			btnNhanPhong.setForeground(Color.WHITE);
-			btnNhanPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-			btnNhanPhong.setBackground(Color.decode(hexColor_Orange));
-			btnNhanPhong.setBounds(10, 10, 120, 35);
-			panel_button.add(btnNhanPhong);
 			{
 				btnXuatPDF = new JButton("Xuất PDF");
 				btnXuatPDF.setBounds(275, 10, 120, 35);
@@ -477,11 +468,6 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		txtTongTienDV.setText(dcf.format(hd.tinhTienDichVu(dsCTDV)));
 		txtTongTienHD.setText(dcf.format(hd.tinhTongTien(dsCTHD, dsCTDV)));
 
-//		if (!pdp.getTrangThai().equals("Chờ nhận phòng")) {
-//			btnNhanPhong.setVisible(false);
-//		} else {
-//			btnNhanPhong.setVisible(true);
-//		}
 	}
 
 	public void clearTable() {
