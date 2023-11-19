@@ -410,20 +410,17 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 					// Cập nhật lại chi tiết hóa đơn
 					chiTietHD = new ChiTietHoaDon(hoaDon, ph);
 					DAO_CTHD.capNhatCTHoaDon_TheoMaHoaDon_MaPhong(chiTietHD);
-					
-					System.out.println(chiTietHD);
 
 					if (chiTietHD != null) {
 						DAO_CTDV = new ChiTietDichVu_DAO();
 						ArrayList<ChiTietDichVu> dsCTDV = new ArrayList<>();
 						dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
 						
-
-						for (ChiTietDichVu value : dsCTDV) {
-							dv = new DichVu();
-							DAO_DV = new DichVu_DAO();
-							dv = DAO_DV.layDichVu_TheoMaDichVu(value.getDichVu().getMaDichVu());
-						}
+//						for (ChiTietDichVu value : dsCTDV) {
+//							dv = new DichVu();
+//							DAO_DV = new DichVu_DAO();
+//							dv = DAO_DV.layDichVu_TheoMaDichVu(value.getDichVu().getMaDichVu());
+//						}
 						JOptionPane.showMessageDialog(null,
 								"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
 						dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh_DangSuDung.getMaTrangThai());
@@ -454,7 +451,6 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 
 		// Tính số giờ đã hát
 		long khoangCachThoiGian = date_ChuyenPhong.getDate().getTime() - date_NhanPhongBanDau.getDate().getTime();
-		System.out.println(date_ChuyenPhong.getDate().getTime());
 		double soGioDaHat = khoangCachThoiGian / (60 * 60 * 1000);
 		txt_SoGioDaHat.setText(soGioDaHat + "");
 

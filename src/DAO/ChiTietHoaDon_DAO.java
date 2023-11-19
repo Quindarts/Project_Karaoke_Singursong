@@ -168,9 +168,10 @@ public class ChiTietHoaDon_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("UPDATE ChiTietHoaDon" + " WHERE maHoaDon = ? AND maPhong = ?");
+			statement = con.prepareStatement("UPDATE ChiTietHoaDon set maHoaDon = ?, maPhong = ? " + " WHERE maHoaDon = ?");
 			statement.setString(1, ctHoaDon.getHoaDon().getMaHoaDon());
 			statement.setString(2, ctHoaDon.getPhong().getMaPhong());
+			statement.setString(3, ctHoaDon.getHoaDon().getMaHoaDon());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
