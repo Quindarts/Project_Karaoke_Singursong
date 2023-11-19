@@ -16,18 +16,27 @@ import javax.swing.table.DefaultTableModel;
 
 import com.toedter.calendar.JDateChooser;
 
+import DAO.ChiTietDichVu_DAO;
+import DAO.ChiTietHoaDon_DAO;
+import DAO.DichVu_DAO;
+import DAO.HoaDon_DAO;
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
 import DAO.NhanVien_DAO;
 import DAO.PhieuDatPhong_DAO;
 import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
+import Entity.ChiTietDichVu;
+import Entity.ChiTietHoaDon;
+import Entity.DichVu;
+import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.LoaiPhong;
 import Entity.NhanVien;
 import Entity.PhieuDatPhong;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
+import OtherFunction.HelpRamDomMa;
 
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -72,6 +81,9 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	private JButton btnDatPhong;
 	private JButton btnHy;
 	private Calendar cal = Calendar.getInstance();
+	private Phong phong;
+	private HoaDon hoaDon;
+	private ChiTietHoaDon chiTietHD;
 	private DefaultTableModel model;
 	private Phong_DAO dao_Phong;
 	private LoaiPhong_DAO dao_LoaiPhong;
@@ -81,11 +93,20 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	private PhieuDatPhong_DAO DAO_PDP;
 	private NhanVien_DAO DAO_NV;
 	private KhachHang_DAO DAO_KH;
+	private HoaDon_DAO DAO_HD;
+	private ChiTietHoaDon_DAO DAO_CTHD;
+	private ChiTietDichVu_DAO DAO_CTDV;
+	private DichVu_DAO DAO_DV;
+	private DichVu dv;
 
 	/**
 	 * Create the panel.
 	 */
-	public Modal_PhieuChuyenPhong() {
+	public Modal_PhieuChuyenPhong(Phong phong, HoaDon hoaDon, ChiTietHoaDon chiTietHD) {
+		this.phong = phong;
+		this.hoaDon = hoaDon;
+		this.chiTietHD = chiTietHD;
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 911, 606);
 		contentPane = new JPanel();
@@ -323,12 +344,16 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 			setVisible(false);
 		}
 	}
-	
-	public void ChuyenPhong () {
+
+	public void ChuyenPhong() {
 		DAO_KH = new KhachHang_DAO();
 		DAO_PDP = new PhieuDatPhong_DAO();
 		DAO_NV = new NhanVien_DAO();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
+		DAO_HD = new HoaDon_DAO();
+		DAO_CTHD = new ChiTietHoaDon_DAO();
+		DAO_CTDV = new ChiTietDichVu_DAO();
+
 		int row = table.getSelectedRow();
 
 		String maPDP = txtMaPDP.getText();
@@ -337,7 +362,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		Phong ph = null;
 		String maPhong = model.getValueAt(row, 0).toString();
 		ph = dao_Phong.timPhong_TheoMaPhong(maPhong);
-		
+
 		NhanVien nv = null;
 		String maNV = phieuDatPhong.getNhanVien().getMaNhanVien();
 		nv = DAO_NV.timNhanVien_TheoMaNhanVien(maNV);
@@ -345,9 +370,12 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		KhachHang kh = null;
 		String maKH = phieuDatPhong.getKhachHang().getMaKhachHang();
 		kh = DAO_KH.layKhachHang_TheoMaKhachHang(maKH);
-		
-		TrangThaiPhong trThaiPh = new TrangThaiPhong();
-		trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Đang sử dụng");
+
+		TrangThaiPhong trThaiPh_DangSuDung = new TrangThaiPhong();
+		trThaiPh_DangSuDung = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Đang sử dụng");
+
+		TrangThaiPhong trThaiPh_Trong = new TrangThaiPhong();
+		trThaiPh_Trong = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");
 
 		Timestamp tgianDatPhong = null;
 		try {
@@ -369,32 +397,54 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		String trangThai = phieuDatPhong.getTrangThai();
 		String moTa = phieuDatPhong.getMoTa();
 
-		phieuDatPhong = new PhieuDatPhong(maPDP, ph, nv, kh, tgianDatPhong, tgianNhanPhong, tinCoc, trangThai,
-				moTa);
+		phieuDatPhong = new PhieuDatPhong(maPDP, ph, nv, kh, tgianDatPhong, tgianNhanPhong, tinCoc, trangThai, moTa);
 
 		try {
 			int t = JOptionPane.showConfirmDialog(null, "Xác nhận chuyển phòng?", "Xác nhận",
 					JOptionPane.YES_NO_OPTION);
 			if (t == JOptionPane.YES_OPTION) {
 				if (DAO_PDP.capNhatPhieuDatPhong(phieuDatPhong)) {
-					dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh.getMaTrangThai());
-					JOptionPane.showMessageDialog(null,
-							"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
-					dispose();
-				} else {
-					JOptionPane.showMessageDialog(null, "Thất bại, vui lòng thử lại");
+
+					ChiTietDichVu chiTietDV = new ChiTietDichVu();
+
+					dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh_DangSuDung.getMaTrangThai());
+					dao_Phong.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh_Trong.getMaTrangThai());
+
+					// Cập nhật lại chi tiết hóa đơn
+					chiTietHD = new ChiTietHoaDon(hoaDon, ph);
+					DAO_CTHD.capNhatCTHoaDon_TheoMaHoaDon_MaPhong(chiTietHD);
+
+					if (chiTietHD != null) {
+						DAO_CTDV = new ChiTietDichVu_DAO();
+
+						ArrayList<ChiTietDichVu> dsCTDV = new ArrayList<>();
+						dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
+
+						for (ChiTietDichVu value : dsCTDV) {
+							dv = new DichVu();
+							DAO_DV = new DichVu_DAO();
+							dv = DAO_DV.layDichVu_TheoMaDichVu(value.getDichVu().getMaDichVu());
+						}
+
+						JOptionPane.showMessageDialog(null,
+								"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
+						dispose();
+					} else {
+						JOptionPane.showMessageDialog(null, "Thất bại, vui lòng thử lại");
+					}
 				}
 			}
 
 		} catch (Exception e2) {
 			// TODO: handle exception
+			e2.printStackTrace();
 			JOptionPane.showMessageDialog(null, "Thất bại, vui lòng thử lại");
 		}
 	}
 
 	public void SetModal_PhieuChuyenPhong(Timestamp thoiGianNhanPhong, String maPhieu, String tenNV, String soDT,
 			String tenKH) {
-		
+
 		txtMaPDP.setText(maPhieu);
 		txtNhanVien.setText(tenNV);
 		txtSoDienThoai.setText(soDT);
@@ -414,7 +464,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 
 		// Lấy danh sách phòng trống và không thêm phòng từ card phòng được chọn
 		for (Phong ph : dao_Phong.layTatCaPhong()) {
-			
+
 			LoaiPhong loaiPh = new LoaiPhong();
 			loaiPh = dao_LoaiPhong.layLoaiPhong_TheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
 

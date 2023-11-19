@@ -55,7 +55,7 @@ import java.awt.Font;
  * 
  */
 public class CardPhong extends JPanel {
-	private static final String DAO_CTHD = null;
+	private static ChiTietHoaDon_DAO DAO_CTHD ;
 	private Phong phong;
 	private int width = 150;
 	private int height = 150;
@@ -88,6 +88,9 @@ public class CardPhong extends JPanel {
 	private String tenKH;
 	private String sdtKH;
 	private HoaDon_DAO DAO_HD;
+	private HoaDon hd;
+	private ArrayList<HoaDon> dsHoaDon;
+	private ArrayList<ChiTietHoaDon> dsChiTietHoaDon;
 
 	/**
 	 * @param phong
@@ -226,10 +229,17 @@ public class CardPhong extends JPanel {
 		DAO_KH = new KhachHang_DAO();
 		DAO_LP = new LoaiPhong_DAO();
 		DAO_TTP = new TrangThaiPhong_DAO();
+		DAO_HD = new HoaDon_DAO();
+		DAO_CTHD = new ChiTietHoaDon_DAO();
+		
 		nv = new NhanVien();
 		phieu = new PhieuDatPhong();
+		hd = new HoaDon();
+		
 		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
+		dsHoaDon = DAO_HD.layTatCaHoaDon();
 		dsPhong = DAO_P.layTatCaPhong();
+		dsChiTietHoaDon = DAO_CTHD.layTatCaChiTietHoaDon();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
 
 		JPopupMenu menu = new JPopupMenu();
@@ -333,30 +343,31 @@ public class CardPhong extends JPanel {
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
 
-			try {
-
-				if (dsPhieuDatPhong != null)
-					for (PhieuDatPhong pdp : dsPhieuDatPhong) {
+try {
+				
+				ChiTietHoaDon cthd = new ChiTietHoaDon();
+				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());	
+				System.out.println("Chi tiet hoa don cua phong: " + cthd);
+				if (cthd != null)				
+					dsChiTietHoaDon.forEach(value ->{
 						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
-						nv = phieu.getNhanVien();
+						hd = value.getHoaDon();
+						hd = DAO_HD.layHoaDon_TheoMaHoaDon(value.getHoaDon().getMaHoaDon());
+						System.out.println("Hoa don cua phong: " + hd);
+						nv = hd.getNhanVien();
 						tenNV = DAO_NV.timNhanVien_TheoMaNhanVien(nv.getMaNhanVien()).getHoTen();
-						kh = phieu.getKhachHang();
+						kh = hd.getKhachHang();
 						tenKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getHoTen();
-						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();
-						if (phieu != null)
-							break;
-					}
-				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong();
+						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();				
+					});
+				
+				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong(phong, hd, cthd);
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(phieu.getThoiGianNhanPhong(), phieu.getMaPhieuDat(), tenNV,
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), phieu.getMaPhieuDat(), tenNV,
 						sdtKH, tenKH);
 
-				// Cập nhật lại trạng thái phòng
-				TrangThaiPhong trThaiPh = new TrangThaiPhong();
-				trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");
-				DAO_P.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh.getMaTrangThai());
-
 			} catch (Exception e2) {
+				e2.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Phòng này chưa được đặt!");
 			}
 
