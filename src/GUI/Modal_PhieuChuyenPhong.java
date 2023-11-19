@@ -102,18 +102,13 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	/**
 	 * Create the panel.
 	 */
-<<<<<<< HEAD
 	public Modal_PhieuChuyenPhong(Phong phong, HoaDon hoaDon, ChiTietHoaDon chiTietHD) {
 		this.phong = phong;
 		this.hoaDon = hoaDon;
 		this.chiTietHD = chiTietHD;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-=======
-	public Modal_PhieuChuyenPhong() {
-		
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
->>>>>>> 20777e8b7352ff66770a028d148ccf0929ccadd9
+
 		setBounds(100, 100, 911, 606);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
@@ -370,11 +365,11 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		ph = dao_Phong.timPhong_TheoMaPhong(maPhong);
 
 		NhanVien nv = null;
-		String maNV = phieuDatPhong.getNhanVien().getMaNhanVien();
+		String maNV = hoaDon.getNhanVien().getMaNhanVien();
 		nv = DAO_NV.timNhanVien_TheoMaNhanVien(maNV);
 
 		KhachHang kh = null;
-		String maKH = phieuDatPhong.getKhachHang().getMaKhachHang();
+		String maKH = hoaDon.getKhachHang().getMaKhachHang();
 		kh = DAO_KH.layKhachHang_TheoMaKhachHang(maKH);
 
 		TrangThaiPhong trThaiPh_DangSuDung = new TrangThaiPhong();
@@ -383,63 +378,62 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		TrangThaiPhong trThaiPh_Trong = new TrangThaiPhong();
 		trThaiPh_Trong = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");
 
-		Timestamp tgianDatPhong = null;
-		try {
-			tgianDatPhong = phieuDatPhong.getThoiGianDatPhong();
-		} catch (Exception e2) {
-			// TODO: handle exception
-			tgianDatPhong = null;
-		}
+//		Timestamp tgianDatPhong = null;
+//		try {
+//			tgianDatPhong = hoaDon.getThoiGianDatPhong();
+//		} catch (Exception e2) {
+//			// TODO: handle exception
+//			tgianDatPhong = null;
+//		}
+//
+//		Timestamp tgianNhanPhong = null;
+//		try {
+//			tgianNhanPhong = hoaDon.getThoiGianNhanPhong();
+//		} catch (Exception e2) {
+//			// TODO: handle exception
+//			tgianDatPhong = null;
+//		}
 
-		Timestamp tgianNhanPhong = null;
-		try {
-			tgianNhanPhong = phieuDatPhong.getThoiGianNhanPhong();
-		} catch (Exception e2) {
-			// TODO: handle exception
-			tgianDatPhong = null;
-		}
+//		double tinCoc = phieuDatPhong.getTienCoc();
+//		String trangThai = phieuDatPhong.getTrangThai();
+//		String moTa = phieuDatPhong.getMoTa();
 
-		double tinCoc = phieuDatPhong.getTienCoc();
-		String trangThai = phieuDatPhong.getTrangThai();
-		String moTa = phieuDatPhong.getMoTa();
-
-		phieuDatPhong = new PhieuDatPhong(maPDP, ph, nv, kh, tgianDatPhong, tgianNhanPhong, tinCoc, trangThai, moTa);
+//		phieuDatPhong = new PhieuDatPhong(maPDP, ph, nv, kh, tgianDatPhong, tgianNhanPhong, tinCoc, trangThai, moTa);
 
 		try {
 			int t = JOptionPane.showConfirmDialog(null, "Xác nhận chuyển phòng?", "Xác nhận",
 					JOptionPane.YES_NO_OPTION);
 			if (t == JOptionPane.YES_OPTION) {
-				if (DAO_PDP.capNhatPhieuDatPhong(phieuDatPhong)) {
+//				if (DAO_PDP.capNhatPhieuDatPhong(phieuDatPhong)) {
 
 					ChiTietDichVu chiTietDV = new ChiTietDichVu();
-
-					dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh_DangSuDung.getMaTrangThai());
-					dao_Phong.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh_Trong.getMaTrangThai());
-
 					// Cập nhật lại chi tiết hóa đơn
 					chiTietHD = new ChiTietHoaDon(hoaDon, ph);
 					DAO_CTHD.capNhatCTHoaDon_TheoMaHoaDon_MaPhong(chiTietHD);
+					
+					System.out.println(chiTietHD);
 
 					if (chiTietHD != null) {
 						DAO_CTDV = new ChiTietDichVu_DAO();
-
 						ArrayList<ChiTietDichVu> dsCTDV = new ArrayList<>();
 						dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
+						
 
 						for (ChiTietDichVu value : dsCTDV) {
 							dv = new DichVu();
 							DAO_DV = new DichVu_DAO();
 							dv = DAO_DV.layDichVu_TheoMaDichVu(value.getDichVu().getMaDichVu());
 						}
-
 						JOptionPane.showMessageDialog(null,
 								"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
+						dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh_DangSuDung.getMaTrangThai());
+						dao_Phong.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh_Trong.getMaTrangThai());
 						dispose();
 					} else {
 						JOptionPane.showMessageDialog(null, "Thất bại, vui lòng thử lại");
 					}
 				}
-			}
+//			}
 
 		} catch (Exception e2) {
 			// TODO: handle exception

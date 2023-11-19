@@ -350,7 +350,7 @@ try {
 				System.out.println("Chi tiet hoa don cua phong: " + cthd);
 				if (cthd != null)				
 					dsChiTietHoaDon.forEach(value ->{
-						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
+//						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
 						hd = value.getHoaDon();
 						hd = DAO_HD.layHoaDon_TheoMaHoaDon(value.getHoaDon().getMaHoaDon());
 						System.out.println("Hoa don cua phong: " + hd);
@@ -363,7 +363,7 @@ try {
 				
 				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong(phong, hd, cthd);
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), phieu.getMaPhieuDat(), tenNV,
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(),"", tenNV,
 						sdtKH, tenKH);
 
 			} catch (Exception e2) {
