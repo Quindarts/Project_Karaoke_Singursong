@@ -16,6 +16,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Toolkit;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JTable;
@@ -73,6 +75,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
+import javax.swing.ImageIcon;
 
 public class Modal_ThanhToan extends JFrame implements ActionListener {
 
@@ -201,7 +204,6 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 	 * 
 	 */
 	public Modal_ThanhToan(HoaDon hoaDon, Phong phong, LoaiPhong loaiPhong, KhachHang khachHang) {
-
 		setHoaDon(hoaDon);
 		setLoaiPhongTT(loaiPhong);
 		setPhongTT(phong);
@@ -210,8 +212,15 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		layDanhSachCTHD();
 		layDanhSachCTDV();
 
-//		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1200, 768);
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 1200, 725);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
+
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -220,15 +229,16 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 
 		JLabel lblNewLabel = new JLabel("THANH TOÁN");
+		lblNewLabel.setForeground(Color.decode(hexColor_Blue1));
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		lblNewLabel.setBounds(0, 0, 1200, 46);
+		lblNewLabel.setBounds(10, -1, 1166, 46);
 		contentPane.add(lblNewLabel);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EmptyBorder(1, 1, 1, 1));
 		panel.setBackground(new Color(255, 255, 255));
-		panel.setBounds(599, 411, 555, 243);
+		panel.setBounds(599, 411, 555, 218);
 		contentPane.add(panel);
 		panel.setLayout(null);
 
@@ -286,7 +296,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		JPanel panel_1_1_4 = new JPanel();
 		panel_1_1_4.setBackground(new Color(255, 255, 255));
 		panel_1_1_4.setLayout(null);
-		panel_1_1_4.setBounds(0, 143, 255, 95);
+		panel_1_1_4.setBounds(0, 143, 255, 67);
 		panel.add(panel_1_1_4);
 
 		JLabel lblNewLabel_1_2_4 = new JLabel("Tiền khách đưa");
@@ -481,24 +491,8 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		txt__soDienThoai.setEnabled(false);
 		panel_1_1_8_1.add(txt__soDienThoai);
 
-		JPanel panel_3 = new JPanel();
-		panel_3.setBounds(884, 664, 258, 46);
-		contentPane.add(panel_3);
-		panel_3.setBackground(new Color(255, 255, 255));
-		panel_3.setLayout(null);
-
-		btn__exit = new JButton("Quay lại");
-		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn__exit.setBounds(0, 0, 112, 36);
-		panel_3.add(btn__exit);
-
-		btn__thanhToan = new JButton("Thanh toán");
-		btn__thanhToan.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn__thanhToan.setBounds(146, 0, 112, 36);
-		panel_3.add(btn__thanhToan);
-
 		JPanel panel_Table_dichVu = new JPanel();
-		panel_Table_dichVu.setBounds(28, 56, 534, 319);
+		panel_Table_dichVu.setBounds(28, 56, 534, 261);
 		contentPane.add(panel_Table_dichVu);
 
 		// Table thong dich vu
@@ -508,18 +502,19 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		JLabel lblNewLabel_1 = new JLabel("Danh sách dịch vụ");
 		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		lblNewLabel_1.setBounds(0, 0, 535, 35);
+		lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		lblNewLabel_1.setBounds(0, 0, 535, 46);
 		panel_Table_dichVu.add(lblNewLabel_1);
 
 		table_DichVu = new JTable();
+		table_DichVu.setFillsViewportHeight(true);
 		table_DichVu.setBackground(Color.WHITE);
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "STT", "Mặt hàng", "Đơn giá", "Số lượng", "Thành tiền" }));
 
 		table_DichVu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(0, 45, 534, 273);
+		scrollPane.setBounds(0, 45, 534, 216);
 		panel_Table_dichVu.add(scrollPane);
 		scrollPane.add(table_DichVu);
 		scrollPane.setViewportView(table_DichVu);
@@ -529,37 +524,54 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		JPanel panel_Table_Phong = new JPanel();
 		panel_Table_Phong.setLayout(null);
 		panel_Table_Phong.setBackground(new Color(5, 74, 145));
-		panel_Table_Phong.setBounds(28, 412, 534, 286);
+		panel_Table_Phong.setBounds(28, 329, 534, 288);
 		contentPane.add(panel_Table_Phong);
 
-		JLabel lblNewLabel_1_1 = new JLabel("Danh sách phòng");
-		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1_1.setForeground(Color.WHITE);
-		lblNewLabel_1_1.setFont(new Font("Segoe UI", Font.BOLD, 20));
-		lblNewLabel_1_1.setBounds(0, 0, 535, 35);
-		panel_Table_Phong.add(lblNewLabel_1_1);
-
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(0, 45, 534, 241);
+		scrollPane_1.setBounds(0, 45, 534, 243);
 		panel_Table_Phong.add(scrollPane_1);
 
 		table_Phong = new JTable();
+		table_Phong.setFillsViewportHeight(true);
 		table_Phong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		table_Phong.setBackground(Color.WHITE);
 		table_Phong.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "STT", "Tên loại phòng", "Tên phòng", "Số giờ hát", "Tiền phòng", "Thành tiền" }));
 
 		scrollPane_1.setViewportView(table_Phong);
+		
+				JLabel lblNewLabel_1_1 = new JLabel("Danh sách phòng");
+				lblNewLabel_1_1.setBounds(0, 0, 535, 46);
+				panel_Table_Phong.add(lblNewLabel_1_1);
+				lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+				lblNewLabel_1_1.setForeground(Color.WHITE);
+				lblNewLabel_1_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+		btn__exit = new JButton("Quay lại");
+		btn__exit.setBounds(880, 630, 120, 35);
+		contentPane.add(btn__exit);
+		btn__exit.setBackground(Color.decode(hexColor_Blue2));
+		btn__exit.setIcon(new ImageIcon(Modal_ThanhToan.class.getResource("/icon/return.png")));
+		btn__exit.setForeground(new Color(255, 255, 255));
+		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		btn__thanhToan = new JButton("Thanh toán");
+		btn__thanhToan.setBounds(1010, 630, 135, 35);
+		contentPane.add(btn__thanhToan);
+		btn__thanhToan.setForeground(new Color(255, 255, 255));
+		btn__thanhToan.setBackground(Color.decode(hexColor_Orange));
+		btn__thanhToan.setIcon(new ImageIcon(Modal_ThanhToan.class.getResource("/icon/confirm.png")));
+		btn__thanhToan.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		btn__thanhToan.setEnabled(false);
+		btn__thanhToan.addActionListener(this);
+		btn__exit.addActionListener(this);
 
 		// Cập nhật form
 		clearForm();
 		renderTablePhong();
 		renderTableDichVu(getDschiTietDV());
 		capNhatForm();
-
-		btn__thanhToan.setEnabled(false);
-		btn__exit.addActionListener(this);
-		btn__thanhToan.addActionListener(this);
 //		table_Phong.addMouseListener((MouseListener) this);
 		txt__tienKhachDua.addActionListener(this);
 
@@ -600,7 +612,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 
 					});
 					dialog_TTHD = new JDialog_ThongTinHoaDon();
-					
+
 					this.setVisible(false);
 					dialog_TTHD.setVisible(true);
 					dialog_TTHD.HienThongTinTheoMaHD(getHoaDon().getMaHoaDon());

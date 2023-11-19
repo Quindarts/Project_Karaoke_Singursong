@@ -24,6 +24,8 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.Window;
 import java.awt.Color;
 import java.awt.Component;
 
@@ -33,7 +35,11 @@ import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
+
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -54,8 +60,10 @@ import java.awt.Font;
 import com.toedter.calendar.JDayChooser;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.border.LineBorder;
+import javax.swing.JPasswordField;
+import javax.swing.border.EtchedBorder;
 
-public class Modal_TrangCaNhan extends JFrame implements ActionListener {
+public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemListener {
 
 	private JPanel contentPane;
 
@@ -64,6 +72,15 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 	private JTextField txt_SoDienThoai;
 	private JTextField txt_DiaChi;
 	private JTextField txt_CCCD;
+	
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
+	
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 
 	private LoaiNhanVien_DAO DAO_LNV;
@@ -85,8 +102,10 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 
 	private AbstractButton rdbtn_Nu;
 	private JTextField txt_TrangThai;
-	private JTextField txt_Password;
 	private JTextField txt_chucVu;
+	private JPasswordField txt_Password;
+
+	private JCheckBox cboShowPassword;
 
 	/**
 	 * Launch the application.
@@ -97,8 +116,14 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 	 */
 	public Modal_TrangCaNhan(NhanVien nhanvien) {
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1024, 450);
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 1034, 396);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		contentPane = new JPanel();
 
 		contentPane.setBackground(Color.WHITE);
@@ -110,31 +135,31 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 
 		JPanel pnl_TieuDe = new JPanel();
 		pnl_TieuDe.setBackground(Color.WHITE);
-		pnl_TieuDe.setBounds(26, 25, 237, 35);
+		pnl_TieuDe.setBounds(22, 11, 237, 35);
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
 
-		JLabel lbl_Title = new JLabel("Bio nhân viên");
+		JLabel lbl_Title = new JLabel("THÔNG TIN NHÂN VIÊN");
 		lbl_Title.setBounds(0, 10, 237, 20);
-		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 17));
 
 		pnl_TieuDe.add(lbl_Title);
 
 		JPanel pnl_Anh = new JPanel();
-		pnl_Anh.setBorder(new LineBorder(new Color(0, 0, 255)));
+		pnl_Anh.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		pnl_Anh.setBackground(Color.WHITE);
-		pnl_Anh.setBounds(26, 70, 179, 215);
+		pnl_Anh.setBounds(26, 70, 179, 172);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
 		///
 		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 159, 185);
+		img_show_panel.setBounds(10, 10, 159, 153);
 		pnl_Anh.add(img_show_panel);
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
-		pnl_ThongTin.setBounds(224, 70, 765, 234);
+		pnl_ThongTin.setBounds(224, 70, 765, 285);
 		contentPane.add(pnl_ThongTin);
 		pnl_ThongTin.setLayout(null);
 
@@ -155,7 +180,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		txt_MaNhanVien.setBounds(125, 0, 225, 25);
 		pnl_MaNhanVien.add(txt_MaNhanVien);
 		txt_MaNhanVien.setColumns(10);
-
+		
 		JPanel pnl_ChucVu = new JPanel();
 		pnl_ChucVu.setBackground(Color.WHITE);
 		pnl_ChucVu.setLayout(null);
@@ -307,37 +332,21 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		txt_CCCD.setColumns(10);
 		txt_CCCD.setBounds(125, 0, 225, 25);
 		pnl_CCCD.add(txt_CCCD);
+		
 
 		JLabel lbl_Password = new JLabel("Mật khẩu");
 		lbl_Password.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Password.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lbl_Password.setBounds(405, 185, 110, 25);
 		pnl_ThongTin.add(lbl_Password);
-
-		txt_Password = new JTextField();
-		txt_Password.setColumns(10);
-		txt_Password.setBounds(525, 185, 225, 25);
+		
+		txt_Password = new JPasswordField();
+		txt_Password.setBounds(526, 185, 198, 25);
 		pnl_ThongTin.add(txt_Password);
 
-		btn_Them = new JButton("Lưu");
-		btn_Them.setForeground(Color.WHITE);
-		btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_Them.setBackground(new Color(0, 128, 255));
-		btn_Them.setBounds(751, 314, 95, 32);
-		contentPane.add(btn_Them);
-
-		btn_Them.addActionListener(this);
-
-		btn_BoQua = new JButton("Bỏ qua");
-		btn_BoQua.setForeground(Color.WHITE);
-		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_BoQua.setBackground(new Color(0, 128, 255));
-		btn_BoQua.setBounds(856, 314, 89, 32);
-		btn_BoQua.addActionListener(this);
-		contentPane.add(btn_BoQua);
-
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
-		btn_ChonAnh.setBounds(26, 295, 179, 32);
+		btn_ChonAnh.setIcon(new ImageIcon(Modal_TrangCaNhan.class.getResource("/icon/upload.png")));
+		btn_ChonAnh.setBounds(26, 262, 179, 32);
 		contentPane.add(btn_ChonAnh);
 		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btn_ChonAnh.setForeground(new Color(255, 255, 255));
@@ -386,10 +395,36 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		txt_DiaChi.setText(nhanvien.getDiaChi());
 		txt_CCCD.setText(nhanvien.getCCCD());
 		
+		
+		
 		TaiKhoan_DAO DAO_TK = new TaiKhoan_DAO();
 		TaiKhoan TK = new TaiKhoan();
 		TK = DAO_TK.timTaiKhoan_TheoMaNhanVien(nhanvien.getMaNhanVien());
-		txt_Password.setText(TK.getMatKhau());
+		txt_Password.setText(TK.getMatKhau().trim());
+		
+		cboShowPassword = new JCheckBox("");
+		cboShowPassword.setBackground(new Color(255, 255, 255));
+		cboShowPassword.setBounds(730, 185, 29, 25);
+		pnl_ThongTin.add(cboShowPassword);
+		
+				btn_Them = new JButton("Lưu");
+				btn_Them.setIcon(new ImageIcon(Modal_TrangCaNhan.class.getResource("/icon/save_16px.png")));
+				btn_Them.setBounds(526, 244, 110, 30);
+				pnl_ThongTin.add(btn_Them);
+				btn_Them.setForeground(Color.WHITE);
+				btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
+				btn_Them.setBackground(Color.decode(hexColor_Orange));
+				
+						btn_BoQua = new JButton("Bỏ qua");
+						btn_BoQua.setIcon(new ImageIcon(Modal_TrangCaNhan.class.getResource("/icon/exit_16px.png")));
+						btn_BoQua.setBounds(649, 244, 110, 30);
+						pnl_ThongTin.add(btn_BoQua);
+						btn_BoQua.setForeground(Color.WHITE);
+						btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
+						btn_BoQua.setBackground(Color.decode(hexColor_Blue2));
+						btn_BoQua.addActionListener(this);
+				
+						btn_Them.addActionListener(this);
 		
 		ImageIcon originalIcon = new ImageIcon(Modal_CapNhatDichVu.class.getResource(nhanvien.getAnhThe()));
 		Image originalImage = originalIcon.getImage();
@@ -397,6 +432,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);
 		
 		img_show_panel.setIcon(resizedIcon);
+		cboShowPassword.addItemListener(this);
 	}
 
 	@Override
@@ -585,4 +621,14 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener {
 		return path;
 	}
 
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getStateChange() == ItemEvent.SELECTED) {            
+            txt_Password.setEchoChar(cboShowPassword.isSelected() ? '\u0000' : '*');
+        } else if (e.getStateChange() == ItemEvent.DESELECTED) {
+        	char echoChar = cboShowPassword.isSelected() ? '\u0000' : '*';
+        	txt_Password.setEchoChar(echoChar);
+        }
+	}
 }

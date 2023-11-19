@@ -4,16 +4,22 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.border.EtchedBorder;
+import javax.swing.ImageIcon;
 
 public class Modal_XemThongTinPhong extends JFrame {
 
@@ -25,6 +31,14 @@ public class Modal_XemThongTinPhong extends JFrame {
 	private JLabel lbl_ViTriPhong;
 	private JLabel lbl_TenPhong;
 	private JLabel img_Phong;
+	
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
 
 	/**
 	 * Launch the application.
@@ -34,8 +48,14 @@ public class Modal_XemThongTinPhong extends JFrame {
 	 * Create the frame.
 	 */
 	public Modal_XemThongTinPhong() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 452, 294);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -50,14 +70,15 @@ public class Modal_XemThongTinPhong extends JFrame {
 		pnl_TieuDe.setLayout(null);
 
 		JLabel lbl_TieuDe = new JLabel("THÔNG TIN PHÒNG");
-		lbl_TieuDe.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_TieuDe.setHorizontalAlignment(SwingConstants.CENTER);
-		lbl_TieuDe.setBounds(140, 0, 150, 24);
+		lbl_TieuDe.setForeground(Color.decode(hexColor_Blue1));
+		lbl_TieuDe.setFont(new Font("Segoe UI", Font.BOLD, 17));
+		lbl_TieuDe.setBounds(0, 0, 290, 24);
 		pnl_TieuDe.add(lbl_TieuDe);
 
-		img_Phong = new JLabel("IMG");
+		img_Phong = new JLabel("");
+		img_Phong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		img_Phong.setBackground(new Color(192, 192, 192));
-		img_Phong.setBounds(10, 44, 179, 192);
+		img_Phong.setBounds(10, 50, 179, 171);
 		contentPane.add(img_Phong);
 
 		JPanel pnl_TenPhong = new JPanel();
@@ -166,19 +187,6 @@ public class Modal_XemThongTinPhong extends JFrame {
 		lbl_LoaiPhong.setBackground(Color.WHITE);
 		lbl_LoaiPhong.setBounds(80, 0, 140, 20);
 		pnl_LoaiPhong.add(lbl_LoaiPhong);
-		
-		JButton btn_OK = new JButton("OK");
-		btn_OK.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_OK.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				setVisible(false);
-			}
-		} );
-		btn_OK.setBounds(329, 232, 85, 21);
-		contentPane.add(btn_OK);
 	}
 
 	public void SetModal_XemThongTinPhong(String anhPhong, String tenPhong ,String tenLoaiPhong, String viTriPhong, String giaPhong,

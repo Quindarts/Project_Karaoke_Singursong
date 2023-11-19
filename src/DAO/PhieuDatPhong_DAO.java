@@ -638,46 +638,46 @@ public class PhieuDatPhong_DAO {
 
 	}
 
-	public boolean capNhatTrangThaiPhieu(PhieuDatPhong phieuDatPhong) {
-		Connection con = ConnectDB.getConnection();
-		int n = 0;
-
-		// Lấy thời gian hiện tại
-		java.util.Date utilDate = new java.util.Date();
-
-		// Chuyển đổi ngày từ java.util.Date thành java.sql.Date
-		Date sqlDate = new Date(utilDate.getTime());
-
-		// Tính toán thời gian trễ 1 giờ
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(sqlDate);
-		cal.add(Calendar.HOUR, -1);
-		java.util.Date lateTime = (java.util.Date) cal.getTime();
-
-		// Chuyển thời gian trễ thành Timestamp
-		Timestamp lateTimestamp = new Timestamp(lateTime.getTime());
-		System.out.println(lateTimestamp);
-
-		PreparedStatement statement = null;
-
-		try {
-			statement = con.prepareStatement("UPDATE PhieuDatPhong SET trangThai = ? WHERE thoiGianNhanPhong >= ?");
-			statement.setString(1, "Hết hạn"); // Đặt trạng thái thành "Hết hạn"
-			statement.setTimestamp(2, lateTimestamp);
-
-			n = statement.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				statement.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-
-		return n > 0;
-	}
+//	public boolean capNhatTrangThaiPhieu(PhieuDatPhong phieuDatPhong) {
+//		Connection con = ConnectDB.getConnection();
+//		int n = 0;
+//
+//		// Lấy thời gian hiện tại
+//		java.util.Date utilDate = new java.util.Date();
+//
+//		// Chuyển đổi ngày từ java.util.Date thành java.sql.Date
+//		Date sqlDate = new Date(utilDate.getTime());
+//
+//		// Tính toán thời gian trễ 1 giờ
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTime(sqlDate);
+//		cal.add(Calendar.HOUR, -1);
+//		java.util.Date lateTime = (java.util.Date) cal.getTime();
+//
+//		// Chuyển thời gian trễ thành Timestamp
+//		Timestamp lateTimestamp = new Timestamp(lateTime.getTime());
+//		System.out.println(lateTimestamp);
+//
+//		PreparedStatement statement = null;
+//
+//		try {
+//			statement = con.prepareStatement("UPDATE PhieuDatPhong SET trangThai = ? WHERE thoiGianNhanPhong >= ?");
+//			statement.setString(1, "Hết hạn"); // Đặt trạng thái thành "Hết hạn"
+//			statement.setTimestamp(2, lateTimestamp);
+//
+//			n = statement.executeUpdate();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		} finally {
+//			try {
+//				statement.close();
+//			} catch (Exception e2) {
+//				e2.printStackTrace();
+//			}
+//		}
+//
+//		return n > 0;
+//	}
 
 	public boolean HuyPhieuDatPhong(String maPDP) {
 		ConnectDB.getInstance();

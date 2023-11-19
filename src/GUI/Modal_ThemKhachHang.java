@@ -39,6 +39,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.Color;
 import javax.swing.border.LineBorder;
+import javax.swing.ImageIcon;
 
 public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 
@@ -74,10 +75,9 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private Calendar cal = Calendar.getInstance();
 
 	public Modal_ThemKhachHang() {
-
+		
 		DAO_KH = new KhachHang_DAO();
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 950, 336);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -114,7 +114,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		txt__MaKH = new JTextField();
 
 		txt__MaKH.setEditable(false);
-		txt__MaKH.setBounds(172, 67, 255, 25);
+		txt__MaKH.setBounds(172, 70, 255, 25);
 		panel_1.add(txt__MaKH);
 		txt__MaKH.setColumns(10);
 
@@ -138,10 +138,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		txt__DiaChi.setColumns(10);
 
 		btn__exit = new JButton("Thoát");
+		btn__exit.setIcon(new ImageIcon(Modal_ThemKhachHang.class.getResource("/icon/exit_16px.png")));
 		btn__exit.setForeground(new Color(255, 255, 255));
 		btn__exit.setBackground(Color.decode(hexColor_Blue2));
-		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btn__exit.setBounds(739, 233, 125, 35);
+		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn__exit.setBounds(749, 246, 110, 30);
 		panel_1.add(btn__exit);
 
 		JLabel lbl__GhiChu = new JLabel("Ghi Chú");
@@ -150,10 +151,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		panel_1.add(lbl__GhiChu);
 
 		btn__Save = new JButton("Lưu");
+		btn__Save.setIcon(new ImageIcon(Modal_ThemKhachHang.class.getResource("/icon/save_16px.png")));
 		btn__Save.setForeground(new Color(255, 255, 255));
 		btn__Save.setBackground(Color.decode(hexColor_Green));
-		btn__Save.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btn__Save.setBounds(604, 233, 125, 35);
+		btn__Save.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn__Save.setBounds(629, 246, 110, 30);
 		panel_1.add(btn__Save);
 
 		JLabel lbl__DiaChi = new JLabel("Địa Chỉ");
@@ -169,13 +171,13 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		rdbt__nu = new JRadioButton("Nữ");
 		rdbt__nu.setBackground(new Color(255, 255, 255));
 		rdbt__nu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		rdbt__nu.setBounds(290, 203, 70, 21);
+		rdbt__nu.setBounds(265, 200, 70, 27);
 		panel_1.add(rdbt__nu);
 		btngr__gioiTinh.add(rdbt__nu);
 
 		rdbt__nam = new JRadioButton("Nam");
-		rdbt__nam.setSize(70, 21);
-		rdbt__nam.setLocation(177, 203);
+		rdbt__nam.setSize(70, 27);
+		rdbt__nam.setLocation(172, 200);
 		rdbt__nam.setBackground(new Color(255, 255, 255));
 		rdbt__nam.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		panel_1.add(rdbt__nam);
@@ -187,25 +189,25 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		JLabel lbl__tieuDe = new JLabel("THÔNG TIN KHÁCH HÀNG");
 		lbl__tieuDe.setForeground(Color.decode(hexColor_Blue1));
 		;
-		lbl__tieuDe.setBounds(43, 10, 849, 39);
+		lbl__tieuDe.setBounds(22, 11, 849, 39);
 		panel_1.add(lbl__tieuDe);
 		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 17));
 
 		date_NgaySinh = new JDateChooser();
 		date_NgaySinh.setDateFormatString("yyyy-MM-dd");
-		date_NgaySinh.setBounds(172, 159, 255, 25);
+		date_NgaySinh.setBounds(172, 150, 255, 25);
 		panel_1.add(date_NgaySinh);
 
 		JPanel pnl_GhiChu = new JPanel();
 		pnl_GhiChu.setBackground(new Color(255, 255, 255));
 		pnl_GhiChu.setBorder(new LineBorder(new Color(192, 192, 192)));
-		pnl_GhiChu.setBounds(604, 159, 257, 74);
+		pnl_GhiChu.setBounds(604, 150, 257, 68);
 		panel_1.add(pnl_GhiChu);
 		pnl_GhiChu.setLayout(null);
 
 		txtA__GhiChu = new JTextArea();
 		txtA__GhiChu.setForeground(new Color(0, 0, 0));
-		txtA__GhiChu.setBounds(1, 1, 255, 72);
+		txtA__GhiChu.setBounds(1, 1, 255, 63);
 		pnl_GhiChu.add(txtA__GhiChu);
 
 //---------------------------

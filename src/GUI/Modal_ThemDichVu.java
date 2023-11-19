@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -25,6 +26,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.Color;
 import java.awt.Component;
@@ -66,6 +68,14 @@ public class Modal_ThemDichVu extends JFrame {
 	private JDateChooser dateChooser_ngayNhap;
 	private Date ngayNhap;
 
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
+
 	/**
 	 * Launch the application.
 	 */
@@ -75,9 +85,15 @@ public class Modal_ThemDichVu extends JFrame {
 	 */
 
 	public Modal_ThemDichVu() {
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 1024, 400);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1024, 450);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -87,36 +103,38 @@ public class Modal_ThemDichVu extends JFrame {
 
 		JPanel pnl_TieuDe = new JPanel();
 		pnl_TieuDe.setBackground(Color.WHITE);
-		pnl_TieuDe.setBounds(26, 25, 230, 25);
+		pnl_TieuDe.setBounds(22, 11, 230, 25);
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
 
-		JLabel lbl_Title = new JLabel("Thêm dịch vụ mới");
+		JLabel lbl_Title = new JLabel("THÊM DỊCH VỤ MỚI");
+		lbl_Title.setForeground(Color.decode(hexColor_Blue1));
 		lbl_Title.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_Title.setBounds(0, 0, 237, 25);
-		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		lbl_Title.setBounds(0, 0, 278, 25);
+		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 17));
 		pnl_TieuDe.add(lbl_Title);
 
 		JPanel pnl_Anh = new JPanel();
-		pnl_Anh.setBorder(new LineBorder(new Color(0, 0, 255)));
-		pnl_Anh.setBackground(new Color(255, 255, 255));
-		pnl_Anh.setBounds(26, 95, 179, 198);
+		pnl_Anh.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		pnl_Anh.setBackground(Color.WHITE);
+		pnl_Anh.setBounds(26, 50, 180, 180);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
 		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 159, 176);
+		img_show_panel.setBounds(10, 11, 160, 158);
 		pnl_Anh.add(img_show_panel);
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
-		pnl_ThongTin.setBounds(224, 95, 765, 286);
+		pnl_ThongTin.setBounds(224, 50, 776, 292);
+		;
 		contentPane.add(pnl_ThongTin);
 		pnl_ThongTin.setLayout(null);
 
 		JPanel pnl_MaLoaiPhong = new JPanel();
 		pnl_MaLoaiPhong.setBackground(Color.WHITE);
-		pnl_MaLoaiPhong.setBounds(10, 5, 350, 25);
+		pnl_MaLoaiPhong.setBounds(10, 5, 350, 35);
 		pnl_ThongTin.add(pnl_MaLoaiPhong);
 		pnl_MaLoaiPhong.setLayout(null);
 
@@ -134,7 +152,7 @@ public class Modal_ThemDichVu extends JFrame {
 		JPanel pnl_TenLoaiPhong = new JPanel();
 		pnl_TenLoaiPhong.setBackground(Color.WHITE);
 		pnl_TenLoaiPhong.setLayout(null);
-		pnl_TenLoaiPhong.setBounds(10, 50, 350, 25);
+		pnl_TenLoaiPhong.setBounds(10, 50, 350, 35);
 		pnl_ThongTin.add(pnl_TenLoaiPhong);
 
 		JLabel lbl_TenDichVu = new JLabel("Tên dịch vụ");
@@ -151,7 +169,7 @@ public class Modal_ThemDichVu extends JFrame {
 		JPanel pnl_SoLuongKhachToiDa = new JPanel();
 		pnl_SoLuongKhachToiDa.setBackground(Color.WHITE);
 		pnl_SoLuongKhachToiDa.setLayout(null);
-		pnl_SoLuongKhachToiDa.setBounds(405, 5, 350, 25);
+		pnl_SoLuongKhachToiDa.setBounds(405, 5, 360, 25);
 		pnl_ThongTin.add(pnl_SoLuongKhachToiDa);
 
 		JLabel lbl_SoLuong = new JLabel("Số lượng");
@@ -168,7 +186,7 @@ public class Modal_ThemDichVu extends JFrame {
 		JPanel pnl_GiaTien = new JPanel();
 		pnl_GiaTien.setLayout(null);
 		pnl_GiaTien.setBackground(Color.WHITE);
-		pnl_GiaTien.setBounds(10, 95, 350, 25);
+		pnl_GiaTien.setBounds(10, 95, 350, 34);
 		pnl_ThongTin.add(pnl_GiaTien);
 
 		JLabel lbl_GiaiTien = new JLabel("Giá tiền");
@@ -182,20 +200,26 @@ public class Modal_ThemDichVu extends JFrame {
 		txt_GiaTien.setBounds(125, 0, 225, 25);
 		pnl_GiaTien.add(txt_GiaTien);
 
-		JButton btn_Luu = new JButton("Lưu");
-		btn_Luu.setBounds(552, 246, 90, 30);
+		JButton btn_Luu = new JButton("Thêm");
+		btn_Luu.setIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/add_16px.png")));
+		btn_Luu.setBackground(Color.decode(hexColor_Green));
+		btn_Luu.setForeground(new Color(255, 255, 255));
+		btn_Luu.setBounds(532, 253, 110, 30);
 		pnl_ThongTin.add(btn_Luu);
 		btn_Luu.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-		JButton btn_BoQua = new JButton("Bỏ qua");
-		btn_BoQua.setBounds(665, 246, 90, 30);
+		JButton btn_BoQua = new JButton("Thoát");
+		btn_BoQua.setIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/exit_16px.png")));
+		btn_BoQua.setBackground(Color.decode(hexColor_Blue2));
+		btn_BoQua.setForeground(new Color(255, 255, 255));
+		btn_BoQua.setBounds(645, 253, 110, 30);
 		pnl_ThongTin.add(btn_BoQua);
 		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
 		JPanel pnl_GiaTien_1 = new JPanel();
 		pnl_GiaTien_1.setLayout(null);
 		pnl_GiaTien_1.setBackground(Color.WHITE);
-		pnl_GiaTien_1.setBounds(10, 139, 350, 25);
+		pnl_GiaTien_1.setBounds(10, 139, 350, 39);
 		pnl_ThongTin.add(pnl_GiaTien_1);
 
 		JLabel lbl_TrangThai = new JLabel("Trạng thái");
@@ -209,13 +233,13 @@ public class Modal_ThemDichVu extends JFrame {
 		cbox_trangThai.addItem("Còn hàng");
 		cbox_trangThai.addItem("Hết hàng");
 
-		cbox_trangThai.setBounds(126, 3, 224, 21);
+		cbox_trangThai.setBounds(126, 3, 224, 25);
 		pnl_GiaTien_1.add(cbox_trangThai);
 
 		JPanel pnl_GiaTien_2 = new JPanel();
 		pnl_GiaTien_2.setLayout(null);
 		pnl_GiaTien_2.setBackground(Color.WHITE);
-		pnl_GiaTien_2.setBounds(405, 95, 350, 25);
+		pnl_GiaTien_2.setBounds(405, 95, 360, 34);
 		pnl_ThongTin.add(pnl_GiaTien_2);
 
 		JLabel lbl_NgayNhap = new JLabel("Ngày nhập");
@@ -231,7 +255,7 @@ public class Modal_ThemDichVu extends JFrame {
 		JPanel pnl_GiaTien_2_1 = new JPanel();
 		pnl_GiaTien_2_1.setLayout(null);
 		pnl_GiaTien_2_1.setBackground(Color.WHITE);
-		pnl_GiaTien_2_1.setBounds(405, 139, 350, 25);
+		pnl_GiaTien_2_1.setBounds(405, 139, 360, 39);
 		pnl_ThongTin.add(pnl_GiaTien_2_1);
 
 		JLabel lbl_NgayHetHan = new JLabel("Ngày hết hạn");
@@ -247,7 +271,7 @@ public class Modal_ThemDichVu extends JFrame {
 		JPanel pnl_GiaTien_2_2 = new JPanel();
 		pnl_GiaTien_2_2.setLayout(null);
 		pnl_GiaTien_2_2.setBackground(Color.WHITE);
-		pnl_GiaTien_2_2.setBounds(405, 50, 350, 25);
+		pnl_GiaTien_2_2.setBounds(405, 50, 350, 30);
 		pnl_ThongTin.add(pnl_GiaTien_2_2);
 
 		JLabel lbl_SoLuongDaSuDung = new JLabel("Số lượng đã sử dụng");
@@ -258,13 +282,13 @@ public class Modal_ThemDichVu extends JFrame {
 
 		txt_soLuongDaSuDung = new JTextField();
 		txt_soLuongDaSuDung.setColumns(10);
-		txt_soLuongDaSuDung.setBounds(153, 1, 197, 25);
+		txt_soLuongDaSuDung.setBounds(153, 1, 207, 25);
 		pnl_GiaTien_2_2.add(txt_soLuongDaSuDung);
 
 		JPanel pnl_GiaTien_1_1 = new JPanel();
 		pnl_GiaTien_1_1.setLayout(null);
 		pnl_GiaTien_1_1.setBackground(Color.WHITE);
-		pnl_GiaTien_1_1.setBounds(10, 188, 350, 88);
+		pnl_GiaTien_1_1.setBounds(10, 188, 745, 54);
 		pnl_ThongTin.add(pnl_GiaTien_1_1);
 
 		JLabel lbl_moTa = new JLabel("Mô Tả");
@@ -274,30 +298,39 @@ public class Modal_ThemDichVu extends JFrame {
 		pnl_GiaTien_1_1.add(lbl_moTa);
 
 		txtA_moTa = new JTextArea();
-		txtA_moTa.setBounds(127, 1, 223, 87);
-		pnl_GiaTien_1_1.add(txtA_moTa);
+		txtA_moTa.setBounds(137, 11, 598, 32);
+//		pnl_GiaTien_1_1.add(txtA_moTa);
 		
-				JButton btn_ChonAnh = new JButton("Chọn ảnh");
-				btn_ChonAnh.setBounds(26, 303, 179, 32);
-				contentPane.add(btn_ChonAnh);
-				btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-				btn_ChonAnh.setForeground(new Color(255, 255, 255));
-				
-						btn_ChonAnh.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-							}
-				
-							public ImageIcon ResizeImage(String ImagePath) {
-								ImageIcon MyImage = new ImageIcon(ImagePath);
-								Image img = MyImage.getImage();
-								Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
-										Image.SCALE_SMOOTH);
-								ImageIcon image = new ImageIcon(newImg);
-								return image;
-							}
-						});
-						btn_ChonAnh.setBackground(new Color(0, 128, 255));
+		JPanel panel = new JPanel();
+		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panel.setBackground(new Color(255, 255, 255));
+		panel.setBounds(127, 0, 619, 53);
+		panel.add(txtA_moTa);
+		pnl_GiaTien_1_1.add(panel);
+
+		JButton btn_ChonAnh = new JButton("Chọn ảnh");
+		btn_ChonAnh.setIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/upload.png")));
+		btn_ChonAnh.setSelectedIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/upload.png")));
+		btn_ChonAnh.setBounds(27, 240, 179, 32);
+		contentPane.add(btn_ChonAnh);
+		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_ChonAnh.setForeground(new Color(255, 255, 255));
+
+		btn_ChonAnh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+			}
+
+			public ImageIcon ResizeImage(String ImagePath) {
+				ImageIcon MyImage = new ImageIcon(ImagePath);
+				Image img = MyImage.getImage();
+				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
+						Image.SCALE_SMOOTH);
+				ImageIcon image = new ImageIcon(newImg);
+				return image;
+			}
+		});
+		btn_ChonAnh.setBackground(Color.decode(hexColor_Green));
 
 		btn_BoQua.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -329,13 +362,13 @@ public class Modal_ThemDichVu extends JFrame {
 				int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
 				Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
 				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
-				
+
 				File file = new File(pathImg);
-		        String fileName = file.getName();
-		        String relativePath = "/img" + File.separator + fileName;
-		        relativePath = relativePath.replace(File.separator, "/");
-		        String hinhA = relativePath;
-		        
+				String fileName = file.getName();
+				String relativePath = "/img" + File.separator + fileName;
+				relativePath = relativePath.replace(File.separator, "/");
+				String hinhA = relativePath;
+
 				String moTa = txtA_moTa.getText();
 
 				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);

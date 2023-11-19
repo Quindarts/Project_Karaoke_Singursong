@@ -22,6 +22,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.Color;
 import java.awt.Component;
 
@@ -51,6 +52,7 @@ import javax.swing.UIManager;
 import java.awt.Font;
 import com.toedter.calendar.JDayChooser;
 import com.toedter.calendar.JDateChooser;
+import javax.swing.border.EtchedBorder;
 
 public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 
@@ -61,6 +63,15 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private JTextField txt_SoDienThoai;
 	private JTextField txt_DiaChi;
 	private JTextField txt_CCCD;
+	
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
+	
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 
 	private LoaiNhanVien_DAO DAO_LNV;
@@ -94,9 +105,14 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	 * Create the frame.
 	 */
 	public Modal_ThemNhanVien() {
-
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1024, 450);
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 1034, 377);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
 		contentPane = new JPanel();
 
 		contentPane.setBackground(Color.WHITE);
@@ -108,59 +124,38 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 
 		JPanel pnl_TieuDe = new JPanel();
 		pnl_TieuDe.setBackground(Color.WHITE);
-		pnl_TieuDe.setBounds(26, 25, 237, 35);
+		pnl_TieuDe.setBounds(22, 11, 237, 35);
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
 
-		JLabel lbl_Title = new JLabel("Thêm nhân viên mới");
+		JLabel lbl_Title = new JLabel("THÊM NHÂN VIÊN");
+		lbl_Title.setForeground(Color.decode(hexColor_Blue1));
 		lbl_Title.setBounds(0, 10, 237, 20);
-		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 17));
 
 		pnl_TieuDe.add(lbl_Title);
 
 		JPanel pnl_Anh = new JPanel();
+		pnl_Anh.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		pnl_Anh.setBackground(Color.WHITE);
-		pnl_Anh.setBounds(26, 70, 179, 234);
+		pnl_Anh.setBounds(26, 55, 179, 193);
 		contentPane.add(pnl_Anh);
 		pnl_Anh.setLayout(null);
 
 		///
 		img_show_panel = new JLabel();
-		img_show_panel.setBounds(10, 10, 179, 192);
+		img_show_panel.setBounds(10, 10, 159, 173);
 		pnl_Anh.add(img_show_panel);
-
-		JButton btn_ChonAnh = new JButton("Chọn ảnh");
-		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_ChonAnh.setForeground(new Color(255, 255, 255));
-
-		btn_ChonAnh.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-			}
-
-			public ImageIcon ResizeImage(String ImagePath) {
-				ImageIcon MyImage = new ImageIcon(ImagePath);
-				Image img = MyImage.getImage();
-				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
-						Image.SCALE_SMOOTH);
-				ImageIcon image = new ImageIcon(newImg);
-				return image;
-			}
-		});
-
-		btn_ChonAnh.setBackground(new Color(0, 128, 255));
-		btn_ChonAnh.setBounds(0, 202, 179, 32);
-		pnl_Anh.add(btn_ChonAnh);
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
-		pnl_ThongTin.setBounds(224, 70, 765, 234);
+		pnl_ThongTin.setBounds(224, 55, 765, 263);
 		contentPane.add(pnl_ThongTin);
 		pnl_ThongTin.setLayout(null);
 
 		JPanel pnl_MaNhanVien = new JPanel();
 		pnl_MaNhanVien.setBackground(Color.WHITE);
-		pnl_MaNhanVien.setBounds(10, 5, 350, 25);
+		pnl_MaNhanVien.setBounds(10, 5, 360, 30);
 		pnl_ThongTin.add(pnl_MaNhanVien);
 		pnl_MaNhanVien.setLayout(null);
 
@@ -179,7 +174,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		JPanel pnl_ChucVu = new JPanel();
 		pnl_ChucVu.setBackground(Color.WHITE);
 		pnl_ChucVu.setLayout(null);
-		pnl_ChucVu.setBounds(405, 5, 350, 25);
+		pnl_ChucVu.setBounds(405, 5, 360, 25);
 		pnl_ThongTin.add(pnl_ChucVu);
 
 		JLabel lbl_ChucVu = new JLabel("Chức vụ");
@@ -211,7 +206,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		JPanel pnl_TenNhanVien = new JPanel();
 		pnl_TenNhanVien.setBackground(Color.WHITE);
 		pnl_TenNhanVien.setLayout(null);
-		pnl_TenNhanVien.setBounds(10, 50, 350, 25);
+		pnl_TenNhanVien.setBounds(10, 50, 360, 25);
 		pnl_ThongTin.add(pnl_TenNhanVien);
 
 		JLabel lbl_TenNhanVien = new JLabel("Tên nhân viên");
@@ -339,27 +334,49 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		txt_CCCD.setBounds(125, 0, 225, 25);
 		pnl_CCCD.add(txt_CCCD);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(50, 70, 179, 234);
-
-		btn_Them = new JButton("Lưu");
-		btn_Them.setForeground(Color.WHITE);
-		btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_Them.setBackground(new Color(0, 128, 255));
-		btn_Them.setBounds(751, 314, 95, 32);
-		contentPane.add(btn_Them);
-
-		btn_Them.addActionListener(this);
-
-		contentPane.add(panel);
-
 		btn_BoQua = new JButton("Bỏ qua");
+		btn_BoQua.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource("/icon/exit_16px.png")));
+		btn_BoQua.setBackground(Color.decode(hexColor_Blue2));
+		btn_BoQua.setBounds(645, 222, 110, 30);
+		pnl_ThongTin.add(btn_BoQua);
 		btn_BoQua.setForeground(Color.WHITE);
 		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btn_BoQua.setBackground(new Color(0, 128, 255));
-		btn_BoQua.setBounds(856, 314, 89, 32);
+
+		btn_Them = new JButton("Lưu");
+		btn_Them.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource("/icon/save_16px.png")));
+		btn_Them.setBackground(Color.decode(hexColor_Orange));
+		btn_Them.setBounds(514, 223, 110, 30);
+		pnl_ThongTin.add(btn_Them);
+		btn_Them.setForeground(Color.WHITE);
+		btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
+
+		JButton btn_ChonAnh = new JButton("Chọn ảnh");
+		btn_ChonAnh.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource("/icon/upload.png")));
+		btn_ChonAnh.setBounds(26, 271, 179, 30);
+		contentPane.add(btn_ChonAnh);
+		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_ChonAnh.setForeground(new Color(255, 255, 255));
+
+		btn_ChonAnh.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
+			}
+
+			public ImageIcon ResizeImage(String ImagePath) {
+				ImageIcon MyImage = new ImageIcon(ImagePath);
+				Image img = MyImage.getImage();
+				Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
+						Image.SCALE_SMOOTH);
+				ImageIcon image = new ImageIcon(newImg);
+				return image;
+			}
+		});
+
+		btn_ChonAnh.setBackground(Color.decode(hexColor_Green));
+
+		btn_Them.addActionListener(this);
 		btn_BoQua.addActionListener(this);
-		contentPane.add(btn_BoQua);
 
 	}
 
@@ -435,7 +452,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
 			}
 			LoaiNhanVien loaiNhanVien = null;
-			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString().trim());
+			loaiNhanVien = DAO_LNV
+					.layLoaiNhanVien_TheoTenLoaiNhanVien(cbox__loaiNhanVien.getSelectedItem().toString().trim());
 			String soDienThoai = txt_SoDienThoai.getText();
 			String trangThai = "";
 
@@ -488,12 +506,11 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 				// TODO: handle exception
 				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
 			}
-			
-			
+
 			String soDienThoai = txt_SoDienThoai.getText();
 			String trangThai = "";
 			String maNhanVien = txt_MaNhanVien.getText().trim();
-	
+
 			int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 			for (int i = 0; i < soLuongTrangThai; i++) {
 				String item = comboBox_TrangThai.getItemAt(i);
@@ -503,7 +520,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 					break;
 				}
 			}
-			
+
 			LoaiNhanVien loaiNhanVien = null;
 			String loaiNV = "";
 			int soLuongLoaiNV = cbox__loaiNhanVien.getItemCount();
@@ -515,7 +532,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 					break;
 				}
 			}
-			
+
 			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(loaiNV);
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);

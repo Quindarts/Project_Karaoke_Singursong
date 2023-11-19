@@ -46,20 +46,19 @@ public class TaiKhoan_DAO {
 	 * @param matKhau
 	 * @return TaiKhoan
 	 */
-	public TaiKhoan timKiemTaiKhoan(String tenDangNhap, String matKhau) {
+	public TaiKhoan timKiemTaiKhoan(String tenDangNhap) {
 		Connection con = ConnectDB.getInstance().getConnection();
 		TaiKhoan taiKhoan = null;
 		try {
 			PreparedStatement statement = con
-					.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ? AND matKhau = ? ");
+					.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ?");
 			statement.setString(1, tenDangNhap);
-			statement.setString(2, matKhau);
 			ResultSet rs = statement.executeQuery();
 
 			while (rs.next()) {
 				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
 				tenDangNhap = rs.getString("tenDangNhap");
-				matKhau = rs.getString("matKhau");
+				String matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
 				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
 			}
@@ -69,6 +68,7 @@ public class TaiKhoan_DAO {
 		}
 		return taiKhoan;
 	}
+	
 
 	public TaiKhoan timTaiKhoan_TheoMaNhanVien(String maNV) {
 		TaiKhoan taiKhoan = null;

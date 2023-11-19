@@ -75,7 +75,7 @@ public class HelpEmail {
 	}
 	
     public static void main(String[] args) {
-    	sendMail("nguyenthientu413@gmail.com", "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: 123456");
+    	sendMail("nguyennga200x@gmail.com", "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: 123456");
     }
 
 }

@@ -19,17 +19,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
+import javax.swing.SwingConstants;
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
 
 public class Modal_CapNhatSoLuong extends JFrame implements ActionListener {
+	
+	
 
 	private JPanel contentPane;
 	private JTextField txt_soLuong;
 	private JButton btn_giam;
-	private JButton btn_tang;
-	private JButton btn_thoat;
 	private JButton btn_save;
 //	private DefaultTableModel model_datDichVu;
 //	private DefaultTableModel model_dichVu;
@@ -45,6 +49,15 @@ public class Modal_CapNhatSoLuong extends JFrame implements ActionListener {
 	private DichVu_DAO DAO_DV;
 	private DichVu dv;
 	private final DecimalFormat dcf = new DecimalFormat("#,##0 VND");
+	private JButton btn_tang;
+	
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
 
 	/**
 	 * Create the frame.
@@ -52,15 +65,23 @@ public class Modal_CapNhatSoLuong extends JFrame implements ActionListener {
 	public Modal_CapNhatSoLuong(JTable table_datDichVu, JTable table_DichVu, int soLuong, int colSelected,
 			int rowSelected) {
 
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 1024, 400);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		
 		this.table_datDichVu = table_datDichVu;
 		this.table_DichVu = table_DichVu;
 		this.soLuong = soLuong;
 		this.colSelected = colSelected;
 		this.rowSelected = rowSelected;
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 400, 200);
-		setTitle("Cập nhật số lượng");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 400, 198);
+//		setTitle("Cập nhật số lượng");
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -69,52 +90,64 @@ public class Modal_CapNhatSoLuong extends JFrame implements ActionListener {
 		contentPane.setLayout(null);
 
 		JPanel panel = new JPanel();
-		panel.setBounds(10, 43, 332, 51);
+		panel.setBounds(10, 42, 366, 51);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		panel.setBackground(Color.WHITE);
 
 		txt_soLuong = new JTextField();
-		txt_soLuong.setBounds(83, 10, 168, 36);
+		txt_soLuong.setBorder(null);
+		txt_soLuong.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txt_soLuong.setHorizontalAlignment(SwingConstants.CENTER);
+		txt_soLuong.setBounds(157, 11, 50, 36);
 		panel.add(txt_soLuong);
 		txt_soLuong.setColumns(10);
 
-		btn_giam = new JButton("Giảm");
+		btn_giam = new JButton("");
+		btn_giam.setBorderPainted(false);
+		btn_giam.setContentAreaFilled(false);
+//		btn_giam.setFocusPainted(false);
+//		btn_giam.setOpaque(false);
+		btn_giam.setIcon(new ImageIcon(Modal_CapNhatSoLuong.class.getResource("/icon/minus_black.png")));
+		btn_giam.setSelectedIcon(new ImageIcon(Modal_CapNhatSoLuong.class.getResource("/icon/minus_black.png")));
 		btn_giam.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_giam.setBounds(0, 10, 85, 36);
+		btn_giam.setBounds(111, 11, 50, 36);
 		panel.add(btn_giam);
 
-		btn_tang = new JButton("Tăng");
+		btn_tang = new JButton("");
+		btn_tang.setBorderPainted(false);
+		btn_tang.setContentAreaFilled(false);
+//		btn_tang.setFocusPainted(false);
+//		btn_tang.setOpaque(false);
+		btn_tang.setIcon(new ImageIcon(Modal_CapNhatSoLuong.class.getResource("/icon/add_black.png")));
 		btn_tang.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_tang.setBounds(247, 10, 85, 36);
+		btn_tang.setBounds(203, 11, 50, 36);
 		panel.add(btn_tang);
 
-		JLabel lblNewLabel = new JLabel("Cập nhật số lượng");
+		JLabel lblNewLabel = new JLabel("SỐ LƯỢNG");
+		lblNewLabel.setForeground(Color.decode(hexColor_Blue1));
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		lblNewLabel.setBounds(10, 10, 192, 35);
+		lblNewLabel.setBounds(10, 0, 352, 35);
 		contentPane.add(lblNewLabel);
 
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(135, 104, 241, 42);
+		panel_1.setBounds(10, 119, 366, 42);
 		contentPane.add(panel_1);
 		panel_1.setLayout(null);
 		panel_1.setBackground(Color.WHITE);
 
-		btn_thoat = new JButton("Thoát");
-		btn_thoat.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_thoat.setBounds(31, 5, 94, 35);
-		panel_1.add(btn_thoat);
-
 		btn_save = new JButton("Xác nhận");
+		btn_save.setForeground(new Color(255, 255, 255));
+		btn_save.setBackground(Color.decode(hexColor_Orange));
 		btn_save.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btn_save.setBounds(135, 5, 94, 35);
+		btn_save.setBounds(134, 0, 94, 30);
 		panel_1.add(btn_save);
 
 		txt_soLuong.setText(String.valueOf(soLuong));
 		btn_giam.addActionListener(this);
 		btn_save.addActionListener(this);
 		btn_tang.addActionListener(this);
-		btn_thoat.addActionListener(this);
 
 	}
 
@@ -267,9 +300,9 @@ public class Modal_CapNhatSoLuong extends JFrame implements ActionListener {
 				txt_soLuong.setText(String.valueOf(sl + 1));
 
 		}
-		if (o.equals(btn_thoat)) {
-			this.setVisible(false);
-		}
+//		if (o.equals(btn_thoat)) {
+//			this.setVisible(false);
+//		}
 
 	}
 

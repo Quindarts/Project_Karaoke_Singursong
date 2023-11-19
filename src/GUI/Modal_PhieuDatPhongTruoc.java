@@ -2,6 +2,7 @@ package GUI;
 
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 import java.awt.Color;
@@ -14,6 +15,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 
 import java.awt.Font;
+import java.awt.Toolkit;
+
 import javax.swing.border.TitledBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
@@ -40,6 +43,8 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.SpinnerModel;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
+import javax.swing.border.LineBorder;
+
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
@@ -62,7 +67,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JSpinner;
 
-public class Modal_PhieuDatPhongTruoc extends JFrame {
+public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 
 	private static Modal_PhieuDatPhongTruoc frame;
 	private JPanel contentPane;
@@ -119,20 +124,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	private JComboBox comboBox;
 	private JSpinner spnThoiGianTraPhong;
 	private JTextField txtGioHat;
-
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			frame = new Modal_PhieuDatPhongTruoc(nhanVien);
-//			frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);
-//			FlatLightLaf.setup();
-//			frame.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
+	private JButton btnHuy;
+	private JButton btnTimKiem;
 
 	/**
 	 * Create the panel.
@@ -140,18 +133,14 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	public Modal_PhieuDatPhongTruoc(NhanVien nhanVien) {
 		this.nhanVien = nhanVien;
 
-//		try {
-//			ConnectDB.getInstance().connect();
-////			System.out.println("Connected!!!!");
-//		} catch (SQLException e) {
-//			e.printStackTrace();
-//		}
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 900, 725);
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 900, 709);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
-//		contentPane.setBackground(Color.decode(hexColor_Blue1));
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -160,7 +149,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 		JPanel panel_PDP = new JPanel();
 		panel_PDP.setBackground(new Color(255, 255, 255));
-		panel_PDP.setBounds(0, 0, 884, 670);
+		panel_PDP.setBounds(0, 0, 884, 684);
 		contentPane.add(panel_PDP);
 		panel_PDP.setLayout(null);
 
@@ -331,6 +320,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_2.add(lblMaPDP);
 
 		txtMaPDP = new JTextField();
+		txtMaPDP.setEnabled(false);
 		txtMaPDP.setText(maPDP);
 		txtMaPDP.setBounds(688, 11, 140, 27);
 		panel_2.add(txtMaPDP);
@@ -372,14 +362,17 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		comboBox.setBounds(463, 50, 136, 27);
 		panel_2.add(comboBox);
 
-		JButton btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem.setIcon(new ImageIcon(Modal_PhieuDatPhongTruoc.class.getResource("/icon/seach_16px.png")));
+		btnTimKiem.setForeground(new Color(255, 255, 255));
+		btnTimKiem.setBackground(Color.decode(hexColor_Blue1));
 		btnTimKiem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				LocPhongTrongTheoNgay();
 			}
 		});
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnTimKiem.setBounds(688, 49, 140, 27);
+		btnTimKiem.setBounds(688, 49, 140, 30);
 		panel_2.add(btnTimKiem);
 
 		dateModel = new SpinnerDateModel();
@@ -431,7 +424,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		JPanel panel_3 = new JPanel();
 		panel_3.setBackground(new Color(255, 255, 255));
 		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_3.setBounds(22, 571, 840, 68);
+		panel_3.setBounds(22, 571, 840, 61);
 		panel_PDP.add(panel_3);
 		panel_3.setLayout(null);
 
@@ -439,32 +432,22 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		txtMoTa.setBounds(10, 11, 820, 46);
 		panel_3.add(txtMoTa);
 
-		btnDatPhong = new JButton("Đặt phòng");
-		btnDatPhong.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Lấy giá trị từ JDateChooser và JSpinner
-
-			}
-		});
-		btnDatPhong.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				taoPhieu();
-			}
-		});
+		btnDatPhong = new JButton("Tạo phiếu");
+		btnDatPhong.setIcon(new ImageIcon(Modal_PhieuDatPhongTruoc.class.getResource("/icon/add_16px.png")));
 
 		btnDatPhong.setBackground(Color.decode(hexColor_Green));
 		btnDatPhong.setForeground(new Color(255, 255, 255));
 		btnDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnDatPhong.setBounds(652, 629, 100, 30);
+		btnDatPhong.setBounds(631, 643, 115, 30);
 		panel_PDP.add(btnDatPhong);
 
-		JButton btnHy = new JButton("Hủy");
-		btnHy.setBackground(Color.decode(hexColor_Blue2));
-		btnHy.setForeground(new Color(255, 255, 255));
-		btnHy.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		btnHy.setBounds(762, 629, 100, 30);
-		panel_PDP.add(btnHy);
+		btnHuy = new JButton("Hủy");
+		btnHuy.setIcon(new ImageIcon(Modal_PhieuDatPhongTruoc.class.getResource("/icon/exit_16px.png")));
+		btnHuy.setBackground(Color.decode(hexColor_Blue2));
+		btnHuy.setForeground(new Color(255, 255, 255));
+		btnHuy.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnHuy.setBounds(752, 643, 110, 30);
+		panel_PDP.add(btnHuy);
 
 		JLabel lblPhiutPhng = new JLabel("PHIẾU ĐẶT PHÒNG TRƯỚC");
 		lblPhiutPhng.setForeground(new Color(5, 74, 145));
@@ -473,16 +456,18 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		panel_PDP.add(lblPhiutPhng);
 
 		JPanel panel_DSPhongTrong = new JPanel();
-		panel_DSPhongTrong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		panel_DSPhongTrong.setBounds(22, 189, 840, 185);
+		panel_DSPhongTrong.setBackground(new Color(255, 255, 255));
+		panel_DSPhongTrong.setBorder(new TitledBorder(null, "Danh s\u00E1ch ph\u00F2ng tr\u1ED1ng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_DSPhongTrong.setBounds(22, 176, 840, 198);
 		panel_PDP.add(panel_DSPhongTrong);
 		panel_DSPhongTrong.setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 820, 163);
+		scrollPane.setBounds(10, 24, 820, 163);
 		panel_DSPhongTrong.add(scrollPane);
 
 		table_DSPhong = new JTable();
+		table_DSPhong.setFillsViewportHeight(true);
 		table_DSPhong.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -521,6 +506,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		}
 		scrollPane.setViewportView(table_DSPhong);
 
+		btnDatPhong.addActionListener(this);
+		btnHuy.addActionListener(this);
 	}
 
 	public void taoPhieu() {
@@ -532,7 +519,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 
 		HelpRamDomMa help = new HelpRamDomMa();
 		maPDP = help.taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-		
 
 		String maPhong = txtMaPhong.getText().toString().trim();
 		Phong p = new Phong(maPhong);
@@ -543,12 +529,13 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 		Double tienCoc = Double.parseDouble(txtTienCoc.getText());
 		String moTa = txtMoTa.getText().trim();
 		DAO_PDP = new PhieuDatPhong_DAO();
-		
+
 		PhieuDatPhong pdp = new PhieuDatPhong(maPDP, p, nv, kh, timestampDatPhong, timestampNhanPhong, tienCoc,
 				"Chờ nhận phòng", moTa);
 		System.out.println(pdp.toString());
 		if (DAO_PDP.taoPhieuDatPhong(pdp)) {
 			JOptionPane.showMessageDialog(null, "Thêm phiếu thành công");
+			dispose();
 		} else {
 			JOptionPane.showMessageDialog(null, "Thất bại");
 		}
@@ -624,5 +611,17 @@ public class Modal_PhieuDatPhongTruoc extends JFrame {
 	public void clearTable() {
 		DefaultTableModel model = (DefaultTableModel) table_DSPhong.getModel();
 		model.setRowCount(0);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if (o.equals(btnHuy)) {
+			dispose();
+		}
+		if (o.equals(btnDatPhong)) {
+			taoPhieu();
+		}
+
 	}
 }

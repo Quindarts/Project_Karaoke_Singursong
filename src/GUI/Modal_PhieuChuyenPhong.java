@@ -102,12 +102,18 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	/**
 	 * Create the panel.
 	 */
+<<<<<<< HEAD
 	public Modal_PhieuChuyenPhong(Phong phong, HoaDon hoaDon, ChiTietHoaDon chiTietHD) {
 		this.phong = phong;
 		this.hoaDon = hoaDon;
 		this.chiTietHD = chiTietHD;
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+=======
+	public Modal_PhieuChuyenPhong() {
+		
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+>>>>>>> 20777e8b7352ff66770a028d148ccf0929ccadd9
 		setBounds(100, 100, 911, 606);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));

@@ -50,8 +50,10 @@ import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.ImageIcon;
 
 public class Modal_ThemPhong extends JFrame {
 
@@ -75,10 +77,24 @@ public class Modal_ThemPhong extends JFrame {
 	private JButton btn__Save;
 	private JComboBox<String> cbBox_viTriPhong;
 	
-
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue2 = "#3E7CB1";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Orange = "#F17300";
+	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Green = "#4BAC4D";
+	
 	public Modal_ThemPhong() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 950, 400);
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setBounds(100, 100, 926, 347);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setLocationRelativeTo(null);
+		setResizable(false);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -87,35 +103,39 @@ public class Modal_ThemPhong extends JFrame {
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
-		panel_1.setBounds(20, 0, 926, 358);
+		panel_1.setBounds(0, 0, 912, 310);
 		contentPane.add(panel_1);
 
 		/****/
 		panel_1.setLayout(null);
 		//
 		JLabel lbl__LoaiPhong = new JLabel("Loại phòng");
-		lbl__LoaiPhong.setBounds(43, 159, 96, 27);
+		lbl__LoaiPhong.setBounds(43, 130, 96, 25);
 		lbl__LoaiPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl__LoaiPhong);
 
 		lbl__TenPhong = new JLabel("Tên phòng");
-		lbl__TenPhong.setBounds(43, 111, 119, 25);
+		lbl__TenPhong.setBounds(43, 90, 119, 25);
 		lbl__TenPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl__TenPhong);
 
 		txt__MaPhong = new JTextField();
 		txt__MaPhong.setEnabled(false);
-		txt__MaPhong.setBounds(172, 65, 255, 25);
+		txt__MaPhong.setBounds(172, 50, 255, 25);
 		panel_1.add(txt__MaPhong);
 		txt__MaPhong.setColumns(10);
 
 		JLabel lbl__MaPhong = new JLabel("Mã phòng");
-		lbl__MaPhong.setBounds(43, 61, 119, 35);
+		lbl__MaPhong.setBounds(43, 50, 119, 25);
 		lbl__MaPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl__MaPhong);
 
 		JButton btn__exit = new JButton("Thoát");
-		btn__exit.setBounds(763, 304, 96, 30);
+		btn__exit.setBackground(Color.decode(hexColor_Blue2));
+		btn__exit.setIcon(new ImageIcon(Modal_ThemPhong.class.getResource("/icon/exit_16px.png")));
+		btn__exit.setForeground(new Color(255, 255, 255));
+		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn__exit.setBounds(766, 252, 110, 30);
 		panel_1.add(btn__exit);
 
 		btn__exit.addActionListener(new ActionListener() {
@@ -128,12 +148,16 @@ public class Modal_ThemPhong extends JFrame {
 		});
 
 		JLabel lbl__GhiChu = new JLabel("Ghi chú");
-		lbl__GhiChu.setBounds(493, 155, 60, 37);
+		lbl__GhiChu.setBounds(493, 170, 60, 25);
 		lbl__GhiChu.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl__GhiChu);
 
 		btn__Save = new JButton("Lưu");
-		btn__Save.setBounds(642, 304, 96, 30);
+		btn__Save.setBackground(Color.decode(hexColor_Orange));
+		btn__Save.setIcon(new ImageIcon(Modal_ThemPhong.class.getResource("/icon/save_16px.png")));
+		btn__Save.setForeground(new Color(255, 255, 255));
+		btn__Save.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn__Save.setBounds(646, 252, 110, 30);
 		panel_1.add(btn__Save);
 
 		btn__Save.addActionListener(new ActionListener() {
@@ -154,12 +178,12 @@ public class Modal_ThemPhong extends JFrame {
 		});
 
 		JLabel lbl_NgayTaoPhong = new JLabel("Ngày tạo phòng");
-		lbl_NgayTaoPhong.setBounds(493, 115, 105, 25);
+		lbl_NgayTaoPhong.setBounds(493, 90, 105, 25);
 		lbl_NgayTaoPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl_NgayTaoPhong);
 
 		JLabel lbl_ViTriPhong = new JLabel("Vị trí phòng");
-		lbl_ViTriPhong.setBounds(489, 67, 109, 30);
+		lbl_ViTriPhong.setBounds(493, 50, 109, 25);
 		lbl_ViTriPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		panel_1.add(lbl_ViTriPhong);
 
@@ -176,42 +200,42 @@ public class Modal_ThemPhong extends JFrame {
 		Box horizontalBox_6 = Box.createHorizontalBox();
 		verticalBox_1.add(horizontalBox_6);
 
-		JLabel lbl__tieuDe = new JLabel("Thêm phòng mới");
-		lbl__tieuDe.setForeground(SystemColor.textHighlight);
-		lbl__tieuDe.setBounds(43, 10, 849, 39);
+		JLabel lbl__tieuDe = new JLabel("THÊM PHÒNG MỚI");
+		lbl__tieuDe.setForeground(Color.decode(hexColor_Blue1));
+		lbl__tieuDe.setBounds(22, 11, 828, 39);
 		panel_1.add(lbl__tieuDe);
 		lbl__tieuDe.setFont(new Font("Segoe UI", Font.BOLD, 16));
 
 		date_NgayTaoPhong = new JDateChooser();
-		date_NgayTaoPhong.setBounds(621, 115, 255, 25);
+		date_NgayTaoPhong.setBounds(621, 90, 255, 25);
 		panel_1.add(date_NgayTaoPhong);
 
 		JPanel pnl_GhiChu = new JPanel();
 		pnl_GhiChu.setBackground(new Color(255, 255, 255));
 		pnl_GhiChu.setBorder(new LineBorder(new Color(192, 192, 192)));
-		pnl_GhiChu.setBounds(621, 160, 261, 81);
+		pnl_GhiChu.setBounds(621, 170, 255, 58);
 		panel_1.add(pnl_GhiChu);
 		pnl_GhiChu.setLayout(null);
 
 		txtA_GhiChu = new JTextArea();
-		txtA_GhiChu.setBounds(3, 3, 255, 70);
+		txtA_GhiChu.setBounds(3, 3, 242, 50);
 		pnl_GhiChu.add(txtA_GhiChu);
 		txtA_GhiChu.setBackground(new Color(255, 255, 255));
 		txtA_GhiChu.setLineWrap(true);
 
 		txt_TenPhong = new JTextField();
 		txt_TenPhong.setColumns(10);
-		txt_TenPhong.setBounds(172, 111, 255, 25);
+		txt_TenPhong.setBounds(172, 90, 255, 25);
 		panel_1.add(txt_TenPhong);
 
 		JLabel lbl_TrangThaiPhong = new JLabel("Trạng thái phòng");
 		lbl_TrangThaiPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_TrangThaiPhong.setBounds(43, 214, 119, 27);
+		lbl_TrangThaiPhong.setBounds(43, 170, 119, 27);
 		panel_1.add(lbl_TrangThaiPhong);
 
 		cbBox_TrangThaiPhong = new JComboBox<String>();
 		cbBox_TrangThaiPhong.setBackground(Color.WHITE);
-		cbBox_TrangThaiPhong.setBounds(172, 218, 255, 25);
+		cbBox_TrangThaiPhong.setBounds(172, 170, 255, 25);
 		panel_1.add(cbBox_TrangThaiPhong);
 		DAO_TTP = new TrangThaiPhong_DAO();
 		try {
@@ -228,17 +252,17 @@ public class Modal_ThemPhong extends JFrame {
 
 		cbBox_LoaiPhong = new JComboBox<String>();
 		cbBox_LoaiPhong.setBackground(Color.WHITE);
-		cbBox_LoaiPhong.setBounds(172, 161, 255, 25);
+		cbBox_LoaiPhong.setBounds(172, 130, 255, 25);
 		panel_1.add(cbBox_LoaiPhong);
 
 		JLabel lbl_TinhTrangPhong = new JLabel("Tình trạng phòng");
 		lbl_TinhTrangPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_TinhTrangPhong.setBounds(43, 270, 119, 25);
+		lbl_TinhTrangPhong.setBounds(493, 130, 119, 25);
 		panel_1.add(lbl_TinhTrangPhong);
 
 		cbBox_TinhTrangPhong_1 = new JComboBox<String>();
 		cbBox_TinhTrangPhong_1.setBackground(Color.WHITE);
-		cbBox_TinhTrangPhong_1.setBounds(172, 271, 255, 25);
+		cbBox_TinhTrangPhong_1.setBounds(622, 130, 255, 25);
 		cbBox_TinhTrangPhong_1.addItem("Sửa chữa");
 		cbBox_TinhTrangPhong_1.addItem("Đang dọn dẹp");
 		cbBox_TinhTrangPhong_1.addItem("Chưa dọn dẹp");
@@ -247,7 +271,7 @@ public class Modal_ThemPhong extends JFrame {
 		
 		cbBox_viTriPhong = new JComboBox<String>();
 		cbBox_viTriPhong.setBackground(Color.WHITE);
-		cbBox_viTriPhong.setBounds(621, 67, 255, 25);
+		cbBox_viTriPhong.setBounds(621, 50, 255, 25);
 		cbBox_viTriPhong.addItem("Lầu 1");
 		cbBox_viTriPhong.addItem("Lầu 2");
 		cbBox_viTriPhong.addItem("Lầu 3");
