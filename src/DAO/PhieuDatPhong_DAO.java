@@ -328,7 +328,40 @@ public class PhieuDatPhong_DAO {
 	 * @param trangThai:    trạng thái
 	 * @param ngayDat:      ngày đặt
 	 * @return danh sách phiếu đặt phòng
+	 * 
+	 * 
 	 */
+
+	public ArrayList<Phong> danhSachPhongDat_theoPhieuDat(Timestamp ngayDat, String soGIoDuKien) {
+		ArrayList<Phong> dsPhong = new ArrayList<Phong>();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		String sql = "SELECT \r\n"
+				+ "Phong.maPhong,Phong.tenPhong,Phong.maTrangThai,Phong.maLoaiPhong,\r\n"
+				+ "ABS(DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast('"+ngayDat+"' as dateTime))) AS KhoangCachThoiGian\r\n"
+				+ "FROM PhieuDatPhong\r\n"
+				+ "INNER JOIN Phong ON Phong.maPhong = PhieuDatPhong.maPhong\r\n"
+				+ "WHERE\r\n"
+				+ "trangThai = N'Chờ nhận phòng'\r\n"
+				+ "AND ABS( DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast("+ngayDat+" as dateTime))) <= 3600*"+soGIoDuKien+"\r\n"
+				+ "AND CONVERT(date, thoiGianNhanPhong) <= CONVERT(date, "+ngayDat+")";
+		try {
+			statement = con.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maP = rs.getString("maPhong");
+				String tenP = rs.getString("tenPhong");
+				String loaiP = rs.getString("maloaiPhong");
+				Phong ph = new Phong(maP,tenP,null, ne, loaiP, loaiP);
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		return dsPhong;
+	}
+
 	public ArrayList<PhieuDatPhong> timDSPhieuDatPhongByAllProperty(String maPhong, String maKhachHang,
 			String trangThai, String ngayDat) {
 		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
@@ -562,22 +595,19 @@ public class PhieuDatPhong_DAO {
 		}
 		return n > 0;
 	}
-	
+
 	public PhieuDatPhong layThongTinPhieuDatTrangThai_DangCho_MaPhong(String maP) {
 		PhieuDatPhong phieuDatPhong = null;
-		
+
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
-		String sql = "select * from PhieuDatPhong PD\r\n"
-				+ "JOIN Phong P  ON P.maPhong = PD.maPhong\r\n"
-				+ "WHERE \r\n"
-				+ "	  P.maPhong = '"+maP+"'\r\n"
-				+ "	  AND\r\n"
+		String sql = "select * from PhieuDatPhong PD\r\n" + "JOIN Phong P  ON P.maPhong = PD.maPhong\r\n" + "WHERE \r\n"
+				+ "	  P.maPhong = '" + maP + "'\r\n" + "	  AND\r\n"
 				+ "      CAST(PD.thoiGianNhanPhong AS DATE) = CAST(GETDATE() AS DATE)\r\n"
 				+ "      AND PD.trangThai = N'Chờ nhận phòng'\r\n"
 				+ "      AND PD.thoiGianNhanPhong >= CONVERT(datetime, DATEADD(HOUR, 0, GETDATE()), 100)\r\n"
 
-				;
+		;
 
 		try {
 			System.out.println(sql);
@@ -609,7 +639,7 @@ public class PhieuDatPhong_DAO {
 		}
 		return phieuDatPhong;
 	}
-	
+
 	public boolean capNhatPhieuDatTrangThai_DaNhanPhong_MaPhieuDat(String maPhieuDat) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();

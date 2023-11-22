@@ -434,16 +434,6 @@ public class JFrame_ThuNgan extends JFrame {
 
 		Clock();
 		panel_Function.add(Panel_QLDP);
-//		panel_Function.add(Panel_QLDP);
-//		panel_Function.add(Panel_QLKH);
-//		panel_Function.add(Panel_BCTK);
-//		panel_Function.add(Panel_QLDV);
-//		panel_Function.add(Panel_QLHD);
-//		panel_Function.add(Panel_QLPDP);
-//		panel_Function.add(Panel_QLKM);
-//		panel_Function.add(Panel_QLLP);
-//		panel_Function.add(Panel_QLP);
-//		panel_Function.add(Panel_QLNV);
 
 		/**
 		 * addMouseListener
