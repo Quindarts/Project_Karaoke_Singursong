@@ -539,13 +539,13 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 				new String[] { "STT", "Tên loại phòng", "Tên phòng", "Số giờ hát", "Tiền phòng", "Thành tiền" }));
 
 		scrollPane_1.setViewportView(table_Phong);
-		
-				JLabel lblNewLabel_1_1 = new JLabel("Danh sách phòng");
-				lblNewLabel_1_1.setBounds(0, 0, 535, 46);
-				panel_Table_Phong.add(lblNewLabel_1_1);
-				lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
-				lblNewLabel_1_1.setForeground(Color.WHITE);
-				lblNewLabel_1_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+		JLabel lblNewLabel_1_1 = new JLabel("Danh sách phòng");
+		lblNewLabel_1_1.setBounds(0, 0, 535, 46);
+		panel_Table_Phong.add(lblNewLabel_1_1);
+		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_1_1.setForeground(Color.WHITE);
+		lblNewLabel_1_1.setFont(new Font("Segoe UI", Font.BOLD, 18));
 
 		btn__exit = new JButton("Quay lại");
 		btn__exit.setBounds(880, 630, 120, 35);
@@ -604,11 +604,12 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 					getDschiTietDV().forEach(ctdv -> {
 						ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
 						DichVu_DAO DAO_DV = new DichVu_DAO();
-						ThongTinDichVu ttdichvu = DAO_TTDV
-								.timThongTinDichVu_TheoMaDichVu(ctdv.getDichVu().getMaDichVu());
-						ttdichvu.setSoLuongDaSuDung(ttdichvu.getSoLuong() - ctdv.getSoLuong());
+						DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(ctdv.getDichVu().getMaDichVu());
+						
+						dv.getThongTinDichVu()
+								.setSoLuongDaSuDung(dv.getThongTinDichVu().getSoLuongDaSuDung() + ctdv.getSoLuong());
 
-						DAO_TTDV.capNhatThongTinDichVu(ttdichvu);
+						DAO_TTDV.capNhatThongTinDichVu(dv.getThongTinDichVu());
 
 					});
 					dialog_TTHD = new JDialog_ThongTinHoaDon();
@@ -746,7 +747,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		int iii = 1;
 		for (ChiTietDichVu chiTietDV : dschiTietDV) {
 			Object[] rowData = { iii++, chiTietDV.getDichVu().getTenDichVu(), chiTietDV.getDichVu().getDonGia(),
-					chiTietDV.getDichVu().getSoLuong(), chiTietDV.thanhTien() };
+					chiTietDV.getSoLuong(), chiTietDV.thanhTien() };
 			iii++;
 			modal_Dv.addRow(rowData);
 		}

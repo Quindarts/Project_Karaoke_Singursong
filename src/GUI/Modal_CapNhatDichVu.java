@@ -48,7 +48,7 @@ public class Modal_CapNhatDichVu extends JFrame {
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private JDateChooser dateChooser_ngayHetHan;
 	private JDateChooser dateChooser_ngayNhap;
-	
+
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
@@ -65,20 +65,20 @@ public class Modal_CapNhatDichVu extends JFrame {
 	 * Create the frame.
 	 */
 
-	public Modal_CapNhatDichVu(String maDichVu, String tenDichVu, String soLuong, String donViTinh, String donGia,
-			String trangThai) {
+	public Modal_CapNhatDichVu(DichVu dv) {
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
 		setBounds(100, 100, 1024, 400);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
-	
+
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		 
+
 		setContentPane(contentPane);
 
 		contentPane.setLayout(null);
@@ -282,30 +282,27 @@ public class Modal_CapNhatDichVu extends JFrame {
 		txtA_moTa.setBounds(137, 11, 598, 32);
 		pnl_GiaTien_1_1.add(txtA_moTa);
 
-		// Set value
-		ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
-		ThongTinDichVu ttdv = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(maDichVu);
+		dateChooser_ngayNhap.setDate(dv.getThongTinDichVu().getNgayNhap());
+		dateChooser_ngayHetHan.setDate(dv.getThongTinDichVu().getNgayHetHan());
+		txt_maDichVu.setText(dv.getMaDichVu());
 
-		dateChooser_ngayNhap.setDate(ttdv.getNgayNhap());
-		dateChooser_ngayHetHan.setDate(ttdv.getNgayHetHan());
-		txt_maDichVu.setText(maDichVu);
-
-		ImageIcon originalIcon = new ImageIcon(Modal_CapNhatDichVu.class.getResource(ttdv.getHinhAnh()));
+		ImageIcon originalIcon = new ImageIcon(
+				Modal_CapNhatDichVu.class.getResource(dv.getThongTinDichVu().getHinhAnh()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(159, 176, Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);
 
 		img_show_panel.setIcon(resizedIcon);
 
-		txt_GiaTien.setText(donGia);
+		txt_GiaTien.setText(String.valueOf(dv.getDonGia()));
 
-		txt_SoLuong.setText(soLuong);
+		txt_SoLuong.setText(String.valueOf(dv.getThongTinDichVu().getSoLuong()));
 
-		txt_soLuongDaSuDung.setText(soLuong);
-		txt_tenDichVu.setText(tenDichVu);
+		txt_soLuongDaSuDung.setText(String.valueOf(dv.getThongTinDichVu().getSoLuongDaSuDung()));
+		txt_tenDichVu.setText(dv.getTenDichVu());
 
-		txtA_moTa.setText(ttdv.getMoTa());
-		
+		txtA_moTa.setText(dv.getThongTinDichVu().getMoTa());
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel.setBackground(new Color(255, 255, 255));
@@ -342,13 +339,12 @@ public class Modal_CapNhatDichVu extends JFrame {
 				String maDichVu = txt_maDichVu.getText();
 				String tenDichVu = txt_tenDichVu.getText();
 				int soLuong = Integer.parseInt(txt_SoLuong.getText());
-				String donViTinh = "VND";
 
 				boolean trangThai = cbox_trangThai.getSelectedItem().toString().trim().equals("Còn hàng");
 				double giaTien = Double.parseDouble(txt_GiaTien.getText());
 
 				// Table Thong tin dich vu
-				ThongTinDichVu thongTinDichVuOld = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(maDichVu);
+
 				int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
 				Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
 				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
@@ -360,20 +356,23 @@ public class Modal_CapNhatDichVu extends JFrame {
 				String hinhA = relativePath;
 
 				String moTa = txtA_moTa.getText();
-
-				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);
-				ThongTinDichVu ttdv = new ThongTinDichVu(thongTinDichVuOld.getMaThongTinDichVu(), dv, soLuong,
+				ThongTinDichVu ttdvNew = new ThongTinDichVu(dv.getThongTinDichVu().getMaThongTinDichVu(), soLuong,
 						soLuongDaSuDung, ngayNhap, ngayHetHan, moTa, hinhA);
+				DichVu dvnew = new DichVu(maDichVu, tenDichVu, dv.getDonViTinh(), giaTien, trangThai, ttdvNew);
 
 				try {
 
 					DichVu_DAO DAO_DV = new DichVu_DAO();
 					ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
-
-					if ((DAO_DV.capNhatDichVu(dv) >= 0) && DAO_TTDV.capNhatThongTinDichVu(ttdv) >= 0) {
+					int resultCN = DAO_DV.capNhatDichVu(dvnew) ;
+					int resultCNTTDV = DAO_TTDV.capNhatThongTinDichVu(ttdvNew);
+					if (resultCN > 0 || resultCNTTDV > 0) {
 						JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thành công.");
 						setVisible(false);
-					} else {
+					} else if(resultCN == 0 && resultCNTTDV ==0) {
+						JOptionPane.showMessageDialog(null, "Không có cập nhật mới.");
+					}
+					else {
 						JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thất bại, vui lòng thử lại.");
 					}
 
@@ -409,7 +408,7 @@ public class Modal_CapNhatDichVu extends JFrame {
 
 			File selectedFile = file.getSelectedFile();
 			path = selectedFile.getAbsolutePath();
-			pathImg += path;
+			pathImg = pathImg + path;
 			return path;
 		}
 

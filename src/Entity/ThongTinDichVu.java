@@ -5,7 +5,6 @@ import java.util.Objects;
 
 public class ThongTinDichVu {
 	private String maThongTinDichVu;
-	private DichVu dichVu;
 	private int soLuong;
 	private int soLuongDaSuDung;
 	private Date ngayNhap;
@@ -20,11 +19,10 @@ public class ThongTinDichVu {
 		super();
 		this.maThongTinDichVu = maThongTinDichVu;
 	}
-	public ThongTinDichVu(String maThongTinDichVu, DichVu dichVu, int soLuong, int soLuongDaSuDung, Date ngayNhap,
+	public ThongTinDichVu(String maThongTinDichVu,int soLuong, int soLuongDaSuDung, Date ngayNhap,
 			Date ngayHetHan, String moTa, String hinhAnh) {
 		super();
 		this.maThongTinDichVu = maThongTinDichVu;
-		this.dichVu = dichVu;
 		this.soLuong = soLuong;
 		this.soLuongDaSuDung = soLuongDaSuDung;
 		this.ngayNhap = ngayNhap;
@@ -37,12 +35,6 @@ public class ThongTinDichVu {
 	}
 	public void setMaThongTinDichVu(String maThongTinDichVu) {
 		this.maThongTinDichVu = maThongTinDichVu;
-	}
-	public DichVu getDichVu() {
-		return dichVu;
-	}
-	public void setDichVu(DichVu dichVu) {
-		this.dichVu = dichVu;
 	}
 	public int getSoLuong() {
 		return soLuong;
@@ -95,9 +87,16 @@ public class ThongTinDichVu {
 		ThongTinDichVu other = (ThongTinDichVu) obj;
 		return Objects.equals(maThongTinDichVu, other.maThongTinDichVu);
 	}
+	public int tinhSoLuongConLai() {
+		if (getSoLuong() - getSoLuongDaSuDung() > 0)
+			return getSoLuong() - getSoLuongDaSuDung();
+		else {
+			return 0;
+		}
+	}
 	@Override
 	public String toString() {
-		return "ThongTinDichVu [maThongTinDichVu=" + maThongTinDichVu + ", dichVu=" + dichVu + ", soLuong=" + soLuong
+		return "ThongTinDichVu [maThongTinDichVu=" + maThongTinDichVu + "," + "soLuong=" + soLuong
 				+ ", soLuongDaSuDung=" + soLuongDaSuDung + ", ngayNhap=" + ngayNhap + ", ngayHetHan=" + ngayHetHan
 				+ ", moTa=" + moTa + ", hinhAnh=" + hinhAnh + "]";
 	}

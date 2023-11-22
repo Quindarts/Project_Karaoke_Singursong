@@ -300,7 +300,7 @@ public class Modal_ThemDichVu extends JFrame {
 		txtA_moTa = new JTextArea();
 		txtA_moTa.setBounds(137, 11, 598, 32);
 //		pnl_GiaTien_1_1.add(txtA_moTa);
-		
+
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel.setBackground(new Color(255, 255, 255));
@@ -371,9 +371,9 @@ public class Modal_ThemDichVu extends JFrame {
 
 				String moTa = txtA_moTa.getText();
 
-				DichVu dv = new DichVu(maDichVu, tenDichVu, soLuong, donViTinh, giaTien, trangThai);
-				ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, dv, soLuong, soLuongDaSuDung, ngayNhap,
+				ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, soLuong, soLuongDaSuDung, ngayNhap,
 						ngayHetHan, moTa, hinhA);
+				DichVu dv = new DichVu(maDichVu, tenDichVu, donViTinh, giaTien, trangThai, ttdv);
 
 				try {
 
@@ -395,19 +395,16 @@ public class Modal_ThemDichVu extends JFrame {
 		});
 	}
 
-	public void setModal_ThemDichVu(String maDichVu, String tenDichVu, String soLuong, String donViTinh, String donGia,
-			String trangThai) {
-		ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
-		ThongTinDichVu ttdv = DAO_TTDV.timThongTinDichVu_TheoMaDichVu(maDichVu);
+	public void setModal_ThemDichVu(DichVu dv) {
 
-		dateChooser_ngayNhap.setDate(ttdv.getNgayNhap());
-		dateChooser_ngayHetHan.setDate(ttdv.getNgayHetHan());
-		txt_maDichVu.setText(maDichVu);
-		txt_GiaTien.setText(donGia);
-		txt_SoLuong.setText(soLuong);
-		txt_soLuongDaSuDung.setText(soLuong);
-		txt_tenDichVu.setText(tenDichVu);
-		txtA_moTa.setText(ttdv.getMoTa());
+		dateChooser_ngayNhap.setDate(dv.getThongTinDichVu().getNgayNhap());
+		dateChooser_ngayHetHan.setDate(dv.getThongTinDichVu().getNgayHetHan());
+		txt_maDichVu.setText(dv.getMaDichVu());
+		txt_GiaTien.setText(String.valueOf(dv.getDonGia()));
+		txt_SoLuong.setText(String.valueOf(dv.getThongTinDichVu().getSoLuong()));
+		txt_soLuongDaSuDung.setText(String.valueOf(dv.getThongTinDichVu().getSoLuongDaSuDung()));
+		txt_tenDichVu.setText(dv.getTenDichVu());
+		txtA_moTa.setText(dv.getThongTinDichVu().getMoTa());
 
 //		txtA_moTa;
 

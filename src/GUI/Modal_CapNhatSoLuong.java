@@ -172,7 +172,7 @@ public class Modal_CapNhatSoLuong extends JFrame implements ActionListener {
 			dv = DAO_DV.layDichVu_TheoMaDichVu(maDichVu);
 
 			if (dv != null) {
-				setSoLuongBanDau(dv.getSoLuong());
+				setSoLuongBanDau(dv.getThongTinDichVu().getSoLuong());
 				setDonGiaDV(dv.getDonGia());
 			}
 

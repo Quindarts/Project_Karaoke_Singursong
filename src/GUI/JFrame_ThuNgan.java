@@ -49,6 +49,7 @@ import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import java.awt.SystemColor;
 
 public class JFrame_ThuNgan extends JFrame {
 
@@ -113,6 +114,9 @@ public class JFrame_ThuNgan extends JFrame {
 	private JPanel panelMenu_QLPhong;
 	private JPanel panelMenu_QLDichVu;
 	private JPanel panelMenu_BaoCaoThongKe;
+	private JPanel panel_1;
+	private JLabel lblNewLabel_1;
+	private JLabel txt_tenNhanVien;
 
 	/**
 	 * Rounded JPanel
@@ -222,7 +226,7 @@ public class JFrame_ThuNgan extends JFrame {
 		panel_Menu.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_Menu.setBackground(Color.decode(hexColor_Blue1));
 //		panel_Menu.setBackground(Color.WHITE);
-		panel_Menu.setBounds(10, 45, 197, 672);
+		panel_Menu.setBounds(10, 60, 197, 672);
 		contentPane.add(panel_Menu);
 		panel_Menu.setLayout(null);
 
@@ -390,7 +394,7 @@ public class JFrame_ThuNgan extends JFrame {
 
 		panel_Function = new JPanel();
 		panel_Function.setBackground(Color.decode(hexColor_Blue1));
-		panel_Function.setBounds(210, 45, 1296, 675);
+		panel_Function.setBounds(210, 60, 1296, 675);
 		contentPane.add(panel_Function);
 		panel_Function.setLayout(null);
 
@@ -401,7 +405,7 @@ public class JFrame_ThuNgan extends JFrame {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
 		menuBar.setBackground(Color.decode(hexColor_Blue1));
-		menuBar.setBounds(1405, 4, 90, 45);
+		menuBar.setBounds(1405, 9, 90, 45);
 		contentPane.add(menuBar);
 
 		JMenu mnNewMenu = new JMenu("");
@@ -455,6 +459,24 @@ public class JFrame_ThuNgan extends JFrame {
 		addMenuClickListener(panelMenu_QLPhong, Panel_QLP);
 		addMenuClickListener(panelMenu_QLDatPhong, Panel_QLDP);
 		addMenuClickListener(panelMenu_BaoCaoThongKe, Panel_BCTK);
+		
+		panel_1 = new JPanel();
+		panel_1.setLayout(null);
+		panel_1.setBackground(new Color(5, 74, 145));
+		panel_1.setBounds(1160, 25, 231, 25);
+		contentPane.add(panel_1);
+		
+		lblNewLabel_1 = new JLabel("Xin chào,");
+		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		lblNewLabel_1.setBounds(0, 0, 63, 25);
+		panel_1.add(lblNewLabel_1);
+		
+		txt_tenNhanVien = new JLabel(nhanVien.getHoTen());
+		txt_tenNhanVien.setForeground(Color.WHITE);
+		txt_tenNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		txt_tenNhanVien.setBounds(67, 0, 158, 25);
+		panel_1.add(txt_tenNhanVien);
 
 		if (nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			addMenuClickListener(panelMenu_QLNhanVien, Panel_QLNV);
@@ -570,5 +592,4 @@ public class JFrame_ThuNgan extends JFrame {
 		}
 
 	}
-
 }

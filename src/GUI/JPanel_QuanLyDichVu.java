@@ -161,7 +161,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 		table_DichVu = new JTable();
 		table_DichVu.setBackground(Color.WHITE);
-		rowData = new String[] { "Mã dịch vụ", "Tên dịch vụ", "Số lượng", "Đơn vị tính", "Đơn giá", "Trạng thái" };
+		rowData = new String[] { "Mã dịch vụ", "Tên dịch vụ", "Số còn lại", "Đơn vị tính", "Đơn giá", "Trạng thái" };
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {}, rowData));
 		table_DichVu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
@@ -183,16 +183,15 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 				if (e.getClickCount() == 2) {
 					int row = table_DichVu.getSelectedRow();
-//	            	txtDiaDiem.setText(model.getValueAt(row, 2).toString());
-//	        		date_KH.setDate((Date) model.getValueAt(row, 3));
 					String maDichVu = model_dichVu.getValueAt(row, 0).toString();
 					String tenDichVu = model_dichVu.getValueAt(row, 1).toString();
 					String soLuong = model_dichVu.getValueAt(row, 2).toString();
 					String donViTinh = model_dichVu.getValueAt(row, 3).toString();
 					String donGia = model_dichVu.getValueAt(row, 4).toString();
 					String trangThai = model_dichVu.getValueAt(row, 5).toString();
-					Modal_CapNhatDichVu md_cn = new Modal_CapNhatDichVu(maDichVu, tenDichVu, soLuong, donViTinh, donGia,
-							trangThai);
+					DAO_DV = new DichVu_DAO();
+					DichVu dv  = DAO_DV.layDichVu_TheoMaDichVu(maDichVu);
+					Modal_CapNhatDichVu md_cn = new Modal_CapNhatDichVu(dv);
 
 					md_cn.setVisible(true);
 
@@ -374,8 +373,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 						JOptionPane.YES_NO_OPTION);
 				if (t == JOptionPane.YES_OPTION) {
 					DichVu dv = new DichVu(maDichVu);
-					ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
-					if (DAO_TTDV.xoaThongTinDichVu_TheoMaDichVu(maDichVu) && DAO_DV.xoaDichVu(dv)) {
+					if (DAO_DV.xoaDichVu(dv)) {
 						xoaDL();
 						JOptionPane.showMessageDialog(null, "Xóa dịch vụ thành công");
 						table_DichVu.clearSelection();
@@ -415,7 +413,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 			if (dsDV != null) {
 				dsDV.forEach(dv -> {
 
-					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getSoLuong(), dv.getDonViTinh(),
+					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(),
 							dv.getDonGia(), dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 
 					model_dichVu.addRow(rowData);
@@ -430,7 +428,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		DAO_DV = new DichVu_DAO();
 		ArrayList<DichVu> dsDV = DAO_DV.phanTrangDichVu(fn, ln);
 		dsDV.forEach(dv -> {
-			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getSoLuong(), dv.getDonViTinh(),
+			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(),
 					dv.getDonGia(), dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 
 			model_dichVu.addRow(rowData);

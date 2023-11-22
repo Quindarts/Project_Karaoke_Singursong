@@ -378,58 +378,31 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		TrangThaiPhong trThaiPh_Trong = new TrangThaiPhong();
 		trThaiPh_Trong = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");
 
-//		Timestamp tgianDatPhong = null;
-//		try {
-//			tgianDatPhong = hoaDon.getThoiGianDatPhong();
-//		} catch (Exception e2) {
-//			// TODO: handle exception
-//			tgianDatPhong = null;
-//		}
-//
-//		Timestamp tgianNhanPhong = null;
-//		try {
-//			tgianNhanPhong = hoaDon.getThoiGianNhanPhong();
-//		} catch (Exception e2) {
-//			// TODO: handle exception
-//			tgianDatPhong = null;
-//		}
-
-//		double tinCoc = phieuDatPhong.getTienCoc();
-//		String trangThai = phieuDatPhong.getTrangThai();
-//		String moTa = phieuDatPhong.getMoTa();
-
-//		phieuDatPhong = new PhieuDatPhong(maPDP, ph, nv, kh, tgianDatPhong, tgianNhanPhong, tinCoc, trangThai, moTa);
-
 		try {
 			int t = JOptionPane.showConfirmDialog(null, "Xác nhận chuyển phòng?", "Xác nhận",
 					JOptionPane.YES_NO_OPTION);
 			if (t == JOptionPane.YES_OPTION) {
-//				if (DAO_PDP.capNhatPhieuDatPhong(phieuDatPhong)) {
 
-					ChiTietDichVu chiTietDV = new ChiTietDichVu();
-					// Cập nhật lại chi tiết hóa đơn
-					chiTietHD = new ChiTietHoaDon(hoaDon, ph);
-					DAO_CTHD.capNhatCTHoaDon_TheoMaHoaDon_MaPhong(chiTietHD);
+				ChiTietDichVu chiTietDV = new ChiTietDichVu();
 
-					if (chiTietHD != null) {
-						DAO_CTDV = new ChiTietDichVu_DAO();
-						ArrayList<ChiTietDichVu> dsCTDV = new ArrayList<>();
-						dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
-						
-//						for (ChiTietDichVu value : dsCTDV) {
-//							dv = new DichVu();
-//							DAO_DV = new DichVu_DAO();
-//							dv = DAO_DV.layDichVu_TheoMaDichVu(value.getDichVu().getMaDichVu());
-//						}
-						JOptionPane.showMessageDialog(null,
-								"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
-						dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh_DangSuDung.getMaTrangThai());
-						dao_Phong.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh_Trong.getMaTrangThai());
-						dispose();
-					} else {
-						JOptionPane.showMessageDialog(null, "Thất bại, vui lòng thử lại");
-					}
+				// Cập nhật lại chi tiết hóa đơn
+				chiTietHD = new ChiTietHoaDon(hoaDon, ph);
+				DAO_CTHD.capNhatCTHoaDon_TheoMaHoaDon_MaPhong(chiTietHD);
+
+				if (chiTietHD != null) {
+					DAO_CTDV = new ChiTietDichVu_DAO();
+					ArrayList<ChiTietDichVu> dsCTDV = new ArrayList<>();
+					dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
+
+					JOptionPane.showMessageDialog(null,
+							"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
+					dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh_DangSuDung.getMaTrangThai());
+					dao_Phong.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh_Trong.getMaTrangThai());
+					dispose();
+				} else {
+					JOptionPane.showMessageDialog(null, "Thất bại, vui lòng thử lại");
 				}
+			}
 //			}
 
 		} catch (Exception e2) {

@@ -27,14 +27,13 @@ public class ThongTinDichVu_DAO {
 			ResultSet rs = statement.executeQuery(sql);
 			while (rs.next()) {
 				String maThongTinDichVu = rs.getString("maThongTinDichVu");
-				DichVu dichVu = new DichVu(rs.getString("maDichVu"));
 				int soLuong = rs.getInt("soLuong");
 				int soLuongDaSuDung = rs.getInt("soLuongDaSuDung");
 				java.sql.Date ngayNhap = rs.getDate("ngayNhap");
 				java.sql.Date ngayHetHan = rs.getDate("ngayHetHan");
 				String moTa = rs.getString("moTa");
 				String hinhAnh = rs.getString("hinhAnh");
-				ThongTinDichVu thongTinDichVu = new ThongTinDichVu(maThongTinDichVu, dichVu, soLuong, soLuongDaSuDung,
+				ThongTinDichVu thongTinDichVu = new ThongTinDichVu(maThongTinDichVu, soLuong, soLuongDaSuDung,
 						ngayNhap, ngayHetHan, moTa, hinhAnh);
 				danhSachThongTinDichVu.add(thongTinDichVu);
 			}
@@ -56,14 +55,13 @@ public class ThongTinDichVu_DAO {
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maThongTinDichVu = rs.getString("maThongTinDichVu");
-				DichVu dichVu = new DichVu(rs.getString("maDichVu"));
 				int soLuong = rs.getInt("soLuong");
 				int soLuongDaSuDung = rs.getInt("soLuongDaSuDung");
 				java.sql.Date ngayNhap = rs.getDate("ngayNhap");
 				java.sql.Date ngayHetHan = rs.getDate("ngayHetHan");
 				String moTa = rs.getString("moTa");
 				String hinhAnh = rs.getString("hinhAnh");
-				thongTinDichVu = new ThongTinDichVu(maThongTinDichVu, dichVu, soLuong, soLuongDaSuDung, ngayNhap,
+				thongTinDichVu = new ThongTinDichVu(maThongTinDichVu, soLuong, soLuongDaSuDung, ngayNhap,
 						ngayHetHan, moTa, hinhAnh);
 			}
 		} catch (Exception e) {
@@ -79,40 +77,7 @@ public class ThongTinDichVu_DAO {
 		return thongTinDichVu;
 	}
 
-	public ThongTinDichVu timThongTinDichVu_TheoMaDichVu(String maDv) {
-		ThongTinDichVu thongTinDichVu = null;
-		ConnectDB.getInstance();
-		Connection con = ConnectDB.getConnection();
-		PreparedStatement statement = null;
-		try {
-			String sql = "SELECT * FROM ThongTinDichVu WHERE maDichVu = ?";
-			statement = con.prepareStatement(sql);
-			statement.setString(1, maDv);
-			ResultSet rs = statement.executeQuery();
-			while (rs.next()) {
-				String maThongTinDichVu = rs.getString("maThongTinDichVu");
-				DichVu dichVu = new DichVu(rs.getString("maDichVu"));
-				int soLuong = rs.getInt("soLuong");
-				int soLuongDaSuDung = rs.getInt("soLuongDaSuDung");
-				java.sql.Date ngayNhap = rs.getDate("ngayNhap");
-				java.sql.Date ngayHetHan = rs.getDate("ngayHetHan");
-				String moTa = rs.getString("moTa");
-				String hinhAnh = rs.getString("hinhAnh");
-				thongTinDichVu = new ThongTinDichVu(maThongTinDichVu, dichVu, soLuong, soLuongDaSuDung, ngayNhap,
-						ngayHetHan, moTa, hinhAnh);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-
-		} finally {
-			try {
-				statement.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-		return thongTinDichVu;
-	}
+	
 
 	public boolean taoThongTinDichVu(ThongTinDichVu thongTinDichVu) {
 		ConnectDB.getInstance();
@@ -120,15 +85,14 @@ public class ThongTinDichVu_DAO {
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("INSERT INTO ThongTinDichVu values(?,?,?,?,?,?,?,?)");
+			statement = con.prepareStatement("INSERT INTO ThongTinDichVu values(?,?,?,?,?,?,?)");
 			statement.setString(1, thongTinDichVu.getMaThongTinDichVu());
-			statement.setString(2, thongTinDichVu.getDichVu().getMaDichVu());
-			statement.setInt(3, thongTinDichVu.getSoLuong());
-			statement.setInt(4, thongTinDichVu.getSoLuongDaSuDung());
-			statement.setDate(5, thongTinDichVu.getNgayNhap());
-			statement.setDate(6, thongTinDichVu.getNgayHetHan());
-			statement.setString(7, thongTinDichVu.getMoTa());
-			statement.setString(8, thongTinDichVu.getHinhAnh());
+			statement.setInt(2, thongTinDichVu.getSoLuong());
+			statement.setInt(3, thongTinDichVu.getSoLuongDaSuDung());
+			statement.setDate(4, thongTinDichVu.getNgayNhap());
+			statement.setDate(5, thongTinDichVu.getNgayHetHan());
+			statement.setString(6, thongTinDichVu.getMoTa());
+			statement.setString(7, thongTinDichVu.getHinhAnh());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,16 +114,15 @@ public class ThongTinDichVu_DAO {
 		int n = 0;
 		try {
 			statement = con.prepareStatement(
-					"UPDATE ThongTinDichVu SET maDichVu = ?, soLuong = ?, soLuongDaSuDung = ?, ngayNhap = ?, ngayHetHan = ?, moTa = ?, hinhAnh = ?"
+					"UPDATE ThongTinDichVu SET  soLuong = ?, soLuongDaSuDung = ?, ngayNhap = ?, ngayHetHan = ?, moTa = ?, hinhAnh = ?"
 							+ " WHERE maThongTinDichVu = ?");
-			statement.setString(1, thongTinDichVu.getDichVu().getMaDichVu());
-			statement.setInt(2, thongTinDichVu.getSoLuong());
-			statement.setInt(3, thongTinDichVu.getSoLuongDaSuDung());
-			statement.setDate(4, thongTinDichVu.getNgayNhap());
-			statement.setDate(5, thongTinDichVu.getNgayHetHan());
-			statement.setString(6, thongTinDichVu.getMoTa());
-			statement.setString(7, thongTinDichVu.getHinhAnh());
-			statement.setString(8, thongTinDichVu.getMaThongTinDichVu());
+			statement.setInt(1, thongTinDichVu.getSoLuong());
+			statement.setInt(2, thongTinDichVu.getSoLuongDaSuDung());
+			statement.setDate(3, thongTinDichVu.getNgayNhap());
+			statement.setDate(4, thongTinDichVu.getNgayHetHan());
+			statement.setString(5, thongTinDichVu.getMoTa());
+			statement.setString(6, thongTinDichVu.getHinhAnh());
+			statement.setString(7, thongTinDichVu.getMaThongTinDichVu());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -175,27 +138,6 @@ public class ThongTinDichVu_DAO {
 		return n;
 	}
 
-	public boolean xoaThongTinDichVu_TheoMaDichVu(String maDichVu) {
-		ConnectDB.getInstance();
-		Connection con = ConnectDB.getConnection();
-		PreparedStatement statement = null;
-		int n = 0;
-		try {
-			statement = con.prepareStatement("DELETE FROM ThongTinDichVu" + " WHERE maDichVu = ?");
-			statement.setString(1, maDichVu);
-			n = statement.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				statement.close();
-			} catch (Exception e2) {
-				// TODO: handle exception
-				e2.printStackTrace();
-			}
-		}
-		return n > 0;
-	}
 
 	public boolean xoaThongTinDichVu(ThongTinDichVu thongTinDichVu) {
 		ConnectDB.getInstance();

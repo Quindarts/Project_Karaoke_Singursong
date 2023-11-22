@@ -106,57 +106,71 @@ public class Phong_DAO {
 		return n > 0;
 	}
 
-	public ArrayList<Phong> layTatCaPhong_TrangThaiPhongMoiNhat() {
-		Phong phong = null;
-		ConnectDB.getInstance();
-		Connection con = ConnectDB.getConnection();
-		PreparedStatement statement = null;
-
-		ArrayList<Phong> dsPhong = new ArrayList<>();
-		String sql = "select * from Phong";
-		try {
-
-			statement = con.prepareStatement(sql);
-			ResultSet rs = statement.executeQuery();
-			while (rs.next()) {
-				String maPhong = rs.getString("maPhong");
-				String tenPhong = rs.getString("tenPhong");
-				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
-				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
-				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
-				String viTriPhong = rs.getString("viTriPhong");
-				String ghiChu = rs.getString("ghiChu");
-				String tinhTrangPhong = rs.getString("tinhTrangPhong");
-				phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
-						tinhTrangPhong);
-				dsPhong.add(phong);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-
-		} finally {
-			try {
-				statement.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
-		}
-		return dsPhong;
-
-	}
-
 	public ArrayList<Phong> timPhong_TheoTongHop(String tenLoaiPhong, String tenKhachHang, String soDienThoai,
-			String tenTrangThai, String tenPhong) {
+			String tenTrangThai, String maPhongTK) {
 
 		ArrayList<Phong> dsPhong = new ArrayList<>();
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
+		String sqlTenLoaiPhong = "";
+		
+		if (tenLoaiPhong.trim().equals("Tất cả"))
+			sqlTenLoaiPhong = "LoaiPhong.tenLoaiPhong Like N'%%'";
+		else {
+			sqlTenLoaiPhong = "LoaiPhong.tenLoaiPhong = N'" + tenLoaiPhong + "' \r\n";
+		}
+		String sqlTenKhachHang = "KhachHang.hoTen Like N'%" + tenKhachHang + "%'\r\n";
+		String sqlSoDienThoai = "KhachHang.soDienThoai LIKE '%" + soDienThoai + "%'";
+		String sqlTenTrangThai = "TrangThaiPhong.tenTrangThai =N'" + tenTrangThai + "'\r\n";
+		String sqlMaPhong = "Phong.maPhong LIKE '%" + maPhongTK + "%'";
 
-		String sql = "";
+		String sqlAND = "AND\r\n";
+		String sqlTop1 = "TOP 1";
+		String sqlWhere = "\n where \n";
+		String sqlJoinLoaiP = "INNER JOIN LoaiPhong ON LoaiPhong.maLoaiPhong = Phong.maLoaiPhong\r\n";
+		String sqlJoinTrangThaiP = "INNER JOIN TrangThaiPhong ON TrangThaiPhong.maTrangThai = Phong.maTrangThai\r\n";
+
+		String sqlJoinPhieuDat = "INNER JOIN PhieuDatPhong ON Phong.maPhong = PhieuDatPhong.maPhong\r\n";
+
+		String sqlJoinKhachHangPDP = "INNER JOIN KhachHang ON KhachHang.maKhachHang = PhieuDatPhong.maKhachHang\r\n";
+		String sqlJoinKhachHangHD = "INNER JOIN KhachHang ON KhachHang.maKhachHang = HoaDon.maKhachHang\r\n";
+
+		String sqlJoinCTHoaDon = "INNER JOIN ChiTietHoaDon ON Phong.maPhong = ChiTietHoaDon.maPhong\r\n";
+		String sqlJoinHoaDon = "INNER JOIN HoaDon ON ChiTietHoaDon.maHoaDon = HoaDon.maHoaDon\r\n";
+
+		//////////////////////////////////////////////////////////////////////////////////////////////////////
+		String sqlTongHop = "select * from Phong\r\n";
+		String sqlPhongTrong = "select * from Phong\r\n"
+				+ "INNER JOIN LoaiPhong ON LoaiPhong.maLoaiPhong = Phong.maLoaiPhong\r\n"
+				+ "INNER JOIN TrangThaiPhong ON TrangThaiPhong.maTrangThai = Phong.maTrangThai\r\n" + "where\r\n"
+				+ sqlTenLoaiPhong + sqlAND + "TrangThaiPhong.tenTrangThai =N'Trống'\r\n" + sqlAND
+				+ "Phong.maPhong LIKE '%P%'";
+
+		if (tenTrangThai.trim().equals("Trống")) {
+
+			sqlTongHop = sqlTongHop + sqlJoinLoaiP + sqlJoinTrangThaiP + sqlWhere + sqlTenLoaiPhong + sqlAND
+					+ sqlTenTrangThai + sqlAND + sqlMaPhong;
+		}
+		if (tenTrangThai.trim().equals("Đã đặt")) {
+			sqlTongHop = sqlTongHop + sqlJoinLoaiP + sqlJoinTrangThaiP + sqlJoinPhieuDat + sqlJoinKhachHangPDP
+					+ sqlWhere + sqlTenLoaiPhong + sqlAND + sqlTenTrangThai + sqlAND + sqlMaPhong + sqlAND
+					+ sqlTenKhachHang + sqlAND + sqlSoDienThoai + sqlAND
+					+ "ABS( DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast(GETDATE() as dateTime))) <= 3600";
+		}
+		if (tenTrangThai.trim().equals("Đang sử dụng")) {
+
+			sqlTongHop = "";
+			sqlTongHop = "select * from Phong \n" + sqlJoinLoaiP + sqlJoinTrangThaiP + sqlJoinCTHoaDon
+					+ sqlJoinHoaDon + sqlJoinKhachHangHD + sqlWhere + sqlTenLoaiPhong + sqlAND + sqlTenTrangThai
+					+ sqlAND + sqlMaPhong + sqlAND + sqlTenKhachHang + sqlAND + sqlSoDienThoai + sqlAND
+					+ "(HoaDon.trangThai = N'Đang chờ thanh toán' AND HoaDon.maKhachHang = KhachHang.maKhachHang) \n"
+					+ sqlAND
+					+ "CONVERT(date, HoaDon.ngayLap) = CONVERT(date, GETDATE())";
+		}
 
 		try {
-
-			PreparedStatement statement = con.prepareStatement(sql);
+			System.out.println(sqlTongHop);
+			PreparedStatement statement = con.prepareStatement(sqlTongHop);
 
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {

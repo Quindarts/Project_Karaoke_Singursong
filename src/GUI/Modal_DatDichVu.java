@@ -47,6 +47,14 @@ import javax.swing.SwingConstants;
 
 public class Modal_DatDichVu extends JFrame implements ActionListener {
 
+	/**
+	 * Color
+	 */
+
+	private String hexColor_Blue1 = "#054A91";
+	private String hexColor_Blue3 = "#81A4CD";
+	private String hexColor_Blue4 = "#DBE4EE";
+	private String hexColor_Green = "#4BAC4D";
 	private JPanel contentPane;
 	private JTextField txt_tenPhong;
 	private JTextField txt_loaiPhong;
@@ -188,7 +196,8 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 
 		// panel ben trai phia duoi
 		btn_them = new JButton("Đặt món");
-		btn_them.setBackground(SystemColor.textHighlight);
+		btn_them.setBackground(Color.decode(hexColor_Green));
+		btn_them.setForeground(Color.WHITE);
 		btn_them.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		btn_them.setBounds(307, 14, 91, 21);
 		JPanel panel_3 = new JPanel();
@@ -235,7 +244,8 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 
 		btn_thoat = new JButton("Thoát");
 		btn_thoat.setFont(new Font("Segoe UI", Font.BOLD, 13));
-
+		btn_thoat.setForeground(Color.WHITE);
+		btn_thoat.setBackground(Color.decode(hexColor_Blue1));
 		btn_thoat.setBounds(698, 530, 126, 33);
 		contentPane.add(btn_thoat);
 
@@ -303,6 +313,8 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 
 		btn_xacNhan = new JButton("Xác nhận");
 		btn_xacNhan.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_xacNhan.setForeground(Color.WHITE);
+		btn_xacNhan.setBackground(Color.decode(hexColor_Green));
 		btn_xacNhan.setBounds(850, 530, 126, 33);
 		contentPane.add(btn_xacNhan);
 
@@ -342,21 +354,18 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 		btn_capNhatTongTien.addActionListener(this);
 
 		tableDichVu.addMouseListener(new MouseAdapter() {
-
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
 				int row = tableDichVu.getSelectedRow();
-				if (e.getClickCount() == 2) {
-					DefaultTableModel md = (DefaultTableModel) tableDichVu.getModel();
-					String maDichVu = model_dsDichVu.getValueAt(row, 0).toString();
-					String tenDichVu = model_dsDichVu.getValueAt(row, 1).toString();
-					String soLuong = model_dsDichVu.getValueAt(row, 2).toString();
-					String donGia = model_dsDichVu.getValueAt(row, 3).toString();
-					dv = new DichVu(maDichVu, tenDichVu, Integer.parseInt(soLuong), Double.parseDouble(donGia));
-					txt_tenMon.setText(tenDichVu);
-					txt_soLuongMonDat.setText("1");
-				}
+				DefaultTableModel md = (DefaultTableModel) tableDichVu.getModel();
+				String maDichVu = model_dsDichVu.getValueAt(row, 0).toString();
+				String tenDichVu = model_dsDichVu.getValueAt(row, 1).toString();
+				String soLuong = model_dsDichVu.getValueAt(row, 2).toString();
+				String donGia = model_dsDichVu.getValueAt(row, 3).toString();
+				dv = new DichVu(maDichVu, tenDichVu, Double.parseDouble(donGia));
+				txt_tenMon.setText(tenDichVu);
+				txt_soLuongMonDat.setText("1");
 
 			}
 		});
@@ -508,8 +517,7 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 
 			else {
 
-				DichVu dv = new DichVu(maDichVu, tenDichVu, Integer.parseInt(soLuongBanDau),
-						Double.parseDouble(donGia));
+				DichVu dv = new DichVu(maDichVu, tenDichVu, Double.parseDouble(donGia));
 
 				if (model_dichVuDatPhong.getRowCount() == 0) {
 					String soLuong = txt_soLuongMonDat.getText();
@@ -573,7 +581,8 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 			dsDV = DAO_DV.layTatCaDichVu();
 			if (dsDV != null) {
 				dsDV.forEach(dv -> {
-					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getSoLuong(), dv.getDonGia() };
+					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
+							dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonGia() };
 
 					model_dsDichVu.addRow(rowData);
 				});
@@ -613,7 +622,8 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 
 							if (dv.getMaDichVu().equals(tableDichVu.getValueAt(i, 0).toString())) {
 
-								tableDichVu.setValueAt(String.valueOf(dv.getSoLuong() - ctdv.getSoLuong()), i, 2);
+								tableDichVu.setValueAt(
+										String.valueOf(dv.getThongTinDichVu().getSoLuong() - ctdv.getSoLuong()), i, 2);
 							}
 						}
 						model_dichVuDatPhong.addRow(rowData);

@@ -121,13 +121,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	private JPanel panel_Phong;
 	private JPanel panel_DanhSachThucDon;
 	private JPanel panel_TraCuuPhong;
-
-	private JLabel lblMaPhong;
 	private JLabel lblThongTinPhongHat;
 	private JLabel lblTenKhachHang;
 	private JLabel lblSDT;
-	private JLabel lblThoiGianNhan;
-	private JLabel lblDanhSachPhong;
 	private JLabel lblSLKhach;
 	private JLabel lblLoiPhng;
 	private JLabel lblTnPhng;
@@ -136,11 +132,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 	private Phong_DAO phongDao;
 	private JTextField txtTenNhanVienDat;
-	private JTextField txtMaPhong;
 	private JTextField txtTenKhachHang;
 	private JTextField txtSoDienThoai;
-	private JTextField txtGioNhanPhong;
-	private JTextField txt_timKiem;
+	private JTextField txt_maPhongTK;
 
 	private JComboBox cbo_loaiPhong;
 
@@ -174,7 +168,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	private ArrayList<LoaiPhong> dsLoaiPhong;
 	private ArrayList<TrangThaiPhong> dsTrangThai;
 	private JComboBox cbo_trangThai;
-	private JTextField txt_soDienThoai;
+	private JTextField txt_soDienThoaiTK;
 	private JPanel panel_2;
 	private JPanel panel_boxSLDaDat;
 	private JLabel lblNewLabel_2;
@@ -197,7 +191,11 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	private JButton btn_timKiem;
 	private JButton btn_lamMoi;
 	private JScrollPane scroll_Phong;
-	private JTextField txt_tenKhachHang;
+	private JTextField txt_tenKhachHangTK;
+	private JButton btn_lamMoiThongTin;
+	private HelpRamDomMa help;
+	private JTextField txt_ngayLap;
+	private JTextField txt_maHoaDon;
 
 	/**
 	 * Rounded JPanel
@@ -267,20 +265,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		add(panel_PDP);
 		panel_PDP.setLayout(null);
 
-		lblMaPhong = new JLabel("Mã phòng");
-		lblMaPhong.setForeground(Color.decode(hexColor_Blue1));
-		lblMaPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblMaPhong.setBounds(128, 55, 68, 21);
-
-		panel_PDP.add(lblMaPhong);
-
-		txtMaPhong = new JTextField();
-		txtMaPhong.setEnabled(false);
-		txtMaPhong.setEditable(false);
-		txtMaPhong.setBounds(202, 57, 146, 19);
-		txtMaPhong.setColumns(10);
-
-		panel_PDP.add(txtMaPhong);
+		String maHD = help.taoMa("HoaDon", "maHoaDon", "HD");
 
 		lblThongTinPhongHat = new JLabel("THÔNG TIN ĐẶT PHÒNG");
 		lblThongTinPhongHat.setForeground(Color.decode(hexColor_Blue1));
@@ -291,7 +276,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_PDP.add(lblThongTinPhongHat);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 249, 408, 233);
+		scrollPane.setBounds(10, 306, 408, 281);
 
 		panel_PDP.add(scrollPane);
 
@@ -315,7 +300,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 		JPanel panel_TTKH = new JPanel();
 		panel_TTKH.setBackground(Color.decode(hexColor_Blue4));
-		panel_TTKH.setBounds(10, 119, 408, 120);
+		panel_TTKH.setBounds(10, 54, 408, 202);
 		panel_PDP.add(panel_TTKH);
 		panel_TTKH.setLayout(null);
 
@@ -344,7 +329,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		lblTenKhachHang.setForeground(Color.decode(hexColor_Blue1));
 		lblTenKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
-		lblSLKhach = new JLabel("Tên nhân viên");
+		lblSLKhach = new JLabel("Tên nhân viên lập");
 		lblSLKhach.setForeground(new Color(5, 74, 145));
 		lblSLKhach.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lblSLKhach.setBounds(18, 83, 138, 25);
@@ -356,30 +341,40 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		txtTenNhanVienDat.setText(nhanVien.getHoTen());
 		txtTenNhanVienDat.setBounds(157, 83, 241, 25);
 		panel_TTKH.add(txtTenNhanVienDat);
-
-		lblThoiGianNhan = new JLabel("Thời gian nhận phòng");
-		lblThoiGianNhan.setForeground(new Color(5, 74, 145));
-		lblThoiGianNhan.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblThoiGianNhan.setBounds(55, 87, 146, 21);
-		panel_PDP.add(lblThoiGianNhan);
-
-		txtGioNhanPhong = new JTextField();
+		
+		JLabel lblMaPhong = new JLabel("Mã hóa đơn");
+		lblMaPhong.setForeground(new Color(5, 74, 145));
+		lblMaPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblMaPhong.setBounds(18, 118, 106, 21);
+		panel_TTKH.add(lblMaPhong);
+		
+		JLabel lblNgyLpHa = new JLabel("Ngày lập hóa đơn");
+		lblNgyLpHa.setForeground(new Color(5, 74, 145));
+		lblNgyLpHa.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblNgyLpHa.setBounds(18, 158, 111, 21);
+		panel_TTKH.add(lblNgyLpHa);
+		
+		txt_ngayLap = new JTextField();
+		txt_ngayLap.setText("22-11-2023");
+		txt_ngayLap.setEnabled(false);
+		txt_ngayLap.setEditable(false);
+		txt_ngayLap.setColumns(10);
+		txt_ngayLap.setBounds(157, 157, 241, 25);
+		panel_TTKH.add(txt_ngayLap);
+		
+		txt_maHoaDon = new JTextField("HD22112023A015");
+		txt_maHoaDon.setEnabled(false);
+		txt_maHoaDon.setEditable(false);
+		txt_maHoaDon.setColumns(10);
+		txt_maHoaDon.setBounds(157, 120, 241, 25);
+		panel_TTKH.add(txt_maHoaDon);
 		Calendar ca = new GregorianCalendar();
 		int day = ca.get(Calendar.DAY_OF_MONTH);
 		int month = ca.get(Calendar.MONTH);
 		int year = ca.get(Calendar.YEAR);
 
-		txtGioNhanPhong.setText(String.format("%02d", day) + "-" + String.format("%02d", month + 1) + "-"
-				+ String.format("%04d", year));
-
-		txtGioNhanPhong.setEnabled(false);
-		txtGioNhanPhong.setEditable(false);
-		txtGioNhanPhong.setColumns(10);
-		txtGioNhanPhong.setBounds(202, 87, 146, 19);
-		panel_PDP.add(txtGioNhanPhong);
-
 		btnXacNhanDatPhong = new JButton("Đặt phòng ngay");
-		btnXacNhanDatPhong.setBounds(141, 627, 155, 35);
+		btnXacNhanDatPhong.setBounds(55, 609, 155, 35);
 
 		btnLamMoiDanhSachPhong = new JButton("Làm mới danh sách");
 		btnLamMoiDanhSachPhong.setSize(140, 20);
@@ -392,11 +387,24 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		btnXacNhanDatPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnXacNhanDatPhong.setForeground(Color.white);
 
-		lblDanhSachPhong = new JLabel("Danh sách phòng đặt");
-		lblDanhSachPhong.setForeground(new Color(5, 74, 145));
-		lblDanhSachPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblDanhSachPhong.setBounds(10, 389, 200, 25);
-		panel_PDP.add(lblDanhSachPhong);
+		btn_lamMoiThongTin = new JButton("Làm mới thông tin");
+		btn_lamMoiThongTin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btn_lamMoiThongTin.setForeground(Color.WHITE);
+		btn_lamMoiThongTin.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_lamMoiThongTin.setBackground(new Color(255, 153, 51));
+		btn_lamMoiThongTin.setBounds(233, 609, 155, 35);
+		panel_PDP.add(btn_lamMoiThongTin);
+		
+		JLabel lbl_dsPhongDat = new JLabel("DANH SÁCH PHÒNG ĐẶT");
+		lbl_dsPhongDat.setHorizontalAlignment(SwingConstants.CENTER);
+		lbl_dsPhongDat.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		lbl_dsPhongDat.setForeground(Color.decode(hexColor_Blue1));
+		lbl_dsPhongDat.setBackground(Color.WHITE);
+		lbl_dsPhongDat.setBounds(10, 276, 408, 25);
+		panel_PDP.add(lbl_dsPhongDat);
 
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.setForeground(Color.decode(hexColor_Blue1));
@@ -545,12 +553,13 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		cbo_loaiPhong = new JComboBox();
 		cbo_loaiPhong.setBounds(127, 12, 120, 22);
 		panel_TraCuuPhong.add(cbo_loaiPhong);
+		cbo_loaiPhong.addItem("Tất cả");
 
-		txt_timKiem = new JTextField();
-		txt_timKiem.setBounds(638, 14, 63, 20);
-		panel_TraCuuPhong.add(txt_timKiem);
-		txt_timKiem.setText("");
-		txt_timKiem.setColumns(10);
+		txt_maPhongTK = new JTextField();
+		txt_maPhongTK.setBounds(638, 14, 63, 20);
+		panel_TraCuuPhong.add(txt_maPhongTK);
+		txt_maPhongTK.setText("");
+		txt_maPhongTK.setColumns(10);
 
 		btn_timKiem = new JButton("Tìm kiếm");
 		btn_timKiem.setFont(new Font("Segoe UI", Font.BOLD, 10));
@@ -572,7 +581,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		lblLoiPhng.setBounds(10, 12, 90, 21);
 		panel_TraCuuPhong.add(lblLoiPhng);
 
-		lblTnPhng = new JLabel("Tên phòng");
+		lblTnPhng = new JLabel("Mã phòng");
 		lblTnPhng.setForeground(new Color(5, 74, 145));
 		lblTnPhng.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lblTnPhng.setBounds(558, 12, 90, 21);
@@ -588,10 +597,10 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		cbo_trangThai.setBounds(127, 45, 120, 21);
 		panel_TraCuuPhong.add(cbo_trangThai);
 
-		txt_soDienThoai = new JTextField();
-		txt_soDienThoai.setBounds(391, 13, 157, 19);
-		panel_TraCuuPhong.add(txt_soDienThoai);
-		txt_soDienThoai.setColumns(10);
+		txt_soDienThoaiTK = new JTextField();
+		txt_soDienThoaiTK.setBounds(391, 13, 157, 19);
+		panel_TraCuuPhong.add(txt_soDienThoaiTK);
+		txt_soDienThoaiTK.setColumns(10);
 
 		JLabel lblSGiHt = new JLabel("Số điện thoại");
 		lblSGiHt.setForeground(new Color(5, 74, 145));
@@ -685,7 +694,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_PhongBan.add(panel_panigationPhong);
 		// Ban Dau
 
-		txt_soDienThoai.setEditable(false);
+		txt_soDienThoaiTK.setEditable(false);
 
 		JLabel lblTnKhchHng = new JLabel("Tên khách hàng");
 		lblTnKhchHng.setForeground(new Color(5, 74, 145));
@@ -693,10 +702,11 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		lblTnKhchHng.setBounds(265, 44, 112, 21);
 		panel_TraCuuPhong.add(lblTnKhchHng);
 
-		txt_tenKhachHang = new JTextField();
-		txt_tenKhachHang.setBounds(391, 46, 157, 19);
-		panel_TraCuuPhong.add(txt_tenKhachHang);
-		txt_tenKhachHang.setColumns(10);
+		txt_tenKhachHangTK = new JTextField();
+		txt_tenKhachHangTK.setBounds(391, 46, 157, 19);
+		panel_TraCuuPhong.add(txt_tenKhachHangTK);
+		txt_tenKhachHangTK.setColumns(10);
+		txt_tenKhachHangTK.setEditable(false);
 
 		JPanel panel = new JPanel();
 		panel.setBounds(343, 573, 100, 25);
@@ -780,14 +790,23 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 		btn_timKiem.addActionListener(this);
 		btn_lamMoi.addActionListener(this);
+		btn_lamMoiThongTin.addActionListener(this);
 		// Event panigation
 
 		cbo_trangThai.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
+
 				// Xử lý khi một mục được chọn
-				if (cbo_trangThai.getSelectedItem().toString().trim().equals("Trống")) {
-					txt_soDienThoai.setEditable(true);
+				if (cbo_trangThai.getSelectedItem().toString().trim().equals("Đang sử dụng")
+						|| cbo_trangThai.getSelectedItem().toString().trim().equals("Đã đặt")) {
+					txt_soDienThoaiTK.setEditable(true);
+					txt_tenKhachHangTK.setEditable(true);
+				}
+				if (cbo_trangThai.getSelectedItem().toString().trim().equals("Trống")
+						|| cbo_trangThai.getSelectedItem().toString().trim().equals("Không phục vụ")) {
+					txt_soDienThoaiTK.setEditable(false);
+					txt_tenKhachHangTK.setEditable(false);
 				}
 			}
 		});
@@ -845,24 +864,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 				java.util.regex.Matcher matcher = patternHoTen.matcher(txtTenKhachHang.getText().trim());
 
 				if (matcher.matches()) {
-//					Phong_DAO phong_DAO = new Phong_DAO();
-//					Phong ph = new Phong();
-//					ph = phong_DAO.timPhong_TheoMaPhong(txtMaPhong.getText().trim());
-//					ph.setTrangThaiPhong(new TrangThaiPhong("OC", "Đang sử dụng"));
-
 					datPhongTaiQuay();
-//					if (datPhongTaiQuay(ph) && phong_DAO.capNhatPhong(ph)) {
-//
-//						denTrangDauPhong();
-//
-//						JOptionPane.showMessageDialog(null, "Đặt phòng thành công!", "Thành công",
-//								JOptionPane.INFORMATION_MESSAGE);
-//					} else {
-//						JOptionPane.showMessageDialog(null, "Đặt phòng không thành công!", "Không thành công",
-//								JOptionPane.INFORMATION_MESSAGE);
-//					}
 				} else {
-					JOptionPane.showMessageDialog(null, "Tên không đúng", "Không thành công",
+					JOptionPane.showMessageDialog(null, "Tên Khách hàng không hợp lệ, vui lòng thử lại.", "Không thành công",
 							JOptionPane.INFORMATION_MESSAGE);
 				}
 
@@ -887,7 +891,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 					java.util.regex.Matcher matcher = patternSDT.matcher(txtSoDienThoai.getText().trim());
 
 					if (!matcher.matches()) {
-						JOptionPane.showMessageDialog(null, "Số điện thoại bạn nhập vào không tồn tại", "Thông báo lỗi",
+						JOptionPane.showMessageDialog(null, "Số điện thoại bạn nhập vào không tồn tại, vui lòng thêm khách hàng mới", "Thông báo lỗi",
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						txtTenKhachHang.setEnabled(true);
@@ -919,6 +923,10 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
+		if (o.equals(btn_lamMoiThongTin)) {
+			clearForm();
+			clearTablePhongDaDat();
+		}
 		if (o.equals(btn_lamMoi)) {
 			clearFormTimKiem();
 			clearTablePhongDaDat();
@@ -978,25 +986,24 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	}
 
 	public void clearFormTimKiem() {
-		txt_soDienThoai.setText("");
-		txt_timKiem.setText("");
+		txt_soDienThoaiTK.setText("");
+		txt_maPhongTK.setText("");
 		cbo_loaiPhong.setSelectedIndex(0);
 		cbo_trangThai.setSelectedIndex(0);
 
 	}
 
 	public void clearTablePhongDaDat() {
-		model_TableDSPhong = (DefaultTableModel) table_DanhSachPhong.getModel();
+
 		model_TableDSPhong.getDataVector().removeAllElements();
+		model_TableDSPhong.fireTableDataChanged();
 	}
 
 	public void clearForm() {
 		txtSoDienThoai.setText("");
 		txtTenKhachHang.setText("");
-		txtGioNhanPhong.setText("");
-//		txtTenPhong.setText("");
-//		txtLoaiPhong.setText("");
-//		txtGiaPhong.setText("");
+		String maHD = help.taoMa("HoaDon", "maHoaDon", "HD");
+		txt_maHoaDon.setText(maHD);
 	}
 
 	public void xoaDLPhong() {
@@ -1299,34 +1306,17 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 	public void timKiemTongHopPhong() {
 
-//		panel_PhongBan.removeAll();
-//		panel_PhongBan.revalidate();
-//		panel_PhongBan.repaint();
-//		panel_PhongBan.add(panel_TraCuuPhong);
-//		panel_PhongBan.add(btnLamMoiDanhSachPhong)
-
-//		scroll_Phong = new JScrollPane(panel_Phong);
-//		scroll_Phong.setSize(806, 490);
-//		scroll_Phong.setLocation(0, 84);
-//		
-//		panel_Phong.setLayout(null);
-//		scroll_Phong.add(panel_Phong);
-//		scroll_Phong.setViewportView(panel_Phong);
-//		panel_Phong.setLayout(new GridLayout(4, 4, 10, 10));
-//		scroll_Phong.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-//		scroll_Phong.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-//		panel_PhongBan.add(scroll_Phong);
 		try {
 
 			Phong_DAO dao = new Phong_DAO();
 
 			String tenLP = cbo_loaiPhong.getSelectedItem().toString();
 			String tenTTP = cbo_trangThai.getSelectedItem().toString();
-			String tenP = txt_timKiem.getText().toString().trim();
-			String tenKH = txt_tenKhachHang.getText().toString().trim();
-			String sdt = txt_soDienThoai.getText().toString().trim();
+			String maP = txt_maPhongTK.getText().toString().trim();
+			String tenKH = txt_tenKhachHangTK.getText().toString().trim();
+			String sdt = txt_soDienThoaiTK.getText().toString().trim();
 
-			ArrayList<Phong> dsph2 = dao.timPhong_TheoTongHop(tenLP, tenKH, sdt, tenTTP, tenP);
+			ArrayList<Phong> dsph2 = dao.timPhong_TheoTongHop(tenLP, tenKH, sdt, tenTTP, maP);
 
 			dsph2.forEach(ph -> {
 				System.out.println(ph.toString());
@@ -1336,64 +1326,6 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 				dsph2.forEach(ph -> {
 					CardPhong cardPhong = new CardPhong(ph, model_TableDSPhong, table_DanhSachPhong);
 					panel_Phong.add(cardPhong);
-
-					cardPhong.addMouseListener(new MouseAdapter() {
-
-						@Override
-						public void mouseClicked(MouseEvent e) {
-
-							if (e.getButton() == MouseEvent.BUTTON1) {
-								txtSoDienThoai.setText("");
-								txtTenKhachHang.setText("");
-								txtGioNhanPhong.setText("");
-
-								HelpDate hDate = new HelpDate();
-								txtMaPhong.setText(cardPhong.getPhong().getMaPhong());
-								PhieuDatPhong pdp = null;
-								PhieuDatPhong_DAO PDP_DAO = new PhieuDatPhong_DAO();
-								LoaiPhong_DAO LP_DAO = new LoaiPhong_DAO();
-								LoaiPhong loaiPhong = null;
-								if (!txtMaPhong.getText().trim().equals("")) {
-
-									pdp = PDP_DAO.layPhieuDatPhong_TheoMaPhong(txtMaPhong.getText());
-
-									if (pdp == null) {
-										clearForm();
-									}
-									KhachHang kh = new KhachHang();
-									KhachHang_DAO DAO_KH = new KhachHang_DAO();
-									try {
-
-										kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
-										System.out.println(
-												cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim());
-										if (cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim()
-												.equals("OCP")
-												|| cardPhong.getPhong().getTrangThaiPhong().getMaTrangThai().trim()
-														.equals("OC")) {
-
-											txtTenKhachHang.setText(kh.getHoTen());
-											txtSoDienThoai.setText(kh.getSoDienThoai());
-
-										}
-									} catch (Exception e2) {
-										// TODO: handle exception
-									}
-									try {
-										loaiPhong = LP_DAO.layLoaiPhong_TheoMaLoaiPhong(
-												cardPhong.getPhong().getLoaiPhong().getMaLoaiPhong());
-//										txtTenPhong.setText(cardPhong.getPhong().getTenPhong());
-//										txtLoaiPhong.setText(loaiPhong.getTenLoaiPhong());
-//										txtGiaPhong.setText(String.valueOf(loaiPhong.getGiaTien()));
-									} catch (Exception e2) {
-										// TODO: handle exception
-										e2.printStackTrace();
-									}
-
-								}
-							}
-						}
-					});
 				});
 			}
 

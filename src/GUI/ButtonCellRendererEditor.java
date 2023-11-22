@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.AbstractCellEditor;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -32,23 +33,15 @@ public class ButtonCellRendererEditor extends AbstractCellEditor implements Tabl
 	private DefaultTableModel modelDichVu;
 	private DichVu dv;
 
-	public ButtonCellRendererEditor(ChiTietDichVu chiTietDichVu) {
-		this.chiTietDichVu = chiTietDichVu;
-
-		button = new JButton("xóa");
-		button.addActionListener(e -> {
-			System.out.println("click me!!!");
-		});
-	}
 
 	public ButtonCellRendererEditor(DefaultTableModel model, JTable table) {
 		panel_main = new JPanel();
-		button = new JButton("Xóa");
+		button = new JButton(new ImageIcon(JPanel_QuanLyDatPhong.class.getResource("/icon/delete_red_16px.png")));
 		button.setBounds(0, 0, 10, 10);
 		button.setForeground(Color.white);
-		button.setBackground(Color.RED);
+//		button.setBackground(Color.RED);
 		button.addActionListener(e -> {
-			System.out.println("click me!!!");
+
 			int row = table.getEditingRow();
 			if (row != -1) {
 				model.removeRow(row);
