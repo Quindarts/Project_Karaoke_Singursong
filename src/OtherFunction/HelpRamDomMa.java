@@ -99,6 +99,7 @@ public class HelpRamDomMa {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		System.out.println(maCot);
 		return maCot;
 	}
 
@@ -106,9 +107,9 @@ public class HelpRamDomMa {
 
 //		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
 		String maPhieuDat = taoMa("HoaDon", "maHoaDon", "HD");
-//		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
+		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
 		System.out.println(maPhieuDat);
-//		System.out.println(maPhieuDat2);
+		System.out.println(maPhieuDat2);
 	}
 
 }

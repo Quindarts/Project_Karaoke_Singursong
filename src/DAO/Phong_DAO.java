@@ -52,110 +52,108 @@ public class Phong_DAO {
 		return danhSachPhong;
 	}
 
-	public ArrayList<Phong> timPhong_TheoTongHop(String tenLoaiPhong, String soGioHat, String tenTrangThai,
-			String tenPhong) {
+	public boolean capNhatTatCaPhong_TrangThaiPhongMoiNhat() {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		int n = 0;
+		String sql = "--- B1: cập nhật PDP hết hạn\r\n" + "UPDATE PhieuDatPhong\r\n" + "SET trangThai = N'Hết hạn'\r\n"
+				+ "WHERE \r\n" + "thoiGianNhanPhong < GETDATE()\r\n" + "AND trangThai =  N'Chờ nhận phòng'\r\n"
+				+ "--- B2: cập nhật  trạng thái Hóa đơn = đã hủy\r\n" + "\r\n" + "UPDATE HoaDon \r\n"
+				+ "SET trangThai = N'Đã hủy'\r\n" + "FROM HoaDon\r\n" + "WHERE \r\n"
+				+ "CONVERT(date, HoaDon.ngayLap) < CONVERT(date, GETDATE())\r\n" + "AND\r\n"
+				+ "trangThai = N'Đang chờ thanh toán';\r\n"
+				+ "--- B2.2: cập nhật trạng thái phòng trống cho phiếu đặt = hết hạn, hóa đơn = đã thanh toán\r\n"
+				+ "UPDATE Phong\r\n" + "SET maTrangThai = 'VC'\r\n" + "FROM Phong\r\n"
+				+ "INNER JOIN ChiTietHoaDon ON Phong.maPhong = ChiTietHoaDon.maPhong\r\n"
+				+ "INNER JOIN HoaDon ON ChiTietHoaDon.maHoaDon = HoaDon.maHoaDon\r\n"
+				+ "INNER JOIN PhieuDatPhong ON Phong.maPhong = PhieuDatPhong.maPhong\r\n" + "WHERE \r\n"
+				+ "HoaDon.trangThai = N'Đã thanh toán'\r\n" + "OR\r\n" + "HoaDon.trangThai = N'Đã hủy'\r\n" + "OR\r\n"
+				+ "PhieuDatPhong.trangThai = N'Hết hạn'\r\n" + "select * from Phong\r\n" + ";\r\n"
+				+ "--- B3: cập nhật trạng thái phòng đã đặt\r\n" + "UPDATE Phong\r\n" + "SET maTrangThai = 'OCP'\r\n"
+				+ "FROM Phong\r\n" + "INNER JOIN PhieuDatPhong ON Phong.maPhong = PhieuDatPhong.maPhong\r\n"
+				+ "WHERE\r\n"
+				+ " ABS( DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast(GETDATE() as dateTime))) <= 3600\r\n"
+				+ "AND PhieuDatPhong.trangThai = N'Chờ nhận phòng'\r\n"
+				+ "AND CONVERT(date, PhieuDatPhong.thoiGianNhanPhong) = CONVERT(date, GETDATE());\r\n" + "\r\n"
+				+ "--- B4: cập nhật trạng thái phòng đang sử dụng\r\n" + "UPDATE Phong\r\n"
+				+ "SET maTrangThai = 'OC'\r\n" + "FROM Phong\r\n"
+				+ "INNER JOIN ChiTietHoaDon ON Phong.maPhong = ChiTietHoaDon.maPhong\r\n"
+				+ "INNER JOIN HoaDon ON ChiTietHoaDon.maHoaDon = HoaDon.maHoaDon\r\n"
+				+ "WHERE CONVERT(date, HoaDon.ngayLap) = CONVERT(date, GETDATE())\r\n"
+				+ "AND HoaDon.trangThai = N'Đang chờ thanh toán';\r\n" + "\r\n"
+				+ "--- B5: cập nhật trạng thái phòng đang trống\r\n" + "UPDATE Phong\r\n" + "SET maTrangThai = 'VC'\r\n"
+				+ "FROM Phong\r\n" + "INNER JOIN ChiTietHoaDon ON Phong.maPhong = ChiTietHoaDon.maPhong\r\n"
+				+ "INNER JOIN HoaDon ON ChiTietHoaDon.maHoaDon = HoaDon.maHoaDon\r\n"
+				+ "INNER JOIN PhieuDatPhong ON Phong.maPhong = PhieuDatPhong.maPhong\r\n" + "WHERE \r\n"
+				+ "maTrangThai <> 'OOO'\r\n" + "AND\r\n" + "maTrangThai <> 'OCP'\r\n" + "AND\r\n"
+				+ "maTrangThai <> 'OC'\r\n" + ";";
+
+		try {
+			statement = con.prepareStatement(sql);
+			n = statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return n > 0;
+	}
+
+	public ArrayList<Phong> layTatCaPhong_TrangThaiPhongMoiNhat() {
+		Phong phong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		ArrayList<Phong> dsPhong = new ArrayList<>();
+		String sql = "select * from Phong";
+		try {
+
+			statement = con.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String tenPhong = rs.getString("tenPhong");
+				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
+				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
+				String viTriPhong = rs.getString("viTriPhong");
+				String ghiChu = rs.getString("ghiChu");
+				String tinhTrangPhong = rs.getString("tinhTrangPhong");
+				phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
+						tinhTrangPhong);
+				dsPhong.add(phong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return dsPhong;
+
+	}
+
+	public ArrayList<Phong> timPhong_TheoTongHop(String tenLoaiPhong, String tenKhachHang, String soDienThoai,
+			String tenTrangThai, String tenPhong) {
 
 		ArrayList<Phong> dsPhong = new ArrayList<>();
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 
 		String sql = "";
-		System.out.println(tenPhong.equals(""));
 
-		// Lấy danh sách phòng trống theo loại phòng cho trước trong khoảng thời gian
-		// nhất định
-		if ((!tenLoaiPhong.equals("") && soGioHat != "0" && tenTrangThai.equals("Trống") && tenPhong.equals(""))
-				|| !tenLoaiPhong.equals("") && soGioHat != "0" && tenTrangThai.equals("Trống")
-						&& !tenPhong.equals("")) {
-
-			String tenTrangThaiSQL = "   AND TT.tenTrangThai = N'" + tenTrangThai + "'  \r\n";
-			String tenLoaiPhongSQL = " LP.tenLoaiPhong =  N'" + tenLoaiPhong + "'   \r\n";
-			String tenPhongSQL = "AND   P.tenPhong LIKE N'%" + tenPhong + "%' \r\n";
-
-			sql = "SELECT P.*\r\n"
-					+ "FROM Phong P\r\n"
-					+ "JOIN LoaiPhong LP ON LP.maLoaiPhong = P.maLoaiPhong\r\n"
-					+ "JOIN TrangThaiPhong TT ON P.maTrangThai = TT.maTrangThai\r\n"
-					+ "LEFT JOIN PhieuDatPhong PD ON P.maPhong = PD.maPhong\r\n"
-					+ "WHERE\r\n"
-					+ "	LP.tenLoaiPhong =  N'"+ tenLoaiPhong +"'\r\n"
-					+ "	AND\r\n"
-					+ "   (PD.thoiGianNhanPhong IS NULL\r\n"
-					+ "   AND P.maTrangThai <> N'OC'\r\n"
-					+ "   AND P.maTrangThai <> N'OOO')\r\n"
-					+ "   OR\r\n"
-					+ "   (\r\n"
-					+ "      CAST(PD.thoiGianNhanPhong AS DATE) = CAST(GETDATE() AS DATE)\r\n"
-					+ "      AND PD.trangThai = N'Chờ nhận phòng'\r\n"
-					+ "      AND PD.thoiGianNhanPhong < CONVERT(datetime, DATEADD(HOUR, -2, GETDATE()), 100) \r\n"
-					+ "   )\r\n"
-					+ "   AND P.maTrangThai <> N'OC'\r\n"
-					+ "   AND P.maTrangThai <> N'OOO';";
-			System.out.println(sql);
-		} else {
-			// Đầy đủ trường
-
-			if (!tenLoaiPhong.equals("") && soGioHat != "0" && !tenTrangThai.equals("") && !tenPhong.equals("")) {
-
-				String tenTrangThaiSQL = "   AND TT.tenTrangThai = N'" + tenTrangThai + "'  ";
-				String tenLoaiPhongSQL = "   AND LP.tenLoaiPhong = N'" + tenLoaiPhong + "'\r\n";
-				String tenPhongSQL = "   P.tenPhong LIKE N'%" + tenPhong + "%'";
-				String soGioHatSQL = "AND  PD.thoiGianNhanPhong IS NULL\r\n"
-						+ "  OR NOT ( CAST(PD.thoiGianNhanPhong AS DATE) = CAST(GETDATE() AS DATE) AND PD.trangThai =N'Chờ nhận phòng' AND PD.thoiGianNhanPhong <  convert(datetime, dateadd(hour,"
-						+ soGioHat + ", GETDATE()), 100)  ))\r\n";
-
-				sql = "SELECT * FROM Phong P JOIN TrangThaiPhong TT ON P.maTrangThai = TT.maTrangThai JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong\r\n"
-						+ "LEFT JOIN PhieuDatPhong PD ON P.maPhong = PD.maPhong WHERE  " + tenPhongSQL + tenTrangThaiSQL
-						+ tenLoaiPhongSQL
-						+ "AND NOT EXISTS (SELECT 1FROM PhieuDatPhong PD WHERE P.maPhong = PD.maPhong   " + soGioHatSQL;
-
-			}
-			// Tìm theo tên loại phòng
-			if (soGioHat == "0" && tenTrangThai == "" && tenPhong.equals("") && !tenLoaiPhong.equals("")) {
-				sql = "SELECT * FROM Phong P JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong\r\n  WHERE LP.tenLoaiPhong = N'"
-						+ tenLoaiPhong + "'";
-
-			}
-			// Tìm theo tên trạng thái
-			if (tenLoaiPhong.equals("") && soGioHat == "0" && tenPhong.equals("") && tenTrangThai == "") {
-				sql = "SELECT * FROM Phong P JOIN TrangThaiPhong TT ON P.maTrangThai = TT.maTrangThai\r\n  WHERE TT.tenTrangThai = N'"
-						+ tenTrangThai + "'";
-
-			}
-			// Tìm theo tên phòng
-			if (tenLoaiPhong.equals("") && soGioHat == "0" && tenTrangThai == "" && !tenPhong.equals("")) {
-				sql = "SELECT * FROM P.tenPhong LIKE N'" + tenPhong + "'";
-			}
-			// Tìm theo số giờ hát
-			if (tenLoaiPhong.equals("") && tenLoaiPhong.equals("") && tenPhong.equals("") && soGioHat != "0") {
-				sql = "SELECT * FROM Phong P JOIN PhieuDatPhong PD ON P.maPhong = PD.maPhong\r\n WHERE (PD.thoiGianNhanPhong IS NULL OR PD.thoiGianNhanPhong >= DATEADD(HOUR,-"
-						+ soGioHat + ", GETDATE()))";
-
-			}
-			// Tìm theo tên loại phòng và tên trạng thái
-			if (soGioHat == "0" && tenPhong.equals("") && !tenLoaiPhong.equals("") && !tenTrangThai.equals("")) {
-				String tenLoaiPhongSQL = "   AND LP.tenLoaiPhong = N'" + tenLoaiPhong + "'\r\n";
-				sql = "SELECT * FROM Phong P JOIN TrangThaiPhong TT ON P.maTrangThai = TT.maTrangThai\r\n JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong\r\n WHERE TT.tenTrangThai = N'"
-						+ tenTrangThai + "'" + tenLoaiPhongSQL;
-				
-			}
-			// Tìm theo tên trạng thái và tên phòng
-			if (soGioHat == "0" && tenLoaiPhong.equals("") && !tenTrangThai.equals("") && !tenPhong.equals("")) {
-				String tenPhongSQL = "   P.tenPhong LIKE N'%" + tenPhong + "%'";
-				String tenTrangThaiSQL = "   AND TT.tenTrangThai = N'" + tenTrangThai + "'  ";
-
-				sql = "SELECT * FROM Phong P JOIN TrangThaiPhong TT ON P.maTrangThai = TT.maTrangThai\r\n WHERE"
-						+ tenPhongSQL + tenTrangThaiSQL;
-			}
-			// Tìm theo tên phong
-			
-		if (soGioHat == "0" && !tenLoaiPhong.equals("") && !tenTrangThai.equals("") && !tenPhong.equals("")) {
-			String tenLoaiPhongSQL = "   AND LP.tenLoaiPhong = N'" + tenLoaiPhong + "'\r\n";
-			String tenPhongSQL = "   AND P.tenPhong = N'" + tenPhong + "'\r\n";
-			sql = "SELECT * FROM Phong P JOIN TrangThaiPhong TT ON P.maTrangThai = TT.maTrangThai\r\n JOIN LoaiPhong LP ON P.maLoaiPhong = LP.maLoaiPhong\r\n WHERE TT.tenTrangThai = N'"
-					+ tenTrangThai + "'" + tenLoaiPhongSQL + tenPhongSQL;
-		}
-		}
 		try {
 
 			PreparedStatement statement = con.prepareStatement(sql);

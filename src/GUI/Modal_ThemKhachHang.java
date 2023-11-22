@@ -131,12 +131,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		txt__SDT = new JTextField();
 		txt__SDT.setBounds(604, 70, 255, 25);
 		panel_1.add(txt__SDT);
-
-		txt__DiaChi = new JTextField();
-		txt__DiaChi.setBounds(604, 110, 255, 25);
-		panel_1.add(txt__DiaChi);
-		txt__DiaChi.setColumns(10);
-
 		btn__exit = new JButton("Thoát");
 		btn__exit.setIcon(new ImageIcon(Modal_ThemKhachHang.class.getResource("/icon/exit_16px.png")));
 		btn__exit.setForeground(new Color(255, 255, 255));

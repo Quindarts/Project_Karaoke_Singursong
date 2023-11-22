@@ -4,14 +4,19 @@ import java.awt.EventQueue;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -24,11 +29,13 @@ import DAO.DichVu_DAO;
 import DAO.NhanVien_DAO;
 import DAO.Phong_DAO;
 import Entity.NhanVien;
+import Entity.Phong;
 import GUI.JFrame_DangNhap.RoundedTransparentBorder;
 
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -70,6 +77,7 @@ public class JFrame_ThuNgan extends JFrame {
 	private String hexColor_Blue4 = "#DBE4EE";
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
+	private String hexColor_Yellow = "#fcbf08";
 
 	private JPanel contentPane;
 	private JPanel panel_Menu;
@@ -96,9 +104,15 @@ public class JFrame_ThuNgan extends JFrame {
 	private JButton btnTrangSau;
 	private JButton btnTrangDau;
 	private JTextField txtTrang;
-	
+
 	private NhanVien_DAO NV_DAO;
 	private MouseListener menuClickListener;
+	private JPanel panelMenu_QLKhuyenMai;
+	private JPanel panelMenu_QLNhanVien;
+	private JPanel panelMenu_QLLoaiPhong;
+	private JPanel panelMenu_QLPhong;
+	private JPanel panelMenu_QLDichVu;
+	private JPanel panelMenu_BaoCaoThongKe;
 
 	/**
 	 * Rounded JPanel
@@ -154,16 +168,26 @@ public class JFrame_ThuNgan extends JFrame {
 	 * Launch the application.
 	 */
 
-
 	/**
 	 * Create the frame.
 	 * 
 	 * 
 	 */
 
+
 	public JFrame_ThuNgan(NhanVien nhanVien) {
 //		this.nhanVien = nhanVien;
 
+		try {
+			Phong_DAO DAO_P = new Phong_DAO();
+			ArrayList<Phong> dsP = new ArrayList<>();
+			if (DAO_P.capNhatTatCaPhong_TrangThaiPhongMoiNhat()) {
+				System.out.println("Connect đến danh sách phòng mới thành công");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1530, 800);
 		contentPane = new JPanel();
@@ -193,8 +217,6 @@ public class JFrame_ThuNgan extends JFrame {
 		Panel_QLP.setBounds(0, 0, 1296, 672);
 		Panel_QLNV = new JPanel_QuanLyNhanVien();
 		Panel_QLNV.setBounds(0, 0, 1296, 672);
-		
-		
 
 		panel_Menu = new JPanel();
 		panel_Menu.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
@@ -213,15 +235,9 @@ public class JFrame_ThuNgan extends JFrame {
 		});
 		panelMenu_QLDatPhong.setBounds(2, 105, 192, 45);
 		panelMenu_QLDatPhong.setBackground(Color.decode(hexColor_Blue1));
-		
-		
-		
+
 		panel_Menu.add(panelMenu_QLDatPhong);
-		
-		
-		
-		
-		
+
 		panelMenu_QLDatPhong.setLayout(null);
 
 		JLabel lblMenu_QLDatPhong = new JLabel("QUẢN LÝ ĐẶT PHÒNG");
@@ -278,8 +294,6 @@ public class JFrame_ThuNgan extends JFrame {
 		panel_Menu.add(panel_DateTime);
 		panel_DateTime.setLayout(null);
 
-		
-
 		lblClock = new JLabel("00:00:00");
 		lblClock.setBounds(10, 11, 157, 24);
 		panel_DateTime.add(lblClock);
@@ -296,7 +310,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lblDay.setForeground(Color.decode(hexColor_Blue1));
 		lblDay.setFont(new Font("Arial", Font.BOLD, 16));
 
-		JPanel panelMenu_QLNhanVien = new JPanel();
+		 panelMenu_QLNhanVien = new JPanel();
 		panelMenu_QLNhanVien.setLayout(null);
 		panelMenu_QLNhanVien.setBackground(new Color(5, 74, 145));
 		panelMenu_QLNhanVien.setBounds(2, 289, 192, 45);
@@ -309,7 +323,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_QLNhanVien.setBounds(10, 10, 166, 20);
 		panelMenu_QLNhanVien.add(lblMenu_QLNhanVien);
 
-		JPanel panelMenu_QLLoaiPhong = new JPanel();
+		 panelMenu_QLLoaiPhong = new JPanel();
 		panelMenu_QLLoaiPhong.setLayout(null);
 		panelMenu_QLLoaiPhong.setBackground(new Color(5, 74, 145));
 		panelMenu_QLLoaiPhong.setBounds(2, 335, 192, 45);
@@ -322,7 +336,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_QLLoaiPhong.setBounds(10, 10, 166, 20);
 		panelMenu_QLLoaiPhong.add(lblMenu_QLLoaiPhong);
 
-		JPanel panelMenu_QLPhong = new JPanel();
+		 panelMenu_QLPhong = new JPanel();
 		panelMenu_QLPhong.setLayout(null);
 		panelMenu_QLPhong.setBackground(new Color(5, 74, 145));
 		panelMenu_QLPhong.setBounds(2, 381, 192, 45);
@@ -335,7 +349,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_QLPhong.setBounds(10, 10, 166, 20);
 		panelMenu_QLPhong.add(lblMenu_QLPhong);
 
-		JPanel panelMenu_QLDichVu = new JPanel();
+		 panelMenu_QLDichVu = new JPanel();
 		panelMenu_QLDichVu.setLayout(null);
 		panelMenu_QLDichVu.setBackground(new Color(5, 74, 145));
 		panelMenu_QLDichVu.setBounds(2, 427, 192, 45);
@@ -348,7 +362,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_QLDichVu.setBounds(10, 10, 166, 20);
 		panelMenu_QLDichVu.add(lblMenu_QLDichVu);
 
-		JPanel panelMenu_QLKhuyenMai = new JPanel();
+		 panelMenu_QLKhuyenMai = new JPanel();
 		panelMenu_QLKhuyenMai.setLayout(null);
 		panelMenu_QLKhuyenMai.setBackground(new Color(5, 74, 145));
 		panelMenu_QLKhuyenMai.setBounds(2, 473, 192, 45);
@@ -361,7 +375,7 @@ public class JFrame_ThuNgan extends JFrame {
 		lblMenu_QLKhuyenMai.setBounds(10, 10, 166, 20);
 		panelMenu_QLKhuyenMai.add(lblMenu_QLKhuyenMai);
 
-		JPanel panelMenu_BaoCaoThongKe = new JPanel();
+		 panelMenu_BaoCaoThongKe = new JPanel();
 		panelMenu_BaoCaoThongKe.setLayout(null);
 		panelMenu_BaoCaoThongKe.setBackground(new Color(5, 74, 145));
 		panelMenu_BaoCaoThongKe.setBounds(2, 519, 192, 45);
@@ -380,16 +394,9 @@ public class JFrame_ThuNgan extends JFrame {
 		contentPane.add(panel_Function);
 		panel_Function.setLayout(null);
 
-
-
-		
-
 		JRadioButton rdbtnNewRadioButton = new JRadioButton("New radio button");
 		rdbtnNewRadioButton.setBounds(33, 75, 109, 23);
 		Panel_QLDP.add(rdbtnNewRadioButton);
-		
-
-
 
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBorderPainted(false);
@@ -421,26 +428,19 @@ public class JFrame_ThuNgan extends JFrame {
 		lbl__userName.setForeground(new Color(255, 255, 255));
 		lbl__userName.setBounds(1198, 22, 176, 31);
 
-
-
 		Clock();
-		
 		panel_Function.add(Panel_QLDP);
-		panel_Function.add(Panel_QLKH);
-		panel_Function.add(Panel_BCTK);
-		panel_Function.add(Panel_QLDV);
-		panel_Function.add(Panel_QLHD);
-		panel_Function.add(Panel_QLPDP);
-		panel_Function.add(Panel_QLKM);
-		panel_Function.add(Panel_QLLP);
-		panel_Function.add(Panel_QLP);
-		panel_Function.add(Panel_QLNV);
-		
-		
-		
-		
-		
-		
+//		panel_Function.add(Panel_QLDP);
+//		panel_Function.add(Panel_QLKH);
+//		panel_Function.add(Panel_BCTK);
+//		panel_Function.add(Panel_QLDV);
+//		panel_Function.add(Panel_QLHD);
+//		panel_Function.add(Panel_QLPDP);
+//		panel_Function.add(Panel_QLKM);
+//		panel_Function.add(Panel_QLLP);
+//		panel_Function.add(Panel_QLP);
+//		panel_Function.add(Panel_QLNV);
+
 		/**
 		 * addMouseListener
 		 **/
@@ -451,67 +451,55 @@ public class JFrame_ThuNgan extends JFrame {
 		addMenuClickListener(panelMenu_QLDichVu, Panel_QLDV);
 		addMenuClickListener(panelMenu_QLKhuyenMai, Panel_QLKM);
 		addMenuClickListener(panelMenu_QLLoaiPhong, Panel_QLLP);
-	
+
 		addMenuClickListener(panelMenu_QLPhong, Panel_QLP);
 		addMenuClickListener(panelMenu_QLDatPhong, Panel_QLDP);
 		addMenuClickListener(panelMenu_BaoCaoThongKe, Panel_BCTK);
-		
-		
-		if(nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+
+		if (nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			addMenuClickListener(panelMenu_QLNhanVien, Panel_QLNV);
-			System.out.println("nay laf quan ly");
-		 } else {
-			 
-			 System.out.println("Không phải quản lý nhân viên");
-		 }
-		
-		
+			System.out.println("nay la quan ly");
+		} else {
+
+			System.out.println("Không phải quản lý nhân viên");
+		}
+
 		mntmNewMenuItem_2.addActionListener((ActionListener) new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	System.out.println(nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000"));
-                setVisible(false);
-                JFrame_DangNhap dangnhap = new JFrame_DangNhap();
-                dangnhap.setVisible(true);
-               
-            }
-        });
-		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000"));
+				setVisible(false);
+				JFrame_DangNhap dangnhap = new JFrame_DangNhap();
+				dangnhap.setVisible(true);
+
+			}
+		});
+
 		mntmNewMenuItem.addActionListener((ActionListener) new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-            	Modal_TrangCaNhan canhan = new Modal_TrangCaNhan(nhanVien);
-            	canhan.setVisible(true);
-               
-            }
-        });
-		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Modal_TrangCaNhan canhan = new Modal_TrangCaNhan(nhanVien);
+				canhan.setVisible(true);
+
+			}
+		});
+
 	}
 
-	
-	
 	public void menuClicked(JPanel panel) {
-		Panel_QLDP.setVisible(false);
-		Panel_QLKH.setVisible(false);
-		Panel_BCTK.setVisible(false);
-		Panel_QLDV.setVisible(false);
-		Panel_QLHD.setVisible(false);
-		Panel_QLKM.setVisible(false);
-		Panel_QLLP.setVisible(false);
-		Panel_QLP.setVisible(false);
-		Panel_QLPDP.setVisible(false);
-		Panel_QLNV.setVisible(false);
-
-		panel.setVisible(true);
+		panel_Function.removeAll(); 
+	    panel_Function.revalidate(); 
+        panel_Function.repaint(); 
+		panel_Function.add(panel);
 	}
-	
-	private void addMenuClickListener(JPanel panel, JPanel targetPanel) {
-	    panel.addMouseListener(new PanelButtonMouseAdapter(panel) {
-	        @Override
-	        public void mouseClicked(MouseEvent e) {
-	            menuClicked(targetPanel);
-	        }
-	    });
+
+	private void addMenuClickListener(JPanel panelMenu, JPanel targetPanel) {
+		panelMenu.addMouseListener(new PanelButtonMouseAdapter(panelMenu) {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				menuClicked(targetPanel);
+			}
+		});
 	}
 
 	/**
@@ -552,6 +540,8 @@ public class JFrame_ThuNgan extends JFrame {
 	/**
 	 * 
 	 * */
+	
+	
 	private class PanelButtonMouseAdapter extends MouseAdapter {
 		JPanel panel;
 
@@ -561,7 +551,7 @@ public class JFrame_ThuNgan extends JFrame {
 
 		@Override
 		public void mouseEntered(MouseEvent e) {
-			panel.setBackground(Color.decode(hexColor_Red));
+			panel.setBackground(Color.decode(hexColor_Orange));
 		}
 
 		@Override
@@ -571,14 +561,14 @@ public class JFrame_ThuNgan extends JFrame {
 
 		@Override
 		public void mousePressed(MouseEvent e) {
-			panel.setBackground(Color.decode(hexColor_Red));
+			panel.setBackground(Color.decode(hexColor_Orange));
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent e) {
 			panel.setBackground(Color.decode(hexColor_Blue1));
 		}
-		
+
 	}
 
 }

@@ -305,6 +305,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		date_DatPhong.setDateFormatString("yyyy-MM-dd");
 		date_DatPhong.setDate(new java.util.Date());
 		date_DatPhong.setBounds(167, 11, 108, 27);
+		System.out.println("Date dat phong" + date_DatPhong);
 		panel_2.add(date_DatPhong);
 
 		JLabel lblNhanVien = new JLabel("Nhân viên");
@@ -397,6 +398,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 
 		SpinnerDateModel dateModel2 = new SpinnerDateModel();
 		dateModel2.setCalendarField(Calendar.MINUTE);
+
+		
 		spnThoiGianDatPhong = new JSpinner(dateModel2);
 		spnThoiGianDatPhong.setEnabled(false);
 		JSpinner.DateEditor editor2 = new JSpinner.DateEditor(spnThoiGianDatPhong, "HH:mm");
@@ -515,7 +518,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		// Chuyển đổi giá trị thành java.sql.Timestamp
 		int soGioHat = Integer.parseInt(txtGioHat.getText());
 		Timestamp timestampNhanPhong = selectDateTime(date_NhanPhong, spnThoiGianNhanPhong);
-		Timestamp timestampDatPhong = selectDateTime(date_DatPhong, spnThoiGianDatPhong);
+		Timestamp timestampDatPhong = selectDateTimeNow();
 
 		HelpRamDomMa help = new HelpRamDomMa();
 		maPDP = help.taoMa("PhieuDatPhong", "maPhieuDat", "PD");
@@ -545,7 +548,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		int soGioHat = Integer.parseInt(txtGioHat.getText());
 		Timestamp timestampNhanPhong = selectDateTime(date_NhanPhong, spnThoiGianNhanPhong);
 		Timestamp timestampTraPhong = tinhGioTraPhongDKTheoSoGioHat(date_NhanPhong, spnThoiGianNhanPhong, soGioHat);
-		System.out.println(timestampTraPhong);
 		String lphong = (String) comboBox.getSelectedItem();
 		List<Phong> dsP = DAO_P.layDanhSachPhongTrongTheoNgayVaLoaiPhong(timestampTraPhong, timestampNhanPhong, lphong);
 		if (dsP != null) {
@@ -567,6 +569,10 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		}
 	}
 
+	public Timestamp selectDateTimeNow() {
+	     return new Timestamp(System.currentTimeMillis());
+	     
+	}
 	public Timestamp selectDateTime(JDateChooser date, JSpinner hour) {
 		Date selectedDate = date.getDate();
 		Date selectedTime = (Date) hour.getValue();
