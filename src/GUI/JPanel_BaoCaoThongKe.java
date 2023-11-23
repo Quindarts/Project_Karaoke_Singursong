@@ -17,6 +17,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -29,12 +31,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import DAO.ChiTietDichVu_DAO;
+import DAO.ChiTietHoaDon_DAO;
 import DAO.DichVu_DAO;
 import DAO.HoaDon_DAO;
 import DAO.KhachHang_DAO;
+import DAO.LoaiPhong_DAO;
 import DAO.NhanVien_DAO;
+import DAO.PhieuDatPhong_DAO;
+import DAO.Phong_DAO;
 import DAO.ThongTinDichVu_DAO;
 import Entity.ChiTietDichVu;
+import Entity.ChiTietHoaDon;
 import Entity.DichVu;
 import Entity.HoaDon;
 import Entity.KhachHang;
@@ -67,7 +75,7 @@ import javax.swing.JComboBox;
 import javax.swing.JTabbedPane;
 import javax.swing.JRadioButton;
 
-public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
+public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, PropertyChangeListener {
 
 	/**
 	 * Color
@@ -84,9 +92,9 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 	private KhachHang_DAO DAO_KH;
 	private HoaDon_DAO DAO_HD;
 	private NhanVien_DAO DAO_NV;
-	private ArrayList<KhachHang> dsKH;
+	private ChiTietHoaDon_DAO DAO_CTHD;
+	private ChiTietDichVu_DAO DAO_CTDV;
 	private ArrayList<HoaDon> dsHD;
-	private ArrayList<NhanVien> dsNV;
 	private int tongSoHD;
 	private JTextField txt_DV_TongDoanhThu;
 	private JTextField txt_DV_TongSoLuong;
@@ -133,6 +141,11 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 	private int dv_Nam_Loc;
 	private int dv_Thang_Loc;
 	private int dv_Quy_Loc;
+	private int hd_Nam_Loc;
+	private int hd_Thang_Loc;
+	private int hd_Quy_Loc;
+	private ArrayList<ChiTietHoaDon> dsCTHD;
+	private ArrayList<ChiTietDichVu> dsCTDV;
 
 	/**
 	 * Rounded JPanel
@@ -230,7 +243,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 		table_HoaDon = new JTable();
 		table_HoaDon.setModel(
 				new DefaultTableModel(new Object[][] {}, new String[] { "STT", "M\u00E3 h\u00F3a \u0111\u01A1n",
-						"Ng\u00E0y l\u1EADp", "Kh\u00E1ch h\u00E0ng", "Nh\u00E2n vi\u00EAn", "T\u1ED5ng ti\u1EC1n" }) {
+						"Ngày thanh toán", "Kh\u00E1ch h\u00E0ng", "Nh\u00E2n vi\u00EAn", "T\u1ED5ng ti\u1EC1n" }) {
 					/**
 					 * 
 					 */
@@ -670,6 +683,11 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 		cbx_HD_LocQuy.addActionListener(this);
 		cbx_HD_LocThang.addActionListener(this);
 
+		dateCh_DV_TuNgay.addPropertyChangeListener(this);
+		dateCh_DV_DenNgay.addPropertyChangeListener(this);
+		dateCh_HD_TuNgay.addPropertyChangeListener(this);
+		dateCh_HD_DenNgay.addPropertyChangeListener(this);
+
 		DocDuLieu_HD();
 		DocDuLieu_DV();
 
@@ -707,42 +725,29 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 	public void DocDuLieu_HD() {
 		model_HoaDon = (DefaultTableModel) table_HoaDon.getModel();
 		model_HoaDon.getDataVector().removeAllElements();
+		DAO_CTHD = new ChiTietHoaDon_DAO();
+		DAO_CTDV = new ChiTietDichVu_DAO();
 
-		// TODO: Lấy tất cả hóa đơn của nhân viên đang đăng nhập
-//		try {
-//			dsHD = DAO_HD.layTatCaHoaDon();
-//			System.out.println(dsHD);
-//			if (dsHD != null) {
-//				dsHD.forEach(hd -> {
-//					KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
-//					NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
-//					
-//					//Kiểm tra nhân viên thanh toán hóa đơn có phải là nhân viên đang đăng nhập hay không
-//					if(nv.getMaNhanVien().equals(nhVien.getMaNhanVien())) {
-//					Object[] rowData = { hd.getMaHoaDon(), hd.getThoiGianKetThuc(), kh.getHoTen(), nv.getHoTen(), "" };
-//					model.addRow(rowData); 
-//					tongSoHD++;}
-//				});
-//			}
-//		} catch (Exception e) {
-//			// TODO: handle exception
-//			e.printStackTrace();
-//		}
-
-		// Lấy tất cả hóa đơn của tất cả nhân viên
+//		// Lấy tất cả hóa đơn của tất cả nhân viên
 		try {
 			dsHD = DAO_HD.layTatCaHoaDon();
 			if (dsHD != null) {
 				dsHD.forEach(hd -> {
+					dsCTHD = DAO_CTHD.timCTHoaDon_TheoMaHoaDon(hd.getMaHoaDon());
+					dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hd.getMaHoaDon());
 					KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
 					NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
-					tongDoanhThu_HD = tongDoanhThu_HD + 0;
-					Object[] rowData_HD = { tongSoHD + 1, hd.getMaHoaDon(), hd.getThoiGianKetThuc(), kh.getHoTen(),
-							nv.getHoTen(), "" };
-					model_HoaDon.addRow(rowData_HD);
-					tongSoHD++;
-					txt_HD_TongSoLuong.setText(tongSoHD + "");
-					txt_HD_TongDoanhThu.setText(tongDoanhThu_HD + "");
+					double tongTien = hd.tinhTongTien(dsCTHD, dsCTDV);
+					System.out.println("Look at this:" + tongTien);
+					tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
+					if (hd.getThoiGianKetThuc() != null) {
+						Object[] rowData_HD = { tongSoHD + 1, hd.getMaHoaDon(), hd.getThoiGianKetThuc(), kh.getHoTen(),
+								nv.getHoTen(), tongTien };
+						model_HoaDon.addRow(rowData_HD);
+						tongSoHD++;
+						txt_HD_TongSoLuong.setText(tongSoHD + "");
+						txt_HD_TongDoanhThu.setText(tongDoanhThu_HD + "");
+					}
 
 				});
 			}
@@ -763,18 +768,259 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 			LocDuLieu_HD();
 		}
 
+		if (o.equals(cbx_HD_LocNam) || o.equals(cbx_HD_LocThang) || o.equals(cbx_HD_LocQuy)
+				|| o.equals(cbx_HD_Loc_TongTien))
+			LocDuLieu_HD();
+
 		if (o.equals(cbx_DV_LocNam) || o.equals(cbx_DV_LocThang) || o.equals(cbx_DV_LocQuy)
 				|| o.equals(cbx_DV_Loc_TongTien))
 			LocDuLieu_DV();
 
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		// TODO Auto-generated method stub
+		Object o = evt.getSource();
+		Date dv_BatDau = new Date();
+		Date dv_KetThuc = new Date();
+		Date hd_BatDau = new Date();
+		Date hd_KetThuc = new Date();
+		if (o.equals(dateCh_DV_TuNgay)) {
+			if ("date".equals(evt.getPropertyName()))
+				dv_BatDau = (Date) evt.getNewValue();
+			LocDuLieu_DV();
+		}
+
+		if (o.equals(dateCh_DV_DenNgay)) {
+			if ("date".equals(evt.getPropertyName()))
+				dv_KetThuc = (Date) evt.getNewValue();
+			LocDuLieu_DV();
+		}
+
+		if (dv_BatDau.after(dv_KetThuc)) {
+			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
+		}
+
+		if (o.equals(dateCh_HD_TuNgay)) {
+			if ("date".equals(evt.getPropertyName()))
+				hd_BatDau = (Date) evt.getNewValue();
+			LocDuLieu_HD();
+		}
+
+		if (o.equals(dateCh_HD_DenNgay)) {
+			if ("date".equals(evt.getPropertyName()))
+				hd_KetThuc = (Date) evt.getNewValue();
+			LocDuLieu_HD();
+		}
+
+		if (hd_BatDau.after(hd_KetThuc)) {
+			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
+		}
+	}
+
 	private void LocDuLieu_HD() {
-		model_HoaDon = (DefaultTableModel) table_HoaDon.getModel();
+//		model_HoaDon = (DefaultTableModel) table_HoaDon.getModel();
 		model_HoaDon.getDataVector().removeAllElements();
 
-		Timestamp ngayBatDau = new Timestamp(dateCh_HD_TuNgay.getDate().getTime());
-		Timestamp ngayKetThuc = new Timestamp(dateCh_HD_DenNgay.getDate().getTime());
+		boolean ketQuaLoc = false;
+		tongDoanhThu_HD = 0;
+		tongSoHD = 0;
+		txt_HD_TongDoanhThu.setText(tongDoanhThu_HD + "");
+		txt_HD_TongSoLuong.setText(tongSoHD + "");
+
+		hd_Nam_Loc = 0;
+		hd_Thang_Loc = 0;
+		hd_Quy_Loc = 0;
+
+		if (cbx_HD_LocNam.getSelectedIndex() != 0) {
+			hd_Nam_Loc = Integer.parseInt(cbx_HD_LocNam.getSelectedItem().toString());
+			chkbx_HD_Loc_TheoNam.setSelected(true);
+			chkbx_HD_Loc_TheoNam.setEnabled(true);
+		} else {
+			chkbx_HD_Loc_TheoNam.setSelected(false);
+			chkbx_HD_Loc_TheoNam.setEnabled(false);
+		}
+
+		chkbx_HD_Loc_TheoNam.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (chkbx_DV_Loc_TheoNam.isSelected() && cbx_HD_LocNam.getSelectedIndex() != 0) {
+					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
+					hd_Nam_Loc = Integer.parseInt(cbx_HD_LocNam.getSelectedItem().toString());
+					chkbx_HD_Loc_TheoNam.setEnabled(true);
+				} else {
+					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
+					cbx_HD_LocNam.setSelectedIndex(0);
+					hd_Nam_Loc = 0;
+				}
+			}
+		});
+
+		if (cbx_HD_LocThang.getSelectedIndex() != 0) {
+			hd_Thang_Loc = Integer.parseInt(cbx_HD_LocThang.getSelectedItem().toString());
+			chkbx_HD_Loc_TheoThang.setSelected(true);
+			chkbx_HD_Loc_TheoThang.setEnabled(true);
+		} else {
+			chkbx_HD_Loc_TheoThang.setSelected(false);
+			chkbx_HD_Loc_TheoThang.setEnabled(false);
+		}
+
+		chkbx_HD_Loc_TheoThang.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (chkbx_HD_Loc_TheoThang.isSelected() && cbx_HD_LocThang.getSelectedIndex() != 0) {
+					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
+					hd_Thang_Loc = Integer.parseInt(cbx_HD_LocThang.getSelectedItem().toString());
+					chkbx_HD_Loc_TheoThang.setEnabled(true);
+				} else {
+					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
+					cbx_HD_LocThang.setSelectedIndex(0);
+					hd_Thang_Loc = 0;
+				}
+			}
+		});
+
+		if (cbx_HD_LocQuy.getSelectedIndex() != 0) {
+			hd_Quy_Loc = Integer.parseInt(cbx_HD_LocQuy.getSelectedItem().toString());
+			chkbx_HD_Loc_TheoQuy.setSelected(true);
+			chkbx_HD_Loc_TheoQuy.setEnabled(true);
+		} else {
+			chkbx_HD_Loc_TheoQuy.setSelected(false);
+			chkbx_HD_Loc_TheoQuy.setEnabled(false);
+		}
+
+		chkbx_HD_Loc_TheoQuy.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (chkbx_HD_Loc_TheoQuy.isSelected() && cbx_HD_LocQuy.getSelectedIndex() != 0) {
+					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
+					hd_Quy_Loc = Integer.parseInt(cbx_HD_LocQuy.getSelectedItem().toString());
+					chkbx_HD_Loc_TheoQuy.setEnabled(true);
+				} else {
+					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
+					cbx_HD_LocQuy.setSelectedIndex(0);
+					hd_Quy_Loc = 0;
+				}
+			}
+		});
+
+		int hd_TongBan_Tu = 0;
+		int hd_TongBan_Den = Integer.MAX_VALUE;
+		if (cbx_HD_Loc_TongTien.getSelectedIndex() != 0) {
+			if (cbx_HD_Loc_TongTien.getSelectedIndex() == 1) {
+				hd_TongBan_Den = 500000;
+			} else if (cbx_HD_Loc_TongTien.getSelectedIndex() == 2) {
+				hd_TongBan_Tu = 500000;
+				hd_TongBan_Den = 2000000;
+			} else if (cbx_HD_Loc_TongTien.getSelectedIndex() == 3) {
+				hd_TongBan_Tu = 200000;
+				hd_TongBan_Den = 5000000;
+			} else if (cbx_HD_Loc_TongTien.getSelectedIndex() == 4) {
+				hd_TongBan_Tu = 500000;
+				hd_TongBan_Den = 10000000;
+			} else if (cbx_HD_Loc_TongTien.getSelectedIndex() == 5) {
+				hd_TongBan_Tu = 10000000;
+			}
+		}
+
+		Date ngayKetThuc = new Date();
+		try {
+			ngayKetThuc = dateCh_HD_DenNgay.getDate();
+			if (ngayKetThuc == null) {
+				ngayKetThuc = new java.util.Date();
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			ngayKetThuc = null;
+		}
+
+		Date ngayBatDau = new Date();
+		try {
+			ngayBatDau = dateCh_HD_TuNgay.getDate();
+			if (ngayBatDau == null) {
+				calendar.set(2000, Calendar.JANUARY, 01);
+				ngayBatDau = calendar.getTime();
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			ngayBatDau = null;
+		}
+
+		ArrayList<HoaDon> dsHD_DaThanhToan = new ArrayList<>();
+		for (HoaDon hd : DAO_HD.layTatCaHoaDon()) {
+			if (hd.getThoiGianKetThuc() != null)
+				dsHD_DaThanhToan.add(hd);
+		}
+
+		for (HoaDon hd : dsHD_DaThanhToan) {
+
+			boolean kiemTra = true;
+
+			Date hd_NgayThanhToan = null; // sẽ được lấy từ hóa đơn sau sau đó parse từ kiểu String sang kiểu Date
+			String n = hd.getThoiGianKetThuc() + "";
+			try {
+				hd_NgayThanhToan = dateFormat_YMD.parse(n);
+			} catch (Exception e) {
+				// TODO: handle exception
+				hd_NgayThanhToan = null;
+			}
+			double tongTien = hd.tinhTongTien(dsCTHD, dsCTDV);
+
+			calendar.setTime(hd_NgayThanhToan);
+			int hd_NgayThanhToan_Nam = calendar.get(calendar.YEAR);
+			int hd_NgayThanhToan_Thang = calendar.get(calendar.MONTH) + 1;
+			int hd_NgayThanhToan_Quy = 0;
+			if (hd_NgayThanhToan_Thang <= 3)
+				hd_NgayThanhToan_Quy = 1;
+			else if (hd_NgayThanhToan_Thang <= 6)
+				hd_NgayThanhToan_Quy = 2;
+			else if (hd_NgayThanhToan_Thang <= 9)
+				hd_NgayThanhToan_Quy = 3;
+			else
+				hd_NgayThanhToan_Quy = 4;
+
+			if (!(hd_NgayThanhToan.after(ngayBatDau) && hd_NgayThanhToan.before(ngayKetThuc)
+					|| hd_NgayThanhToan.equals(ngayBatDau) || hd_NgayThanhToan.equals(ngayKetThuc))) {
+				kiemTra = false;
+			}
+
+			if (!(cbx_HD_LocNam.getSelectedIndex() == 0) && !(hd_NgayThanhToan_Nam == hd_Nam_Loc)) {
+				kiemTra = false;
+			}
+
+			if (!(cbx_HD_LocThang.getSelectedIndex() == 0) && !(hd_NgayThanhToan_Thang == hd_Thang_Loc)) {
+				kiemTra = false;
+			}
+
+			if (!(cbx_HD_LocQuy.getSelectedIndex() == 0) && !(hd_NgayThanhToan_Quy == hd_Quy_Loc)) {
+				kiemTra = false;
+			}
+
+			if (tongTien < hd_TongBan_Tu || tongTien > hd_TongBan_Den) {
+				kiemTra = false;
+			}
+
+			if (kiemTra) {
+				dsCTHD = DAO_CTHD.timCTHoaDon_TheoMaHoaDon(hd.getMaHoaDon());
+				dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hd.getMaHoaDon());
+				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
+				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
+				tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
+				Object[] rowData_HD = { tongSoHD + 1, hd.getMaHoaDon(), hd.getThoiGianKetThuc(), kh.getHoTen(),
+						nv.getHoTen(), tongTien };
+				model_HoaDon.addRow(rowData_HD);
+				tongSoHD++;
+				txt_HD_TongSoLuong.setText(tongSoHD + "");
+				txt_HD_TongDoanhThu.setText(tongDoanhThu_HD + "");
+
+				ketQuaLoc = true;
+			}
+		}
+		if (!ketQuaLoc) {
+			model_HoaDon.fireTableDataChanged();
+		}
 	}
 
 	private void LocDuLieu_DV() {
@@ -791,15 +1037,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 		dv_Quy_Loc = 0;
 
 		// Dữ liệu lấy từ bảng lọc
-//		comboBox.addItemListener(new ItemListener() {
-//        @Override
-//        public void itemStateChanged(ItemEvent e)  {
-//            // Kiểm tra giá trị của JComboBox khi được chọn
-//            if (comboBox.getSelectedIndex() != 0) {
-//                checkBox.setSelected(true);
-//            }
-//        }
-//    });
 
 		if (cbx_DV_LocNam.getSelectedIndex() != 0) {
 			dv_Nam_Loc = Integer.parseInt(cbx_DV_LocNam.getSelectedItem().toString());
@@ -909,7 +1146,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 				calendar.set(2000, Calendar.JANUARY, 01);
 				ngayBatDau = calendar.getTime();
 			}
-
 		} catch (Exception e) {
 			// TODO: handle exception
 			ngayBatDau = null;
@@ -989,7 +1225,4 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener {
 		}
 	}
 
-	public void Tt() {
-
-	}
 }
