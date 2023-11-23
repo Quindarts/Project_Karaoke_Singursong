@@ -126,6 +126,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 	private JTextField txtGioHat;
 	private JButton btnHuy;
 	private JButton btnTimKiem;
+	private ArrayList<Phong> dsDemo;
+	private PhieuDatPhong_DAO DAP_PDP;
 
 	/**
 	 * Create the panel.
@@ -134,7 +136,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		this.nhanVien = nhanVien;
 
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		setIconImage(Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 900, 725);
@@ -305,7 +308,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		date_DatPhong.setDateFormatString("yyyy-MM-dd");
 		date_DatPhong.setDate(new java.util.Date());
 		date_DatPhong.setBounds(167, 11, 108, 27);
-		System.out.println("Date dat phong" + date_DatPhong);
+
 		panel_2.add(date_DatPhong);
 
 		JLabel lblNhanVien = new JLabel("Nhân viên");
@@ -356,6 +359,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		comboBox = new JComboBox();
 		DAO_LP = new LoaiPhong_DAO();
 		ArrayList<LoaiPhong> dsLP = DAO_LP.layTatCaLoaiPhong();
+		comboBox.addItem("Tất cả");
 		for (LoaiPhong lp : dsLP) {
 			comboBox.addItem(lp.getMaLoaiPhong());
 			;
@@ -367,11 +371,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		btnTimKiem.setIcon(new ImageIcon(Modal_PhieuDatPhongTruoc.class.getResource("/icon/seach_16px.png")));
 		btnTimKiem.setForeground(new Color(255, 255, 255));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue1));
-		btnTimKiem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LocPhongTrongTheoNgay();
-			}
-		});
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		btnTimKiem.setBounds(688, 49, 140, 30);
 		panel_2.add(btnTimKiem);
@@ -388,18 +387,9 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		spnThoiGianNhanPhong.setBounds(285, 50, 65, 27);
 		panel_2.add(spnThoiGianNhanPhong);
 
-//		SpinnerDateModel dateModel3 = new SpinnerDateModel();
-//		dateModel3.setCalendarField(Calendar.MINUTE);
-//		spnThoiGianTraPhong = new JSpinner(dateModel3);
-//		JSpinner.DateEditor editor3 = new JSpinner.DateEditor(spnThoiGianTraPhong, "HH:mm");
-//		spnThoiGianTraPhong.setEditor(editor3);
-//		spnThoiGianTraPhong.setBounds(167, 86, 65, 27);
-//		panel_2.add(spnThoiGianTraPhong);
-
 		SpinnerDateModel dateModel2 = new SpinnerDateModel();
 		dateModel2.setCalendarField(Calendar.MINUTE);
 
-		
 		spnThoiGianDatPhong = new JSpinner(dateModel2);
 		spnThoiGianDatPhong.setEnabled(false);
 		JSpinner.DateEditor editor2 = new JSpinner.DateEditor(spnThoiGianDatPhong, "HH:mm");
@@ -460,7 +450,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 
 		JPanel panel_DSPhongTrong = new JPanel();
 		panel_DSPhongTrong.setBackground(new Color(255, 255, 255));
-		panel_DSPhongTrong.setBorder(new TitledBorder(null, "Danh s\u00E1ch ph\u00F2ng tr\u1ED1ng", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_DSPhongTrong.setBorder(new TitledBorder(null, "Danh s\u00E1ch ph\u00F2ng tr\u1ED1ng",
+				TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_DSPhongTrong.setBounds(22, 176, 840, 198);
 		panel_PDP.add(panel_DSPhongTrong);
 		panel_DSPhongTrong.setLayout(null);
@@ -471,6 +462,21 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 
 		table_DSPhong = new JTable();
 		table_DSPhong.setFillsViewportHeight(true);
+		String[] rowData = new String[] { "Mã phòng", "Loại phòng", "Trạng thái", "Giá phòng/Giờ" };
+
+		table_DSPhong.setModel(new DefaultTableModel(new Object[][] {}, rowData));
+
+		model = (DefaultTableModel) table_DSPhong.getModel();
+		scrollPane.setViewportView(table_DSPhong);
+
+		table_DSPhong.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
+			private static final long serialVersionUID = -143705667217047914L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
 		table_DSPhong.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -482,141 +488,19 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 
 			}
 		});
-		table_DSPhong.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "Mã phòng", "Loại phòng", "Trạng thái", "Giá phòng/Giờ" }));
+
+		// Event
 		DAO_P = new Phong_DAO();
 		DAO_LP = new LoaiPhong_DAO();
 		DAO_TTP = new TrangThaiPhong_DAO();
-
+		DAP_PDP = new PhieuDatPhong_DAO();
 		dsP = new ArrayList<Phong>();
-		model = (DefaultTableModel) table_DSPhong.getModel();
-		try {
-			dsP = DAO_P.timPhong_TheoMaTrangThai("VC");
-			if (dsP != null) {
-				dsP.forEach(p -> {
-					LoaiPhong lp = new LoaiPhong();
-					TrangThaiPhong ttp = new TrangThaiPhong();
-					ttp = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai());
-					lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
-					Object[] rowData = { p.getMaPhong(), p.getLoaiPhong().getMaLoaiPhong(), ttp.getTenTrangThai(),
-							lp.getGiaTien() };
-
-					model.addRow(rowData);
-				});
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		scrollPane.setViewportView(table_DSPhong);
+		renderDanhSachPhongTrong();
 
 		btnDatPhong.addActionListener(this);
 		btnHuy.addActionListener(this);
-	}
+		btnTimKiem.addActionListener(this);
 
-	public void taoPhieu() {
-
-		// Chuyển đổi giá trị thành java.sql.Timestamp
-		int soGioHat = Integer.parseInt(txtGioHat.getText());
-		Timestamp timestampNhanPhong = selectDateTime(date_NhanPhong, spnThoiGianNhanPhong);
-		Timestamp timestampDatPhong = selectDateTimeNow();
-
-		HelpRamDomMa help = new HelpRamDomMa();
-		maPDP = help.taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-
-		String maPhong = txtMaPhong.getText().toString().trim();
-		Phong p = new Phong(maPhong);
-		NhanVien nv = new NhanVien(nhanVien.getMaNhanVien());
-		KhachHang_DAO DAO_KH = new KhachHang_DAO();
-		KhachHang kh = DAO_KH.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim());
-
-		Double tienCoc = Double.parseDouble(txtTienCoc.getText());
-		String moTa = txtMoTa.getText().trim();
-		DAO_PDP = new PhieuDatPhong_DAO();
-
-		PhieuDatPhong pdp = new PhieuDatPhong(maPDP, p, nv, kh, timestampDatPhong, timestampNhanPhong, tienCoc,
-				"Chờ nhận phòng", moTa);
-		System.out.println(pdp.toString());
-		if (DAO_PDP.taoPhieuDatPhong(pdp)) {
-			JOptionPane.showMessageDialog(null, "Thêm phiếu thành công");
-			dispose();
-		} else {
-			JOptionPane.showMessageDialog(null, "Thất bại");
-		}
-	}
-
-	public void LocPhongTrongTheoNgay() {
-		int soGioHat = Integer.parseInt(txtGioHat.getText());
-		Timestamp timestampNhanPhong = selectDateTime(date_NhanPhong, spnThoiGianNhanPhong);
-		Timestamp timestampTraPhong = tinhGioTraPhongDKTheoSoGioHat(date_NhanPhong, spnThoiGianNhanPhong, soGioHat);
-		String lphong = (String) comboBox.getSelectedItem();
-		List<Phong> dsP = DAO_P.layDanhSachPhongTrongTheoNgayVaLoaiPhong(timestampTraPhong, timestampNhanPhong, lphong);
-		if (dsP != null) {
-			clearTable();
-			for (Phong p : dsP) {
-				LoaiPhong lp = new LoaiPhong();
-				TrangThaiPhong ttp = new TrangThaiPhong();
-				ttp = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai());
-				lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
-				Object[] rowData = { p.getMaPhong(), p.getLoaiPhong().getMaLoaiPhong(), ttp.getTenTrangThai(),
-						lp.getGiaTien() };
-
-				model.addRow(rowData);
-
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Không tìm thấy");
-
-		}
-	}
-
-	public Timestamp selectDateTimeNow() {
-	     return new Timestamp(System.currentTimeMillis());
-	     
-	}
-	public Timestamp selectDateTime(JDateChooser date, JSpinner hour) {
-		Date selectedDate = date.getDate();
-		Date selectedTime = (Date) hour.getValue();
-
-		// Kết hợp ngày và giờ thành một giá trị java.util.Date
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(selectedTime);
-
-		Calendar selectedDateTime = Calendar.getInstance();
-		selectedDateTime.setTime(selectedDate);
-		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
-		selectedDateTime.set(Calendar.SECOND, 0);
-		selectedDateTime.set(Calendar.MILLISECOND, 0);
-
-		// Chuyển đổi giá trị thành java.sql.Timestamp
-		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
-		return timestamp;
-	}
-
-	public Timestamp tinhGioTraPhongDKTheoSoGioHat(JDateChooser date, JSpinner hour, int soGioHat) {
-		Date selectedDate = date.getDate();
-		Date selectedTime = (Date) hour.getValue();
-
-		// Kết hợp ngày và giờ thành một giá trị java.util.Date
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTime(selectedTime);
-		calendar.add(Calendar.HOUR, soGioHat);
-
-		Calendar selectedDateTime = Calendar.getInstance();
-		selectedDateTime.setTime(selectedDate);
-		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
-		selectedDateTime.set(Calendar.SECOND, 0);
-		selectedDateTime.set(Calendar.MILLISECOND, 0);
-
-		// Chuyển đổi giá trị thành java.sql.Timestamp
-		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
-		return timestamp;
-	}
-
-	public void clearTable() {
-		DefaultTableModel model = (DefaultTableModel) table_DSPhong.getModel();
-		model.setRowCount(0);
 	}
 
 	@Override
@@ -628,6 +512,142 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		if (o.equals(btnDatPhong)) {
 			taoPhieu();
 		}
+		if (o.equals(btnTimKiem)) {
+			locPhongTrongTheoNgay();
+		}
 
 	}
+
+	public void taoPhieu() {
+
+		int soGioHat = Integer.parseInt(txtGioHat.getText());
+		Timestamp timestampNhanPhong = selectDateTimeNhanPhong(date_NhanPhong, spnThoiGianNhanPhong);
+		Timestamp timestampDatPhong = selectDateTimeNow();
+		HelpRamDomMa help = new HelpRamDomMa();
+
+		maPDP = help.taoMa("PhieuDatPhong", "maPhieuDat", "PD");
+		String maPhong = txtMaPhong.getText().toString().trim();
+		Double tienCoc = Double.parseDouble(txtTienCoc.getText());
+		String moTa = txtMoTa.getText().trim();
+
+		Phong p = new Phong(maPhong);
+		NhanVien nv = new NhanVien(nhanVien.getMaNhanVien());
+		KhachHang_DAO DAO_KH = new KhachHang_DAO();
+		KhachHang kh = DAO_KH.layKhachHang_TheoSDT(txtSoDienThoai.getText().trim());
+		DAO_PDP = new PhieuDatPhong_DAO();
+
+		PhieuDatPhong pdp = new PhieuDatPhong(maPDP, p, nv, kh, timestampDatPhong, timestampNhanPhong, tienCoc,
+				"Chờ nhận phòng", moTa);
+
+		if (DAO_PDP.taoPhieuDatPhong(pdp)) {
+			JOptionPane.showMessageDialog(null, "Đặt phòng trước thành công.");
+			dispose();
+		} else {
+			JOptionPane.showMessageDialog(null, "Đặt phòng thất bại, vui lòng thử lại sau.");
+		}
+	}
+
+	public void renderDanhSachPhongTrong() {
+
+		model = (DefaultTableModel) table_DSPhong.getModel();
+
+		Timestamp timestampNhanPhong = selectDateTimeNhanPhong(date_NhanPhong, spnThoiGianNhanPhong);
+
+		String maLoaiP = comboBox.getSelectedItem().toString().trim().equals("Tất cả") ? ""
+				: comboBox.getSelectedItem().toString().trim();
+
+		String soGioHatDuKien = txtGioHat.getText().trim().equals("") ? "1" : txtGioHat.getText();
+		try {
+
+			dsP = DAO_P.timDSPhongTheoMaLoaiPhong(maLoaiP);
+
+			dsDemo = new ArrayList<Phong>();
+			dsDemo = DAP_PDP.danhSachPhongDat_theoPhieuDat(timestampNhanPhong, soGioHatDuKien, maLoaiP);
+			if (dsDemo != null) {
+				dsDemo.forEach(ph -> {
+					dsP.forEach(phRender -> {
+						if (phRender.getMaPhong().trim().equals(ph.getMaPhong().trim())) {
+							phRender.setTrangThaiPhong(new TrangThaiPhong("OCP"));
+						}
+					});
+				});
+			}
+
+			// Lọc phòng trống
+			if (dsP != null) {
+				dsP.forEach(p -> {
+					LoaiPhong lp = new LoaiPhong();
+					TrangThaiPhong ttp = new TrangThaiPhong();
+
+					ttp = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai());
+					lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(p.getLoaiPhong().getMaLoaiPhong());
+
+					Object[] rowData = { p.getMaPhong(), p.getLoaiPhong().getMaLoaiPhong(), ttp.getTenTrangThai(),
+							lp.getGiaTien() };
+					if (p.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
+						model.addRow(rowData);
+					}
+
+				});
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
+	public void locPhongTrongTheoNgay() {
+
+		clearTable();
+		renderDanhSachPhongTrong();
+
+	}
+
+	public Timestamp selectDateTimeNow() {
+		return new Timestamp(System.currentTimeMillis());
+
+	}
+
+	public Timestamp selectDateTimeNhanPhong(JDateChooser date, JSpinner hour) {
+		Date selectedDate = date.getDate() == null ? new Date() : date.getDate();
+		Date selectedTime = (Date) hour.getValue();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(selectedTime);
+
+		Calendar selectedDateTime = Calendar.getInstance();
+		selectedDateTime.setTime(selectedDate);
+		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
+		selectedDateTime.set(Calendar.SECOND, calendar.get(Calendar.SECOND));
+		selectedDateTime.set(Calendar.MILLISECOND, calendar.get(Calendar.MILLISECOND));
+
+		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
+		return timestamp;
+	}
+
+	public Timestamp tinhGioTraPhongDKTheoSoGioHat(JDateChooser date, JSpinner hour, int soGioHat) {
+		Date selectedDate = date.getDate();
+		Date selectedTime = (Date) hour.getValue();
+
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(selectedTime);
+		calendar.add(Calendar.HOUR, soGioHat);
+
+		Calendar selectedDateTime = Calendar.getInstance();
+		selectedDateTime.setTime(selectedDate);
+		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
+		selectedDateTime.set(Calendar.SECOND, calendar.get(Calendar.SECOND));
+		selectedDateTime.set(Calendar.MILLISECOND, calendar.get(Calendar.MILLISECOND));
+
+		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
+		return timestamp;
+	}
+
+	public void clearTable() {
+		DefaultTableModel model = (DefaultTableModel) table_DSPhong.getModel();
+		model.setRowCount(0);
+	}
+
 }

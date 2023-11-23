@@ -239,9 +239,8 @@ public class Phong_DAO {
 
 		ArrayList<Phong> dsPhong = new ArrayList<>();
 		try {
-			String sql = "SELECT * FROM Phong WHERE maLoaiPhong = ?";
+			String sql = "SELECT * FROM Phong WHERE maLoaiPhong LIKE '%"+maLP+"%'";
 			statement = con.prepareStatement(sql);
-			statement.setString(1, maLP);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maPhong = rs.getString("maPhong");
@@ -453,6 +452,8 @@ public class Phong_DAO {
 	public List<Phong> layDanhSachPhongTrongTheoNgayVaLoaiPhong(Timestamp startTime, Timestamp endTime, String lp) {
 		List<Phong> danhSachPhong = new ArrayList<Phong>();
 		PreparedStatement statement = null;
+		System.out.println(startTime);
+		System.out.println(endTime);
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();

@@ -15,8 +15,10 @@ import ConnectDB.ConnectDB;
 import Entity.PhieuDatPhong;
 
 import Entity.Phong;
+import Entity.TrangThaiPhong;
 import Entity.NhanVien;
 import Entity.KhachHang;
+import Entity.LoaiPhong;
 
 public class PhieuDatPhong_DAO {
 
@@ -332,27 +334,34 @@ public class PhieuDatPhong_DAO {
 	 * 
 	 */
 
-	public ArrayList<Phong> danhSachPhongDat_theoPhieuDat(Timestamp ngayDat, String soGIoDuKien) {
+	public ArrayList<Phong> danhSachPhongDat_theoPhieuDat(Timestamp ngayDat, String soGIoDuKien, String maloaiPhong) {
 		ArrayList<Phong> dsPhong = new ArrayList<Phong>();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
-		String sql = "SELECT \r\n"
-				+ "Phong.maPhong,Phong.tenPhong,Phong.maTrangThai,Phong.maLoaiPhong,\r\n"
-				+ "ABS(DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast('"+ngayDat+"' as dateTime))) AS KhoangCachThoiGian\r\n"
-				+ "FROM PhieuDatPhong\r\n"
-				+ "INNER JOIN Phong ON Phong.maPhong = PhieuDatPhong.maPhong\r\n"
-				+ "WHERE\r\n"
-				+ "trangThai = N'Chờ nhận phòng'\r\n"
-				+ "AND ABS( DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast("+ngayDat+" as dateTime))) <= 3600*"+soGIoDuKien+"\r\n"
-				+ "AND CONVERT(date, thoiGianNhanPhong) <= CONVERT(date, "+ngayDat+")";
+		String sql = "SELECT \r\n" + "Phong.maPhong,Phong.tenPhong,Phong.maTrangThai,Phong.maLoaiPhong,\r\n"
+				+ "ABS(DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast('" + ngayDat
+				+ "' as dateTime))) AS KhoangCachThoiGian\r\n" + "FROM PhieuDatPhong\r\n"
+				+ "INNER JOIN Phong ON Phong.maPhong = PhieuDatPhong.maPhong\r\n" + "WHERE\r\n"
+				+ "trangThai = N'Chờ nhận phòng'\r\n" + "AND\r\n" + "maLoaiPhong LIKE '%" + maloaiPhong + "%'"
+				+ "AND ABS( DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast('" + ngayDat
+				+ "' as dateTime))) <= 3600*" + soGIoDuKien + "\r\n"
+				+ "AND CONVERT(date, thoiGianNhanPhong) <= CONVERT(date, '" + ngayDat + "')";
 		try {
+			System.out.println(sql);
 			statement = con.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
+
 			while (rs.next()) {
 				String maP = rs.getString("maPhong");
 				String tenP = rs.getString("tenPhong");
 				String loaiP = rs.getString("maloaiPhong");
-				Phong ph = new Phong(maP,tenP,null, ne, loaiP, loaiP);
+				String maTTP = rs.getString("maTrangThai");
+				LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+				TrangThaiPhong_DAO DAO_TTP = new TrangThaiPhong_DAO();
+				LoaiPhong lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(loaiP);
+				TrangThaiPhong ttp = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(maTTP);
+				Phong ph = new Phong(maP, tenP, lp, ttp, null, "", "", "");
+				dsPhong.add(ph);
 			}
 
 		} catch (Exception e) {
@@ -517,6 +526,7 @@ public class PhieuDatPhong_DAO {
 				Double tienCoc = rs.getDouble("tienCoc");
 				String trangThai = rs.getString("trangThai");
 				String moTa = rs.getString("moTa");
+
 				phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang, thoiGianDatPhong,
 						thoiGianNhanPhong, tienCoc, trangThai, moTa);
 				danhSachPhieuDatPhong.add(phieuDatPhong);
