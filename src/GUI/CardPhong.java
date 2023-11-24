@@ -55,7 +55,7 @@ import java.awt.Font;
  * 
  */
 public class CardPhong extends JPanel {
-	private static ChiTietHoaDon_DAO DAO_CTHD ;
+	private static ChiTietHoaDon_DAO DAO_CTHD;
 	private Phong phong;
 	private int width = 150;
 	private int height = 150;
@@ -231,11 +231,11 @@ public class CardPhong extends JPanel {
 		DAO_TTP = new TrangThaiPhong_DAO();
 		DAO_HD = new HoaDon_DAO();
 		DAO_CTHD = new ChiTietHoaDon_DAO();
-		
+
 		nv = new NhanVien();
 		phieu = new PhieuDatPhong();
 		hd = new HoaDon();
-		
+
 		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
 		dsHoaDon = DAO_HD.layTatCaHoaDon();
 		dsPhong = DAO_P.layTatCaPhong();
@@ -342,14 +342,12 @@ public class CardPhong extends JPanel {
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
-
-try {
-				
+			try {
 				ChiTietHoaDon cthd = new ChiTietHoaDon();
-				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());	
+				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());
 				System.out.println("Chi tiet hoa don cua phong: " + cthd);
-				if (cthd != null)				
-					dsChiTietHoaDon.forEach(value ->{
+				if (cthd != null)
+					dsChiTietHoaDon.forEach(value -> {
 //						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
 						hd = value.getHoaDon();
 						hd = DAO_HD.layHoaDon_TheoMaHoaDon(value.getHoaDon().getMaHoaDon());
@@ -358,19 +356,17 @@ try {
 						tenNV = DAO_NV.timNhanVien_TheoMaNhanVien(nv.getMaNhanVien()).getHoTen();
 						kh = hd.getKhachHang();
 						tenKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getHoTen();
-						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();				
+						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();
 					});
-				
+
 				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong(phong, hd, cthd);
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(),"", tenNV,
-						sdtKH, tenKH);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), "", tenNV, sdtKH, tenKH);
 
 			} catch (Exception e2) {
 				e2.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Phòng này chưa được đặt!");
 			}
-
 		});
 
 		menu.add(xemThongTinMenuItem);

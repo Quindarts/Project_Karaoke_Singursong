@@ -3,6 +3,8 @@ package GUI;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
 import javax.print.DocFlavor.URL;
@@ -76,8 +78,29 @@ public class CardDichVu extends JPanel {
 		btn_Xem.setBackground(new Color(50, 205, 50));
 		btn_Xem.setBounds(87, 190, 80, 21);
 		add(btn_Xem);
+		
+		btn_Xem.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DAO_TTDV = new ThongTinDichVu_DAO();
+				ttdv = DAO_TTDV.timThongTinDichVu_TheoMaThongTinDichVu(dichVu.getThongTinDichVu().getMaThongTinDichVu());
+				String tenDV = dichVu.getTenDichVu();
+				String donViTinh = dichVu.getDonViTinh();
+				double donGia = dichVu.getDonGia();
+				int soLuongTon = ttdv.getSoLuong() - ttdv.getSoLuongDaSuDung();
+				String trangThai = dichVu.getTrangThai() ? "Còn hàng" : "Hết hàng";
+				String mieuTa = ttdv.getMoTa();
+				Modal_XemThongDichVu modal_XemTTDV = new Modal_XemThongDichVu();
+				modal_XemTTDV.SetModal_XemThongTinDichVu( tenDV, donViTinh, donGia, soLuongTon, trangThai, mieuTa);
+				modal_XemTTDV.setVisible(true);
+			
+			}
+		});
 	}
 
+	
+	
 	public ImageIcon ResizeImage(String ImagePath) {
 		ImageIcon MyImage = new ImageIcon(ImagePath);
 		Image img = MyImage.getImage();
