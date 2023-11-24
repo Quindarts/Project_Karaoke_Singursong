@@ -78,10 +78,8 @@ public class HoaDon {
 
 			// In ra timestamp
 			
-			System.out.println("Thời gian đặt phòng hiện tại: " + currentTimestamp);
 			result =(float) gioHat / 60;
 		}
-		System.out.println(gioHat);
 		return   result;// Trả về giờ hát dưới dạng số nguyên
 		
 	}

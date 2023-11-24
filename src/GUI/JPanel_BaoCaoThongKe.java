@@ -20,6 +20,7 @@ import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -134,6 +135,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private SimpleDateFormat dateFormat_HM = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat dateFormat_YMDHMS = new SimpleDateFormat("dd-M-yyyy hh:mm");
+	private DecimalFormat dcf = new DecimalFormat("#,##0 VND");
 	private JRadioButton rdbtn_DV_ConHang;
 	private JRadioButton rdbtn_DV_HetHang;
 	private Calendar calendar = Calendar.getInstance();
@@ -146,6 +148,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private int hd_Quy_Loc;
 	private ArrayList<ChiTietHoaDon> dsCTHD;
 	private ArrayList<ChiTietDichVu> dsCTDV;
+	private ArrayList<HoaDon> dsHD_DaThanhToan;
 
 	/**
 	 * Rounded JPanel
@@ -691,6 +694,12 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		DocDuLieu_HD();
 		DocDuLieu_DV();
 
+		dsHD_DaThanhToan = new ArrayList<>();
+		for (HoaDon hd : DAO_HD.layTatCaHoaDon()) {
+			if (hd.getThoiGianKetThuc() != null)
+				dsHD_DaThanhToan.add(hd);
+		}
+
 	}
 
 	public void DocDuLieu_DV() {
@@ -738,7 +747,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 					KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
 					NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
 					double tongTien = hd.tinhTongTien(dsCTHD, dsCTDV);
-					System.out.println("Look at this:" + tongTien);
 					tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
 					if (hd.getThoiGianKetThuc() != null) {
 						Object[] rowData_HD = { tongSoHD + 1, hd.getMaHoaDon(), hd.getThoiGianKetThuc(), kh.getHoTen(),
@@ -778,25 +786,26 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 	}
 
-	@Override
+//	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
-		// TODO Auto-generated method stub
+//		// TODO Auto-generated method stub
 		Object o = evt.getSource();
 		Date dv_BatDau = new Date();
 		Date dv_KetThuc = new Date();
 		Date hd_BatDau = new Date();
 		Date hd_KetThuc = new Date();
+
 		if (o.equals(dateCh_DV_TuNgay)) {
 			if ("date".equals(evt.getPropertyName()))
 				dv_BatDau = (Date) evt.getNewValue();
 			LocDuLieu_DV();
-		}
-
+		} 
+		
 		if (o.equals(dateCh_DV_DenNgay)) {
 			if ("date".equals(evt.getPropertyName()))
 				dv_KetThuc = (Date) evt.getNewValue();
 			LocDuLieu_DV();
-		}
+		} 
 
 		if (dv_BatDau.after(dv_KetThuc)) {
 			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
@@ -905,8 +914,8 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			}
 		});
 
-		int hd_TongBan_Tu = 0;
-		int hd_TongBan_Den = Integer.MAX_VALUE;
+		double hd_TongBan_Tu = 0;
+		double hd_TongBan_Den = Integer.MAX_VALUE;
 		if (cbx_HD_Loc_TongTien.getSelectedIndex() != 0) {
 			if (cbx_HD_Loc_TongTien.getSelectedIndex() == 1) {
 				hd_TongBan_Den = 500000;
@@ -914,14 +923,17 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				hd_TongBan_Tu = 500000;
 				hd_TongBan_Den = 2000000;
 			} else if (cbx_HD_Loc_TongTien.getSelectedIndex() == 3) {
-				hd_TongBan_Tu = 200000;
+				hd_TongBan_Tu = 2000000;
 				hd_TongBan_Den = 5000000;
 			} else if (cbx_HD_Loc_TongTien.getSelectedIndex() == 4) {
-				hd_TongBan_Tu = 500000;
+				hd_TongBan_Tu = 5000000;
 				hd_TongBan_Den = 10000000;
 			} else if (cbx_HD_Loc_TongTien.getSelectedIndex() == 5) {
 				hd_TongBan_Tu = 10000000;
 			}
+		} else {
+			hd_TongBan_Tu = 0;
+			hd_TongBan_Den = Integer.MAX_VALUE;
 		}
 
 		Date ngayKetThuc = new Date();
@@ -948,12 +960,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			ngayBatDau = null;
 		}
 
-		ArrayList<HoaDon> dsHD_DaThanhToan = new ArrayList<>();
-		for (HoaDon hd : DAO_HD.layTatCaHoaDon()) {
-			if (hd.getThoiGianKetThuc() != null)
-				dsHD_DaThanhToan.add(hd);
-		}
-
 		for (HoaDon hd : dsHD_DaThanhToan) {
 
 			boolean kiemTra = true;
@@ -966,6 +972,9 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				// TODO: handle exception
 				hd_NgayThanhToan = null;
 			}
+			
+			dsCTHD = DAO_CTHD.timCTHoaDon_TheoMaHoaDon(hd.getMaHoaDon());
+			dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hd.getMaHoaDon());
 			double tongTien = hd.tinhTongTien(dsCTHD, dsCTDV);
 
 			calendar.setTime(hd_NgayThanhToan);
@@ -1002,9 +1011,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				kiemTra = false;
 			}
 
-			if (kiemTra) {
-				dsCTHD = DAO_CTHD.timCTHoaDon_TheoMaHoaDon(hd.getMaHoaDon());
-				dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hd.getMaHoaDon());
+			if (kiemTra) {	
 				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
 				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
 				tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
@@ -1013,7 +1020,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				model_HoaDon.addRow(rowData_HD);
 				tongSoHD++;
 				txt_HD_TongSoLuong.setText(tongSoHD + "");
-				txt_HD_TongDoanhThu.setText(tongDoanhThu_HD + "");
+				txt_HD_TongDoanhThu.setText(dcf.format(tongDoanhThu_HD));
 
 				ketQuaLoc = true;
 			}
@@ -1213,8 +1220,8 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 						thongTinDV.getSoLuongDaSuDung() * dv.getDonGia() };
 				model_DichVu.addRow(rowData_DV);
 				tongSoDV++;
-				txt_DV_TongSoLuong.setText(tongSoDV + "");
-				txt_DV_TongDoanhThu.setText(tongDoanhThu_DV + "");
+				txt_DV_TongSoLuong.setText(tongSoDV+"");
+				txt_DV_TongDoanhThu.setText(dcf.format(tongDoanhThu_DV));
 				ketQuaLoc = true;
 			}
 		}
