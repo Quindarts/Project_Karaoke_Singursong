@@ -136,10 +136,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private SimpleDateFormat dateFormat_HM = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat dateFormat_YMDHMS = new SimpleDateFormat("dd-M-yyyy hh:mm");
 	private DecimalFormat dcf = new DecimalFormat("#,##0 VND");
-	private JRadioButton rdbtn_DV_ConHang;
-	private JRadioButton rdbtn_DV_HetHang;
 	private Calendar calendar = Calendar.getInstance();
-	private JRadioButton rdbtn_DV_TatCa;
 	private int dv_Nam_Loc;
 	private int dv_Thang_Loc;
 	private int dv_Quy_Loc;
@@ -422,7 +419,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		txt_HD_TongDoanhThu.setEditable(false);
 		txt_HD_TongDoanhThu.setHorizontalAlignment(SwingConstants.LEFT);
 		txt_HD_TongDoanhThu.setColumns(10);
-		txt_HD_TongDoanhThu.setBounds(136, 4, 199, 18);
+		txt_HD_TongDoanhThu.setBounds(130, 4, 199, 18);
 		pnl_TongDoanhThu.add(txt_HD_TongDoanhThu);
 
 		JPanel pnl_TongSoHoaDon = new JPanel();
@@ -440,7 +437,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		txt_HD_TongSoLuong.setText("0");
 		txt_HD_TongSoLuong.setEnabled(false);
 		txt_HD_TongSoLuong.setColumns(10);
-		txt_HD_TongSoLuong.setBounds(136, 4, 36, 18);
+		txt_HD_TongSoLuong.setBounds(130, 4, 36, 18);
 		pnl_TongSoHoaDon.add(txt_HD_TongSoLuong);
 
 		/**
@@ -459,8 +456,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		table_DichVu = new JTable();
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "STT", "M\u00E3 d\u1ECBch v\u1EE5", "T\u00EAn d\u1ECBch v\u1EE5", "Ng\u00E0y nh\u1EADp",
-						"S\u1ED1 l\u01B0\u1EE3ng nh\u1EADp", "S\u1ED1 l\u01B0\u1EE3ng t\u1ED3n", "Tr\u1EA1ng th\u00E1i",
-						"T\u1ED5ng ti\u1EC1n b\u00E1n" }));
+						"Số lượng bán", "T\u1ED5ng ti\u1EC1n b\u00E1n" }));
 		table_DichVu.getColumnModel().getColumn(0).setResizable(false);
 		table_DichVu.getColumnModel().getColumn(0).setPreferredWidth(50);
 		table_DichVu.getColumnModel().getColumn(0).setMaxWidth(50);
@@ -597,38 +593,9 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_Loc_TheoTongTien_1.add(cbx_DV_Loc_TongTien);
 
 		btn_DV_Loc = new JButton("Lọc");
-		btn_DV_Loc.setBounds(96, 568, 85, 21);
+		btn_DV_Loc.setBounds(40, 568, 85, 21);
 		btn_DV_Loc.addActionListener(this);
 		panel_Loc_DichVu.add(btn_DV_Loc);
-
-		JPanel pnl_Loc_TheoTrangThai = new JPanel();
-		pnl_Loc_TheoTrangThai.setLayout(null);
-		pnl_Loc_TheoTrangThai.setBorder(new TitledBorder(
-				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
-				"Theo tr\u1EA1ng th\u00E1i ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-		pnl_Loc_TheoTrangThai.setBackground(Color.WHITE);
-		pnl_Loc_TheoTrangThai.setBounds(10, 283, 235, 50);
-		panel_Loc_DichVu.add(pnl_Loc_TheoTrangThai);
-
-		rdbtn_DV_ConHang = new JRadioButton("Còn hàng");
-		rdbtn_DV_ConHang.setBackground(new Color(255, 255, 255));
-		rdbtn_DV_ConHang.setBounds(18, 20, 75, 21);
-		pnl_Loc_TheoTrangThai.add(rdbtn_DV_ConHang);
-
-		rdbtn_DV_HetHang = new JRadioButton("Hết hàng");
-		rdbtn_DV_HetHang.setBackground(Color.WHITE);
-		rdbtn_DV_HetHang.setBounds(90, 20, 75, 21);
-		pnl_Loc_TheoTrangThai.add(rdbtn_DV_HetHang);
-
-		ButtonGroup brnGr_DV_TrangThai = new ButtonGroup();
-		brnGr_DV_TrangThai.add(rdbtn_DV_ConHang);
-		brnGr_DV_TrangThai.add(rdbtn_DV_HetHang);
-		brnGr_DV_TrangThai.add(rdbtn_DV_TatCa);
-
-		rdbtn_DV_TatCa = new JRadioButton("Tất cả");
-		rdbtn_DV_TatCa.setBackground(Color.WHITE);
-		rdbtn_DV_TatCa.setBounds(168, 20, 58, 21);
-		pnl_Loc_TheoTrangThai.add(rdbtn_DV_TatCa);
 
 		JPanel panel_TongTien_DichVu = new JPanel();
 		panel_TongTien_DichVu.setLayout(null);
@@ -652,10 +619,10 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_TongDoanhThu_1.add(lblNewLabel_2);
 
 		txt_DV_TongDoanhThu = new JTextField();
+		txt_DV_TongDoanhThu.setEditable(false);
 		txt_DV_TongDoanhThu.setHorizontalAlignment(SwingConstants.LEFT);
-		txt_DV_TongDoanhThu.setEnabled(false);
 		txt_DV_TongDoanhThu.setColumns(10);
-		txt_DV_TongDoanhThu.setBounds(136, 4, 199, 18);
+		txt_DV_TongDoanhThu.setBounds(130, 4, 199, 18);
 		pnl_TongDoanhThu_1.add(txt_DV_TongDoanhThu);
 
 		JPanel pnl_TongSoHoaDon_1 = new JPanel();
@@ -674,7 +641,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		txt_DV_TongSoLuong.setHorizontalAlignment(SwingConstants.LEFT);
 		txt_DV_TongSoLuong.setEnabled(false);
 		txt_DV_TongSoLuong.setColumns(10);
-		txt_DV_TongSoLuong.setBounds(136, 4, 36, 18);
+		txt_DV_TongSoLuong.setBounds(130, 4, 36, 18);
 		pnl_TongSoHoaDon_1.add(txt_DV_TongSoLuong);
 
 		cbx_DV_Loc_TongTien.addActionListener(this);
@@ -713,12 +680,10 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 					thongTinDV = new ThongTinDichVu();
 					thongTinDV = DAO_TTDV
 							.timThongTinDichVu_TheoMaThongTinDichVu(dv.getThongTinDichVu().getMaThongTinDichVu());
-					String trangThai = dv.getTrangThai() ? "Còn hàng" : "Hết hàng";
-					int soLuongBan = thongTinDV.getSoLuong() - thongTinDV.getSoLuongDaSuDung();
 					tongDoanhThu_DV = tongDoanhThu_DV + thongTinDV.getSoLuongDaSuDung() * dv.getDonGia();
+					double tienBan = thongTinDV.getSoLuongDaSuDung() * dv.getDonGia();
 					Object[] rowData_DV = { tongSoDV + 1, dv.getMaDichVu(), dv.getTenDichVu(), thongTinDV.getNgayNhap(),
-							thongTinDV.getSoLuong(), soLuongBan, trangThai,
-							thongTinDV.getSoLuongDaSuDung() * dv.getDonGia() };
+							thongTinDV.getSoLuongDaSuDung(), dcf.format(tienBan) };
 					model_DichVu.addRow(rowData_DV);
 					tongSoDV++;
 					txt_DV_TongSoLuong.setText(tongSoDV + "");
@@ -750,7 +715,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 					tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
 					if (hd.getThoiGianKetThuc() != null) {
 						Object[] rowData_HD = { tongSoHD + 1, hd.getMaHoaDon(), hd.getThoiGianKetThuc(), kh.getHoTen(),
-								nv.getHoTen(), tongTien };
+								nv.getHoTen(), dcf.format(tongTien) };
 						model_HoaDon.addRow(rowData_HD);
 						tongSoHD++;
 						txt_HD_TongSoLuong.setText(tongSoHD + "");
@@ -953,11 +918,11 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			ngayBatDau = null;
 		}
 
-		if(ngayBatDau.after(ngayKetThuc)) {
+		if (ngayBatDau.after(ngayKetThuc)) {
 			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
 			return;
 		}
-		
+
 		for (HoaDon hd : dsHD_DaThanhToan) {
 
 			boolean kiemTra = true;
@@ -1014,7 +979,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
 				tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
 				Object[] rowData_HD = { tongSoHD + 1, hd.getMaHoaDon(), hd.getThoiGianKetThuc(), kh.getHoTen(),
-						nv.getHoTen(), tongTien };
+						nv.getHoTen(), dcf.format(tongTien) };
 				model_HoaDon.addRow(rowData_HD);
 				tongSoHD++;
 				txt_HD_TongSoLuong.setText(tongSoHD + "");
@@ -1156,18 +1121,16 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			ngayBatDau = null;
 		}
 
-		if(ngayBatDau.after(ngayKetThuc)) {
+		if (ngayBatDau.after(ngayKetThuc)) {
 			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
 			return;
 		}
-		
+
 		for (DichVu dv : DAO_DV.layTatCaDichVu()) {
 			boolean kiemTra = true;
 
 			thongTinDV = new ThongTinDichVu();
 			thongTinDV = DAO_TTDV.timThongTinDichVu_TheoMaThongTinDichVu(dv.getThongTinDichVu().getMaThongTinDichVu());
-			String trangThai = dv.getTrangThai() ? "Còn hàng" : "Hết hàng";
-			int soLuongBan = thongTinDV.getSoLuong() - thongTinDV.getSoLuongDaSuDung();
 
 			// Lấy thông tin cần thiết từ dichVu
 			Date dv_NgayNhap = null; // sẽ được lấy từ hóa đơn sau sau đó parse từ kiểu String sang kiểu Date
@@ -1219,8 +1182,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			if (kiemTra) {
 				tongDoanhThu_DV = tongDoanhThu_DV + thongTinDV.getSoLuongDaSuDung() * dv.getDonGia();
 				Object[] rowData_DV = { tongSoDV + 1, dv.getMaDichVu(), dv.getTenDichVu(), thongTinDV.getNgayNhap(),
-						thongTinDV.getSoLuong(), soLuongBan, trangThai,
-						thongTinDV.getSoLuongDaSuDung() * dv.getDonGia() };
+						thongTinDV.getSoLuongDaSuDung(), dcf.format(thongTinDV.getSoLuongDaSuDung() * dv.getDonGia()) };
 				model_DichVu.addRow(rowData_DV);
 				tongSoDV++;
 				txt_DV_TongSoLuong.setText(tongSoDV + "");
