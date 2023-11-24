@@ -33,6 +33,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -96,6 +98,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private AbstractButton rdbtn_Nam;
 
 	private AbstractButton rdbtn_Nu;
+
+	private JLabel lbl_Valuedate;
 
 	/**
 	 * Launch the application.
@@ -350,6 +354,11 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		pnl_ThongTin.add(btn_Them);
 		btn_Them.setForeground(Color.WHITE);
 		btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		
+		lbl_Valuedate = new JLabel("");
+		lbl_Valuedate.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 13));
+		lbl_Valuedate.setBounds(10, 230, 350, 25);
+		pnl_ThongTin.add(lbl_Valuedate);
 
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
 		btn_ChonAnh.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource("/icon/upload.png")));
@@ -375,8 +384,10 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 
 		btn_ChonAnh.setBackground(Color.decode(hexColor_Green));
 
+//----------------------------------------------		
 		btn_Them.addActionListener(this);
 		btn_BoQua.addActionListener(this);
+
 
 	}
 
@@ -643,6 +654,11 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		return true;
 	}
 
+	
+	
+
+
+	
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
@@ -676,4 +692,6 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		}
 		return path;
 	}
+
+
 }

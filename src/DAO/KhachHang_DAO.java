@@ -24,9 +24,8 @@ public class KhachHang_DAO {
 			String sql = "SELECT * FROM KhachHang";
 			Statement statement = con.createStatement();
 			ResultSet rs = statement.executeQuery(sql);
-			
+
 			while (rs.next()) {
-				
 				String maKhachHang = rs.getString("maKhachHang");
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
@@ -38,7 +37,6 @@ public class KhachHang_DAO {
 				KhachHang khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai,
 						diemThuong, ghiChu);
 				danhSachKhachHang.add(khachHang);
-				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,19 +45,18 @@ public class KhachHang_DAO {
 	}
 
 	public KhachHang layKhachHang_TheoMaKhachHang(String maKH) {
-		
+
 		KhachHang khachHang = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
-		
+
 		try {
 			String sql = "SELECT * FROM KhachHang WHERE maKhachHang = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, maKH);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				
 				String maKhachHang = rs.getString("maKhachHang");
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
@@ -70,40 +67,33 @@ public class KhachHang_DAO {
 				String ghiChu = rs.getString("ghiChu");
 				khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, diemThuong,
 						ghiChu);
-				
 			}
 		} catch (Exception e) {
-			
 			e.printStackTrace();
-
 		} finally {
 			try {
-				
 				statement.close();
-				
 			} catch (Exception e2) {
-				
 				e2.printStackTrace();
-				
 			}
 		}
 		return khachHang;
 	}
-	
+
 	public KhachHang layKhachHang_TheoSoDienThoai(String soDT) {
-		
+
 		KhachHang khachHang = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
-		
+
 		try {
 			String sql = "SELECT * FROM KhachHang WHERE soDienThoai = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, soDT);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				
+
 				String maKhachHang = rs.getString("maKhachHang");
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
@@ -114,40 +104,34 @@ public class KhachHang_DAO {
 				String ghiChu = rs.getString("ghiChu");
 				khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, diemThuong,
 						ghiChu);
-				
 			}
 		} catch (Exception e) {
-			
 			e.printStackTrace();
-
 		} finally {
 			try {
-				
 				statement.close();
-				
 			} catch (Exception e2) {
-				
+
 				e2.printStackTrace();
-				
 			}
 		}
 		return khachHang;
 	}
 
-public KhachHang layKhachHang_TheoSDT(String SDT) {
-		
+	public KhachHang layKhachHang_TheoSDT(String SDT) {
+
 		KhachHang khachHang = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
-		
+
 		try {
 			String sql = "SELECT * FROM KhachHang WHERE soDienThoai = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, SDT);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
-				
+
 				String maKhachHang = rs.getString("maKhachHang");
 				String hoTen = rs.getString("hoTen");
 				Boolean gioiTinh = rs.getBoolean("gioiTinh");
@@ -158,26 +142,57 @@ public KhachHang layKhachHang_TheoSDT(String SDT) {
 				String ghiChu = rs.getString("ghiChu");
 				khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, diemThuong,
 						ghiChu);
-				
 			}
 		} catch (Exception e) {
-			
-			e.printStackTrace();
 
+			e.printStackTrace();
 		} finally {
 			try {
-				
 				statement.close();
-				
 			} catch (Exception e2) {
-				
 				e2.printStackTrace();
-				
 			}
 		}
 		return khachHang;
 	}
 	
+	public ArrayList<KhachHang> layKhachHang_TheoTen(String ten) {
+
+		KhachHang khachHang = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		ArrayList<KhachHang> dsKH = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM KhachHang WHERE hoTen like N'%" + ten.trim() + "%'";
+			statement = con.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maKhachHang = rs.getString("maKhachHang");
+				String hoTen = rs.getString("hoTen");
+				Boolean gioiTinh = rs.getBoolean("gioiTinh");
+				java.sql.Date ngaySinh = rs.getDate("ngaySinh");
+				String diaChi = rs.getString("diaChi");
+				String soDienThoai = rs.getString("soDienThoai");
+				int diemThuong = rs.getInt("diemThuong");
+				String ghiChu = rs.getString("ghiChu");			
+				khachHang = new KhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, diemThuong,
+						ghiChu);
+				dsKH.add(khachHang);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+
+				e2.printStackTrace();
+			}
+		}
+		return dsKH;
+	}
+
 	public boolean taoKhachHang(KhachHang khachHang) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();

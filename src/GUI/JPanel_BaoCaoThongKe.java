@@ -722,7 +722,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 					model_DichVu.addRow(rowData_DV);
 					tongSoDV++;
 					txt_DV_TongSoLuong.setText(tongSoDV + "");
-					txt_DV_TongDoanhThu.setText(tongDoanhThu_DV + "");
+					txt_DV_TongDoanhThu.setText(dcf.format(tongDoanhThu_DV));
 				});
 			}
 		} catch (Exception e) {
@@ -754,7 +754,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 						model_HoaDon.addRow(rowData_HD);
 						tongSoHD++;
 						txt_HD_TongSoLuong.setText(tongSoHD + "");
-						txt_HD_TongDoanhThu.setText(tongDoanhThu_HD + "");
+						txt_HD_TongDoanhThu.setText(dcf.format(tongDoanhThu_HD));
 					}
 
 				});
@@ -786,7 +786,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 	}
 
-//	@Override
+	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 //		// TODO Auto-generated method stub
 		Object o = evt.getSource();
@@ -799,16 +799,12 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			if ("date".equals(evt.getPropertyName()))
 				dv_BatDau = (Date) evt.getNewValue();
 			LocDuLieu_DV();
-		} 
-		
+		}
+
 		if (o.equals(dateCh_DV_DenNgay)) {
 			if ("date".equals(evt.getPropertyName()))
 				dv_KetThuc = (Date) evt.getNewValue();
 			LocDuLieu_DV();
-		} 
-
-		if (dv_BatDau.after(dv_KetThuc)) {
-			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
 		}
 
 		if (o.equals(dateCh_HD_TuNgay)) {
@@ -823,9 +819,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			LocDuLieu_HD();
 		}
 
-		if (hd_BatDau.after(hd_KetThuc)) {
-			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
-		}
 	}
 
 	private void LocDuLieu_HD() {
@@ -960,6 +953,11 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			ngayBatDau = null;
 		}
 
+		if(ngayBatDau.after(ngayKetThuc)) {
+			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
+			return;
+		}
+		
 		for (HoaDon hd : dsHD_DaThanhToan) {
 
 			boolean kiemTra = true;
@@ -972,7 +970,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				// TODO: handle exception
 				hd_NgayThanhToan = null;
 			}
-			
+
 			dsCTHD = DAO_CTHD.timCTHoaDon_TheoMaHoaDon(hd.getMaHoaDon());
 			dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hd.getMaHoaDon());
 			double tongTien = hd.tinhTongTien(dsCTHD, dsCTDV);
@@ -1011,7 +1009,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				kiemTra = false;
 			}
 
-			if (kiemTra) {	
+			if (kiemTra) {
 				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
 				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
 				tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
@@ -1158,6 +1156,11 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			ngayBatDau = null;
 		}
 
+		if(ngayBatDau.after(ngayKetThuc)) {
+			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
+			return;
+		}
+		
 		for (DichVu dv : DAO_DV.layTatCaDichVu()) {
 			boolean kiemTra = true;
 
@@ -1220,7 +1223,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 						thongTinDV.getSoLuongDaSuDung() * dv.getDonGia() };
 				model_DichVu.addRow(rowData_DV);
 				tongSoDV++;
-				txt_DV_TongSoLuong.setText(tongSoDV+"");
+				txt_DV_TongSoLuong.setText(tongSoDV + "");
 				txt_DV_TongDoanhThu.setText(dcf.format(tongDoanhThu_DV));
 				ketQuaLoc = true;
 			}

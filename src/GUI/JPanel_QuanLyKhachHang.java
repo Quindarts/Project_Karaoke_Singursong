@@ -276,7 +276,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		chcbx_Nu.setBounds(72, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nu);
 		chcbx_Nu.addItemListener(this);
-		
+
 		chcbx_TatCa = new JCheckBox("Tất cả");
 		chcbx_TatCa.setBackground(new Color(255, 255, 255));
 		chcbx_TatCa.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -427,10 +427,15 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		btnGr_TimTheoLoai = new ButtonGroup();
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoMaKH);
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
-		
-
 
 		DocDuLieu();
+
+//-------------------------
+		txt_TimKiem.addActionListener(this);
+		txt_DiemThuongDen.addActionListener(this);
+		txt_DiemThuongTu.addActionListener(this);
+		txt_TuoiDen.addActionListener(this);
+		txt_TuoiTu.addActionListener(this);
 	}
 
 	public void XoaDuLieuTrenTable() {
@@ -474,40 +479,53 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 	}
 
 	public void TimKhachHang_TheoMa() {
-		model.getDataVector().removeAllElements();
 		String chuoiTimKiem = txt_TimKiem.getText().trim();
-		KhachHang kh_MaKH = DAO_KH.layKhachHang_TheoMaKhachHang(chuoiTimKiem);
+		KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(chuoiTimKiem);
 		try {
-			dsKH.add(kh_MaKH);
-			if (dsKH != null) {
-				String gender = kh_MaKH.isGioiTinh() ? "Nam" : "Nữ";
-				Object[] rowData = { kh_MaKH.getMaKhachHang(), kh_MaKH.getHoTen(), gender, kh_MaKH.getNgaySinh(),
-						kh_MaKH.getDiaChi(), kh_MaKH.getSoDienThoai(), kh_MaKH.getDiemThuong(), kh_MaKH.getGhiChu() };
-				model.addRow(rowData);
-			}
+			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
+			modal_ThemKhachHang = new Modal_ThemKhachHang();
+			modal_ThemKhachHang.setModal_ThemKhachHang(kh.getMaKhachHang(), kh.getHoTen(), gender,
+					kh.getNgaySinh().toString(), kh.getSoDienThoai(), kh.getDiaChi(), kh.getGhiChu());
+			modal_ThemKhachHang.setVisible(true);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có mã: " + chuoiTimKiem);
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Không tồn tại khách hàng có mã: " + chuoiTimKiem.trim());
 		}
 	}
 
 	public void TimKhachHang_TheoSoDT() {
+		String chuoiTimKiem = txt_TimKiem.getText().trim();
+		KhachHang kh = DAO_KH.layKhachHang_TheoSoDienThoai(chuoiTimKiem);
+		try {
+			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
+			modal_ThemKhachHang = new Modal_ThemKhachHang();
+			modal_ThemKhachHang.setModal_ThemKhachHang(kh.getMaKhachHang(), kh.getHoTen(), gender,
+					kh.getNgaySinh().toString(), kh.getSoDienThoai(), kh.getDiaChi(), kh.getGhiChu());
+			modal_ThemKhachHang.setVisible(true);
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(null, "Không tồn tại khách hàng có số điện thoại: " + chuoiTimKiem.trim());
+		}
+
+	}
+
+	public void TimKhachHang_TheoTen() {
 		model.getDataVector().removeAllElements();
 		String chuoiTimKiem = txt_TimKiem.getText().trim();
-		KhachHang kh_SoDT = DAO_KH.layKhachHang_TheoSoDienThoai(chuoiTimKiem);
-		try {
-			dsKH.add(kh_SoDT);
-			if (dsKH != null) {
-				String gender = kh_SoDT.isGioiTinh() ? "Nam" : "Nữ";
-				Object[] rowData = { kh_SoDT.getMaKhachHang(), kh_SoDT.getHoTen(), gender, kh_SoDT.getNgaySinh(),
-						kh_SoDT.getDiaChi(), kh_SoDT.getSoDienThoai(), kh_SoDT.getDiemThuong(), kh_SoDT.getGhiChu() };
+		ArrayList<KhachHang> dsKH = DAO_KH.layKhachHang_TheoTen(chuoiTimKiem);
+		if (dsKH.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Không có khách hàng nào được tìm thấy.");
+		} else {
+			for (KhachHang kh : dsKH) {
+				String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
+				Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
+						kh.getSoDienThoai(), kh.getDiemThuong(), kh.getGhiChu() };
 				model.addRow(rowData);
 			}
-		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "Không có khách hàng nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
-	
-	public void LamMoiBoLoc () {
+
+	public void LamMoiBoLoc() {
 		txt_DiemThuongDen.setText("");
 		txt_DiemThuongTu.setText("");
 		txt_TimKiem.setText("");
@@ -548,12 +566,22 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		boolean loc_nu = chcbx_Nu.isSelected();
 		boolean loc_tatCa = !loc_nam && !loc_nu; // Nếu cả nam và nữ đều không được chọn
 
+		if (loc_tuoiDen < loc_tuoiTu) {
+			JOptionPane.showMessageDialog(null, "Tuổi bắt đầu phải lớn hơn tuổi kết thúc!");
+			return;
+		}
+
+		if (loc_diemThuongTu > loc_diemThuongDen) {
+			JOptionPane.showMessageDialog(null, "Điểm tưởng bắt đầu phải lớn hơn điểm thưởng kết thúc!");
+			return;
+		}
+
 		model.getDataVector().removeAllElements();
 		boolean ketQuaLoc = false;
-		
+
 		for (KhachHang kh : DAO_KH.layTatCaKhachHang()) {
 			boolean kiemTra = true;
-			
+
 			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
 			Calendar ngayHienTai = Calendar.getInstance();
 			Calendar cal = Calendar.getInstance();
@@ -564,15 +592,15 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 			if ((chcbx_Nam.isSelected() && !gender.equals("Nam")) || (chcbx_Nu.isSelected() && !gender.equals("Nữ"))) {
 				kiemTra = false; // Kiểm tra giới tính được chọn
 			}
-			
+
 			if (tuoi < loc_tuoiTu || tuoi > loc_tuoiDen) {
 				kiemTra = false; // Kiểm tra độ tuổi được nhập
-	        }
-			
+			}
+
 			if ((loc_diemThuongTu > diemThuong || diemThuong > loc_diemThuongDen)) {
 				kiemTra = false; // Kiểm tra điểm thưởng được nhập
 			}
-			
+
 			if (kiemTra) {
 				Object[] rowData = { kh.getMaKhachHang(), kh.getHoTen(), gender, kh.getNgaySinh(), kh.getDiaChi(),
 						kh.getSoDienThoai(), diemThuong, kh.getGhiChu() };
@@ -582,6 +610,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		}
 
 		if (!ketQuaLoc) {
+			model.fireTableDataChanged();
 			JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
 		}
 	}
@@ -590,33 +619,48 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
-		if(o.equals(btnThem)) {
+		if (o.equals(btnThem)) {
+			modal_ThemKhachHang = new Modal_ThemKhachHang();
 			modal_ThemKhachHang.setVisible(true);
 		}
-		if(o.equals(btnXoa)) {
+		if (o.equals(btnXoa)) {
 			XoaKhachHang();
 		}
-		if(o.equals(btnLamMoi)) {
+		if (o.equals(btnLamMoi)) {
 			DocDuLieu();
 			LamMoiBoLoc();
 		}
-		if(o.equals(btnLoc)) {
+		if ((o.equals(txt_TimKiem) && rdBtn_TimTheoSoDT.isSelected() == false
+				&& rdBtn_TimTheoMaKH.isSelected() == false)
+				|| (o.equals(btnTimKiem) & rdBtn_TimTheoSoDT.isSelected() == false
+						&& rdBtn_TimTheoMaKH.isSelected() == false)) {
+			TimKhachHang_TheoTen();
+		}
+
+		if (o.equals(txt_DiemThuongDen) || o.equals(txt_DiemThuongTu) || o.equals(txt_TuoiDen) || o.equals(txt_TuoiTu))
 			LocDuLieu();
+
+		if ((rdBtn_TimTheoSoDT.isSelected() && o.equals(btnTimKiem))
+				|| (rdBtn_TimTheoSoDT.isSelected() && o.equals(txt_TimKiem))) {
+			TimKhachHang_TheoSoDT();
+		}
+
+		if (rdBtn_TimTheoMaKH.isSelected() && o.equals(btnTimKiem)
+				|| (rdBtn_TimTheoMaKH.isSelected() && o.equals(txt_TimKiem))) {
+			TimKhachHang_TheoMa();
 		}
 	}
 
 	public void setJPanel_QuanLyKhachHang(boolean b) {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 		Object o = e.getItem();
-		if(o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))	LocDuLieu();
+		if (o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))
+			LocDuLieu();
 	}
 
-
-	
 }

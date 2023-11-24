@@ -54,7 +54,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JComboBox;
 
-public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , ItemListener {
+public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, ItemListener {
 
 	/**
 	 * Color
@@ -221,21 +221,18 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		chcbx_Nam.setBounds(6, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nam);
 
-
 		chcbx_Nu = new JCheckBox("Nữ");
 		chcbx_Nu.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_Nu.setBackground(Color.WHITE);
 		chcbx_Nu.setBounds(72, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_Nu);
 
-		
 		chcbx_TatCa = new JCheckBox("Tất cả");
 		chcbx_TatCa.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		chcbx_TatCa.setBackground(Color.WHITE);
 		chcbx_TatCa.setBounds(138, 35, 64, 21);
 		pnl_Loc_TheoGioiTinh.add(chcbx_TatCa);
 
-		
 		btnGr_LocTheoGioiTinh = new ButtonGroup();
 		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
 		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
@@ -434,7 +431,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		btnGr_TimTheoLoai = new ButtonGroup();
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoMaKH);
 		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
-		btnGr_TimTheoLoai.add(rdBtn_TimTheoSoDT);
+		btnGr_TimTheoLoai.add(rdBtn_TimTheoCCCD);
 
 		// Add event:
 		btnThem.addActionListener((ActionListener) this);
@@ -451,6 +448,11 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		DAO_LoaiNV = new LoaiNhanVien_DAO();
 		DocDuLieu();
 
+//------------------------------------------
+		txt_TimKiem.addActionListener(this);
+		txt_TuoiDen.addActionListener(this);
+		txt_TuoiTu.addActionListener(this);
+
 	}
 
 	@Override
@@ -466,29 +468,39 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 			DocDuLieu();
 			LamMoiBoLoc();
 		}
-		if (o.equals(btnTimKiem)) {
-			if (rdBtn_TimTheoMaKH.isSelected()) {
-				TimNhanVien_TheoMa();
-			} else if (rdBtn_TimTheoSoDT.isSelected()) {
-				TimNhanVien_TheoSoDT();
-			} else if (rdBtn_TimTheoCCCD.isSelected()) {
-				TimNhanVien_TheoCCCD();
-			}
+
+		if ((rdBtn_TimTheoMaKH.isSelected() && o.equals(txt_TimKiem))
+				|| (rdBtn_TimTheoMaKH.isSelected() && o.equals(btnTimKiem))) {
+			TimNhanVien_TheoMa();
+		} else if (rdBtn_TimTheoSoDT.isSelected() && o.equals(txt_TimKiem)
+				|| (rdBtn_TimTheoSoDT.isSelected() && o.equals(btnTimKiem))) {
+			TimNhanVien_TheoSoDT();
+		} else if (rdBtn_TimTheoCCCD.isSelected() && o.equals(txt_TimKiem)
+				|| (rdBtn_TimTheoCCCD.isSelected() && o.equals(btnTimKiem))) {
+			TimNhanVien_TheoCCCD();
 		}
-		if (o.equals(btnLoc)) {
+
+		if ((o.equals(txt_TimKiem) && rdBtn_TimTheoMaKH.isSelected() == false && rdBtn_TimTheoSoDT.isSelected() == false
+				&& rdBtn_TimTheoCCCD.isSelected() == false)
+				|| (o.equals(txt_TimKiem) && rdBtn_TimTheoMaKH.isSelected() == false
+						&& rdBtn_TimTheoSoDT.isSelected() == false && rdBtn_TimTheoCCCD.isSelected() == false
+						&& o.equals(btnTimKiem))) {
+			TimNhanVien_TheoHoTen();
+		}
+
+		if (o.equals(btnLoc) || o.equals(cb_Loc_LoaiNV) || o.equals(cb_Loc_LoaiTrangThai) || o.equals(txt_TuoiDen)
+				|| o.equals(txt_TuoiTu)) {
 			LocDuLieu();
 		}
-		if( o.equals(cb_Loc_LoaiNV)) LocDuLieu();
-		if( o.equals(cb_Loc_LoaiTrangThai)) LocDuLieu();
-		
+
 	}
-	
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		Object o = e.getItem();
-		if(o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))	LocDuLieu();
+		if (o.equals(chcbx_Nam) || o.equals(chcbx_Nu) || o.equals(chcbx_TatCa))
+			LocDuLieu();
 	}
-
 
 	public void XoaDuLieuTrenTable() {
 		model = (DefaultTableModel) table_NhanVien.getModel();
@@ -521,17 +533,16 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		String chuoiTimKiem = txt_TimKiem.getText().trim();
 		NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(chuoiTimKiem);
 		try {
-			dsNV.add(nv);
-			if (dsNV != null) {
-				LoaiNhanVien loaiNV = new LoaiNhanVien();
-				loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
-				String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
-				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
-						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
-						nv.getAnhThe() };
-				model.addRow(rowData);
-			}
+			LoaiNhanVien loaiNV = new LoaiNhanVien();
+			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+			String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+			model_ThemNhanVien = new Modal_ThemNhanVien();
+			model_ThemNhanVien.setModal_ThemNhanVien(nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
+					gender, nv.getNgaySinh() + "", nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
+					nv.getAnhThe());
+			model_ThemNhanVien.setVisible(true);
 		} catch (Exception e) {
+			// TODO: handle exception
 			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có mã: " + chuoiTimKiem);
 		}
 	}
@@ -539,23 +550,18 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 	public void TimNhanVien_TheoSoDT() {
 		model.getDataVector().removeAllElements();
 		String chuoiTimKiem = txt_TimKiem.getText().trim();
-		dsNV = DAO_NV.layTatCaNhanVien();
-		boolean ketQuaTim = false;
-		for (NhanVien nv : DAO_NV.layTatCaNhanVien()) {
-			String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+		NhanVien nv = DAO_NV.timNhanVien_TheoSoDienThoai(chuoiTimKiem);
+		try {
 			LoaiNhanVien loaiNV = new LoaiNhanVien();
 			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
-			String sdt = nv.getSoDienThoai().trim();
-			if (sdt.equals(chuoiTimKiem)) {
-				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
-						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
-						nv.getAnhThe() };
-				model.addRow(rowData);
-				ketQuaTim = true;
-			}
-		}
-
-		if (!ketQuaTim) {
+			String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+			model_ThemNhanVien = new Modal_ThemNhanVien();
+			model_ThemNhanVien.setModal_ThemNhanVien(nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
+					gender, nv.getNgaySinh() + "", nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
+					nv.getAnhThe());
+			model_ThemNhanVien.setVisible(true);
+		} catch (Exception e) {
+			// TODO: handle exception
 			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
@@ -571,10 +577,11 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
 			String cccd = nv.getCCCD().trim();
 			if (cccd.equals(chuoiTimKiem)) {
-				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
-						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
-						nv.getAnhThe() };
-				model.addRow(rowData);
+				model_ThemNhanVien = new Modal_ThemNhanVien();
+				model_ThemNhanVien.setModal_ThemNhanVien(nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
+						gender, nv.getNgaySinh() + "", nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(),
+						nv.getTrangThai(), nv.getAnhThe());
+				model_ThemNhanVien.setVisible(true);
 				ketQuaTim = true;
 			}
 		}
@@ -584,7 +591,26 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		}
 	}
 
-	public void LamMoiBoLoc () {
+	public void TimNhanVien_TheoHoTen() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = txt_TimKiem.getText().trim();
+		ArrayList<NhanVien> dsNV = DAO_NV.timNhanVien_TheoHoTen(chuoiTimKiem);
+		if (dsNV.isEmpty()) {
+			JOptionPane.showMessageDialog(null, "Không có nhân viên nào được tìm thấy.");
+		} else {
+			for (NhanVien nv : dsNV) {
+				LoaiNhanVien loaiNV = new LoaiNhanVien();
+				loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+				String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
+				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
+						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
+						nv.getAnhThe() };
+				model.addRow(rowData);
+			}
+		}
+	}
+
+	public void LamMoiBoLoc() {
 		txt_TimKiem.setText("");
 		txt_TuoiDen.setText("");
 		txt_TuoiTu.setText("");
@@ -593,10 +619,10 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		btnGr_LocTheoGioiTinh.clearSelection();
 		btnGr_TimTheoLoai.clearSelection();
 	}
-	
+
 	public void LocDuLieu() {
 		boolean ketQuaLoc = false;
-		
+
 		int loc_tuoiTu, loc_tuoiDen; // Lấy tuổi
 		try {
 			loc_tuoiTu = Integer.parseInt(txt_TuoiTu.getText().trim());
@@ -608,7 +634,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		} catch (NumberFormatException e) {// Xử lý ngoại lệ nếu người dùng không nhập số tuổi tối đa
 			loc_tuoiDen = Integer.MAX_VALUE; // Lọc theo tất cả các tuổi
 		}
-		
+
 		model.getDataVector().removeAllElements();
 		model_ThemNhanVien = new Modal_ThemNhanVien();
 		for (NhanVien nv : DAO_NV.layTatCaNhanVien()) {
@@ -631,11 +657,11 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 			if ((chcbx_Nam.isSelected() && !gender.equals("Nam")) || (chcbx_Nu.isSelected() && !gender.equals("Nữ"))) {
 				kiemTra = false; // Kiểm tra giới tính được chọn
 			}
-			
+
 			if (tuoi < loc_tuoiTu || tuoi > loc_tuoiDen) {
 				kiemTra = false; // Kiểm tra độ tuổi được nhập
-	        }
-			
+			}
+
 			if (!loc_LoaiNV.equals(chonLoaiNV) && !loaiNV.getTenLoaiNhanVien().equals(loc_LoaiNV)) {
 				kiemTra = false; // Kiểm tra loại nhân viên được chọn
 			}
@@ -656,10 +682,8 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener , It
 		if (!ketQuaLoc) {
 			model.fireTableDataChanged();
 			JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
-			
+
 		}
 	}
-	
 
-	
-}	
+}
