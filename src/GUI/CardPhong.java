@@ -315,7 +315,7 @@ public class CardPhong extends JPanel {
 				TrangThaiPhong trThaiP = null;
 				trThaiP = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(phong.getTrangThaiPhong().getMaTrangThai());
 				String trangThaiPhong = trThaiP.getTenTrangThai();
-				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong();
+				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong(phong);
 				thongTinPhong.setVisible(true);
 				thongTinPhong.SetModal_XemThongTinPhong(anhPhong, tenPhong, tenLoaiPhong, viTriPhong, giaPhong,
 						trangThaiPhong, tinhTrang);

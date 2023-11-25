@@ -54,10 +54,8 @@ public class CardDichVu extends JPanel {
 		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource(dichVu.getThongTinDichVu().getHinhAnh()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-		ImageIcon resizedIcon = new ImageIcon(resizedImage);
-		
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
 		img_show_panel.setIcon(resizedIcon);
-		
 		main_card.add(img_show_panel);
 
 		JLabel lbl_giaTien = new JLabel(Double.toString(dichVu.getDonGia()));

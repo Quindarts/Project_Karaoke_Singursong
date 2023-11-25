@@ -8,11 +8,18 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import DAO.LoaiPhong_DAO;
+import Entity.LoaiPhong;
+import Entity.Phong;
+
 import java.awt.Color;
+import java.awt.Container;
+
 import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -39,6 +46,10 @@ public class Modal_XemThongTinPhong extends JFrame {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
+	private Phong phong;
+	private LoaiPhong loaiPh;
+	private LoaiPhong_DAO DAO_LP;
+	private JLabel img_show_panel;
 
 	/**
 	 * Launch the application.
@@ -47,7 +58,8 @@ public class Modal_XemThongTinPhong extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Modal_XemThongTinPhong() {
+	public Modal_XemThongTinPhong(Phong phong) {
+		this.phong = phong;
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
@@ -187,10 +199,13 @@ public class Modal_XemThongTinPhong extends JFrame {
 		lbl_LoaiPhong.setBackground(Color.WHITE);
 		lbl_LoaiPhong.setBounds(80, 0, 140, 20);
 		pnl_LoaiPhong.add(lbl_LoaiPhong);
+		
+		
+		
 	}
 
 	public void SetModal_XemThongTinPhong(String anhPhong, String tenPhong ,String tenLoaiPhong, String viTriPhong, String giaPhong,
-			String trangThai, String tinhTrang) {
+			String trangThai, String tinhTrang) {	
 		img_Phong.setText(anhPhong);
 		lbl_TenPhong.setText(tenPhong);
 		lbl_LoaiPhong.setText(tenLoaiPhong);
