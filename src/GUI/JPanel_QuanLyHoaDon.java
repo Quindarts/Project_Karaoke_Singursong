@@ -18,14 +18,20 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import com.formdev.flatlaf.json.ParseException;
 import com.toedter.calendar.JDateChooser;
 
+import DAO.DichVu_DAO;
 import DAO.HoaDon_DAO;
 import DAO.KhachHang_DAO;
 import DAO.NhanVien_DAO;
@@ -37,6 +43,7 @@ import Entity.PhieuDatPhong;
 import Entity.Phong;
 
 import javax.swing.JButton;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -54,13 +61,17 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.SwingConstants;
+import javax.swing.JRadioButton;
 
-public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, MouseListener {
+public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, MouseListener, KeyListener {
 
 	/**
 	 * Color
 	 */
+
+	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
@@ -86,6 +97,30 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 	private JButton btnLamMoi;
 
 	private JDialog_ThongTinHoaDon dialog_TTHD;
+	private JButton btnTimKiem;
+	private JTextField txtPhieuDatPhong;
+
+	private JButton btnTrangDau;
+
+	private JButton btnTrangSau;
+
+	private JTextField txtTrang;
+
+	private JButton btnTrangTruoc;
+
+	private JButton btnTrangCuoi;
+
+	private JTextField txt_TongTrang;
+
+	private JRadioButton rdbTatCa;
+
+	private JRadioButton rdbChoThanhToan;
+
+	private JRadioButton rdbDaThanhToan;
+
+	private JRadioButton rdbDaHuy;
+
+	private ButtonGroup searchGroup;
 
 	/**
 	 * Rounded JPanel
@@ -154,7 +189,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		JPanel panel_Table = new JPanel();
 		panel_Table.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_Table.setBackground(Color.decode(hexColor_Blue1));
-		panel_Table.setBounds(0, 37, 1296, 635);
+		panel_Table.setBounds(0, 0, 1296, 672);
 		panel.add(panel_Table);
 		panel_Table.setLayout(null);
 
@@ -172,7 +207,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		});
 		table_HoaDon.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 10, 1019, 615);
+		scrollPane.setBounds(10, 36, 1019, 615);
 		scrollPane.add(table_HoaDon);
 		scrollPane.setViewportView(table_HoaDon);
 		panel_Table.add(scrollPane);
@@ -180,18 +215,20 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		model = (DefaultTableModel) table_HoaDon.getModel();
 		DocDuLieuTrenSQL();
 
-		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.WHITE);
-		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(1031, 10, 255, 615);
-		panel_Table.add(panel_1);
-		panel_1.setLayout(null);
+		JPanel panel_RDB = new JPanel();
+		panel_RDB.setBackground(Color.WHITE);
+		panel_RDB.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_RDB.setBounds(1031, 36, 255, 615);
+		panel_Table.add(panel_RDB);
+		panel_RDB.setLayout(null);
 
 		JPanel panel_TKTheoTG = new JPanel();
-		panel_TKTheoTG.setBounds(10, 11, 235, 176);
+		panel_TKTheoTG.setBounds(10, 11, 235, 114);
 		dateTuNgay = new JDateChooser();
+		dateTuNgay.setDateFormatString("yyyy-MM-dd");
 		dateTuNgay.setBounds(46, 28, 179, 20);
 		dateDenNgay = new JDateChooser();
+		dateDenNgay.setDateFormatString("yyyy-MM-dd");
 		dateDenNgay.setBounds(46, 59, 179, 20);
 		panel_TKTheoTG.setBackground(new Color(255, 255, 255));
 		panel_TKTheoTG.setBorder(new TitledBorder(
@@ -200,7 +237,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		panel_TKTheoTG.setLayout(null);
 		panel_TKTheoTG.add(dateTuNgay);
 		panel_TKTheoTG.add(dateDenNgay);
-		panel_1.add(panel_TKTheoTG);
+		panel_RDB.add(panel_TKTheoTG);
 
 		JLabel lblNewLabel = new JLabel("Từ :");
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -212,26 +249,8 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		lbln.setBounds(10, 59, 46, 20);
 		panel_TKTheoTG.add(lbln);
 
-		JComboBox comboBox = new JComboBox();
-		comboBox.setBounds(46, 97, 179, 22);
-		panel_TKTheoTG.add(comboBox);
-
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(46, 130, 179, 22);
-		panel_TKTheoTG.add(comboBox_1);
-
-		JLabel lblNm = new JLabel("Năm :");
-		lblNm.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblNm.setBounds(10, 97, 46, 20);
-		panel_TKTheoTG.add(lblNm);
-
-		JLabel lblQu = new JLabel("Quý :");
-		lblQu.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblQu.setBounds(10, 130, 46, 20);
-		panel_TKTheoTG.add(lblQu);
-
 		JPanel panel_TKCuThe = new JPanel();
-		panel_TKCuThe.setBounds(10, 216, 235, 146);
+		panel_TKCuThe.setBounds(10, 143, 235, 146);
 		dateTuNgay = new JDateChooser();
 		dateDenNgay = new JDateChooser();
 		panel_TKCuThe.setBackground(new Color(255, 255, 255));
@@ -239,74 +258,22 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
 				"T\u00ECm ki\u1EBFm c\u1EE5 th\u1EC3", TitledBorder.LEADING, TitledBorder.TOP, null,
 				Color.decode(hexColor_Blue1)));
-		panel_1.add(panel_TKCuThe);
+		panel_RDB.add(panel_TKCuThe);
 		panel_TKCuThe.setLayout(null);
 
 		txtHD = new JTextField();
-		txtHD.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					clearTable();
-					TimKiemTheoHD();
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
 		txtHD.setBounds(84, 26, 141, 20);
 		panel_TKCuThe.add(txtHD);
 		txtHD.setColumns(10);
 
 		txtKH = new JTextField();
-		txtKH.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					clearTable();
-					TimKiemTheoKH();
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-
 		txtKH.setColumns(10);
-		txtKH.setBounds(84, 55, 141, 20);
+		txtKH.setBounds(84, 86, 141, 20);
 		panel_TKCuThe.add(txtKH);
 
 		txtNV = new JTextField();
-		txtNV.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					clearTable();
-					TimKiemTheoNV();
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
 		txtNV.setColumns(10);
-		txtNV.setBounds(84, 85, 141, 20);
+		txtNV.setBounds(84, 116, 141, 20);
 		panel_TKCuThe.add(txtNV);
 
 		JLabel lblHan = new JLabel("Hóa đơn :");
@@ -316,40 +283,96 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 
 		JLabel lblKhchHng = new JLabel("Khách hàng :");
 		lblKhchHng.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblKhchHng.setBounds(10, 55, 77, 20);
+		lblKhchHng.setBounds(10, 86, 77, 20);
 		panel_TKCuThe.add(lblKhchHng);
 
 		JLabel lblNhnVin = new JLabel("Nhân viên :");
 		lblNhnVin.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblNhnVin.setBounds(10, 85, 77, 20);
+		lblNhnVin.setBounds(10, 116, 77, 20);
 		panel_TKCuThe.add(lblNhnVin);
 
-		btnLamMoi = new JButton("Làm mới");
-		btnLamMoi.setIcon(new ImageIcon(JPanel_QuanLyHoaDon.class.getResource("/icon/refresh.png")));
-		btnLamMoi.setForeground(Color.WHITE);
-		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnLamMoi.setBackground(Color.LIGHT_GRAY);
-		btnLamMoi.setBounds(280, 0, 125, 35);
-		panel.add(btnLamMoi);
+		JLabel lblPhiutPhng = new JLabel("Phiếu đặt :");
+		lblPhiutPhng.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblPhiutPhng.setBounds(10, 55, 93, 20);
+		panel_TKCuThe.add(lblPhiutPhng);
 
-		JButton btnTimKiem = new JButton("Tìm kiếm");
-		btnTimKiem.setBounds(415, 0, 123, 35);
-		panel.add(btnTimKiem);
+		txtPhieuDatPhong = new JTextField();
+		txtPhieuDatPhong.setColumns(10);
+		txtPhieuDatPhong.setBounds(84, 56, 141, 20);
+		panel_TKCuThe.add(txtPhieuDatPhong);
+
+		btnTimKiem = new JButton("Tìm kiếm");
+		btnTimKiem.setBounds(72, 314, 123, 35);
+		panel_RDB.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyHoaDon.class.getResource("/icon/search.png")));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
 		btnTimKiem.setForeground(Color.WHITE);
 		btnTimKiem.setFont(new Font("Segoe UI", Font.BOLD, 15));
 
-		addEvent();
-	}
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnLamMoi.setBounds(72, 359, 125, 35);
+		panel_RDB.add(btnLamMoi);
+		btnLamMoi.setIcon(new ImageIcon(JPanel_QuanLyHoaDon.class.getResource("/icon/refresh.png")));
+		btnLamMoi.setForeground(Color.WHITE);
+		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnLamMoi.setBackground(Color.LIGHT_GRAY);
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+		rdbTatCa = new JRadioButton("Tất cả");
+		rdbTatCa.setBackground(new Color(255, 255, 255));
+		rdbTatCa.setBounds(10, 6, 76, 21);
+		panel_Table.add(rdbTatCa);
+
+		rdbChoThanhToan = new JRadioButton("Chờ thanh toán");
+		rdbChoThanhToan.setBackground(Color.WHITE);
+		rdbChoThanhToan.setBounds(88, 6, 110, 21);
+		panel_Table.add(rdbChoThanhToan);
+
+		rdbDaThanhToan = new JRadioButton("Đã thanh toán");
+		rdbDaThanhToan.setBackground(Color.WHITE);
+		rdbDaThanhToan.setBounds(200, 6, 103, 21);
+		panel_Table.add(rdbDaThanhToan);
+
+		rdbDaHuy = new JRadioButton("Đã hủy");
+		rdbDaHuy.setBackground(Color.WHITE);
+		rdbDaHuy.setBounds(305, 6, 103, 21);
+		panel_Table.add(rdbDaHuy);
+
+		searchGroup = new ButtonGroup();
+		searchGroup.add(rdbDaThanhToan);
+		searchGroup.add(rdbChoThanhToan);
+		searchGroup.add(rdbDaHuy);
+		searchGroup.add(rdbTatCa);
+
+		btnLamMoi.addMouseListener(this);
+		table_HoaDon.addMouseListener(this);
+		btnTimKiem.addMouseListener(this);
+
+		txtPhieuDatPhong.addKeyListener(this);
+		txtHD.addKeyListener(this);
+		txtNV.addKeyListener(this);
+		txtKH.addKeyListener(this);
+
+		rdbChoThanhToan.addActionListener(this);
+		rdbDaHuy.addActionListener(this);
+		rdbDaThanhToan.addActionListener(this);
+		rdbTatCa.addActionListener(this);
+
 	}
 
 	public void clearTable() {
 		DefaultTableModel model = (DefaultTableModel) table_HoaDon.getModel();
 		model.setRowCount(0);
+	}
+	
+	private void XoaRong() {
+		txtHD.setText("");
+		txtKH.setText("");
+		txtNV.setText("");
+		txtPhieuDatPhong.setText("");
 	}
 
 	private void DocDuLieuTrenSQL() {
@@ -420,6 +443,27 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		}
 	}
 
+	// Tìm kiếm theo mã phiếu đặt phòng
+
+	public void TimKiemTheoPhieuDatPhong() {
+		String pdp = txtPhieuDatPhong.getText();
+		ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoPhieuDatPhong(pdp);
+
+		if (dsHD != null) {
+			for (HoaDon hd : dsHD) {
+				KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
+				NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
+				Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+						hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+						hd.getTrangThai(), hd.getThoiGianKetThuc() };
+				model.addRow(rowData);
+
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
+		}
+	}
+
 	// Tìm kiếm tương đối theo mã hóa đơn (có thể tìm theo ngày lập hóa đơn)
 	public void TimKiemTheoHD() {
 		String hdon = txtHD.getText();
@@ -439,15 +483,87 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		}
 	}
 
+	// Tìm kiếm hóa đơn theo khoảng ngày
+	public void TimKiemTheoKhoangNgay() throws java.text.ParseException {
+		java.sql.Date sqlDate_TuNgay = new java.sql.Date(dateTuNgay.getDate().getTime());
+		java.sql.Date sqlDate_DenNgay = new java.sql.Date(dateDenNgay.getDate().getTime());
+		ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoKhoangNgay(sqlDate_TuNgay, sqlDate_DenNgay);
+
+		if (dsHD != null) {
+			for (HoaDon hd : dsHD) {
+				KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
+				NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
+				Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+						hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+						hd.getTrangThai(), hd.getThoiGianKetThuc() };
+				model.addRow(rowData);
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
+		}
+	}
+
+	// Tìm kiếm theo trạng thái
+	public void TimKiemTheoTrangThai() {
+		hd_DAO = new HoaDon_DAO();
+		boolean choThanhToan = rdbChoThanhToan.isSelected();
+		boolean daThanhToan = rdbDaThanhToan.isSelected();
+		boolean daHuy = rdbDaHuy.isSelected();
+		boolean tatCa = rdbTatCa.isSelected();
+		// Tạo danh sách dsPDP để lưu kết quả
+		List<HoaDon> dsHD = new ArrayList<>();
+		// Lấy danh sách phiếu đặt phòng dựa trên trạng thái được chọn
+		if (choThanhToan) {
+			dsHD.addAll(hd_DAO.layHoaDon_TheoTrangThai("Chờ thanh toán"));
+		}
+		if (daThanhToan) {
+			dsHD.addAll(hd_DAO.layHoaDon_TheoTrangThai("Đã thanh toán"));
+		}
+		if (daHuy) {
+			dsHD.addAll(hd_DAO.layHoaDon_TheoTrangThai("Đã hủy"));
+		}
+
+		if (!dsHD.isEmpty()) {
+			clearTable();
+			for (HoaDon hd : dsHD) {
+				KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
+				NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
+				Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+						hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+						hd.getTrangThai(), hd.getThoiGianKetThuc() };
+				model.addRow(rowData);
+			}
+		} else {
+			clearTable();
+		}
+
+		if (tatCa) {
+			DocDuLieuTrenSQL();
+		}
+	}
+
+	/**
+	 * Event
+	 **/
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if (o.equals(rdbChoThanhToan) || o.equals(rdbDaHuy) || o.equals(rdbDaThanhToan) || o.equals(rdbTatCa)) {
+			TimKiemTheoTrangThai();
+		}
+	}
+
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btnLamMoi)) {
+			XoaRong();
 			clearTable();
 			DocDuLieuTrenSQL();
 		}
 
-		if (o.equals(table_HoaDon)) {
+		else if (o.equals(table_HoaDon)) {
 			if (e.getClickCount() == 2) {
 				int row = table_HoaDon.getSelectedRow();
 				String maHD = model.getValueAt(row, 0).toString();
@@ -458,6 +574,9 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 			}
 		}
 
+		else if (o.equals(btnTimKiem)) {
+			clearTable();
+		}
 	}
 
 	@Override
@@ -484,10 +603,34 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 
 	}
 
-	public void addEvent() {
-		btnLamMoi.addMouseListener(this);
-		table_HoaDon.addMouseListener(this);
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
 
 	}
 
+	@Override
+	public void keyPressed(KeyEvent e) {
+		Object o = e.getSource();
+
+		if (o.equals(txtHD) && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			clearTable();
+			TimKiemTheoHD();
+		} else if (o.equals(txtKH) && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			clearTable();
+			TimKiemTheoKH();
+		} else if (o.equals(txtNV) && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			clearTable();
+			TimKiemTheoNV();
+		} else if (o.equals(txtPhieuDatPhong) && e.getKeyCode() == KeyEvent.VK_ENTER) {
+			clearTable();
+			TimKiemTheoPhieuDatPhong();
+		}
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
+	}
 }

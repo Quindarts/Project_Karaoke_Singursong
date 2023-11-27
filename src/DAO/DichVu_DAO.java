@@ -177,7 +177,7 @@ public class DichVu_DAO {
 			statement.setBoolean(4, dichVu.getTrangThai());
 			statement.setString(5, dichVu.getMaDichVu());
 			statement.setString(6, dichVu.getThongTinDichVu().getMaThongTinDichVu());
-
+			statement.setString(6, dichVu.getMaDichVu());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

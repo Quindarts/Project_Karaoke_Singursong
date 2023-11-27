@@ -17,6 +17,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +64,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
-
+	
 	private JTable table_DichVu;
 	private JTextField textField;
 
@@ -85,6 +86,8 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 	private JButton btnTrangCuoi;
 	private JTextField txt_TongTrang;
 	private JLabel lblNewLabel;
+	private final DecimalFormat dcf = new DecimalFormat("#,##0 VND");
+
 
 	/**
 	 * Rounded JPanel
@@ -147,21 +150,19 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1296, 672);
 		panel.setBackground(Color.decode(hexColor_Blue1));
-//		panel.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		add(panel);
 		panel.setLayout(null);
 
 		JPanel panel_Table = new JPanel();
 		panel_Table.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_Table.setBackground(Color.decode(hexColor_Blue1));
-//		panel_Table.setBackground(Color.WHITE);
 		panel_Table.setBounds(0, 37, 1296, 635);
 		panel.add(panel_Table);
 		panel_Table.setLayout(null);
 
 		table_DichVu = new JTable();
 		table_DichVu.setBackground(Color.WHITE);
-		rowData = new String[] { "Mã dịch vụ", "Tên dịch vụ", "Số còn lại", "Đơn vị tính", "Đơn giá", "Trạng thái" };
+		rowData = new String[] { "Mã dịch vụ", "Tên dịch vụ", "Số lượng còn lại", "Đơn vị tính", "Đơn giá", "Trạng thái" };
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {}, rowData));
 		table_DichVu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
@@ -172,7 +173,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return false; // Đặt tất cả các ô không thể chỉnh sửa
+				return false; 
 			}
 		});
 		model_dichVu = (DefaultTableModel) table_DichVu.getModel();
@@ -184,11 +185,6 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 				if (e.getClickCount() == 2) {
 					int row = table_DichVu.getSelectedRow();
 					String maDichVu = model_dichVu.getValueAt(row, 0).toString();
-					String tenDichVu = model_dichVu.getValueAt(row, 1).toString();
-					String soLuong = model_dichVu.getValueAt(row, 2).toString();
-					String donViTinh = model_dichVu.getValueAt(row, 3).toString();
-					String donGia = model_dichVu.getValueAt(row, 4).toString();
-					String trangThai = model_dichVu.getValueAt(row, 5).toString();
 					DAO_DV = new DichVu_DAO();
 					DichVu dv  = DAO_DV.layDichVu_TheoMaDichVu(maDichVu);
 					Modal_CapNhatDichVu md_cn = new Modal_CapNhatDichVu(dv);
@@ -429,7 +425,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		ArrayList<DichVu> dsDV = DAO_DV.phanTrangDichVu(fn, ln);
 		dsDV.forEach(dv -> {
 			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(),
-					dv.getDonGia(), dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+					dcf.format(dv.getDonGia()), dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 
 			model_dichVu.addRow(rowData);
 		});

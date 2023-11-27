@@ -24,7 +24,7 @@ public class TaiKhoan_DAO {
 	}
 
 	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau) {
-		System.out.println("Bat Dau");
+	
 		Connection con = ConnectDB.getInstance().getConnection();
 		try {
 			PreparedStatement statement = con.prepareStatement("insert into TaiKhoan values(?,?,?,?)");
@@ -117,7 +117,7 @@ public class TaiKhoan_DAO {
 				Boolean trangThai = rs.getBoolean("trangThai");
 				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
 				n++;
-				System.out.println("đã thực hiện đổi mật khẩu");
+			
 			}
 		} catch (SQLException e) {
 			return n > 0;

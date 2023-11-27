@@ -33,6 +33,8 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
@@ -54,7 +56,7 @@ import com.toedter.calendar.JDayChooser;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.border.EtchedBorder;
 
-public class Modal_ThemNhanVien extends JFrame implements ActionListener {
+public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusListener {
 
 	private JPanel contentPane;
 
@@ -63,7 +65,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private JTextField txt_SoDienThoai;
 	private JTextField txt_DiaChi;
 	private JTextField txt_CCCD;
-	
+
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
@@ -71,7 +73,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
-	
+
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 
 	private LoaiNhanVien_DAO DAO_LNV;
@@ -96,6 +98,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	private AbstractButton rdbtn_Nam;
 
 	private AbstractButton rdbtn_Nu;
+
+	private JLabel lbl_Valuedate;
 
 	/**
 	 * Launch the application.
@@ -351,6 +355,13 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		btn_Them.setForeground(Color.WHITE);
 		btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
+		lbl_Valuedate = new JLabel("");
+		lbl_Valuedate.setForeground(new Color(255, 0, 0));
+		lbl_Valuedate.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Valuedate.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lbl_Valuedate.setBounds(10, 230, 350, 25);
+		pnl_ThongTin.add(lbl_Valuedate);
+
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
 		btn_ChonAnh.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource("/icon/upload.png")));
 		btn_ChonAnh.setBounds(26, 271, 179, 30);
@@ -375,8 +386,13 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 
 		btn_ChonAnh.setBackground(Color.decode(hexColor_Green));
 
+//----------------------------------------------		
 		btn_Them.addActionListener(this);
 		btn_BoQua.addActionListener(this);
+		txt_TenNhanVien.addFocusListener(this);
+		txt_SoDienThoai.addFocusListener(this);
+		txt_DiaChi.addFocusListener(this);
+		txt_CCCD.addFocusListener(this);
 
 	}
 
@@ -439,6 +455,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 
 	public void ThemNhanVien() {
 		if (ValueDate()) {
+			lbl_Valuedate.setText("");
 			String anhThe = pathImg;
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
@@ -494,6 +511,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 
 	public void CapNhatNhanVien() {
 		if (ValueDate()) {
+			lbl_Valuedate.setText("");
 			String anhThe = pathImg;
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
@@ -557,28 +575,35 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 	}
 
 	public boolean ValueDate() {
-		String tenNV = txt_TenNhanVien.getText().trim();
+
 		String chucVu = cbox__loaiNhanVien.getSelectedItem().toString().trim();
 		String chonChucVu = cbox__loaiNhanVien.getItemAt(0).toString().trim();
 		boolean gt_Nam = rdbtn_Nam.isSelected();
 		boolean gt_Nu = rdbtn_Nu.isSelected();
 		String trangThai = comboBox_TrangThai.getSelectedItem().toString().trim();
 		String chonTrangThai = comboBox_TrangThai.getItemAt(0).toString().trim();
-		String soDienThoai = txt_SoDienThoai.getText().trim();
+
 		String diaChi = txt_DiaChi.getText().trim();
 		String cccd = txt_CCCD.getText().trim();
 
-		if (txt_TenNhanVien.equals("")) {
-			txt_TenNhanVien.requestFocus();
-			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
+		String tenNV = txt_TenNhanVien.getText().trim();
+		if (tenNV.equals("")) {
+			JOptionPane.showMessageDialog(this, "Tên nhân viên không được rỗng");
 			return false;
-		} else if (!(tenNV.length() > 0
-				&& tenNV.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
-						+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
-						+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
-			System.out.println(tenNV);
-			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
-			txt_TenNhanVien.requestFocus();
+		} else if (!(tenNV.length() > 0 && tenNV.matches(
+				"^[AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+ [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+(?: [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]*)*"))) {
+			JOptionPane.showMessageDialog(this, "Tên nhân viên không hợp lệ");
+			return false;
+		}
+
+		String soDienThoai = txt_SoDienThoai.getText().trim();
+		if (soDienThoai.equals("")) {
+			txt_SoDienThoai.requestFocus();
+			JOptionPane.showMessageDialog(this, "Số điện thoại không được rỗng");
+			return false;
+		} else if (!(soDienThoai.length() > 0 && soDienThoai.matches("^(\\+84|0)(3|9|5|7|8)\\d{8}$"))) {
+			JOptionPane.showMessageDialog(this, "Số điện thoại không hợp lệ");
+			txt_SoDienThoai.requestFocus();
 			return false;
 		}
 
@@ -588,59 +613,62 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 			cal.add(Calendar.DAY_OF_MONTH, -18);
 			java.util.Date chkNgaySinh = new java.util.Date(cal.getTimeInMillis());
 			if (!(ngaySinh.before(chkNgaySinh))) {
-				JOptionPane.showMessageDialog(null, "Nhân viên này chưa đủ 18 tuổi!");
+				JOptionPane.showMessageDialog(this, "Nhân viên này chưa đủ 18 tuổi!");
 				return false;
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
-			JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
+			JOptionPane.showMessageDialog(this, "Ngày sinh không được để trống!");
+			return false;
 		}
 
 		if (!gt_Nam && !gt_Nu) {
-			JOptionPane.showMessageDialog(null, "Giới tính chưa được chọn!");
+			JOptionPane.showMessageDialog(this, "Giới tính chưa được chọn!");
 			return false;
 		}
 
 		if (chucVu.equals(chonChucVu)) {
-			JOptionPane.showMessageDialog(null, "Chức vụ chưa được chọn!");
+			JOptionPane.showMessageDialog(this, "Chức vụ chưa được chọn!");
 			return false;
 		}
 
 		if (trangThai.equals(chonTrangThai)) {
-			JOptionPane.showMessageDialog(null, "Trạng thái chưa được chọn!");
-			return false;
-		}
-
-		if (soDienThoai.equals("")) {
-			txt_SoDienThoai.requestFocus();
-			JOptionPane.showMessageDialog(null, "Số điện thoại không được rỗng");
-			return false;
-		} else if (!(soDienThoai.length() > 0 && soDienThoai.matches("^(\\+84|0)(3|9|5|7|8)\\d{8}$"))) {
-			JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
-			txt_SoDienThoai.requestFocus();
+			JOptionPane.showMessageDialog(this, "Trạng thái chưa được chọn!");
 			return false;
 		}
 
 		if (diaChi.equals("")) {
 			txt_DiaChi.requestFocus();
-			JOptionPane.showMessageDialog(null, "Địa chỉ không được rỗng");
+			JOptionPane.showMessageDialog(this, "Địa chỉ không được rỗng");
 			return false;
 		} else if (!(diaChi.length() > 0 && diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
-			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+			JOptionPane.showMessageDialog(this, "Địa chỉ không hợp lệ");
 			txt_DiaChi.requestFocus();
 			return false;
 		}
 
 		if (cccd.equals("")) {
 			txt_CCCD.requestFocus();
-			JOptionPane.showMessageDialog(null, "Căn cước công dân không được rỗng");
+			JOptionPane.showMessageDialog(this, "Căn cước công dân không được rỗng");
 			return false;
 		} else if (!(cccd.length() > 0 && cccd.matches("^(([0-9]{9})|([0-9]{12}))$"))) {
-			JOptionPane.showMessageDialog(null, "CCCD / CMND không hợp lệ");
+			JOptionPane.showMessageDialog(this, "CCCD / CMND không hợp lệ");
 			txt_CCCD.requestFocus();
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		// TODO Auto-generated method stub
+		Object o = e.getSource();
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		// TODO Auto-generated method stub
+		Object o = e.getSource();
 	}
 
 	public String chooseFileEvent(String typeFile) {
@@ -676,4 +704,5 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener {
 		}
 		return path;
 	}
+
 }

@@ -265,7 +265,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+		file.setCurrentDirectory(new File(System.getProperty("src/img")));
 
 		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
 				"xls");
@@ -304,11 +304,11 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		txt_SoLuongKhachToiDa.setText(soLuong);
 		txtA_Mota.setText(moTa);
 //		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));	
-		if(!hinhAnh.equals("")) {
-			docAnh(hinhAnh);
-		} else {
-			docAnh("D:\\Hk1-3\\PTUD\\sourecode\\KaraokeSingUrSong\\src\\img\\noImage.jpg");
-		}
+//		if(!hinhAnh.equals("")) {
+//			docAnh(hinhAnh);
+//		} else {
+//			docAnh("D:\\Hk1-3\\PTUD\\sourecode\\KaraokeSingUrSong\\src\\img\\noImage.jpg");
+//		}
 		
 	}
 

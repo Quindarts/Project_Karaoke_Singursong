@@ -7,9 +7,12 @@ import java.util.ArrayList;
  */
 public class ChiTietDichVu {
 
+
+
 	private HoaDon hoaDon;
 	private DichVu dichVu;
 	private int soLuong;
+	private Phong phong;
 
 	public ChiTietDichVu() {
 		super();
@@ -23,12 +26,27 @@ public class ChiTietDichVu {
 		this.soLuong = soLuong;
 	}
 
+	public ChiTietDichVu(HoaDon hoaDon, DichVu dichVu, int soLuong, Phong phong) {
+		super();
+		this.hoaDon = hoaDon;
+		this.dichVu = dichVu;
+		this.soLuong = soLuong;
+		this.phong = phong;
+	}
+
 	public ChiTietDichVu(HoaDon hoaDon, DichVu dichVu) {
 		super();
 		this.hoaDon = hoaDon;
 		this.dichVu = dichVu;
 	}
 
+	public Phong getPhong() {
+		return phong;
+	}
+
+	public void setPhong(Phong phong) {
+		this.phong = phong;
+	}
 	public HoaDon getHoaDon() {
 		return hoaDon;
 	}

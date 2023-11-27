@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 
 import ConnectDB.ConnectDB;
 import Entity.KhachHang;
@@ -248,8 +249,11 @@ public class HoaDon_DAO {
 		PreparedStatement statement = null;
 		try {
 			String sql = " select * from HoaDon \r\n"
+					+ "INNER JOIN ChiTietHoaDon ON ChiTietHoaDon.maHoaDon = HoaDon.maHoaDon\r\n"
+					+ "INNER JOIN PHONG ON Phong.maPhong = ChiTietHoaDon.maPhong\r\n"
 					+ "WHERE\r\n"
 					+ " trangThai = N'Đang chờ thanh toán'\r\n"
+					+ "AND Phong.maPhong = '"+ maPhong+"'\r\n"
 					+ "AND CAST(ngayLap AS DATE) = CAST(GETDATE() AS DATE)\r\n"
 					+ "AND ngayLap <= CONVERT(datetime, DATEADD(HOUR, 0, GETDATE()), 100)";
 			statement = con.prepareStatement(sql);
@@ -266,7 +270,6 @@ public class HoaDon_DAO {
 				String trangThai = rs.getString("trangThai");
 				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
 						thoiGianKetThuc);
-				System.out.println(hoaDon);
 			}
 
 		} catch (Exception e) {
@@ -429,4 +432,119 @@ public class HoaDon_DAO {
 		}
 		return n > 0;
 	}
+	public ArrayList<HoaDon> layHoaDon_TheoKhoangNgay(Date tuNgay, Date denNgay) {
+		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
+		HoaDon hoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT *\r\n"
+					+ "FROM HoaDon\r\n"
+					+ "WHERE  CONVERT(DATE, ngayLap) >= ? AND  CONVERT(DATE, ngayLap) < ?;";
+			statement = con.prepareStatement(sql);
+			statement.setDate(1, (java.sql.Date) tuNgay);
+			statement.setDate(2, (java.sql.Date) denNgay);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maHoaDon = rs.getString("maHoaDon");
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
+				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
+				String trangThai = rs.getString("trangThai");
+				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
+						thoiGianKetThuc);
+				listHD.add(hoaDon);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return listHD;
+	}
+	public ArrayList<HoaDon> layHoaDon_TheoPhieuDatPhong(String pdp) {
+		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
+		HoaDon hoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT HoaDon.* FROM HoaDon "
+					+ "JOIN PhieuDatPhong ON HoaDon.maPhieuDat = PhieuDatPhong.maPhieuDat "
+					+ "WHERE PhieuDatPhong.maPhieuDat LIKE ? ";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, "%" + pdp + "%");
+		
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maHoaDon = rs.getString("maHoaDon");
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
+				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
+				String trangThai = rs.getString("trangThai");
+				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
+						thoiGianKetThuc);
+				listHD.add(hoaDon);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return listHD;
+	}
+	public ArrayList<HoaDon> layHoaDon_TheoTrangThai(String tt) {
+		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
+		HoaDon hoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM HoaDon WHERE trangThai = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, tt);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maHoaDon = rs.getString("maHoaDon");
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
+				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
+				String trangThai = rs.getString("trangThai");
+				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
+						thoiGianKetThuc);
+				listHD.add(hoaDon);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return listHD;
+	}
+
 }

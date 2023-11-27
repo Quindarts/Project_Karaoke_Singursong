@@ -3,6 +3,8 @@ package GUI;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ResourceBundle;
 
 import javax.print.DocFlavor.URL;
@@ -49,13 +51,11 @@ public class CardDichVu extends JPanel {
 		img_show_panel.setBounds(0, 0, 150, 150);
 		
 //		---mới 
-		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource(dichVu.getThongTinDichVu().getHinhAnh()));
+		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/"+dichVu.getThongTinDichVu().getHinhAnh()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-		ImageIcon resizedIcon = new ImageIcon(resizedImage);
-		
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
 		img_show_panel.setIcon(resizedIcon);
-		
 		main_card.add(img_show_panel);
 
 		JLabel lbl_giaTien = new JLabel(Double.toString(dichVu.getDonGia()));
@@ -76,8 +76,29 @@ public class CardDichVu extends JPanel {
 		btn_Xem.setBackground(new Color(50, 205, 50));
 		btn_Xem.setBounds(87, 190, 80, 21);
 		add(btn_Xem);
+		
+		btn_Xem.addActionListener(new ActionListener() {	
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				DAO_TTDV = new ThongTinDichVu_DAO();
+				ttdv = DAO_TTDV.timThongTinDichVu_TheoMaThongTinDichVu(dichVu.getThongTinDichVu().getMaThongTinDichVu());
+				String tenDV = dichVu.getTenDichVu();
+				String donViTinh = dichVu.getDonViTinh();
+				double donGia = dichVu.getDonGia();
+				int soLuongTon = ttdv.getSoLuong() - ttdv.getSoLuongDaSuDung();
+				String trangThai = dichVu.getTrangThai() ? "Còn hàng" : "Hết hàng";
+				String mieuTa = ttdv.getMoTa();
+				Modal_XemThongDichVu modal_XemTTDV = new Modal_XemThongDichVu();
+				modal_XemTTDV.SetModal_XemThongTinDichVu( tenDV, donViTinh, donGia, soLuongTon, trangThai, mieuTa);
+				modal_XemTTDV.setVisible(true);
+			
+			}
+		});
 	}
 
+	
+	
 	public ImageIcon ResizeImage(String ImagePath) {
 		ImageIcon MyImage = new ImageIcon(ImagePath);
 		Image img = MyImage.getImage();

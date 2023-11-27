@@ -8,6 +8,8 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import Entity.Phong;
+
 import java.awt.Color;
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -47,7 +49,7 @@ public class Modal_XemThongTinPhong extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Modal_XemThongTinPhong() {
+	public Modal_XemThongTinPhong(Phong phong) {
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));

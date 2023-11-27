@@ -169,7 +169,6 @@ public class Phong_DAO {
 		}
 
 		try {
-			System.out.println(sqlTongHop);
 			PreparedStatement statement = con.prepareStatement(sqlTongHop);
 
 			ResultSet rs = statement.executeQuery();
@@ -452,8 +451,7 @@ public class Phong_DAO {
 	public List<Phong> layDanhSachPhongTrongTheoNgayVaLoaiPhong(Timestamp startTime, Timestamp endTime, String lp) {
 		List<Phong> danhSachPhong = new ArrayList<Phong>();
 		PreparedStatement statement = null;
-		System.out.println(startTime);
-		System.out.println(endTime);
+	
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
@@ -633,5 +631,149 @@ public class Phong_DAO {
 		}
 		return dsPhong;
 	}
+	public ArrayList<Phong> timDSPhongWhenSelectCBO(String floor, String maTrangThai, String maTinhTrang) {		
+		Phong phong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		ArrayList<Phong> dsPhong = new ArrayList<>();
+		String sql = "SELECT * FROM Phong WHERE 1 = 1";
+		if (floor != null && !floor.isEmpty() && !floor.equals("Tất cả")) {
+		    sql += " AND viTriPhong = ?";
+		}
+
+		if (maTrangThai != null && !maTrangThai.isEmpty() && !maTrangThai.equals("Tất cả")) {
+		    sql += " AND maTrangThai = ?";
+		}
+
+		if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
+		    sql += " AND tinhTrangPhong = ?";
+		}
+		try {
+			statement = con.prepareStatement(sql);
+			int parameterIndex = 1;
+			
+			if (floor != null && !floor.isEmpty() && !floor.equals("Tất cả")) {
+		        statement.setString(parameterIndex++, floor);
+		        
+		    }
+			
+			if (maTrangThai != null && !maTrangThai.isEmpty() && !maTrangThai.equals("Tất cả")) {
+				
+		        statement.setString(parameterIndex++, maTrangThai);
+		        
+		    }
+
+		    if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
+		    	
+		        statement.setString(parameterIndex++, maTinhTrang);
+		    }
+//			statement.setString(1, floor);
+//			statement.setString(2, maTrangThai);
+//			statement.setString(3, maTinhTrang);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String tenPhong = rs.getString("tenPhong");
+				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
+				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
+				String viTriPhong = rs.getString("viTriPhong");
+				String ghiChu = rs.getString("ghiChu");
+				String tinhTrangPhong = rs.getString("tinhTrangPhong");
+				phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
+						tinhTrangPhong);
+				dsPhong.add(phong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		
+		return dsPhong;
+	}
+	public ArrayList<Phong> timdsPhongtheoThoigian(String from, String to) {
+		Phong phong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		ArrayList<Phong> dsPhong = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM Phong WHERE ngayTaoPhong >= ? AND ngayTaoPhong <= ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, from);
+			statement.setString(2, to);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String tenPhong = rs.getString("tenPhong");
+				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
+				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
+				String viTriPhong = rs.getString("viTriPhong");
+				String ghiChu = rs.getString("ghiChu");
+				String tinhTrangPhong = rs.getString("tinhTrangPhong");
+				phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
+						tinhTrangPhong);
+				dsPhong.add(phong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return dsPhong;
+	}
+	public ArrayList<Phong> timDSPhongTheoMaPhong(String maP) {
+		Phong phong = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		ArrayList<Phong> dsPhong = new ArrayList<>();
+		try {
+			String sql = "SELECT * FROM Phong WHERE maPhong LIKE ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, "%" + maP + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maPhong = rs.getString("maPhong");
+				String tenPhong = rs.getString("tenPhong");
+				LoaiPhong loaiPhong = new LoaiPhong(rs.getString("maLoaiPhong"));
+				TrangThaiPhong trangThaiPhong = new TrangThaiPhong(rs.getString("maTrangThai"));
+				java.sql.Date ngayTaoPhong = rs.getDate("ngayTaoPhong");
+				String viTriPhong = rs.getString("viTriPhong");
+				String ghiChu = rs.getString("ghiChu");
+				String tinhTrangPhong = rs.getString("tinhTrangPhong");
+				phong = new Phong(maPhong, tenPhong, loaiPhong, trangThaiPhong, ngayTaoPhong, viTriPhong, ghiChu,
+						tinhTrangPhong);
+				dsPhong.add(phong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return dsPhong;
+	}
+	
 
 }

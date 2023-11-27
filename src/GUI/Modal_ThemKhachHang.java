@@ -75,7 +75,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private Calendar cal = Calendar.getInstance();
 
 	public Modal_ThemKhachHang() {
-		
+
 		DAO_KH = new KhachHang_DAO();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 950, 336);
@@ -204,10 +204,16 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		txtA__GhiChu.setBounds(1, 1, 255, 63);
 		pnl_GhiChu.add(txtA__GhiChu);
 
+		txt__DiaChi = new JTextField();
+		txt__DiaChi.setBounds(604, 110, 255, 25);
+		panel_1.add(txt__DiaChi);
+
 //---------------------------
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
+		
+		
 
 	}
 
@@ -242,8 +248,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 				themKhachHang();
 			} else {
 				capNhatKhachHang();
-//				JPanel_QuanLyKhachHang Panel = new JPanel_QuanLyKhachHang();
-//				Panel.setJPanel_QuanLyKhachHang(true);
 			}
 		}
 
@@ -259,17 +263,16 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			String diaChi = txt__DiaChi.getText();
 			String sdt = txt__SDT.getText();
 			java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
-			Date dt = (Date) cal.getTime();
+//			Date dt = (Date) cal.getTime();
 			String ghiChu = txtA__GhiChu.getText();
 			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
 			String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
 			txt__MaKH.setText(maKhachHang);
 			int diemThuong = 0;
 			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
-			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, dt, diaChi, sdt, diemThuong,
+			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
 					ghiChu);
 			if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
-				System.out.println(maKhachHang);
 				try {
 					DAO_KH.taoKhachHang(kh);
 					JOptionPane.showMessageDialog(null, "Thêm khách hàng " + tenKhachHang + " thành công!");
@@ -319,19 +322,18 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		String diaChi = txt__DiaChi.getText().trim();
 		boolean gt_Nam = rdbt__nam.isSelected();
 		boolean gt_Nu = rdbt__nu.isSelected();
-		String ghiChu = txtA__GhiChu.getText().trim();
 
-//		if (txt__TenKH.equals("")) {
-//			txt__TenKH.requestFocus();
-//			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
-//			return false;
-//		} else if (!(tenKH.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
-//				+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
-//				+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
-//			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
-//			txt__TenKH.requestFocus();
-//			return false;
-//		}
+		if (txt__TenKH.equals("")) {
+			txt__TenKH.requestFocus();
+			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
+			return false;
+		} else if (!(tenKH.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
+				+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
+				+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
+			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
+			txt__TenKH.requestFocus();
+			return false;
+		}
 
 		try {
 			Date ngaySinh = new Date(date_NgaySinh.getDate().getTime());
@@ -352,25 +354,21 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			return false;
 		}
 
-//		if (soDienThoai.equals("")) {
-//			txt__SDT.requestFocus();
-//			JOptionPane.showMessageDialog(null, "Số điện thoại không được rỗng");
-//			return false;
-//		} else if (!(soDienThoai.matches("^(\\+84|0)(3|9|5|7|8)\\d{8}$"))) {
-//			JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
-//			txt__SDT.requestFocus();
-//			return false;
-//		}
+		if (soDienThoai.equals("")) {
+			txt__SDT.requestFocus();
+			JOptionPane.showMessageDialog(null, "Số điện thoại không được rỗng");
+			return false;
+		} else if (!(soDienThoai.matches("^(\\+84|0)(3|9|5|7|8)\\d{8}$"))) {
+			JOptionPane.showMessageDialog(null, "Số điện thoại không hợp lệ");
+			txt__SDT.requestFocus();
+			return false;
+		}
 
-//		if (diaChi.equals("")) {
-//			txt__DiaChi.requestFocus();
-//			JOptionPane.showMessageDialog(null, "Địa chỉ không được rỗng");
-//			return false;
-//		} else if (!(diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
-//			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
-//			txt__DiaChi.requestFocus();
-//			return false;
-//		}
+		if (!(diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
+			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+			txt__DiaChi.requestFocus();
+			return false;
+		}
 		return true;
 	}
 }

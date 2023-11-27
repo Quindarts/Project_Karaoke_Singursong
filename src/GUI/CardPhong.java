@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
@@ -46,6 +47,7 @@ import Entity.Phong;
 import Entity.TrangThaiPhong;
 import OtherFunction.HelpRamDomMa;
 
+import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
 import java.awt.Font;
 
@@ -55,7 +57,7 @@ import java.awt.Font;
  * 
  */
 public class CardPhong extends JPanel {
-	private static ChiTietHoaDon_DAO DAO_CTHD ;
+	private static ChiTietHoaDon_DAO DAO_CTHD;
 	private Phong phong;
 	private int width = 150;
 	private int height = 150;
@@ -118,16 +120,29 @@ public class CardPhong extends JPanel {
 
 		JLabel nameLabel = new JLabel(phong.getMaPhong());
 		nameLabel.setBackground(new Color(5, 74, 145));
-		nameLabel.setBounds(0, 0, 150, 150);
+		nameLabel.setBounds(54, 59, 96, 43);
 		nameLabel.setForeground(Color.decode(hexColor_Blue1));
-		nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(nameLabel);
 
+		ImageIcon imgVIP = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/vip.png"));
+
+		Image scaled_imgVIP = imgVIP.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+		imgVIP = new ImageIcon(scaled_imgVIP);
+
+		JLabel lblNewLabel = new JLabel();
+		lblNewLabel.setIcon(imgVIP);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(120, 0, 30, 30);
+		if (phong.getLoaiPhong().getMaLoaiPhong().trim().equals("ORD1")
+				|| phong.getLoaiPhong().getMaLoaiPhong().trim().equals("ORD2")) {
+			add(lblNewLabel);
+		}
 		cbox_DatPhong = new JCheckBox("Đặt phòng này");
 		cbox_DatPhong.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		cbox_DatPhong.setForeground(new Color(51, 153, 255));
-		cbox_DatPhong.setBounds(0, 0, 150, 21);
+		cbox_DatPhong.setBounds(0, 6, 114, 21);
 
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 			add(cbox_DatPhong);
@@ -231,11 +246,11 @@ public class CardPhong extends JPanel {
 		DAO_TTP = new TrangThaiPhong_DAO();
 		DAO_HD = new HoaDon_DAO();
 		DAO_CTHD = new ChiTietHoaDon_DAO();
-		
+
 		nv = new NhanVien();
 		phieu = new PhieuDatPhong();
 		hd = new HoaDon();
-		
+
 		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
 		dsHoaDon = DAO_HD.layTatCaHoaDon();
 		dsPhong = DAO_P.layTatCaPhong();
@@ -315,7 +330,7 @@ public class CardPhong extends JPanel {
 				TrangThaiPhong trThaiP = null;
 				trThaiP = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(phong.getTrangThaiPhong().getMaTrangThai());
 				String trangThaiPhong = trThaiP.getTenTrangThai();
-				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong();
+				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong(phong);
 				thongTinPhong.setVisible(true);
 				thongTinPhong.SetModal_XemThongTinPhong(anhPhong, tenPhong, tenLoaiPhong, viTriPhong, giaPhong,
 						trangThaiPhong, tinhTrang);
@@ -343,13 +358,13 @@ public class CardPhong extends JPanel {
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
 
-try {
-				
+			try {
+
 				ChiTietHoaDon cthd = new ChiTietHoaDon();
-				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());	
+				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());
 				System.out.println("Chi tiet hoa don cua phong: " + cthd);
-				if (cthd != null)				
-					dsChiTietHoaDon.forEach(value ->{
+				if (cthd != null)
+					dsChiTietHoaDon.forEach(value -> {
 //						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
 						hd = value.getHoaDon();
 						hd = DAO_HD.layHoaDon_TheoMaHoaDon(value.getHoaDon().getMaHoaDon());
@@ -358,13 +373,12 @@ try {
 						tenNV = DAO_NV.timNhanVien_TheoMaNhanVien(nv.getMaNhanVien()).getHoTen();
 						kh = hd.getKhachHang();
 						tenKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getHoTen();
-						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();				
+						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();
 					});
-				
+
 				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong(phong, hd, cthd);
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(),"", tenNV,
-						sdtKH, tenKH);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), "", tenNV, sdtKH, tenKH);
 
 			} catch (Exception e2) {
 				e2.printStackTrace();

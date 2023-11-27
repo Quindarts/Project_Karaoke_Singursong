@@ -66,6 +66,12 @@ public class Modal_CapNhatDichVu extends JFrame {
 	 */
 
 	public Modal_CapNhatDichVu(DichVu dv) {
+		if (dv.getThongTinDichVu().getHinhAnh().trim().equals("")) {
+			pathImg = "";
+		} else {
+			pathImg = "/img/" + dv.getThongTinDichVu().getHinhAnh().trim();
+		}
+		
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
@@ -213,6 +219,7 @@ public class Modal_CapNhatDichVu extends JFrame {
 
 		cbox_trangThai.addItem("Còn hàng");
 		cbox_trangThai.addItem("Hết hàng");
+		cbox_trangThai.setSelectedItem(dv.getTrangThai());
 
 		cbox_trangThai.setBounds(126, 3, 224, 25);
 		pnl_GiaTien_1.add(cbox_trangThai);
@@ -287,7 +294,7 @@ public class Modal_CapNhatDichVu extends JFrame {
 		txt_maDichVu.setText(dv.getMaDichVu());
 
 		ImageIcon originalIcon = new ImageIcon(
-				Modal_CapNhatDichVu.class.getResource(dv.getThongTinDichVu().getHinhAnh()));
+				Modal_CapNhatDichVu.class.getResource("/img/"+dv.getThongTinDichVu().getHinhAnh()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(159, 176, Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);
@@ -350,29 +357,25 @@ public class Modal_CapNhatDichVu extends JFrame {
 				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
 
 				File file = new File(pathImg);
-				String fileName = file.getName();
-				String relativePath = "/img" + File.separator + fileName;
-				relativePath = relativePath.replace(File.separator, "/");
-				String hinhA = relativePath;
+				String fileName = file.getName().toString();
 
 				String moTa = txtA_moTa.getText();
 				ThongTinDichVu ttdvNew = new ThongTinDichVu(dv.getThongTinDichVu().getMaThongTinDichVu(), soLuong,
-						soLuongDaSuDung, ngayNhap, ngayHetHan, moTa, hinhA);
+						soLuongDaSuDung, ngayNhap, ngayHetHan, moTa, fileName);
 				DichVu dvnew = new DichVu(maDichVu, tenDichVu, dv.getDonViTinh(), giaTien, trangThai, ttdvNew);
 
 				try {
 
 					DichVu_DAO DAO_DV = new DichVu_DAO();
 					ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
-					int resultCN = DAO_DV.capNhatDichVu(dvnew) ;
+					int resultCN = DAO_DV.capNhatDichVu(dvnew);
 					int resultCNTTDV = DAO_TTDV.capNhatThongTinDichVu(ttdvNew);
 					if (resultCN > 0 || resultCNTTDV > 0) {
 						JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thành công.");
 						setVisible(false);
-					} else if(resultCN == 0 && resultCNTTDV ==0) {
+					} else if (resultCN == 0 && resultCNTTDV == 0) {
 						JOptionPane.showMessageDialog(null, "Không có cập nhật mới.");
-					}
-					else {
+					} else {
 						JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thất bại, vui lòng thử lại.");
 					}
 
@@ -388,7 +391,7 @@ public class Modal_CapNhatDichVu extends JFrame {
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+		file.setCurrentDirectory(new File("src/img"));
 
 		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
 				"xls");

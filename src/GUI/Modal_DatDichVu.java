@@ -476,15 +476,18 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 		}
 		if (o.equals(btn_xacNhan)) {
 
-			boolean checkresult = DAO_CTDV.xoaCTDichVu_TheoMaHoaDon(hoaDon.getMaHoaDon());
+			boolean checkresult = DAO_CTDV.xoaCTDichVu_TheoMaHoaDon_TheoMaPhong(hoaDon.getMaHoaDon(),
+					phong.getMaPhong());
+			System.out.println(hoaDon.getMaHoaDon() + phong.getMaPhong());
+			
 			for (int i = 0; i < table_dvDatPhong.getRowCount(); i++) {
 
 				String maDichVu = table_dvDatPhong.getValueAt(i, 0).toString();
 				ChiTietDichVu ctdv = new ChiTietDichVu(hoaDon, new DichVu(maDichVu),
-						Integer.parseInt(table_dvDatPhong.getValueAt(i, 2).toString()));
+						Integer.parseInt(table_dvDatPhong.getValueAt(i, 2).toString()), phong);
 				try {
+					System.out.println(ctdv.toString());
 					DAO_CTDV.taoCTDichVu(ctdv);
-
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -599,10 +602,12 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 			DAO_CTDV = new ChiTietDichVu_DAO();
 
 			hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
-			System.out.println(hoaDon.toString());
-			if (hoaDon != null) {
-				dsCTDV_HD = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hoaDon.getMaHoaDon());
 
+			if (hoaDon != null) {
+				dsCTDV_HD = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaPhong_TheoMaHD(phong.getMaPhong(),
+						hoaDon.getMaHoaDon());
+
+				System.out.println(dsCTDV_HD);
 				if (dsCTDV_HD != null) {
 					dsCTDV_HD.forEach(ctdv -> {
 						// Lưu chi tiết dịch vụ

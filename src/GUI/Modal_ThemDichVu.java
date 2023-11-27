@@ -60,7 +60,7 @@ public class Modal_ThemDichVu extends JFrame {
 	private JTextField txt_GiaTien;
 	private JTextArea txtA_moTa;
 	private JLabel img_show_panel;
-	private String pathImg = "";
+	private String pathImg = "src/img";
 	private HelpValidate valiDate;
 	private JTextField txt_soLuongDaSuDung;
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
@@ -346,7 +346,7 @@ public class Modal_ThemDichVu extends JFrame {
 
 				String tenDichVu = txt_tenDichVu.getText();
 				int soLuong = Integer.parseInt(txt_SoLuong.getText());
-				String donViTinh = "VND";
+				String donViTinh = "";
 
 				boolean trangThai = cbox_trangThai.getSelectedItem().toString().trim().equals("Còn hàng");
 				double giaTien = Double.parseDouble(txt_GiaTien.getText());
@@ -364,15 +364,14 @@ public class Modal_ThemDichVu extends JFrame {
 				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
 
 				File file = new File(pathImg);
-				String fileName = file.getName();
-				String relativePath = "/img" + File.separator + fileName;
-				relativePath = relativePath.replace(File.separator, "/");
-				String hinhA = relativePath;
+				String fileName = file.getName().toString();;
+				
+			
 
 				String moTa = txtA_moTa.getText();
 
 				ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, soLuong, soLuongDaSuDung, ngayNhap,
-						ngayHetHan, moTa, hinhA);
+						ngayHetHan, moTa, fileName);
 				DichVu dv = new DichVu(maDichVu, tenDichVu, donViTinh, giaTien, trangThai, ttdv);
 
 				try {
@@ -413,7 +412,7 @@ public class Modal_ThemDichVu extends JFrame {
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+		file.setCurrentDirectory(new File("src/img"));
 
 		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
 				"xls");
