@@ -17,7 +17,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,9 +29,11 @@ import javax.swing.table.DefaultTableModel;
 import DAO.KhachHang_DAO;
 import DAO.LoaiPhong_DAO;
 import DAO.Phong_DAO;
+import DAO.TrangThaiPhong_DAO;
 import Entity.KhachHang;
 import Entity.LoaiPhong;
 import Entity.Phong;
+import Entity.TrangThaiPhong;
 
 import javax.swing.JButton;
 import javax.swing.ImageIcon;
@@ -37,6 +42,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.CompoundBorder;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -45,8 +54,9 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.JComboBox;
 
-public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
+public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, KeyListener, ItemListener {
 
 	/**
 	 * Color
@@ -61,7 +71,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 	private String hexColor_Green = "#4BAC4D";
 
 	private JTable table_LoaiPhong;
-	private JTextField textField;
+	private JTextField txt_find;
 
 	private JButton btnThem;
 
@@ -74,6 +84,8 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 	private JButton btnLamMoi;
 
 	private String[] rowData;
+	private JComboBox<String>  cboNumberPeople;
+	private JComboBox<String> cboPrice;
 
 
 	/**
@@ -215,6 +227,42 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_1.setBounds(1031, 10, 255, 615);
 		panel_Table.add(panel_1);
+		panel_1.setLayout(null);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setBackground(new Color(255, 255, 255));
+		panel_2.setBorder(new TitledBorder(null, "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 255)));
+		panel_2.setForeground(new Color(0, 0, 0));
+		panel_2.setBounds(10, 35, 235, 163);
+		panel_1.add(panel_2);
+		panel_2.setLayout(null);
+		
+		cboNumberPeople = new JComboBox();
+		cboNumberPeople.setBounds(139, 36, 86, 36);
+		panel_2.add(cboNumberPeople);
+		cboNumberPeople.addItem("Tất cả");
+		cboNumberPeople.addItem("5");
+		cboNumberPeople.addItem("12");
+		
+		JLabel lblNewLabel = new JLabel("Số lượng khách: ");
+		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNewLabel.setBounds(10, 36, 119, 36);
+		panel_2.add(lblNewLabel);
+		
+		JLabel lblMcGiTin = new JLabel("Mức giá tiền: ");
+		lblMcGiTin.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblMcGiTin.setBounds(10, 92, 119, 36);
+		panel_2.add(lblMcGiTin);
+		
+		cboPrice = new JComboBox();
+		cboPrice.setBounds(116, 94, 109, 36);
+		panel_2.add(cboPrice);
+		cboPrice.addItem("Tất cả");
+		cboPrice.addItem("20.000 VND");
+		cboPrice.addItem("40.000 VND");
+		cboPrice.addItem("60.000 VND");
+		cboPrice.addItem("80.000 VND");
+		cboPrice.addItem("100.000 VND");
 
 		btnThem = new JButton("Thêm");
 
@@ -268,10 +316,10 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
 
-		textField = new JTextField();
-		textField.setBounds(545, 0, 223, 34);
-		panel.add(textField);
-		textField.setColumns(10);
+		txt_find = new JTextField();
+		txt_find.setBounds(545, 0, 223, 34);
+		panel.add(txt_find);
+		txt_find.setColumns(10);
 
 		JButton btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setBounds(415, 0, 123, 35);
@@ -284,6 +332,9 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 		// Add event:
 		btnThem.addActionListener((ActionListener) this);
 		btnLamMoi.addActionListener(this);
+		txt_find.addKeyListener(this);
+		cboNumberPeople.addItemListener(this);
+		cboPrice.addItemListener(this);
 	}
 
 	@Override
@@ -322,5 +373,108 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener {
 			// TODO: handle exception
 		}
 	}
+	
+	public void TimTheoMaLP() {
+		model.getDataVector().removeAllElements();
+		String chuoiTimKiem = txt_find.getText().trim();
+		LoaiPhong ma_loai_phong= DAO_LP.layLoaiPhong_TheoMaLoaiPhong(chuoiTimKiem);
+		
+		dsLP = DAO_LP.timDSPhongTheoMaLPhong(chuoiTimKiem);
+		
+		try {
+			dsLP.add(ma_loai_phong);
+			if (dsLP != null) {
+							
+				dsLP = DAO_LP.timDSPhongTheoMaLPhong(chuoiTimKiem);
+				if (dsLP != null) {
+					dsLP.forEach(lp -> {
 
+						Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
+								lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
+
+						model.addRow(rowData);
+					});
+				}
+				
+				
+			}
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "Không có phòng nào có mã: " + chuoiTimKiem);
+		}
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		// TODO Auto-generated method stub
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			TimTheoMaLP();
+        }
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getStateChange() == ItemEvent.SELECTED) {
+			String selectNumber = (String) cboNumberPeople.getSelectedItem();
+			String selectPrice = (String) cboPrice.getSelectedItem();
+			String priceConvert;
+			
+			model = (DefaultTableModel) table_LoaiPhong.getModel();
+	    	model.getDataVector().removeAllElements();
+	    	switch (selectPrice) {
+	    	case "20.000 VND" :
+	    		priceConvert = "20000.00";
+	    		break;
+	    	case "40.000 VND" :
+	    		priceConvert = "40000.00";
+	    		break;
+	    	case "60.000 VND" :
+	    		priceConvert = "60000.00";
+	    		break;
+	    	case "80.000 VND" :
+	    		priceConvert = "80000.00";
+	    		break;
+	    	case "100.000 VND" :
+	    		priceConvert = "100000.00";
+	    		break;
+			default:
+				priceConvert = "Tất cả";
+			}
+	    	
+	    	
+	    	dsLP = DAO_LP.timDStheoSoLuongVaGiaTien(selectNumber,priceConvert);    	
+	    	try {
+	    		if (dsLP != null) {
+	    			if(!dsLP.isEmpty()) {
+	    				dsLP.forEach(lp -> {
+
+							Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
+									lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
+
+							model.addRow(rowData);
+						});	
+	    			} else {
+	    				model = (DefaultTableModel) table_LoaiPhong.getModel();
+   				     	model.getDataVector().removeAllElements();
+   				     	model.fireTableDataChanged();
+	    			}
+				}
+				
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(null, "Không chuỗi này");
+			}
+		}
+	}	
 }

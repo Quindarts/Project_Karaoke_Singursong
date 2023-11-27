@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import ConnectDB.ConnectDB;
 import Entity.LoaiPhong;
+import Entity.Phong;
+import Entity.TrangThaiPhong;
 
 public class LoaiPhong_DAO {
 
@@ -46,9 +48,9 @@ public class LoaiPhong_DAO {
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
-			String sql = "SELECT * FROM LoaiPhong WHERE maLoaiPhong = ?";
+			String sql = "SELECT * FROM LoaiPhong WHERE maLoaiPhong LIKE ?";
 			statement = con.prepareStatement(sql);
-			statement.setString(1, maLoaiP);
+			statement.setString(1, "%" + maLoaiP + "%");
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maLoaiPhong = rs.getString("maLoaiPhong");
@@ -182,5 +184,88 @@ public class LoaiPhong_DAO {
 			}
 		}
 		return n > 0;
+	}
+	
+	public ArrayList<LoaiPhong> timDSPhongTheoMaLPhong(String maLP) {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		ArrayList<LoaiPhong> danhSachLoaiPhong = new ArrayList<LoaiPhong>();
+		try {
+			String sql = "SELECT * FROM LoaiPhong WHERE maLoaiPhong LIKE ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, "%" + maLP + "%");
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maLoaiPhong = rs.getString("maLoaiPhong");
+				String tenLoaiPhong = rs.getString("tenLoaiPhong");
+				int soLuongKhachToiDa = rs.getInt("soLuongKhachToiDa");
+				Double giaTien = rs.getDouble("giaTien");
+				String hinhAnh = rs.getString("hinhAnh");
+				String moTa = rs.getString("moTa");
+				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, soLuongKhachToiDa, giaTien, hinhAnh, moTa);
+				danhSachLoaiPhong.add(loaiPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachLoaiPhong;
+	}
+	
+	public ArrayList<LoaiPhong> timDStheoSoLuongVaGiaTien(String soLuong, String price) {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		
+		ArrayList<LoaiPhong> danhSachLoaiPhong = new ArrayList<LoaiPhong>();
+		String sql = "SELECT * FROM LoaiPhong WHERE 1 = 1 ";
+		if(!soLuong.equals("Tất cả")) {
+			sql += "AND soLuongKhachToiDa = ? ";
+		}
+		if(!price.equals("Tất cả")) {
+			sql += "AND giaTien <= ?"; 
+		}
+		
+		
+		try {
+			statement = con.prepareStatement(sql);
+			int parameterIndex = 1;
+			if(!soLuong.equals("Tất cả")) {
+				statement.setString(parameterIndex++, soLuong);
+			}
+			if(!price.equals("Tất cả")) {
+				statement.setString(parameterIndex++, price);
+			}
+			
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maLoaiPhong = rs.getString("maLoaiPhong");
+				String tenLoaiPhong = rs.getString("tenLoaiPhong");
+				int soLuongKhachToiDa = rs.getInt("soLuongKhachToiDa");
+				Double giaTien = rs.getDouble("giaTien");
+				String hinhAnh = rs.getString("hinhAnh");
+				String moTa = rs.getString("moTa");
+				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPhong, soLuongKhachToiDa, giaTien, hinhAnh, moTa);
+				danhSachLoaiPhong.add(loaiPhong);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachLoaiPhong;
 	}
 }
