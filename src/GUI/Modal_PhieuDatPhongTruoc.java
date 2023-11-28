@@ -577,7 +577,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 					});
 				});
 			}
-
+			
 			// Lọc phòng trống
 			if (dsP != null) {
 				dsP.forEach(p -> {
@@ -591,6 +591,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 							lp.getGiaTien() };
 					if (p.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 						model.addRow(rowData);
+					}else {
+						System.out.println("Test Git");
 					}
 
 				});
