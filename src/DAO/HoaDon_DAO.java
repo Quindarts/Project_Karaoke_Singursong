@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -204,7 +205,8 @@ public class HoaDon_DAO {
 		try {
 			String sql = "SELECT HoaDon.* FROM HoaDon "
 					+ "JOIN KhachHang ON HoaDon.maKhachHang = KhachHang.maKhachHang "
-					+ "WHERE KhachHang.hoTen LIKE ? OR KhachHang.soDienThoai LIKE ? OR KhachHang.maKhachHang LIKE ?";
+					+ "WHERE KhachHang.hoTen LIKE ? OR KhachHang.soDienThoai LIKE ? OR KhachHang.maKhachHang LIKE ?"
+					+ "AND HoaDon.trangThai = ?";
 			statement = con.prepareStatement(sql);
 			statement.setString(1, "%" + kh + "%");
 			statement.setString(2, "%" + kh + "%");
@@ -464,7 +466,7 @@ public class HoaDon_DAO {
 		return n > 0;
 	}
 
-	public ArrayList<HoaDon> layHoaDon_TheoKhoangNgay(Date tuNgay, Date denNgay) {
+	public ArrayList<HoaDon> layHoaDon_TheoKhoangNgay(Timestamp tuNgay, Timestamp denNgay) {
 		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
 		HoaDon hoaDon = null;
 		ConnectDB.getInstance();
@@ -472,10 +474,10 @@ public class HoaDon_DAO {
 		PreparedStatement statement = null;
 		try {
 			String sql = "SELECT *\r\n" + "FROM HoaDon\r\n"
-					+ "WHERE  CONVERT(DATE, ngayLap) >= ? AND  CONVERT(DATE, ngayLap) < ?;";
+					+ "WHERE  ngayLap >= ? AND  ngayLap < ?;";
 			statement = con.prepareStatement(sql);
-			statement.setDate(1, (java.sql.Date) tuNgay);
-			statement.setDate(2, (java.sql.Date) denNgay);
+			statement.setTimestamp(1, tuNgay);
+			statement.setTimestamp(2, denNgay);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maHoaDon = rs.getString("maHoaDon");

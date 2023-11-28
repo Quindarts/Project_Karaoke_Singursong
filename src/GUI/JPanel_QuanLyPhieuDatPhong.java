@@ -22,9 +22,11 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -81,7 +83,7 @@ import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
-public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener {
+public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener, PropertyChangeListener {
 
 	/**
 	 * Color
@@ -136,7 +138,6 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	private JRadioButton rdbDaHuy;
 	private JRadioButton rdbTatCa;
 	private JDateChooser dateNgayNhan;
-	private JButton btnTimKiem;
 
 	/**
 	 * Rounded JPanel
@@ -221,17 +222,16 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		table_PhieuDatPhong = new JTable();
 		table_PhieuDatPhong.setBackground(Color.WHITE);
 		table_PhieuDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		table_PhieuDatPhong
-				.setModel(model = new DefaultTableModel(new Object[][] {}, rowData = new String[] { "Mã phiếu đặt",
-						"Ngày nhận", "Khách hàng", "Số điện thoại", "Phòng", "Trạng thái", "Ghi chú", ""}) {
-					private static final long serialVersionUID = -143705667217047914L;
+		table_PhieuDatPhong.setModel(model = new DefaultTableModel(new Object[][] {}, rowData = new String[] {
+				"Mã phiếu đặt", "Ngày nhận", "Khách hàng", "Số điện thoại", "Phòng", "Trạng thái", "Ghi chú", "" }) {
+			private static final long serialVersionUID = -143705667217047914L;
 
-					@Override
-					public boolean isCellEditable(int row, int column) {
-						return column >= 7; // Đặt tất cả các ô không thể chỉnh sửa
-					}
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return column >= 7; // Đặt tất cả các ô không thể chỉnh sửa
+			}
 
-				});
+		});
 
 		customTable_PDP = new CustomTable(model, 7);
 		customTable_PDP.setBackground(Color.WHITE);
@@ -355,7 +355,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		dateNgayNhan = new JDateChooser();
 		dateNgayNhan.setDateFormatString("yyyy-MM-dd");
 
-		dateNgayNhan.setBounds(10, 244, 195, 27);
+		dateNgayNhan.setBounds(10, 244, 235, 27);
 		panel_TimKiem.add(dateNgayNhan);
 
 		JLabel dcNgayNhanPhong = new JLabel("Ngày nhận phòng");
@@ -396,18 +396,6 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		txtmaPhieu.setBackground(Color.WHITE);
 		txtmaPhieu.setBounds(10, 30, 235, 25);
 		panel_TimKiem.add(txtmaPhieu);
-
-		btnTimKiem = new JButton("");
-		btnTimKiem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoNgayNhan();
-			}
-		});
-		btnTimKiem.setBackground(new Color(255, 255, 255));
-		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/search.png")));
-		btnTimKiem.setBounds(206, 244, 39, 27);
-		panel_TimKiem.add(btnTimKiem);
-		;
 
 		rdbChoNhanPhong = new JRadioButton("Chờ  nhận phòng");
 		rdbChoNhanPhong.addActionListener(new ActionListener() {
@@ -501,7 +489,21 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		panel.add(btnThem);
 
 		// Add event:
-		addEventForGUI();
+
+		btnHuyPDP.addActionListener(this);
+		btnLamMoi.addActionListener(this);
+		btnSua.addActionListener(this);
+		btnThem.addActionListener(this);
+
+		rdbChoNhanPhong.addActionListener(this);
+		rdbDaHuy.addActionListener(this);
+		rdbDaNhanPhong.addActionListener(this);
+		rdbHetHan.addActionListener(this);
+		rdbTatCa.addActionListener(this);
+
+		dateNgayNhan.addPropertyChangeListener(this);
+
+//		addEventForGUI();
 
 	}
 
@@ -510,13 +512,14 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		btnLamMoi.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnThem.addActionListener(this);
-		btnTimKiem.addActionListener(this);
 
 		rdbChoNhanPhong.addActionListener(this);
 		rdbDaHuy.addActionListener(this);
 		rdbDaNhanPhong.addActionListener(this);
 		rdbHetHan.addActionListener(this);
 		rdbTatCa.addActionListener(this);
+
+		dateNgayNhan.addPropertyChangeListener(this);
 	}
 
 	@Override
@@ -536,8 +539,8 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		// Sửa thông tin phiếu đặt phòng có trạng thái "Chờ nhận phòng"
 		if (o.equals(btnSua)) {
 			row = customTable_PDP.getSelectedRow();
-			
-			if(row >= 0) {
+
+			if (row >= 0) {
 				String maPD = model.getValueAt(row, 0).toString().trim();
 				String ttp = model.getValueAt(row, 5).toString();
 				if (ttp.equals("Chờ nhận phòng")) {
@@ -546,10 +549,10 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 				} else {
 					JOptionPane.showMessageDialog(null, "Phiếu " + maPD + " không thể cập nhật!");
 				}
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu cần cập nhật!");
 			}
-			
+
 		}
 
 		// Thêm phiếu đặt phòng trước
@@ -557,15 +560,10 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 			modal_PhieuDatPhongTruoc.setVisible(true);
 		}
 
-		if (o.equals(btnTimKiem)) {
-
-		}
-
 		if (o.equals(rdbChoNhanPhong) && o.equals(rdbDaHuy) && o.equals(rdbDaNhanPhong) && o.equals(rdbHetHan)
 				&& o.equals(rdbTatCa)) {
 			TimKiemTheoTrangThai();
 		}
-
 	}
 
 	public void clearTable() {
@@ -683,9 +681,8 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	}
 
 	private void TimKiemTheoNgayNhan() {
-		java.util.Date ngayNhan =  dateNgayNhan.getDate();
-		dsPDP = DAO_PDP.layPhieuDatPhong_TheoNgayNhan(ngayNhan);
-
+		Date ngayNhan = dateNgayNhan.getDate();
+		ArrayList<PhieuDatPhong> dsPDP = DAO_PDP.layPhieuDatPhong_TheoNgayNhan(ngayNhan);
 		if (dsPDP != null) {
 			clearTable();
 			for (PhieuDatPhong pdp : dsPDP) {
@@ -751,6 +748,20 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 			JOptionPane.showMessageDialog(null, "Phiếu " + maPDP + "hủy thất bại!");
 		}
 
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		Object o = evt.getSource();
+		Date ngayNhan = new Date();
+
+		if (o.equals(dateNgayNhan)) {
+			if ("date".equals(evt.getPropertyName())) {
+					ngayNhan = (Date) evt.getNewValue();
+					clearTable();
+					TimKiemTheoNgayNhan();
+			}
+		}
 	}
 
 }

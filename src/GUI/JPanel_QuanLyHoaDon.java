@@ -18,13 +18,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
-import java.sql.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
@@ -64,8 +66,10 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 import javax.swing.JRadioButton;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
-public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, MouseListener, KeyListener {
+public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, MouseListener, KeyListener, PropertyChangeListener{
 
 	/**
 	 * Color
@@ -121,6 +125,8 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 	private JRadioButton rdbDaHuy;
 
 	private ButtonGroup searchGroup;
+
+	private JDateChooser date_NgayLap;
 
 	/**
 	 * Rounded JPanel
@@ -223,13 +229,15 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		panel_RDB.setLayout(null);
 
 		JPanel panel_TKTheoTG = new JPanel();
-		panel_TKTheoTG.setBounds(10, 11, 235, 114);
+		panel_TKTheoTG.setBounds(10, 11, 235, 131);
 		dateTuNgay = new JDateChooser();
 		dateTuNgay.setDateFormatString("yyyy-MM-dd");
-		dateTuNgay.setBounds(46, 28, 179, 20);
+		dateTuNgay.setBounds(79, 61, 146, 20);
+
 		dateDenNgay = new JDateChooser();
 		dateDenNgay.setDateFormatString("yyyy-MM-dd");
-		dateDenNgay.setBounds(46, 59, 179, 20);
+		dateDenNgay.setBounds(79, 92, 146, 20);
+
 		panel_TKTheoTG.setBackground(new Color(255, 255, 255));
 		panel_TKTheoTG.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
@@ -241,18 +249,26 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 
 		JLabel lblNewLabel = new JLabel("Từ :");
 		lblNewLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lblNewLabel.setBounds(10, 28, 46, 20);
+		lblNewLabel.setBounds(10, 61, 46, 20);
 		panel_TKTheoTG.add(lblNewLabel);
 
 		JLabel lbln = new JLabel("Đến :");
 		lbln.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		lbln.setBounds(10, 59, 46, 20);
+		lbln.setBounds(10, 92, 46, 20);
 		panel_TKTheoTG.add(lbln);
 
+		JLabel lblNgyLp = new JLabel("Ngày lập :");
+		lblNgyLp.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		lblNgyLp.setBounds(10, 31, 73, 20);
+		panel_TKTheoTG.add(lblNgyLp);
+
+		date_NgayLap = new JDateChooser();
+		date_NgayLap.setDateFormatString("yyyy-MM-dd");
+		date_NgayLap.setBounds(79, 31, 146, 20);
+		panel_TKTheoTG.add(date_NgayLap);
+
 		JPanel panel_TKCuThe = new JPanel();
-		panel_TKCuThe.setBounds(10, 143, 235, 146);
-		dateTuNgay = new JDateChooser();
-		dateDenNgay = new JDateChooser();
+		panel_TKCuThe.setBounds(10, 152, 235, 146);
 		panel_TKCuThe.setBackground(new Color(255, 255, 255));
 		panel_TKCuThe.setBorder(new TitledBorder(
 				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
@@ -302,7 +318,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		panel_TKCuThe.add(txtPhieuDatPhong);
 
 		btnTimKiem = new JButton("Tìm kiếm");
-		btnTimKiem.setBounds(72, 314, 123, 35);
+		btnTimKiem.setBounds(70, 325, 123, 35);
 		panel_RDB.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyHoaDon.class.getResource("/icon/search.png")));
 		btnTimKiem.setBackground(Color.decode(hexColor_Blue2));
@@ -314,7 +330,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnLamMoi.setBounds(72, 359, 125, 35);
+		btnLamMoi.setBounds(70, 370, 125, 35);
 		panel_RDB.add(btnLamMoi);
 		btnLamMoi.setIcon(new ImageIcon(JPanel_QuanLyHoaDon.class.getResource("/icon/refresh.png")));
 		btnLamMoi.setForeground(Color.WHITE);
@@ -360,6 +376,10 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		rdbDaHuy.addActionListener(this);
 		rdbDaThanhToan.addActionListener(this);
 		rdbTatCa.addActionListener(this);
+		
+		date_NgayLap.addPropertyChangeListener(this);
+		dateDenNgay.addPropertyChangeListener(this);
+		dateTuNgay.addPropertyChangeListener(this);
 
 	}
 
@@ -367,7 +387,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		DefaultTableModel model = (DefaultTableModel) table_HoaDon.getModel();
 		model.setRowCount(0);
 	}
-	
+
 	private void XoaRong() {
 		txtHD.setText("");
 		txtKH.setText("");
@@ -484,10 +504,11 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 	}
 
 	// Tìm kiếm hóa đơn theo khoảng ngày
-	public void TimKiemTheoKhoangNgay() throws java.text.ParseException {
-		java.sql.Date sqlDate_TuNgay = new java.sql.Date(dateTuNgay.getDate().getTime());
-		java.sql.Date sqlDate_DenNgay = new java.sql.Date(dateDenNgay.getDate().getTime());
-		ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoKhoangNgay(sqlDate_TuNgay, sqlDate_DenNgay);
+	public void TimKiemTheoKhoangNgay() {
+		Timestamp tuNgay = selectDateTimeTuNgay(dateTuNgay);
+		Timestamp denNgay = selectDateTimeDenNgay(dateDenNgay);
+		System.out.println(tuNgay.toString());
+		ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoKhoangNgay(tuNgay, denNgay);
 
 		if (dsHD != null) {
 			for (HoaDon hd : dsHD) {
@@ -501,6 +522,68 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		} else {
 			JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
 		}
+	}
+	
+	// Tìm kiếm hóa đơn theo ngày lập
+		public void TimKiemTheoNgayLap() {
+			Timestamp batDauNgayLap = selectDateTimeTuNgay(date_NgayLap);
+			Timestamp ketThucNgayLap = selectDateTimeDenNgay(date_NgayLap);
+			ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoKhoangNgay(batDauNgayLap, ketThucNgayLap);
+
+			if (dsHD != null) {
+				for (HoaDon hd : dsHD) {
+					KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
+					NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
+					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+							hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+							hd.getTrangThai(), hd.getThoiGianKetThuc() };
+					model.addRow(rowData);
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
+			}
+		}
+
+	public Timestamp selectDateTimeTuNgay(JDateChooser date) {
+		Date selectedDate = date.getDate();
+
+		// Tạo một đối tượng Calendar và set thời gian
+		Calendar calendar = Calendar.getInstance();
+		// Set giờ, phút và giây thành 00:00:00
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		Calendar selectedDateTime = Calendar.getInstance();
+
+		selectedDateTime.setTime(selectedDate);
+		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
+		selectedDateTime.set(Calendar.SECOND, calendar.get(Calendar.SECOND));
+		selectedDateTime.set(Calendar.MILLISECOND, calendar.get(Calendar.MILLISECOND));
+
+		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
+		return timestamp;
+	}
+
+	public Timestamp selectDateTimeDenNgay(JDateChooser date) {
+		Date selectedDate = date.getDate();
+
+		// Tạo một đối tượng Calendar và set thời gian
+		Calendar calendar = Calendar.getInstance();
+		// Set giờ, phút và giây thành 00:00:00
+		calendar.set(Calendar.HOUR_OF_DAY, 23);
+		calendar.set(Calendar.MINUTE, 59);
+		calendar.set(Calendar.SECOND, 59);
+		Calendar selectedDateTime = Calendar.getInstance();
+
+		selectedDateTime.setTime(selectedDate);
+		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
+		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
+		selectedDateTime.set(Calendar.SECOND, calendar.get(Calendar.SECOND));
+		selectedDateTime.set(Calendar.MILLISECOND, calendar.get(Calendar.MILLISECOND));
+
+		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
+		return timestamp;
 	}
 
 	// Tìm kiếm theo trạng thái
@@ -576,6 +659,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 
 		else if (o.equals(btnTimKiem)) {
 			clearTable();
+			TimKiemTheoKhoangNgay();
 		}
 	}
 
@@ -632,5 +716,37 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		Object o = evt.getSource();
+		Date tuNgay = new Date();
+		Date denNgay = new Date();
+		Date ngayLap = new Date();
+
+		if (o.equals(dateTuNgay)) {
+			if ("date".equals(evt.getPropertyName())) {
+				tuNgay = (Date) evt.getNewValue();
+				clearTable();
+				TimKiemTheoKhoangNgay();
+			}
+		}
+
+		if (o.equals(dateDenNgay)) {
+			if ("date".equals(evt.getPropertyName())) {
+				denNgay = (Date) evt.getNewValue();
+				clearTable();
+				TimKiemTheoKhoangNgay();
+			}
+		}
+
+		if (o.equals(date_NgayLap)) {
+			if ("date".equals(evt.getPropertyName())) {
+				denNgay = (Date) evt.getNewValue();
+				clearTable();
+				TimKiemTheoNgayLap();
+			}
+		}
 	}
 }

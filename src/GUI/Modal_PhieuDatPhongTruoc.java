@@ -55,12 +55,16 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.EventObject;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import org.jfree.chart.axis.DateAxis;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -348,6 +352,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		date_NhanPhong = new JDateChooser();
 		date_NhanPhong.setDateFormatString("yyyy-MM-dd ");
 		date_NhanPhong.setBounds(167, 49, 108, 27);
+
 		panel_2.add(date_NhanPhong);
 
 		JLabel lblLoiPhng = new JLabel("Loại phòng");
@@ -643,6 +648,52 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 
 		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
 		return timestamp;
+	}
+
+	public boolean Validate() {
+		Date ngayNhanPhong = date_NhanPhong.getDate();
+		Date ngayDatPhong = date_DatPhong.getDate();
+		SpinnerDateModel gioNhanPhong = (SpinnerDateModel) spnThoiGianNhanPhong.getValue();
+		String soGioHatDK = txtGioHat.getText().trim();
+		String sdtKH = txtSoDienThoai.getText().trim();
+
+		/**
+		 * Ngày nhận phòng: ** Lớn hơn ngày hiện tại **
+		 **/
+		if (ngayNhanPhong.before(ngayDatPhong)) {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+			// Đặt lại ngày hiện tại cho JDateChooser
+			JOptionPane.showMessageDialog(this, "Ngày nhận phòng không hợp lệ!");
+		}
+		/**
+		 * Giờ nhận phòng: ** 08:00:00 <= gioNhanPhong <= 21:00:00
+		 * 
+		 * 
+		 **/
+
+		// Số giờ hát dự kiến là số nguyên dương
+		if ((soGioHatDK.length() > 0)) {
+			try {
+				int sl = Integer.parseInt(soGioHatDK);
+				if (!(sl >= 1 && sl <= 16)) {
+					JOptionPane.showMessageDialog(this, "Số lượng khách phải nằm trong khoảng (10,150)");
+					return false;
+				}
+			} catch (NumberFormatException e) {
+				txtGioHat.requestFocus();
+				JOptionPane.showMessageDialog(this, "Số giờ hát dự kiến phải là số nguyên dương!");
+				return false;
+			}
+		} else {
+			txtGioHat.requestFocus();
+			JOptionPane.showMessageDialog(this, "Số giờ hát dự kiến không được rỗng");
+			return false;
+		}
+
+		// Số điện thoại khách hàng nếu không tồn tại thì phải thêm thông tin khách hàng
+
+		return false;
+
 	}
 
 	public void clearTable() {

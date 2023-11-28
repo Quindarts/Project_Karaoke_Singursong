@@ -8,8 +8,8 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
-import java.sql.Date;
 
 import ConnectDB.ConnectDB;
 import Entity.PhieuDatPhong;
@@ -421,10 +421,11 @@ public class PhieuDatPhong_DAO {
 		return danhSachPhieuDatPhong;
 	}
 
-	@SuppressWarnings("deprecation")
-	public ArrayList<PhieuDatPhong> layPhieuDatPhong_TheoNgayNhan(java.util.Date ngayNhan) {
+	public ArrayList<PhieuDatPhong> layPhieuDatPhong_TheoNgayNhan(Date ngayNhan) {
 		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
 		PhieuDatPhong phieuDatPhong = null;
+		// Chuyển đổi thành java.sql.Date bằng constructor
+        java.sql.Date ngayNhanSQL = new java.sql.Date(ngayNhan.getTime());
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
@@ -432,7 +433,7 @@ public class PhieuDatPhong_DAO {
 			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong WHERE CONVERT(date, thoiGianNhanPhong) = ?";
 
 			statement = con.prepareStatement(sql);
-			statement.setDate(1, (Date) ngayNhan);
+			statement.setDate(1, ngayNhanSQL);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				String maPhieuDat = rs.getString("maPhieuDat");
