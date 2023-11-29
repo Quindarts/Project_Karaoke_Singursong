@@ -357,9 +357,7 @@ public class CardPhong extends JPanel {
 		});
 
 		chuyenPhongMenuItem.addActionListener(e1 -> {
-
 			try {
-
 				ChiTietHoaDon cthd = new ChiTietHoaDon();
 				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());
 				System.out.println("Chi tiet hoa don cua phong: " + cthd);
@@ -384,7 +382,6 @@ public class CardPhong extends JPanel {
 				e2.printStackTrace();
 				JOptionPane.showMessageDialog(null, "Phòng này chưa được đặt!");
 			}
-
 		});
 
 		menu.add(xemThongTinMenuItem);
