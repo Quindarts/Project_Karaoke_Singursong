@@ -907,6 +907,10 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 							txtTenKhachHang.setEnabled(false);
 						} else {
 							txtTenKhachHang.setEnabled(true);
+							JOptionPane.showMessageDialog(null, "Số điện thoại bạn nhập vào không tồn tại, vui lòng thêm khách hàng mới", "Thông báo lỗi",
+									JOptionPane.INFORMATION_MESSAGE);
+							Modal_ThemKhachHang modal_ThemKhachHang = new Modal_ThemKhachHang();
+							modal_ThemKhachHang.setVisible(true);
 						}
 					}
 				}

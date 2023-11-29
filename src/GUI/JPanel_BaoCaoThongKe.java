@@ -128,8 +128,8 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private JCheckBox chkbx_DV_Loc_TheoQuy;
 	private JComboBox<String> cbx_DV_LocQuy;
 	private JComboBox<String> cbx_DV_Loc_TongTien;
-	private JButton btn_HD_Loc;
-	private JButton btn_DV_Loc;
+	private JButton btn_HD_LamMoi;
+	private JButton btn_DV_LamMoi;
 	private double tongDoanhThu_DV;
 	private double tongDoanhThu_HD;
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
@@ -146,6 +146,12 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private ArrayList<ChiTietHoaDon> dsCTHD;
 	private ArrayList<ChiTietDichVu> dsCTDV;
 	private ArrayList<HoaDon> dsHD_DaThanhToan;
+	private JTextField txt_DV_TopDichVu;
+	private JLabel lbl_HD_ThongBao;
+	private JLabel lbl_DV_ThongBao;
+	private JComboBox<String> cbx_DV_SapXepTongTien;
+	private Date ngayKetThuc;
+	private Date ngayBatDau;
 
 	/**
 	 * Rounded JPanel
@@ -389,10 +395,17 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		cbx_HD_Loc_TongTien.addItem("Trên 10.000.000VNĐ");
 		pnl_Loc_TheoTongTien.add(cbx_HD_Loc_TongTien);
 
-		btn_HD_Loc = new JButton("Lọc");
-		btn_HD_Loc.setBounds(106, 564, 85, 21);
-		btn_HD_Loc.addActionListener(this);
-		panel_Loc.add(btn_HD_Loc);
+		btn_HD_LamMoi = new JButton("Làm mới");
+		btn_HD_LamMoi.setBounds(106, 564, 85, 21);
+		btn_HD_LamMoi.addActionListener(this);
+		panel_Loc.add(btn_HD_LamMoi);
+
+		lbl_HD_ThongBao = new JLabel("");
+		lbl_HD_ThongBao.setForeground(new Color(255, 0, 0));
+		lbl_HD_ThongBao.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lbl_HD_ThongBao.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_HD_ThongBao.setBounds(20, 343, 225, 20);
+		panel_Loc.add(lbl_HD_ThongBao);
 
 		JPanel panel_TongTien = new JPanel();
 		panel_TongTien.setLayout(null);
@@ -448,10 +461,10 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_DichVu.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		pnl_DichVu.setBackground(new Color(5, 74, 145));
 		tabbedPane.addTab("Dịch vụ", null, pnl_DichVu, null);
-		
-		//Bieu do thong ke
+
+		// Bieu do thong ke
 		JPanel pnl_bieuDo = new JPanel_BieuDoThongKe();
-		
+
 		tabbedPane.addTab("Biểu đồ", null, pnl_bieuDo, null);
 
 		JScrollPane scrollPane_DichVu = new JScrollPane();
@@ -472,7 +485,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		panel_Loc_DichVu.setLayout(null);
 		panel_Loc_DichVu.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Loc_DichVu.setBackground(Color.WHITE);
-		panel_Loc_DichVu.setBounds(1031, 10, 255, 615);
+		panel_Loc_DichVu.setBounds(1036, 10, 255, 615);
 		pnl_DichVu.add(panel_Loc_DichVu);
 
 		JLabel lbl_Loc_1 = new JLabel("LỌC");
@@ -597,10 +610,48 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		cbx_DV_Loc_TongTien.addItem("Trên 10.000.000VNĐ");
 		pnl_Loc_TheoTongTien_1.add(cbx_DV_Loc_TongTien);
 
-		btn_DV_Loc = new JButton("Lọc");
-		btn_DV_Loc.setBounds(40, 568, 85, 21);
-		btn_DV_Loc.addActionListener(this);
-		panel_Loc_DichVu.add(btn_DV_Loc);
+		btn_DV_LamMoi = new JButton("Làm mới");
+		btn_DV_LamMoi.setBounds(96, 569, 85, 21);
+		btn_DV_LamMoi.addActionListener(this);
+		panel_Loc_DichVu.add(btn_DV_LamMoi);
+
+		JPanel pnl_Loc_SapXepTongTien_1 = new JPanel();
+		pnl_Loc_SapXepTongTien_1.setLayout(null);
+		pnl_Loc_SapXepTongTien_1.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"S\u1EAFp x\u1EBFp t\u1ED5ng ti\u1EC1n theo", TitledBorder.LEADING, TitledBorder.TOP, null,
+				new Color(0, 0, 0)));
+		pnl_Loc_SapXepTongTien_1.setBackground(Color.WHITE);
+		pnl_Loc_SapXepTongTien_1.setBounds(10, 283, 235, 50);
+		panel_Loc_DichVu.add(pnl_Loc_SapXepTongTien_1);
+
+		cbx_DV_SapXepTongTien = new JComboBox<String>();
+		cbx_DV_SapXepTongTien.setBounds(10, 20, 215, 21);
+		pnl_Loc_SapXepTongTien_1.add(cbx_DV_SapXepTongTien);
+		cbx_DV_SapXepTongTien.addItem("Chọn kiểu sắp xếp");
+		cbx_DV_SapXepTongTien.addItem("Tăng dần");
+		cbx_DV_SapXepTongTien.addItem("Giảm dần");
+
+		JPanel pnl_Loc_TimSanPhamBanChay = new JPanel();
+		pnl_Loc_TimSanPhamBanChay.setLayout(null);
+		pnl_Loc_TimSanPhamBanChay.setBorder(new TitledBorder(
+				new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)),
+				"Top d\u1ECBch v\u1EE5", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+		pnl_Loc_TimSanPhamBanChay.setBackground(Color.WHITE);
+		pnl_Loc_TimSanPhamBanChay.setBounds(10, 343, 235, 50);
+		panel_Loc_DichVu.add(pnl_Loc_TimSanPhamBanChay);
+
+		txt_DV_TopDichVu = new JTextField();
+		txt_DV_TopDichVu.setBounds(10, 21, 96, 19);
+		pnl_Loc_TimSanPhamBanChay.add(txt_DV_TopDichVu);
+		txt_DV_TopDichVu.setColumns(10);
+
+		lbl_DV_ThongBao = new JLabel("");
+		lbl_DV_ThongBao.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_DV_ThongBao.setForeground(Color.RED);
+		lbl_DV_ThongBao.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lbl_DV_ThongBao.setBounds(20, 403, 225, 20);
+		panel_Loc_DichVu.add(lbl_DV_ThongBao);
 
 		JPanel panel_TongTien_DichVu = new JPanel();
 		panel_TongTien_DichVu.setLayout(null);
@@ -674,6 +725,66 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 	}
 
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		Object o = e.getSource();
+		if (o.equals(btn_DV_LamMoi)) {
+			LamMoiBoLoc_DV();
+		}
+		if (o.equals(btn_HD_LamMoi)) {
+			LamMoiBoLoc_HD();
+		}
+
+		if (o.equals(cbx_HD_LocNam) || o.equals(cbx_HD_LocThang) || o.equals(cbx_HD_LocQuy)
+				|| o.equals(cbx_HD_Loc_TongTien)) {
+			dateCh_HD_TuNgay.setDate(null);
+			dateCh_HD_DenNgay.setDate(null);
+			LocDuLieu_HD();
+		}
+
+		if (o.equals(cbx_DV_LocNam) || o.equals(cbx_DV_LocThang) || o.equals(cbx_DV_LocQuy)
+				|| o.equals(cbx_DV_Loc_TongTien)) {
+			dateCh_DV_TuNgay.setDate(null);
+			dateCh_DV_DenNgay.setDate(null);
+			LocDuLieu_DV();
+		}
+
+		// Kiểm tra tháng
+
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		Object o = evt.getSource();
+		if (o.equals(dateCh_DV_TuNgay) || o.equals(dateCh_DV_DenNgay)) {
+			LocDuLieu_DV();
+		}
+		if (o.equals(dateCh_HD_TuNgay) || o.equals(dateCh_HD_DenNgay)) {
+			LocDuLieu_HD();
+		}
+	}
+
+	public void LamMoiBoLoc_HD() {
+		model_HoaDon.getDataVector().removeAllElements();
+		DocDuLieu_HD();
+		cbx_HD_Loc_TongTien.setSelectedIndex(0);
+		cbx_HD_LocNam.setSelectedIndex(0);
+		cbx_HD_LocQuy.setSelectedIndex(0);
+		cbx_HD_LocThang.setSelectedIndex(0);
+		dateCh_HD_TuNgay.setDate(null);
+		dateCh_HD_DenNgay.setDate(null);
+	}
+
+	public void LamMoiBoLoc_DV() {
+		model_DichVu.getDataVector().removeAllElements();
+		DocDuLieu_DV();
+		cbx_DV_Loc_TongTien.setSelectedIndex(0);
+		cbx_DV_LocNam.setSelectedIndex(0);
+		cbx_DV_LocQuy.setSelectedIndex(0);
+		cbx_DV_LocThang.setSelectedIndex(0);
+		dateCh_DV_TuNgay.setDate(null);
+		dateCh_DV_DenNgay.setDate(null);
+	}
+
 	public void DocDuLieu_DV() {
 		model_DichVu = (DefaultTableModel) table_DichVu.getModel();
 		model_DichVu.getDataVector().removeAllElements();
@@ -696,7 +807,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				});
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
@@ -730,69 +840,11 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				});
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		Object o = e.getSource();
-		if (o.equals(btn_DV_Loc)) {
-			LocDuLieu_DV();
-		}
-		if (o.equals(btn_HD_Loc)) {
-			LocDuLieu_HD();
-		}
-
-		if (o.equals(cbx_HD_LocNam) || o.equals(cbx_HD_LocThang) || o.equals(cbx_HD_LocQuy)
-				|| o.equals(cbx_HD_Loc_TongTien))
-			LocDuLieu_HD();
-
-		if (o.equals(cbx_DV_LocNam) || o.equals(cbx_DV_LocThang) || o.equals(cbx_DV_LocQuy)
-				|| o.equals(cbx_DV_Loc_TongTien))
-			LocDuLieu_DV();
-
-	}
-
-	@Override
-	public void propertyChange(PropertyChangeEvent evt) {
-//		// TODO Auto-generated method stub
-		Object o = evt.getSource();
-		Date dv_BatDau = new Date();
-		Date dv_KetThuc = new Date();
-		Date hd_BatDau = new Date();
-		Date hd_KetThuc = new Date();
-
-		if (o.equals(dateCh_DV_TuNgay)) {
-			if ("date".equals(evt.getPropertyName()))
-				dv_BatDau = (Date) evt.getNewValue();
-			LocDuLieu_DV();
-		}
-
-		if (o.equals(dateCh_DV_DenNgay)) {
-			if ("date".equals(evt.getPropertyName()))
-				dv_KetThuc = (Date) evt.getNewValue();
-			LocDuLieu_DV();
-		}
-
-		if (o.equals(dateCh_HD_TuNgay)) {
-			if ("date".equals(evt.getPropertyName()))
-				hd_BatDau = (Date) evt.getNewValue();
-			LocDuLieu_HD();
-		}
-
-		if (o.equals(dateCh_HD_DenNgay)) {
-			if ("date".equals(evt.getPropertyName()))
-				hd_KetThuc = (Date) evt.getNewValue();
-			LocDuLieu_HD();
-		}
-
-	}
-
 	private void LocDuLieu_HD() {
-//		model_HoaDon = (DefaultTableModel) table_HoaDon.getModel();
 		model_HoaDon.getDataVector().removeAllElements();
 
 		boolean ketQuaLoc = false;
@@ -899,7 +951,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			hd_TongBan_Den = Integer.MAX_VALUE;
 		}
 
-		Date ngayKetThuc = new Date();
+		ngayKetThuc = new Date();
 		try {
 			ngayKetThuc = dateCh_HD_DenNgay.getDate();
 			if (ngayKetThuc == null) {
@@ -910,7 +962,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			ngayKetThuc = null;
 		}
 
-		Date ngayBatDau = new Date();
+		ngayBatDau = new Date();
 		try {
 			ngayBatDau = dateCh_HD_TuNgay.getDate();
 			if (ngayBatDau == null) {
@@ -924,22 +976,60 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		}
 
 		if (ngayBatDau.after(ngayKetThuc)) {
-			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
+			model_HoaDon.getDataVector().removeAllElements();
+			lbl_HD_ThongBao.setText("Ngày kết thúc phải sau ngày bắt đầu!");
 			return;
+		} else {
+			lbl_HD_ThongBao.setText("");
+		}
+
+		switch (hd_Quy_Loc) {
+		case 4:
+			if (hd_Thang_Loc < 10) {
+				lbl_HD_ThongBao.setText("Quý " + hd_Quy_Loc + " không có tháng " + hd_Thang_Loc + "!");
+			} else {
+				lbl_HD_ThongBao.setText("");
+			}
+			break;
+		case 3:
+			if (hd_Thang_Loc < 7 || hd_Thang_Loc > 10) {
+				lbl_HD_ThongBao.setText("Quý " + hd_Quy_Loc + " không có tháng " + hd_Thang_Loc + "!");
+			} else {
+				lbl_HD_ThongBao.setText("");
+			}
+			break;
+		case 2:
+			if (hd_Thang_Loc < 4 || hd_Thang_Loc > 6) {
+				lbl_HD_ThongBao.setText("Quý " + hd_Quy_Loc + " không có tháng " + hd_Thang_Loc + "!");
+			} else {
+				lbl_HD_ThongBao.setText("");
+			}
+			break;
+		case 1:
+			if (hd_Thang_Loc > 3) {
+				lbl_HD_ThongBao.setText("Quý " + hd_Quy_Loc + " không có tháng " + hd_Thang_Loc + "!");
+			} else {
+				lbl_HD_ThongBao.setText("");
+			}
+			break;
+
+		default:
+			break;
 		}
 
 		for (HoaDon hd : dsHD_DaThanhToan) {
 
 			boolean kiemTra = true;
 
-			Date hd_NgayThanhToan = null; // sẽ được lấy từ hóa đơn sau sau đó parse từ kiểu String sang kiểu Date
-			String n = hd.getThoiGianKetThuc() + "";
-			try {
-				hd_NgayThanhToan = dateFormat_YMD.parse(n);
-			} catch (Exception e) {
-				// TODO: handle exception
-				hd_NgayThanhToan = null;
-			}
+			Date hd_NgayThanhToan = null; // sẽ được lấy từ hóa đơn sau đó parse từ kiểu String sang kiểu Date
+			hd_NgayThanhToan = hd.getThoiGianKetThuc();
+//			String n = hd.getThoiGianKetThuc() + "";
+//			try {
+//				hd_NgayThanhToan = dateFormat_YMD.parse(n);
+//			} catch (Exception e) {
+//				// TODO: handle exception
+//				hd_NgayThanhToan = null;
+//			}
 
 			dsCTHD = DAO_CTHD.timCTHoaDon_TheoMaHoaDon(hd.getMaHoaDon());
 			dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(hd.getMaHoaDon());
@@ -989,7 +1079,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 				tongSoHD++;
 				txt_HD_TongSoLuong.setText(tongSoHD + "");
 				txt_HD_TongDoanhThu.setText(dcf.format(tongDoanhThu_HD));
-
 				ketQuaLoc = true;
 			}
 		}
@@ -999,7 +1088,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	}
 
 	private void LocDuLieu_DV() {
-//		model_DichVu = (DefaultTableModel) table_DichVu.getModel();
 		model_DichVu.getDataVector().removeAllElements();
 		boolean ketQuaLoc = false;
 		tongDoanhThu_DV = 0;
@@ -1012,6 +1100,34 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		dv_Quy_Loc = 0;
 
 		// Dữ liệu lấy từ bảng lọc
+		Date ngayKetThuc = new Date();
+		try {
+			ngayKetThuc = dateCh_DV_DenNgay.getDate();
+			if (ngayKetThuc == null) {
+				ngayKetThuc = new java.util.Date();
+			}
+		} catch (Exception e) {
+			ngayKetThuc = null;
+		}
+
+		Date ngayBatDau = new Date();
+		try {
+			ngayBatDau = dateCh_DV_TuNgay.getDate();
+			if (ngayBatDau == null) {
+				calendar.set(2000, Calendar.JANUARY, 01);
+				ngayBatDau = calendar.getTime();
+			}
+		} catch (Exception e) {
+			ngayBatDau = null;
+		}
+
+		if (ngayBatDau.after(ngayKetThuc)) {
+			model_DichVu.getDataVector().removeAllElements();
+			lbl_DV_ThongBao.setText("Ngày kết thúc phải sau ngày bắt đầu!");
+			return;
+		} else {
+			lbl_DV_ThongBao.setText("");
+		}
 
 		if (cbx_DV_LocNam.getSelectedIndex() != 0) {
 			dv_Nam_Loc = Integer.parseInt(cbx_DV_LocNam.getSelectedItem().toString());
@@ -1085,6 +1201,40 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			}
 		});
 
+		switch (dv_Quy_Loc) {
+		case 4:
+			if (dv_Thang_Loc < 10) {
+				lbl_DV_ThongBao.setText("Quý " + dv_Quy_Loc + " không có tháng " + dv_Thang_Loc + "!");
+			} else {
+				lbl_DV_ThongBao.setText("");
+			}
+			break;
+		case 3:
+			if (dv_Thang_Loc < 7 || dv_Thang_Loc > 10) {
+				lbl_DV_ThongBao.setText("Quý " + dv_Quy_Loc + " không có tháng " + dv_Thang_Loc + "!");
+			} else {
+				lbl_DV_ThongBao.setText("");
+			}
+			break;
+		case 2:
+			if (dv_Thang_Loc < 4 || dv_Thang_Loc > 6) {
+				lbl_DV_ThongBao.setText("Quý " + dv_Quy_Loc + " không có tháng " + dv_Thang_Loc + "!");
+			} else {
+				lbl_DV_ThongBao.setText("");
+			}
+			break;
+		case 1:
+			if (dv_Thang_Loc > 3) {
+				lbl_DV_ThongBao.setText("Quý " + dv_Quy_Loc + " không có tháng " + dv_Thang_Loc + "!");
+			} else {
+				lbl_HD_ThongBao.setText("");
+			}
+			break;
+
+		default:
+			break;
+		}
+
 		int dv_TongBan_Tu = 0;
 		int dv_TongBan_Den = Integer.MAX_VALUE;
 		if (cbx_DV_Loc_TongTien.getSelectedIndex() != 0) {
@@ -1102,33 +1252,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			} else if (cbx_DV_Loc_TongTien.getSelectedIndex() == 5) {
 				dv_TongBan_Tu = 10000000;
 			}
-		}
-		Date ngayKetThuc = new Date();
-		try {
-			ngayKetThuc = dateCh_DV_DenNgay.getDate();
-			if (ngayKetThuc == null) {
-				ngayKetThuc = new java.util.Date();
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			ngayKetThuc = null;
-		}
-
-		Date ngayBatDau = new Date();
-		try {
-			ngayBatDau = dateCh_DV_TuNgay.getDate();
-			if (ngayBatDau == null) {
-				calendar.set(2000, Calendar.JANUARY, 01);
-				ngayBatDau = calendar.getTime();
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			ngayBatDau = null;
-		}
-
-		if (ngayBatDau.after(ngayKetThuc)) {
-			JOptionPane.showMessageDialog(null, "Ngày kết thúc phải sau ngày bắt đầu!");
-			return;
 		}
 
 		for (DichVu dv : DAO_DV.layTatCaDichVu()) {
@@ -1197,9 +1320,9 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		}
 		if (!ketQuaLoc) {
 			model_DichVu.fireTableDataChanged();
+			return;
 //			JOptionPane.showMessageDialog(null, "Không tìm thấy kết quả phù hợp với tiêu chí lọc.");
 
 		}
 	}
-
 }
