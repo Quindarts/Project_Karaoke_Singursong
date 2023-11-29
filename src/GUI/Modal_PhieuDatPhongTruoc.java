@@ -18,6 +18,8 @@ import java.awt.Font;
 import java.awt.Toolkit;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import com.formdev.flatlaf.FlatLightLaf;
 import com.toedter.calendar.JDateChooser;
@@ -70,8 +72,10 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JSpinner;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
-public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
+public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, PropertyChangeListener, ChangeListener {
 
 	private static Modal_PhieuDatPhongTruoc frame;
 	private JPanel contentPane;
@@ -393,7 +397,19 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		panel_2.add(spnThoiGianNhanPhong);
 
 		SpinnerDateModel dateModel2 = new SpinnerDateModel();
-		dateModel2.setCalendarField(Calendar.MINUTE);
+//		dateModel2.setCalendarField(Calendar.MINUTE);
+		// Thiết lập giới hạn thời gian từ 8:00 AM đến 9:00 PM
+		Calendar calendar = Calendar.getInstance();
+		calendar.set(Calendar.HOUR_OF_DAY, 8);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		Date startTime = calendar.getTime();
+
+		calendar.set(Calendar.HOUR_OF_DAY, 21);
+		Date endTime = calendar.getTime();
+
+		dateModel2.setStart(startTime);
+		dateModel2.setEnd(endTime);
 
 		spnThoiGianDatPhong = new JSpinner(dateModel2);
 		spnThoiGianDatPhong.setEnabled(false);
@@ -506,6 +522,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		btnHuy.addActionListener(this);
 		btnTimKiem.addActionListener(this);
 
+		date_NhanPhong.addPropertyChangeListener(this);
+
 	}
 
 	@Override
@@ -577,7 +595,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 					});
 				});
 			}
-			
+
 			// Lọc phòng trống
 			if (dsP != null) {
 				dsP.forEach(p -> {
@@ -591,8 +609,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 							lp.getGiaTien() };
 					if (p.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 						model.addRow(rowData);
-					}else {
-						System.out.println("Test Git");
 					}
 
 				});
@@ -604,7 +620,6 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 	}
 
 	public void locPhongTrongTheoNgay() {
-
 		clearTable();
 		renderDanhSachPhongTrong();
 
@@ -650,6 +665,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 
 		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
 		return timestamp;
+
 	}
 
 	public boolean Validate() {
@@ -662,11 +678,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		/**
 		 * Ngày nhận phòng: ** Lớn hơn ngày hiện tại **
 		 **/
-		if (ngayNhanPhong.before(ngayDatPhong)) {
-			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
-			// Đặt lại ngày hiện tại cho JDateChooser
-			JOptionPane.showMessageDialog(this, "Ngày nhận phòng không hợp lệ!");
-		}
+
 		/**
 		 * Giờ nhận phòng: ** 08:00:00 <= gioNhanPhong <= 21:00:00
 		 * 
@@ -678,7 +690,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 			try {
 				int sl = Integer.parseInt(soGioHatDK);
 				if (!(sl >= 1 && sl <= 16)) {
-					JOptionPane.showMessageDialog(this, "Số lượng khách phải nằm trong khoảng (10,150)");
+					JOptionPane.showMessageDialog(this, "Số giờ hát không hợp lệ!");
 					return false;
 				}
 			} catch (NumberFormatException e) {
@@ -688,7 +700,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 			}
 		} else {
 			txtGioHat.requestFocus();
-			JOptionPane.showMessageDialog(this, "Số giờ hát dự kiến không được rỗng");
+			JOptionPane.showMessageDialog(this, "Số giờ hát dự kiến không được rỗng!");
 			return false;
 		}
 
@@ -703,4 +715,46 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener {
 		model.setRowCount(0);
 	}
 
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		Object o = evt.getSource();
+		Date ngayNhan = new Date();
+		/**
+		 * Ngày nhận phòng: ** Lớn hơn ngày hiện tại
+		 **/
+		if (o.equals(date_NhanPhong)) {
+			if ("date".equals(evt.getPropertyName())) {
+				ngayNhan = (Date) evt.getNewValue();
+				Date ngayNhanPhong = date_NhanPhong.getDate();
+				Date currentDate = new Date();
+
+				// Tạo một đối tượng Calendar và đặt nó thành ngày hiện tại
+				Calendar calendar = Calendar.getInstance();
+				calendar.setTime(currentDate);
+
+				// Thực hiện phép trừ, ví dụ: trừ đi 5 ngày
+				calendar.add(Calendar.DAY_OF_MONTH, -1);
+
+				// Lấy kết quả dưới dạng đối tượng Date
+				Date subtractedDate = calendar.getTime();
+
+				System.out.println(ngayNhanPhong);
+				System.out.println(subtractedDate);
+				if (ngayNhanPhong.before(subtractedDate)) {
+					Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+					// Đặt lại ngày hiện tại cho JDateChooser
+					JOptionPane.showMessageDialog(this, "Ngày nhận phòng không hợp lệ!");
+				}
+
+			}
+		}
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		Object o = e.getSource();
+		if (o.equals(spnThoiGianNhanPhong)) {
+
+		}
+	}
 }
