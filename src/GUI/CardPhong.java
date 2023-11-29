@@ -135,10 +135,11 @@ public class CardPhong extends JPanel {
 		lblNewLabel.setIcon(imgVIP);
 		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel.setBounds(120, 0, 30, 30);
-		if (phong.getLoaiPhong().getMaLoaiPhong().trim().equals("ORD1")
-				|| phong.getLoaiPhong().getMaLoaiPhong().trim().equals("ORD2")) {
-			add(lblNewLabel);
-		}
+//		if (phong.getLoaiPhong().getMaLoaiPhong().trim().equals("ORD1")
+//				|| phong.getLoaiPhong().getMaLoaiPhong().trim().equals("ORD2")) {
+//			
+//		}
+		add(lblNewLabel);
 		cbox_DatPhong = new JCheckBox("Đặt phòng này");
 		cbox_DatPhong.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		cbox_DatPhong.setForeground(new Color(51, 153, 255));

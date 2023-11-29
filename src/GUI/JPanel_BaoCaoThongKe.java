@@ -146,6 +146,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private ArrayList<ChiTietHoaDon> dsCTHD;
 	private ArrayList<ChiTietDichVu> dsCTDV;
 	private ArrayList<HoaDon> dsHD_DaThanhToan;
+	private JTabbedPane tabbedPane;
 
 	/**
 	 * Rounded JPanel
@@ -205,12 +206,12 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		setLayout(null);
 		setBounds(0, 0, 1296, 672);
 
-		JPanel panel = new JPanel();
-		panel.setBounds(0, 0, 1296, 672);
-		panel.setBackground(Color.decode(hexColor_Blue1));
+//		JPanel panel = new JPanel();
+//		panel.setBounds(0, 0, 1296, 672);
+//		panel.setBackground(Color.decode(hexColor_Blue1));
 //		panel.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
-		add(panel);
-		panel.setLayout(null);
+//		add(panel);
+//		panel.setLayout(null);
 
 		DAO_HD = new HoaDon_DAO();
 		DAO_NV = new NhanVien_DAO();
@@ -222,23 +223,40 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		tongDoanhThu_DV = 0;
 		tongDoanhThu_HD = 0;
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setForeground(new Color(0, 128, 255));
-		tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 17));
+//		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+//		tabbedPane.setBackground(new Color(255, 255, 255));
+//		tabbedPane.setForeground(new Color(0, 128, 255));
+//		tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 17));
+//		tabbedPane.setBounds(0, 0, 1296, 672);
+//		panel.add(tabbedPane);
+		
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+		tabbedPane.setForeground(Color.decode(hexColor_Blue1));
+		tabbedPane.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
+		tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		tabbedPane.setBackground(Color.WHITE);
+		tabbedPane.putClientProperty("TabbedPane.showTabSeparators", true);
 		tabbedPane.setBounds(0, 0, 1296, 672);
-		panel.add(tabbedPane);
+		add(tabbedPane);
 
 		/**
 		 * Tạo Panel Hóa đơn
 		 */
+		
+		//Bieu do thong ke
+		JPanel pnl_bieuDo = new JPanel_BieuDoThongKe();
+		
+		tabbedPane.addTab("BIỂU ĐỒ", new ImageIcon(JPanel_BaoCaoThongKe.class.getResource("/icon/chart.png")),
+				pnl_bieuDo, null);
 		JPanel pnl_HoaDon = new JPanel();
 		pnl_HoaDon.setLayout(null);
-		pnl_HoaDon.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
-		pnl_HoaDon.setBackground(new Color(5, 74, 145));
-		tabbedPane.addTab("Hóa đơn", null, pnl_HoaDon, null);
-
+//		pnl_HoaDon.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
+		pnl_HoaDon.setBackground(new Color(255, 255, 255));
+		tabbedPane.addTab("HÓA ĐƠN", new ImageIcon(JPanel_BaoCaoThongKe.class.getResource("/icon/invoice.png")),
+				pnl_HoaDon, null);
 		JScrollPane scrollPane_HoaDon = new JScrollPane();
-		scrollPane_HoaDon.setBounds(10, 10, 1019, 549);
+		scrollPane_HoaDon.setBounds(10, 10, 970, 526);
 		model_HoaDon = new DefaultTableModel();
 		table_HoaDon = new JTable();
 		table_HoaDon.setModel(
@@ -266,7 +284,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		panel_Loc.setLayout(null);
 		panel_Loc.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Loc.setBackground(Color.WHITE);
-		panel_Loc.setBounds(1031, 10, 255, 615);
+		panel_Loc.setBounds(990, 10, 252, 576);
 		pnl_HoaDon.add(panel_Loc);
 
 		JLabel lbl_Loc = new JLabel("LỌC");
@@ -390,14 +408,14 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_Loc_TheoTongTien.add(cbx_HD_Loc_TongTien);
 
 		btn_HD_Loc = new JButton("Lọc");
-		btn_HD_Loc.setBounds(106, 564, 85, 21);
+		btn_HD_Loc.setBounds(96, 543, 85, 21);
 		btn_HD_Loc.addActionListener(this);
 		panel_Loc.add(btn_HD_Loc);
 
 		JPanel panel_TongTien = new JPanel();
 		panel_TongTien.setLayout(null);
 		panel_TongTien.setBackground(Color.WHITE);
-		panel_TongTien.setBounds(10, 561, 1019, 64);
+		panel_TongTien.setBounds(10, 546, 970, 49);
 		pnl_HoaDon.add(panel_TongTien);
 
 		JPanel pnl_HD_PhanTrang = new JPanel();
@@ -407,7 +425,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		JPanel pnl_TongDoanhThu = new JPanel();
 		pnl_TongDoanhThu.setLayout(null);
 		pnl_TongDoanhThu.setBackground(Color.WHITE);
-		pnl_TongDoanhThu.setBounds(675, 15, 335, 25);
+		pnl_TongDoanhThu.setBounds(635, 15, 335, 25);
 		panel_TongTien.add(pnl_TongDoanhThu);
 
 		JLabel lblNewLabel = new JLabel("Tổng doanh thu: ");
@@ -425,7 +443,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		JPanel pnl_TongSoHoaDon = new JPanel();
 		pnl_TongSoHoaDon.setLayout(null);
 		pnl_TongSoHoaDon.setBackground(Color.WHITE);
-		pnl_TongSoHoaDon.setBounds(494, 15, 171, 25);
+		pnl_TongSoHoaDon.setBounds(454, 15, 171, 25);
 		panel_TongTien.add(pnl_TongSoHoaDon);
 
 		JLabel lblTngSHa = new JLabel("Tổng số hóa đơn:");
@@ -445,17 +463,12 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		 */
 		JPanel pnl_DichVu = new JPanel();
 		pnl_DichVu.setLayout(null);
-		pnl_DichVu.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
-		pnl_DichVu.setBackground(new Color(5, 74, 145));
-		tabbedPane.addTab("Dịch vụ", null, pnl_DichVu, null);
-		
-		//Bieu do thong ke
-		JPanel pnl_bieuDo = new JPanel_BieuDoThongKe();
-		
-		tabbedPane.addTab("Biểu đồ", null, pnl_bieuDo, null);
+		pnl_DichVu.setBackground(new Color(255, 255, 255));
+		tabbedPane.addTab("DỊCH VỤ", new ImageIcon(JPanel_BaoCaoThongKe.class.getResource("/icon/food-service.png")),
+				pnl_DichVu, null);
 
 		JScrollPane scrollPane_DichVu = new JScrollPane();
-		scrollPane_DichVu.setBounds(10, 10, 1019, 549);
+		scrollPane_DichVu.setBounds(10, 10, 970, 526);
 		pnl_DichVu.add(scrollPane_DichVu);
 		model_DichVu = new DefaultTableModel();
 		table_DichVu = new JTable();
@@ -472,7 +485,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		panel_Loc_DichVu.setLayout(null);
 		panel_Loc_DichVu.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		panel_Loc_DichVu.setBackground(Color.WHITE);
-		panel_Loc_DichVu.setBounds(1031, 10, 255, 615);
+		panel_Loc_DichVu.setBounds(990, 10, 252, 576);
 		pnl_DichVu.add(panel_Loc_DichVu);
 
 		JLabel lbl_Loc_1 = new JLabel("LỌC");
@@ -598,14 +611,14 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_Loc_TheoTongTien_1.add(cbx_DV_Loc_TongTien);
 
 		btn_DV_Loc = new JButton("Lọc");
-		btn_DV_Loc.setBounds(40, 568, 85, 21);
+		btn_DV_Loc.setBounds(90, 545, 85, 21);
 		btn_DV_Loc.addActionListener(this);
 		panel_Loc_DichVu.add(btn_DV_Loc);
 
 		JPanel panel_TongTien_DichVu = new JPanel();
 		panel_TongTien_DichVu.setLayout(null);
 		panel_TongTien_DichVu.setBackground(Color.WHITE);
-		panel_TongTien_DichVu.setBounds(10, 561, 1019, 64);
+		panel_TongTien_DichVu.setBounds(10, 546, 970, 53);
 		pnl_DichVu.add(panel_TongTien_DichVu);
 
 		JPanel pnl_DV_PhanTrang = new JPanel();
@@ -615,7 +628,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		JPanel pnl_TongDoanhThu_1 = new JPanel();
 		pnl_TongDoanhThu_1.setLayout(null);
 		pnl_TongDoanhThu_1.setBackground(Color.WHITE);
-		pnl_TongDoanhThu_1.setBounds(675, 15, 335, 25);
+		pnl_TongDoanhThu_1.setBounds(635, 15, 335, 25);
 		panel_TongTien_DichVu.add(pnl_TongDoanhThu_1);
 
 		JLabel lblNewLabel_2 = new JLabel("Tổng doanh thu: ");
@@ -633,7 +646,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		JPanel pnl_TongSoHoaDon_1 = new JPanel();
 		pnl_TongSoHoaDon_1.setLayout(null);
 		pnl_TongSoHoaDon_1.setBackground(Color.WHITE);
-		pnl_TongSoHoaDon_1.setBounds(494, 15, 171, 25);
+		pnl_TongSoHoaDon_1.setBounds(454, 15, 171, 25);
 		panel_TongTien_DichVu.add(pnl_TongSoHoaDon_1);
 
 		JLabel lblTngSHa_1 = new JLabel("Tổng số dịch vụ:");

@@ -51,12 +51,12 @@ public class CardDichVu extends JPanel {
 		img_show_panel.setBounds(0, 0, 150, 150);
 		
 //		---mới 
-//		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/"+dichVu.getThongTinDichVu().getHinhAnh()));
-//		Image originalImage = originalIcon.getImage();
-//		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-//		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
-//		img_show_panel.setIcon(resizedIcon);
-//		main_card.add(img_show_panel);
+		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/"+dichVu.getThongTinDichVu().getHinhAnh()));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+		img_show_panel.setIcon(resizedIcon);
+		main_card.add(img_show_panel);
 
 		JLabel lbl_giaTien = new JLabel(Double.toString(dichVu.getDonGia()));
 		lbl_giaTien.setForeground(new Color(255, 69, 0));

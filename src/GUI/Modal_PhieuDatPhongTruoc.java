@@ -145,7 +145,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, 
 
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+				Toolkit.getDefaultToolkit().getImage(Modal_PhieuDatPhongTruoc.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 900, 725);
@@ -719,7 +719,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, 
 				Calendar calendar = Calendar.getInstance();
 				calendar.setTime(currentDate);
 
-				// Thực hiện phép trừ, ví dụ: trừ đi 5 ngày
+				// Thực hiện phép trừ, ví dụ: trừ đi 1 ngày
 				calendar.add(Calendar.DAY_OF_MONTH, -1);
 
 				// Lấy kết quả dưới dạng đối tượng Date

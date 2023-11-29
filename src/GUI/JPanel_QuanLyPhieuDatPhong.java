@@ -473,14 +473,16 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		panel.add(btnLamMoi);
 
 		btnSua = new JButton("Sửa phiếu");
+		btnSua.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/edit.png")));
 		btnSua.setSelectedIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/update.png")));
 		btnSua.setForeground(Color.WHITE);
 		btnSua.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnSua.setBackground(Color.decode(hexColor_Green));
+		btnSua.setBackground(Color.decode(hexColor_Orange));
 		btnSua.setBounds(156, 0, 135, 35);
 		panel.add(btnSua);
 
 		btnThem = new JButton("Thêm");
+		btnThem.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/add.png")));
 		btnThem.setSelectedIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/add.png")));
 		btnThem.setForeground(Color.WHITE);
 		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 15));

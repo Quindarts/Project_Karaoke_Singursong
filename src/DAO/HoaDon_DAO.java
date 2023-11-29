@@ -466,19 +466,68 @@ public class HoaDon_DAO {
 		return n > 0;
 	}
 
-	public ArrayList<HoaDon> layHoaDon_TheoKhoangNgay(Timestamp tuNgay, Timestamp denNgay) {
+	public ArrayList<HoaDon> layHoaDon_TheoKhoangNgay(Date tuNgay, Date denNgay) {
 		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
+		
+		// Chuyển đổi thành java.sql.Date bằng constructor
+        java.sql.Date tuNgaySQL = new java.sql.Date(tuNgay.getTime());
+        java.sql.Date denNgaySQL = new java.sql.Date(denNgay.getTime());
+        
 		HoaDon hoaDon = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		try {
 			String sql = "SELECT *\r\n" + "FROM HoaDon\r\n"
-					+ "WHERE  ngayLap >= ? AND  ngayLap < ?;";
+					+ "WHERE  CONVERT(date, ngayLap) >= ? AND  CONVERT(date, ngayLap) <= ?;";
 			statement = con.prepareStatement(sql);
-			statement.setTimestamp(1, tuNgay);
-			statement.setTimestamp(2, denNgay);
+			statement.setDate(1, tuNgaySQL);
+			statement.setDate(2,denNgaySQL);
 			ResultSet rs = statement.executeQuery();
+			
+			while (rs.next()) {
+				String maHoaDon = rs.getString("maHoaDon");
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
+				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
+				String trangThai = rs.getString("trangThai");
+				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
+						thoiGianKetThuc);
+				listHD.add(hoaDon);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return listHD;
+	}
+	
+	public ArrayList<HoaDon> layHoaDon_TheoNgayLap(Date ngayLapHD) {
+		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
+		
+		// Chuyển đổi thành java.sql.Date bằng constructor
+        java.sql.Date ngayLapSQL = new java.sql.Date(ngayLapHD.getTime());
+        
+		HoaDon hoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT *\r\n" + "FROM HoaDon\r\n"
+					+ "WHERE  CONVERT(date, ngayLap) = ? ";
+			statement = con.prepareStatement(sql);
+			statement.setDate(1, ngayLapSQL);
+			ResultSet rs = statement.executeQuery();
+			
 			while (rs.next()) {
 				String maHoaDon = rs.getString("maHoaDon");
 				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));

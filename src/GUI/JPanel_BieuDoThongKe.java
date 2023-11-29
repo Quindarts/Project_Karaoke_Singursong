@@ -139,7 +139,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1296, 672);
 		panel.setBackground(Color.decode(hexColor_Blue1));
-		panel.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
+//		panel.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 
 		add(panel);
 		panel.setLayout(null);
@@ -147,27 +147,27 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		// Mainlayout
 		JPanel panel_main = new JPanel();
 		panel_main.setBackground(new Color(255, 255, 255));
-		panel_main.setBounds(10, 10, 1265, 642);
+		panel_main.setBounds(0, 0, 1265, 639);
 		panel.add(panel_main);
 		panel_main.setLayout(null);
 
 		// Panel Chart bar top dich vu
 		JPanel panel_container = new JPanel();
 		panel_container.setBackground(new Color(255, 255, 255));
-		panel_container.setBounds(10, 10, 1245, 629);
+		panel_container.setBounds(0, 0, 1245, 629);
 		panel_main.add(panel_container);
 		panel_container.setLayout(null);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setLayout(null);
 		panel_1.setBackground(new Color(255, 140, 0));
-		panel_1.setBounds(9, 77, 373, 105);
+		panel_1.setBounds(0, 77, 392, 105);
 		panel_container.add(panel_1);
 
 		JPanel panel_locBar = new JPanel();
 		panel_locBar.setLayout(null);
 		panel_locBar.setBackground(Color.WHITE);
-		panel_locBar.setBounds(807, 10, 428, 54);
+		panel_locBar.setBounds(0, 10, 428, 54);
 		panel_container.add(panel_locBar);
 
 		JLabel lblNewLabel = new JLabel("Ngày bắt đầu");
@@ -263,7 +263,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		JPanel panel_1_1 = new JPanel();
 		panel_1_1.setLayout(null);
 		panel_1_1.setBackground(new Color(106, 90, 205));
-		panel_1_1.setBounds(422, 77, 383, 105);
+		panel_1_1.setBounds(415, 77, 400, 105);
 		panel_container.add(panel_1_1);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Tổng doanh thu");
@@ -291,7 +291,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		JPanel panel_1_2 = new JPanel();
 		panel_1_2.setLayout(null);
 		panel_1_2.setBackground(new Color(34, 139, 34));
-		panel_1_2.setBounds(839, 77, 396, 105);
+		panel_1_2.setBounds(839, 77, 406, 105);
 		panel_container.add(panel_1_2);
 
 		JLabel lblNewLabel_1_2 = new JLabel("Số lượng hàng bán được");
@@ -316,12 +316,6 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 
 		lbl_icon3.setIcon(imgSanPham);
 		panel_1_2.add(lbl_icon3);
-
-		JLabel lblNewLabel_3 = new JLabel("Trực quan hóa thống kê Karaoke SingUrSong");
-		lblNewLabel_3.setForeground(SystemColor.textHighlight);
-		lblNewLabel_3.setFont(new Font("Segoe UI", Font.BOLD, 19));
-		lblNewLabel_3.setBounds(9, 10, 456, 37);
-		panel_container.add(lblNewLabel_3);
 
 		// ---------Chart--------------------------
 		dataset = new DefaultCategoryDataset();
@@ -357,7 +351,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		chartBar_thongKeTopDV.setBackgroundPaint(Color.WHITE);
 
 		ChartPanel chartPanel = new ChartPanel(chartBar_thongKeTopDV);
-		chartPanel.setBounds(0, 222, 395, 385);
+		chartPanel.setBounds(0, 205, 392, 385);
 		chartPanel.setPreferredSize(new Dimension(500, 300));
 		chartPanel.setMinimumDrawWidth(100);
 		chartPanel.setForeground(SystemColor.textHighlight);
@@ -402,7 +396,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		chartBar_thongKeTopDT.setBackgroundPaint(Color.WHITE);
 
 		ChartPanel chartPanelDV_DT = new ChartPanel(chartBar_thongKeTopDT);
-		chartPanelDV_DT.setBounds(405, 222, 400, 385);
+		chartPanelDV_DT.setBounds(415, 205, 400, 385);
 		chartPanelDV_DT.setPreferredSize(new Dimension(500, 300));
 		chartPanelDV_DT.setMinimumDrawWidth(100);
 		chartPanelDV_DT.setForeground(SystemColor.textHighlight);
@@ -437,7 +431,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		chartPieThongKeDV.setBackgroundPaint(Color.WHITE);
 
 		ChartPanel chartPanelPie = new ChartPanel(chartPieThongKeDV);
-		chartPanelPie.setBounds(840, 222, 395, 385);
+		chartPanelPie.setBounds(839, 205, 406, 385);
 		panel_container.add(chartPanelPie);
 		chartPanelPie.setPreferredSize(new Dimension(300, 300));
 		chartPanelPie.setMinimumDrawWidth(100);

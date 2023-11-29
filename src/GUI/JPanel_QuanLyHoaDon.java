@@ -69,7 +69,8 @@ import javax.swing.JRadioButton;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
-public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, MouseListener, KeyListener, PropertyChangeListener{
+public class JPanel_QuanLyHoaDon extends JPanel
+		implements ActionListener, MouseListener, KeyListener, PropertyChangeListener {
 
 	/**
 	 * Color
@@ -376,7 +377,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		rdbDaHuy.addActionListener(this);
 		rdbDaThanhToan.addActionListener(this);
 		rdbTatCa.addActionListener(this);
-		
+
 		date_NgayLap.addPropertyChangeListener(this);
 		dateDenNgay.addPropertyChangeListener(this);
 		dateTuNgay.addPropertyChangeListener(this);
@@ -505,9 +506,8 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 
 	// Tìm kiếm hóa đơn theo khoảng ngày
 	public void TimKiemTheoKhoangNgay() {
-		Timestamp tuNgay = selectDateTimeTuNgay(dateTuNgay);
-		Timestamp denNgay = selectDateTimeDenNgay(dateDenNgay);
-		System.out.println(tuNgay.toString());
+		Date tuNgay = dateTuNgay.getDate();
+		Date denNgay = dateDenNgay.getDate();
 		ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoKhoangNgay(tuNgay, denNgay);
 
 		if (dsHD != null) {
@@ -523,67 +523,24 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 			JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
 		}
 	}
-	
+
 	// Tìm kiếm hóa đơn theo ngày lập
-		public void TimKiemTheoNgayLap() {
-			Timestamp batDauNgayLap = selectDateTimeTuNgay(date_NgayLap);
-			Timestamp ketThucNgayLap = selectDateTimeDenNgay(date_NgayLap);
-			ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoKhoangNgay(batDauNgayLap, ketThucNgayLap);
+	public void TimKiemTheoNgayLap() {
+		Date ngayLap = date_NgayLap.getDate();
+		ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoNgayLap(ngayLap);
 
-			if (dsHD != null) {
-				for (HoaDon hd : dsHD) {
-					KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
-					NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
-					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
-							hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
-							hd.getTrangThai(), hd.getThoiGianKetThuc() };
-					model.addRow(rowData);
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
+		if (dsHD != null) {
+			for (HoaDon hd : dsHD) {
+				KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
+				NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
+				Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+						hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+						hd.getTrangThai(), hd.getThoiGianKetThuc() };
+				model.addRow(rowData);
 			}
+		} else {
+			JOptionPane.showMessageDialog(null, "Không tồn tại hóa đơn !");
 		}
-
-	public Timestamp selectDateTimeTuNgay(JDateChooser date) {
-		Date selectedDate = date.getDate();
-
-		// Tạo một đối tượng Calendar và set thời gian
-		Calendar calendar = Calendar.getInstance();
-		// Set giờ, phút và giây thành 00:00:00
-		calendar.set(Calendar.HOUR_OF_DAY, 0);
-		calendar.set(Calendar.MINUTE, 0);
-		calendar.set(Calendar.SECOND, 0);
-		Calendar selectedDateTime = Calendar.getInstance();
-
-		selectedDateTime.setTime(selectedDate);
-		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
-		selectedDateTime.set(Calendar.SECOND, calendar.get(Calendar.SECOND));
-		selectedDateTime.set(Calendar.MILLISECOND, calendar.get(Calendar.MILLISECOND));
-
-		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
-		return timestamp;
-	}
-
-	public Timestamp selectDateTimeDenNgay(JDateChooser date) {
-		Date selectedDate = date.getDate();
-
-		// Tạo một đối tượng Calendar và set thời gian
-		Calendar calendar = Calendar.getInstance();
-		// Set giờ, phút và giây thành 00:00:00
-		calendar.set(Calendar.HOUR_OF_DAY, 23);
-		calendar.set(Calendar.MINUTE, 59);
-		calendar.set(Calendar.SECOND, 59);
-		Calendar selectedDateTime = Calendar.getInstance();
-
-		selectedDateTime.setTime(selectedDate);
-		selectedDateTime.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY));
-		selectedDateTime.set(Calendar.MINUTE, calendar.get(Calendar.MINUTE));
-		selectedDateTime.set(Calendar.SECOND, calendar.get(Calendar.SECOND));
-		selectedDateTime.set(Calendar.MILLISECOND, calendar.get(Calendar.MILLISECOND));
-
-		Timestamp timestamp = new Timestamp(selectedDateTime.getTimeInMillis());
-		return timestamp;
 	}
 
 	// Tìm kiếm theo trạng thái
@@ -717,7 +674,7 @@ public class JPanel_QuanLyHoaDon extends JPanel implements ActionListener, Mouse
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		Object o = evt.getSource();
