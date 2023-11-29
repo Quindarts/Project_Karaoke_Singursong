@@ -200,8 +200,6 @@ public class Modal_XemThongTinPhong extends JFrame {
 		lbl_LoaiPhong.setBounds(80, 0, 140, 20);
 		pnl_LoaiPhong.add(lbl_LoaiPhong);
 		
-		
-		
 	}
 
 	public void SetModal_XemThongTinPhong(String anhPhong, String tenPhong ,String tenLoaiPhong, String viTriPhong, String giaPhong,
