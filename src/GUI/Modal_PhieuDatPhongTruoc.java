@@ -247,6 +247,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, 
 								JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						txtTenKH.setEnabled(true);
+						
 					}
 
 					if (txtSoDienThoai.getText().trim() != "" && matcher.matches()) {
@@ -397,7 +398,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, 
 		panel_2.add(spnThoiGianNhanPhong);
 
 		SpinnerDateModel dateModel2 = new SpinnerDateModel();
-//		dateModel2.setCalendarField(Calendar.MINUTE);
+		dateModel2.setCalendarField(Calendar.MINUTE);
 		// Thiết lập giới hạn thời gian từ 8:00 AM đến 9:00 PM
 		Calendar calendar = Calendar.getInstance();
 		calendar.set(Calendar.HOUR_OF_DAY, 8);
@@ -536,7 +537,9 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, 
 			taoPhieu();
 		}
 		if (o.equals(btnTimKiem)) {
-			locPhongTrongTheoNgay();
+			if(Validate()) {
+				locPhongTrongTheoNgay();
+			}	
 		}
 
 	}
@@ -669,21 +672,8 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, 
 	}
 
 	public boolean Validate() {
-		Date ngayNhanPhong = date_NhanPhong.getDate();
-		Date ngayDatPhong = date_DatPhong.getDate();
-		SpinnerDateModel gioNhanPhong = (SpinnerDateModel) spnThoiGianNhanPhong.getValue();
 		String soGioHatDK = txtGioHat.getText().trim();
 		String sdtKH = txtSoDienThoai.getText().trim();
-
-		/**
-		 * Ngày nhận phòng: ** Lớn hơn ngày hiện tại **
-		 **/
-
-		/**
-		 * Giờ nhận phòng: ** 08:00:00 <= gioNhanPhong <= 21:00:00
-		 * 
-		 * 
-		 **/
 
 		// Số giờ hát dự kiến là số nguyên dương
 		if ((soGioHatDK.length() > 0)) {
@@ -703,10 +693,7 @@ public class Modal_PhieuDatPhongTruoc extends JFrame implements ActionListener, 
 			JOptionPane.showMessageDialog(this, "Số giờ hát dự kiến không được rỗng!");
 			return false;
 		}
-
-		// Số điện thoại khách hàng nếu không tồn tại thì phải thêm thông tin khách hàng
-
-		return false;
+		return true;
 
 	}
 
