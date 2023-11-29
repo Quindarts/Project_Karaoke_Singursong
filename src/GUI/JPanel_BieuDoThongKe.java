@@ -52,7 +52,7 @@ import Entity.ChiTietHoaDon;
 import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.NhanVien;
-import GUI.JPanel_BaoCaoThongKe.RoundedTransparentBorder;
+//import GUI.JPanel_BaoCaoThongKe.RoundedTransparentBorder;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
