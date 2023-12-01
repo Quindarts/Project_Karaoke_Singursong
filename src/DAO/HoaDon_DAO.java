@@ -4,6 +4,7 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
@@ -693,5 +694,78 @@ public class HoaDon_DAO {
 			e.printStackTrace();
 		}
 		return tongHD;
+	}
+
+	public ArrayList<HoaDon> loc_TongHop(String ngayBD, String ngayKT, int thang, int nam, int quy) {
+		boolean locTheoThang = false;
+		boolean locTheoNam = false;
+		boolean locTheoQuy = false;
+
+		if (thang != 0)
+			locTheoThang = true;
+
+		if (quy != 0)
+			locTheoQuy = true;
+
+		if (nam != 0)
+			locTheoNam = true;
+
+		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
+		HoaDon hoaDon = null;
+		String sql = "SELECT * FROM HoaDon WHERE trangThai = N'Đã thanh toán' "
+		+ "AND thoiGianKetThuc BETWEEN '" + ngayBD + "' AND '" + ngayKT + "' ";
+
+		if (locTheoThang) {
+			sql += " AND MONTH(thoiGianKetThuc) = ? ";
+		}
+
+		if (locTheoNam) {
+			sql += " AND YEAR(thoiGianKetThuc) = ? ";
+		}
+
+		if (locTheoQuy) {
+			sql += " AND DATENAME(QUARTER, thoiGianKetThuc) = ? ";
+		}
+
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		try {
+			statement = con.prepareStatement(sql);
+			
+			int parameterIndex = 1;
+
+			if (locTheoThang) {
+				statement.setInt(parameterIndex++, thang);
+			}
+
+			if (locTheoNam) {
+				statement.setInt(parameterIndex++, nam);
+			}
+
+			if (locTheoQuy) {
+				statement.setInt(parameterIndex++, quy);
+			}
+			
+			ResultSet rs = statement.executeQuery();	
+			while (rs.next()) {
+				String maHoaDon = rs.getString("maHoaDon");
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
+				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
+				String trangThai = rs.getString("trangThai");
+				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
+						thoiGianKetThuc);
+				listHD.add(hoaDon);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return listHD;
 	}
 }

@@ -42,7 +42,8 @@ public class HelpRamDomMa {
 		}
 		if (maFromData.trim() != "" && !maFromData.trim().substring(maFromData.trim().length() - 3).equals("999")) {
 
-			if (maFromData.trim().substring(0, 11).equals(result.substring(0, 11).trim())) {
+			if (maFromData.trim().length() >= 11 && result.length() >= 11
+					&& maFromData.trim().substring(0, 11).equals(result.substring(0, 11).trim())) {
 
 				String str_base = maFromData.substring(11);
 
@@ -103,13 +104,13 @@ public class HelpRamDomMa {
 		return maCot;
 	}
 
-	public static void main(String[] args) {
-
-//		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
-		String maPhieuDat = taoMa("HoaDon", "maHoaDon", "HD");
-		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-		System.out.println(maPhieuDat);
-		System.out.println(maPhieuDat2);
-	}
+//	public static void main(String[] args) {
+//
+////		String maHoaDon = taoMa("HoaDon", "maHoaDon", "HD");
+////		String maPhieuDat = taoMa("HoaDon", "maHoaDon", "HD");
+////		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
+////		System.out.println(maPhieuDat);
+////		System.out.println(maPhieuDat2);
+//	}
 
 }

@@ -66,7 +66,7 @@ public class JFrame_ThuNgan extends JFrame {
 	private JPanel_QuanLyLoaiPhong Panel_QLLP;
 	private JPanel_QuanLyPhong Panel_QLP;
 	private JPanel_QuanLyNhanVien Panel_QLNV;
-//	private JPanel_BaoCaoThongKe Panel_BCTK;
+	private JPanel_BaoCaoThongKe Panel_BCTK;
 
 	/**
 	 * Color

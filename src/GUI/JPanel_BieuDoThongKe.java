@@ -52,7 +52,7 @@ import Entity.ChiTietHoaDon;
 import Entity.HoaDon;
 import Entity.KhachHang;
 import Entity.NhanVien;
-//import GUI.JPanel_BaoCaoThongKe.RoundedTransparentBorder;
+import GUI.JPanel_BaoCaoThongKe.RoundedTransparentBorder;
 import com.toedter.calendar.JCalendar;
 import com.toedter.calendar.JDateChooser;
 
@@ -517,8 +517,6 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 					NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
 					double tongTien = hd.tinhTongTien(dsCTHD, dsCTDV);
 					tongDoanhThu_HD = tongDoanhThu_HD + tongTien;
-					
-
 				});
 			}
 			lbl_tongDoanhThu.setText(dcf.format(tongDoanhThu_HD));
