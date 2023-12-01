@@ -402,7 +402,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 		lbl_HD_ThongBao = new JLabel("");
 		lbl_HD_ThongBao.setForeground(new Color(255, 0, 0));
-		lbl_HD_ThongBao.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+		lbl_HD_ThongBao.setFont(new Font("Segoe UI", Font.ITALIC, 13));
 		lbl_HD_ThongBao.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_HD_ThongBao.setBounds(10, 283, 235, 20);
 		panel_Loc.add(lbl_HD_ThongBao);
@@ -618,7 +618,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		lbl_DV_ThongBao = new JLabel("");
 		lbl_DV_ThongBao.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_DV_ThongBao.setForeground(Color.RED);
-		lbl_DV_ThongBao.setFont(new Font("Segoe UI", Font.ITALIC, 12));
+		lbl_DV_ThongBao.setFont(new Font("Segoe UI", Font.ITALIC, 13));
 		lbl_DV_ThongBao.setBounds(10, 283, 235, 20);
 		panel_Loc_DichVu.add(lbl_DV_ThongBao);
 
