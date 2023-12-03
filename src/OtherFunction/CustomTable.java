@@ -16,6 +16,8 @@ import java.awt.event.MouseEvent;
 
 public class CustomTable extends JTable {
 	private TableColumn buttonColumn;
+	private JButton deleteButton;
+	private JButton editButton;
 
 	public CustomTable(DefaultTableModel model, int coll) {
 		super(model);
@@ -26,9 +28,7 @@ public class CustomTable extends JTable {
 	}
 
 	public class ButtonRenderer extends DefaultTableCellRenderer {
-		private JButton deleteButton;
-		private JButton editButton;
-
+		
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 				int row, int column) {
 			JPanel panel = new JPanel();
@@ -38,21 +38,20 @@ public class CustomTable extends JTable {
 			// Thêm icon xóa
 
 			deleteButton = new JButton();
-			deleteButton
-					.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/add.png")));
-//			deleteButton.setBorderPainted(false);
-//			deleteButton.setContentAreaFilled(false);
-//			deleteButton.setFocusPainted(false);
-//			deleteButton.setOpaque(false);
+			deleteButton.setIcon(new ImageIcon(CustomTable.class.getResource("/icon/delete_red_16px.png")));
+			deleteButton.setBorderPainted(true);
+			deleteButton.setContentAreaFilled(true);
+			deleteButton.setFocusPainted(false);
+			deleteButton.setOpaque(false);
 
 			// Thêm icon sửa
 
 			editButton = new JButton();
-			editButton.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/add.png")));
-//			editButton.setBorderPainted(false);
-//			editButton.setContentAreaFilled(false);
-//			editButton.setFocusPainted(false);
-//			editButton.setOpaque(false);
+			editButton.setIcon(new ImageIcon(CustomTable.class.getResource("/icon/pen_blue_16px.png")));
+			editButton.setBorderPainted(true);
+			editButton.setContentAreaFilled(true);
+			editButton.setFocusPainted(false);
+			editButton.setOpaque(false);
 
 			panel.add(deleteButton);
 			panel.add(editButton);
@@ -62,45 +61,52 @@ public class CustomTable extends JTable {
 
 	}
 
-	public class ButtonEditor extends DefaultCellEditor {
-		private JButton button;
-		private boolean isPushed;
+	 public class ButtonEditor extends DefaultCellEditor {
+	        private JButton button;
+	        private boolean isPushed;
 
-		public ButtonEditor(JCheckBox checkBox) {
-			super(checkBox);
-			button = new JButton();
-			button.addActionListener(new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					fireEditingStopped();
-					// Xử lý sự kiện khi icon được click
-					JOptionPane.showMessageDialog(null,"ok");
+	        public ButtonEditor(JCheckBox checkBox) {
+	            super(checkBox);
+	            button = new JButton();
+	            button.addActionListener(new ActionListener() {
+	                @Override
+	                public void actionPerformed(ActionEvent e) {
+	                    fireEditingStopped();
+	                    handleButtonClick();
+	                }
+	            });
+	        }
 
-				}
-			});
-		}
+	        private void handleButtonClick() {
+	            int selectedRow = getSelectedRow();
+	            int selectedColumn = getSelectedColumn();
 
-		@Override
-		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
-				int column) {
-			isPushed = true;
-			return button;
-		}
+	            if (selectedColumn == buttonColumn.getModelIndex()) {
+	                // Check which button was clicked
+	                if (button == deleteButton) {
+	                    // Handle delete button click
+	                    handleDeleteButtonClick(selectedRow);
+	                } else if (button == editButton) {
+	                    // Handle edit button click
+	                    handleEditButtonClick(selectedRow);
+	                }
+	            }
+	        }
 
-		@Override
-		public Object getCellEditorValue() {
-			if (isPushed) {
-				// Xử lý sự kiện khi icon được click
-			}
-			isPushed = false;
-			return null;
-		}
+	        private void handleDeleteButtonClick(int selectedRow) {
+	            // Implement logic to delete the selected row
+//	            DefaultTableModel model = (DefaultTableModel) getModel();
+	            JOptionPane.showMessageDialog(null, "Delete button clicked for row: " + selectedRow);
+//	            model.removeRow(selectedRow);
+	        }
 
-		@Override
-		public boolean stopCellEditing() {
-			isPushed = false;
-			return super.stopCellEditing();
-		}
-	}
+	        private void handleEditButtonClick(int selectedRow) {
+	            // Implement logic to edit the selected row
+	            // You might open a dialog or perform any other action here
+	            JOptionPane.showMessageDialog(null, "Edit button clicked for row: " + selectedRow);
+	        }
+
+	        // ... existing code ...
+	    }
 
 }

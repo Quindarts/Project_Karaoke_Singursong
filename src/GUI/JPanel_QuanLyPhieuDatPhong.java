@@ -228,7 +228,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return column >= 7; // Đặt tất cả các ô không thể chỉnh sửa
+				return column >= 6; // Đặt tất cả các ô không thể chỉnh sửa
 			}
 
 		});
