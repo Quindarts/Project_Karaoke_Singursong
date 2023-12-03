@@ -112,20 +112,14 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private ThongTinDichVu_DAO DAO_TTDV;
 	private JDateChooser dateCh_HD_TuNgay;
 	private JDateChooser dateCh_HD_DenNgay;
-	private JCheckBox chkbx_HD_Loc_TheoThang;
 	private JComboBox<String> cbx_HD_LocThang;
-	private JCheckBox chkbx_HD_Loc_TheoNam;
 	private JComboBox<String> cbx_HD_LocNam;
-	private JCheckBox chkbx_HD_Loc_TheoQuy;
 	private JComboBox<String> cbx_HD_LocQuy;
 	private JComboBox<String> cbx_HD_Loc_TongTien;
 	private JDateChooser dateCh_DV_TuNgay;
 	private JDateChooser dateCh_DV_DenNgay;
-	private JCheckBox chkbx_DV_Loc_TheoThang;
 	private JComboBox<String> cbx_DV_LocThang;
-	private JCheckBox chkbx_DV_Loc_TheoNam;
 	private JComboBox<String> cbx_DV_LocNam;
-	private JCheckBox chkbx_DV_Loc_TheoQuy;
 	private JComboBox<String> cbx_DV_LocQuy;
 	private JComboBox<String> cbx_DV_Loc_TongTien;
 	private JButton btn_HD_LamMoi;
@@ -311,15 +305,8 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_LocThang.setBounds(10, 76, 215, 25);
 		pnl_Loc_TheoThoiGian.add(pnl_LocThang);
 
-		chkbx_HD_Loc_TheoThang = new JCheckBox("Tháng");
-		chkbx_HD_Loc_TheoThang.setHorizontalAlignment(SwingConstants.LEFT);
-		chkbx_HD_Loc_TheoThang.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-		chkbx_HD_Loc_TheoThang.setBackground(Color.WHITE);
-		chkbx_HD_Loc_TheoThang.setBounds(10, 0, 61, 27);
-		pnl_LocThang.add(chkbx_HD_Loc_TheoThang);
-
 		cbx_HD_LocThang = new JComboBox<String>();
-		cbx_HD_LocThang.setBounds(90, 2, 100, 20);
+		cbx_HD_LocThang.setBounds(70, 2, 100, 20);
 		cbx_HD_LocThang.addItem("Chọn tháng");
 		for (int i = 1; i <= 12; i++) {
 			cbx_HD_LocThang.addItem(i + "");
@@ -327,21 +314,19 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		cbx_HD_LocThang.setMaximumRowCount(6);
 		pnl_LocThang.add(cbx_HD_LocThang);
 
+		JLabel lblNewLabel_3 = new JLabel("Tháng");
+		lblNewLabel_3.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lblNewLabel_3.setBounds(10, 2, 70, 20);
+		pnl_LocThang.add(lblNewLabel_3);
+
 		JPanel pnl_LocNam = new JPanel();
 		pnl_LocNam.setLayout(null);
 		pnl_LocNam.setBackground(Color.WHITE);
 		pnl_LocNam.setBounds(10, 111, 215, 25);
 		pnl_Loc_TheoThoiGian.add(pnl_LocNam);
 
-		chkbx_HD_Loc_TheoNam = new JCheckBox("Năm");
-		chkbx_HD_Loc_TheoNam.setHorizontalAlignment(SwingConstants.LEFT);
-		chkbx_HD_Loc_TheoNam.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-		chkbx_HD_Loc_TheoNam.setBackground(Color.WHITE);
-		chkbx_HD_Loc_TheoNam.setBounds(10, 0, 61, 27);
-		pnl_LocNam.add(chkbx_HD_Loc_TheoNam);
-
 		cbx_HD_LocNam = new JComboBox<String>();
-		cbx_HD_LocNam.setBounds(90, 2, 100, 20);
+		cbx_HD_LocNam.setBounds(70, 2, 100, 20);
 		cbx_HD_LocNam.addItem("Chọn năm");
 		for (int i = LocalDate.now().getYear(); i >= 2000; i--) {
 			cbx_HD_LocNam.addItem(i + "");
@@ -349,27 +334,30 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		cbx_HD_LocNam.setMaximumRowCount(6);
 		pnl_LocNam.add(cbx_HD_LocNam);
 
+		JLabel lblNewLabel_3_1 = new JLabel("Năm");
+		lblNewLabel_3_1.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lblNewLabel_3_1.setBounds(10, 2, 70, 20);
+		pnl_LocNam.add(lblNewLabel_3_1);
+
 		JPanel pnl_LocQuy = new JPanel();
 		pnl_LocQuy.setLayout(null);
 		pnl_LocQuy.setBackground(Color.WHITE);
 		pnl_LocQuy.setBounds(10, 146, 215, 25);
 		pnl_Loc_TheoThoiGian.add(pnl_LocQuy);
 
-		chkbx_HD_Loc_TheoQuy = new JCheckBox("Quý");
-		chkbx_HD_Loc_TheoQuy.setHorizontalAlignment(SwingConstants.LEFT);
-		chkbx_HD_Loc_TheoQuy.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-		chkbx_HD_Loc_TheoQuy.setBackground(Color.WHITE);
-		chkbx_HD_Loc_TheoQuy.setBounds(10, 0, 61, 27);
-		pnl_LocQuy.add(chkbx_HD_Loc_TheoQuy);
-
 		cbx_HD_LocQuy = new JComboBox<String>();
-		cbx_HD_LocQuy.setBounds(90, 2, 100, 20);
+		cbx_HD_LocQuy.setBounds(70, 2, 100, 20);
 		cbx_HD_LocQuy.addItem("Chọn quý");
 		cbx_HD_LocQuy.addItem("1");
 		cbx_HD_LocQuy.addItem("2");
 		cbx_HD_LocQuy.addItem("3");
 		cbx_HD_LocQuy.addItem("4");
 		pnl_LocQuy.add(cbx_HD_LocQuy);
+
+		JLabel lblNewLabel_3_1_1 = new JLabel("Quý");
+		lblNewLabel_3_1_1.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lblNewLabel_3_1_1.setBounds(10, 2, 70, 20);
+		pnl_LocQuy.add(lblNewLabel_3_1_1);
 
 		JLabel lblNewLabel_1_1 = new JLabel("Từ");
 		lblNewLabel_1_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -531,15 +519,8 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_LocThang_1.setBounds(10, 76, 215, 25);
 		pnl_Loc_TheoThoiGian_1.add(pnl_LocThang_1);
 
-		chkbx_DV_Loc_TheoThang = new JCheckBox("Tháng");
-		chkbx_DV_Loc_TheoThang.setHorizontalAlignment(SwingConstants.LEFT);
-		chkbx_DV_Loc_TheoThang.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-		chkbx_DV_Loc_TheoThang.setBackground(Color.WHITE);
-		chkbx_DV_Loc_TheoThang.setBounds(10, 0, 61, 27);
-		pnl_LocThang_1.add(chkbx_DV_Loc_TheoThang);
-
 		cbx_DV_LocThang = new JComboBox<String>();
-		cbx_DV_LocThang.setBounds(90, 2, 100, 20);
+		cbx_DV_LocThang.setBounds(70, 2, 100, 20);
 		cbx_DV_LocThang.addItem("Chọn tháng");
 		for (int i = 1; i <= 12; i++) {
 			cbx_DV_LocThang.addItem(i + "");
@@ -547,21 +528,19 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		cbx_DV_LocThang.setMaximumRowCount(6);
 		pnl_LocThang_1.add(cbx_DV_LocThang);
 
+		JLabel lblNewLabel_3_2 = new JLabel("Tháng");
+		lblNewLabel_3_2.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lblNewLabel_3_2.setBounds(10, 2, 70, 20);
+		pnl_LocThang_1.add(lblNewLabel_3_2);
+
 		JPanel pnl_LocNam_1 = new JPanel();
 		pnl_LocNam_1.setLayout(null);
 		pnl_LocNam_1.setBackground(Color.WHITE);
 		pnl_LocNam_1.setBounds(10, 111, 215, 25);
 		pnl_Loc_TheoThoiGian_1.add(pnl_LocNam_1);
 
-		chkbx_DV_Loc_TheoNam = new JCheckBox("Năm");
-		chkbx_DV_Loc_TheoNam.setHorizontalAlignment(SwingConstants.LEFT);
-		chkbx_DV_Loc_TheoNam.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-		chkbx_DV_Loc_TheoNam.setBackground(Color.WHITE);
-		chkbx_DV_Loc_TheoNam.setBounds(10, 0, 61, 27);
-		pnl_LocNam_1.add(chkbx_DV_Loc_TheoNam);
-
 		cbx_DV_LocNam = new JComboBox<String>();
-		cbx_DV_LocNam.setBounds(90, 2, 100, 20);
+		cbx_DV_LocNam.setBounds(70, 2, 100, 20);
 		cbx_DV_LocNam.addItem("Chọn năm");
 		for (int i = LocalDate.now().getYear(); i >= 2000; i--) {
 			cbx_DV_LocNam.addItem(i + "");
@@ -569,27 +548,30 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		cbx_DV_LocNam.setMaximumRowCount(6);
 		pnl_LocNam_1.add(cbx_DV_LocNam);
 
+		JLabel lblNewLabel_3_2_1 = new JLabel("Năm");
+		lblNewLabel_3_2_1.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lblNewLabel_3_2_1.setBounds(10, 2, 70, 20);
+		pnl_LocNam_1.add(lblNewLabel_3_2_1);
+
 		JPanel pnl_DV_LocQuy = new JPanel();
 		pnl_DV_LocQuy.setLayout(null);
 		pnl_DV_LocQuy.setBackground(Color.WHITE);
 		pnl_DV_LocQuy.setBounds(10, 146, 215, 25);
 		pnl_Loc_TheoThoiGian_1.add(pnl_DV_LocQuy);
 
-		chkbx_DV_Loc_TheoQuy = new JCheckBox("Quý");
-		chkbx_DV_Loc_TheoQuy.setHorizontalAlignment(SwingConstants.LEFT);
-		chkbx_DV_Loc_TheoQuy.setFont(new Font("Segoe UI", Font.ITALIC, 13));
-		chkbx_DV_Loc_TheoQuy.setBackground(Color.WHITE);
-		chkbx_DV_Loc_TheoQuy.setBounds(10, 0, 61, 27);
-		pnl_DV_LocQuy.add(chkbx_DV_Loc_TheoQuy);
-
 		cbx_DV_LocQuy = new JComboBox<String>();
-		cbx_DV_LocQuy.setBounds(90, 2, 100, 20);
+		cbx_DV_LocQuy.setBounds(70, 2, 100, 20);
 		cbx_DV_LocQuy.addItem("Chọn quý");
 		cbx_DV_LocQuy.addItem("1");
 		cbx_DV_LocQuy.addItem("2");
 		cbx_DV_LocQuy.addItem("3");
 		cbx_DV_LocQuy.addItem("4");
 		pnl_DV_LocQuy.add(cbx_DV_LocQuy);
+
+		JLabel lblNewLabel_3_2_1_1 = new JLabel("Quý");
+		lblNewLabel_3_2_1_1.setFont(new Font("Segoe UI", Font.ITALIC, 13));
+		lblNewLabel_3_2_1_1.setBounds(10, 2, 70, 20);
+		pnl_DV_LocQuy.add(lblNewLabel_3_2_1_1);
 
 		JLabel lblNewLabel_1_1_1 = new JLabel("Từ");
 		lblNewLabel_1_1_1.setHorizontalAlignment(SwingConstants.LEFT);
@@ -825,75 +807,21 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 		if (cbx_HD_LocNam.getSelectedIndex() != 0) {
 			hd_Nam_Loc = Integer.parseInt(cbx_HD_LocNam.getSelectedItem().toString());
-			chkbx_HD_Loc_TheoNam.setSelected(true);
-			chkbx_HD_Loc_TheoNam.setEnabled(true);
 		} else {
-			chkbx_HD_Loc_TheoNam.setSelected(false);
-			chkbx_HD_Loc_TheoNam.setEnabled(false);
+			hd_Nam_Loc = 0;
 		}
-
-		chkbx_HD_Loc_TheoNam.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (chkbx_DV_Loc_TheoNam.isSelected() && cbx_HD_LocNam.getSelectedIndex() != 0) {
-					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
-					hd_Nam_Loc = Integer.parseInt(cbx_HD_LocNam.getSelectedItem().toString());
-					chkbx_HD_Loc_TheoNam.setEnabled(true);
-				} else {
-					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
-					cbx_HD_LocNam.setSelectedIndex(0);
-					hd_Nam_Loc = 0;
-				}
-			}
-		});
 
 		if (cbx_HD_LocThang.getSelectedIndex() != 0) {
 			hd_Thang_Loc = Integer.parseInt(cbx_HD_LocThang.getSelectedItem().toString());
-			chkbx_HD_Loc_TheoThang.setSelected(true);
-			chkbx_HD_Loc_TheoThang.setEnabled(true);
 		} else {
-			chkbx_HD_Loc_TheoThang.setSelected(false);
-			chkbx_HD_Loc_TheoThang.setEnabled(false);
+			hd_Thang_Loc = 0;
 		}
-
-		chkbx_HD_Loc_TheoThang.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (chkbx_HD_Loc_TheoThang.isSelected() && cbx_HD_LocThang.getSelectedIndex() != 0) {
-					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
-					hd_Thang_Loc = Integer.parseInt(cbx_HD_LocThang.getSelectedItem().toString());
-					chkbx_HD_Loc_TheoThang.setEnabled(true);
-				} else {
-					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
-					cbx_HD_LocThang.setSelectedIndex(0);
-					hd_Thang_Loc = 0;
-				}
-			}
-		});
 
 		if (cbx_HD_LocQuy.getSelectedIndex() != 0) {
 			hd_Quy_Loc = Integer.parseInt(cbx_HD_LocQuy.getSelectedItem().toString());
-			chkbx_HD_Loc_TheoQuy.setSelected(true);
-			chkbx_HD_Loc_TheoQuy.setEnabled(true);
 		} else {
-			chkbx_HD_Loc_TheoQuy.setSelected(false);
-			chkbx_HD_Loc_TheoQuy.setEnabled(false);
+			hd_Quy_Loc = 0;
 		}
-
-		chkbx_HD_Loc_TheoQuy.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (chkbx_HD_Loc_TheoQuy.isSelected() && cbx_HD_LocQuy.getSelectedIndex() != 0) {
-					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
-					hd_Quy_Loc = Integer.parseInt(cbx_HD_LocQuy.getSelectedItem().toString());
-					chkbx_HD_Loc_TheoQuy.setEnabled(true);
-				} else {
-					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
-					cbx_HD_LocQuy.setSelectedIndex(0);
-					hd_Quy_Loc = 0;
-				}
-			}
-		});
 
 		double hd_TongBan_Tu = 0;
 		double hd_TongBan_Den = Integer.MAX_VALUE;
@@ -1057,75 +985,21 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 		if (cbx_DV_LocNam.getSelectedIndex() != 0) {
 			dv_Nam_Loc = Integer.parseInt(cbx_DV_LocNam.getSelectedItem().toString());
-			chkbx_DV_Loc_TheoNam.setSelected(true);
-			chkbx_DV_Loc_TheoNam.setEnabled(true);
 		} else {
-			chkbx_DV_Loc_TheoNam.setSelected(false);
-			chkbx_DV_Loc_TheoNam.setEnabled(false);
+			dv_Nam_Loc = 0;
 		}
-
-		chkbx_DV_Loc_TheoNam.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (chkbx_DV_Loc_TheoNam.isSelected() && cbx_DV_LocNam.getSelectedIndex() != 0) {
-					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
-					dv_Nam_Loc = Integer.parseInt(cbx_DV_LocNam.getSelectedItem().toString());
-					chkbx_DV_Loc_TheoNam.setEnabled(true);
-				} else {
-					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
-					cbx_DV_LocNam.setSelectedIndex(0);
-					dv_Nam_Loc = 0;
-				}
-			}
-		});
 
 		if (cbx_DV_LocThang.getSelectedIndex() != 0) {
 			dv_Thang_Loc = Integer.parseInt(cbx_DV_LocThang.getSelectedItem().toString());
-			chkbx_DV_Loc_TheoThang.setSelected(true);
-			chkbx_DV_Loc_TheoThang.setEnabled(true);
 		} else {
-			chkbx_DV_Loc_TheoThang.setSelected(false);
-			chkbx_DV_Loc_TheoThang.setEnabled(false);
+			dv_Thang_Loc = 0;
 		}
-
-		chkbx_DV_Loc_TheoThang.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (chkbx_DV_Loc_TheoThang.isSelected() && cbx_DV_LocThang.getSelectedIndex() != 0) {
-					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
-					dv_Thang_Loc = Integer.parseInt(cbx_DV_LocThang.getSelectedItem().toString());
-					chkbx_DV_Loc_TheoThang.setEnabled(true);
-				} else {
-					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
-					cbx_DV_LocThang.setSelectedIndex(0);
-					dv_Thang_Loc = 0;
-				}
-			}
-		});
 
 		if (cbx_DV_LocQuy.getSelectedIndex() != 0) {
 			dv_Quy_Loc = Integer.parseInt(cbx_DV_LocQuy.getSelectedItem().toString());
-			chkbx_DV_Loc_TheoQuy.setSelected(true);
-			chkbx_DV_Loc_TheoQuy.setEnabled(true);
 		} else {
-			chkbx_DV_Loc_TheoQuy.setSelected(false);
-			chkbx_DV_Loc_TheoQuy.setEnabled(false);
+			dv_Quy_Loc = 0;
 		}
-
-		chkbx_DV_Loc_TheoQuy.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (chkbx_DV_Loc_TheoQuy.isSelected() && cbx_DV_LocQuy.getSelectedIndex() != 0) {
-					// Nếu được chọn, gán giá trị cho dv_Nam_Loc
-					dv_Quy_Loc = Integer.parseInt(cbx_DV_LocQuy.getSelectedItem().toString());
-					chkbx_DV_Loc_TheoQuy.setEnabled(true);
-				} else {
-					// Nếu bỏ chọn, đặt giá trị của JComboBox thành index 0
-					cbx_DV_LocQuy.setSelectedIndex(0);
-					dv_Quy_Loc = 0;
-				}
-			}
-		});
 
 		switch (dv_Quy_Loc) {
 		case 4:
