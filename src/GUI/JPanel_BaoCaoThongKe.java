@@ -254,7 +254,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 					 * 
 					 */
 					private static final long serialVersionUID = 1L;
-					boolean[] columnEditables = new boolean[] { false, true, true, true, true, true };
+					boolean[] columnEditables = new boolean[] { false, false, false, false, false, false };
 
 					public boolean isCellEditable(int row, int column) {
 						return columnEditables[column];
@@ -474,7 +474,14 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		table_DichVu = new JTable();
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {},
 				new String[] { "STT", "M\u00E3 d\u1ECBch v\u1EE5", "T\u00EAn d\u1ECBch v\u1EE5", "Ng\u00E0y nh\u1EADp",
-						"Số lượng bán", "T\u1ED5ng ti\u1EC1n b\u00E1n" }));
+						"Số lượng bán", "T\u1ED5ng ti\u1EC1n b\u00E1n" }) {
+			private static final long serialVersionUID = -143705667217047914L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // Đặt tất cả các ô không thể chỉnh sửa
+			}
+		});
 		table_DichVu.getColumnModel().getColumn(0).setResizable(false);
 		table_DichVu.getColumnModel().getColumn(0).setPreferredWidth(50);
 		table_DichVu.getColumnModel().getColumn(0).setMaxWidth(50);

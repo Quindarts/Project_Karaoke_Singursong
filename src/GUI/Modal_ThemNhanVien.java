@@ -490,17 +490,20 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);
-			System.out.println(nv);
 
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
-				if (DAO_NV.taoNhanVien(nv)) {
-					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thành công");
-					setVisible(false);
-				} else {
-					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
+				int result = JOptionPane.showConfirmDialog(this,
+						"Bạn có chắc chắn muốn cập nhật khách hàng " + hoTen + "?", "Xác nhận",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					if (DAO_NV.taoNhanVien(nv)) {
+						JOptionPane.showMessageDialog(null, "Tạo mới nhân viên " + hoTen + " thành công");
+						setVisible(false);
+					} else {
+						JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
+					}
 				}
-
 			} catch (Exception e2) {
 				// TODO: handle exception
 				JOptionPane.showConfirmDialog(null, "Tạo mới nhân viên thất bại, vui lòng thử lại");
@@ -559,13 +562,17 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
-				if (DAO_NV.capNhatNhanVien(nv)) {
-					JOptionPane.showMessageDialog(null, "Cập nhật nhân viên thành công");
-					setVisible(false);
-				} else {
-					JOptionPane.showMessageDialog(null, "Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại");
+				int result = JOptionPane.showConfirmDialog(this,
+						"Bạn có chắc chắn muốn cập nhật khách hàng " + hoTen + "?", "Xác nhận",
+						JOptionPane.YES_NO_OPTION);
+				if (result == JOptionPane.YES_OPTION) {
+					if (DAO_NV.capNhatNhanVien(nv)) {
+						JOptionPane.showMessageDialog(null, "Cập nhật nhân viên " + hoTen + "thành công");
+						setVisible(false);
+					} else {
+						JOptionPane.showMessageDialog(null, "Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại");
+					}
 				}
-
 			} catch (Exception e2) {
 				// TODO: handle exception
 				JOptionPane.showConfirmDialog(null, "Cập nhật thông tin nhân viên thất bại, vui lòng thử lại");

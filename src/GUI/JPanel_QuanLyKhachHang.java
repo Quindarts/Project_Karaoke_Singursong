@@ -91,7 +91,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
-	private ButtonGroup btnGr_LocTheoGioiTinh;
 
 	long khoangTuoi;
 	private JButton btnThem;
@@ -101,6 +100,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 	private JButton btnTimKiem;
 
 	private ButtonGroup btnGr_TimTheoLoai;
+
+	private ButtonGroup btnGr_LocTheoGioiTinh;
 
 	/**
 	 * Rounded JPanel
@@ -218,7 +219,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 					String ngaySinh = model.getValueAt(row, 3).toString();
 					String diaChi = model.getValueAt(row, 4).toString();
 					String sdt = model.getValueAt(row, 5).toString();
-					String diemThuong = model.getValueAt(row, 6).toString();
 					String ghiChu = model.getValueAt(row, 7).toString();
 					modal_ThemKhachHang.setVisible(true);
 					modal_ThemKhachHang.setModal_ThemKhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, sdt, diaChi,
@@ -284,7 +284,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		pnl_Loc_TheoGioiTinh.add(chcbx_TatCa);
 		chcbx_TatCa.addItemListener(this);
 
-		ButtonGroup btnGr_LocTheoGioiTinh = new ButtonGroup();
+		btnGr_LocTheoGioiTinh = new ButtonGroup();
 		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
 		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
 		btnGr_LocTheoGioiTinh.add(chcbx_TatCa);
@@ -470,9 +470,14 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		KhachHang khachHang = new KhachHang(maKhachHang);
 		try {
 			String tenKhachHang = DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang).getHoTen();
-			DAO_KH.xoaKhachHang(khachHang);
-			JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenKhachHang + "thành công");
-			model.removeRow(row);
+			int result = JOptionPane.showConfirmDialog(this,
+					"Bạn có chắc chắn muốn xóa khách hàng " + tenKhachHang + "?", "Xác nhận",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				DAO_KH.xoaKhachHang(khachHang);
+				JOptionPane.showMessageDialog(null, "Xóa khách hàng " + tenKhachHang + " thành công");
+				model.removeRow(row);
+			}
 		} catch (Exception e2) {
 			JOptionPane.showMessageDialog(null, "Xóa thất bại");
 		}
@@ -531,6 +536,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		txt_TimKiem.setText("");
 		txt_TuoiDen.setText("");
 		txt_TuoiTu.setText("");
+		btnGr_TimTheoLoai.clearSelection();
+		btnGr_LocTheoGioiTinh.clearSelection();
 	}
 
 	public void LocDuLieu() {
@@ -560,11 +567,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		} catch (NumberFormatException e) {
 			loc_diemThuongDen = Integer.MAX_VALUE; // Lọc theo tất cả điểm thưởng
 		}
-
-		// Kiểm tra nếu không chọn lọc theo giới tính thì mặc định là lọc tất cả
-		boolean loc_nam = chcbx_Nam.isSelected();
-		boolean loc_nu = chcbx_Nu.isSelected();
-		boolean loc_tatCa = !loc_nam && !loc_nu; // Nếu cả nam và nữ đều không được chọn
 
 		if (loc_tuoiDen < loc_tuoiTu) {
 			JOptionPane.showMessageDialog(null, "Tuổi bắt đầu phải lớn hơn tuổi kết thúc!");

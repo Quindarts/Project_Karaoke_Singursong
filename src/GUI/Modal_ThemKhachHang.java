@@ -212,8 +212,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
-		
-		
 
 	}
 
@@ -300,18 +298,22 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
 					ghiChu);
-			if (DAO_KH.capNhatKhachHang(kh)) {
-				try {
-					DAO_KH.capNhatKhachHang(kh);
-					JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
-					setVisible(false);
-				} catch (Exception e2) {
-					// TODO: handle exception
-					JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+			int result = JOptionPane.showConfirmDialog(this,
+					"Bạn có chắc chắn muốn cập nhật khách hàng " + tenKhachHang + "?", "Xác nhận",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				if (DAO_KH.capNhatKhachHang(kh)) {
+					try {
+						DAO_KH.capNhatKhachHang(kh);
+						JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
+						setVisible(false);
+					} catch (Exception e2) {
+						// TODO: handle exception
+						JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " không đã tồn tại!");
 				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " Không đã tồn tại!");
-
 			}
 		}
 	}
@@ -347,6 +349,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			// TODO: handle exception
 			JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
+			return false;
 		}
 
 		if (!gt_Nam && !gt_Nu) {
@@ -364,11 +367,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			return false;
 		}
 
-		if (!(diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
-			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
-			txt__DiaChi.requestFocus();
-			return false;
-		}
+//		if (!(diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
+//			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+//			txt__DiaChi.requestFocus();
+//			return false;
+//		}
 		return true;
 	}
 }
