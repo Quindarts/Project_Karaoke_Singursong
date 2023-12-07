@@ -21,6 +21,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.geom.RoundRectangle2D;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -398,49 +399,24 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		panel_TimKiem.add(txtmaPhieu);
 
 		rdbChoNhanPhong = new JRadioButton("Chờ  nhận phòng");
-		rdbChoNhanPhong.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbChoNhanPhong.setBounds(89, 7, 118, 23);
 		panel_Table.add(rdbChoNhanPhong);
 
 		rdbDaNhanPhong = new JRadioButton("Đã  nhận phòng");
-		rdbDaNhanPhong.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbDaNhanPhong.setBounds(214, 7, 114, 23);
 		panel_Table.add(rdbDaNhanPhong);
 
 		rdbHetHan = new JRadioButton("Hết hạn");
-		rdbHetHan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-
-		});
 		rdbHetHan.setBounds(330, 7, 91, 23);
 		panel_Table.add(rdbHetHan);
 
 		rdbDaHuy = new JRadioButton("Đã hủy");
-		rdbDaHuy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbDaHuy.setBounds(423, 7, 114, 23);
 		panel_Table.add(rdbDaHuy);
 
 		rdbTatCa = new JRadioButton("Tất cả");
-		rdbTatCa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbTatCa.setBounds(10, 7, 77, 23);
+		rdbTatCa.setSelected(true);
 		panel_Table.add(rdbTatCa);
 
 		searchGroup = new ButtonGroup();
@@ -529,12 +505,27 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		Object o = e.getSource();
 		// Hủy phiếu đặt phòng có trạng thái "Chờ nhận phòng"
 		if (o.equals(btnHuyPDP)) {
-			HuyPhieu();
+			row = customTable_PDP.getSelectedRow();
+			if (row >= 0) {
+				String maPD = model.getValueAt(row, 0).toString().trim();
+				String ttp = model.getValueAt(row, 5).toString();
+				if (ttp.equals("Chờ nhận phòng")) {
+					HuyPhieu();
+				} else {
+					Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+					JOptionPane.showMessageDialog(null, "Phiếu " + maPD + " không thể hủy!");
+				}
+			} else {
+				Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu cần hủy!");
+			}
 		}
 
 		// Làm mới table
 		if (o.equals(btnLamMoi)) {
+			rdbTatCa.setSelected(true);
 			clearTable();
+			clearFindField();
 			DocDuLieuTrenSQL();
 		}
 
@@ -549,9 +540,11 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 					modal_CapNhatPhieuDatPhongTruoc.setVisible(true);
 					modal_CapNhatPhieuDatPhongTruoc.HienThongTinTheoMaPDP(maPD);
 				} else {
+					Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 					JOptionPane.showMessageDialog(null, "Phiếu " + maPD + " không thể cập nhật!");
 				}
 			} else {
+				Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu cần cập nhật!");
 			}
 
@@ -562,8 +555,8 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 			modal_PhieuDatPhongTruoc.setVisible(true);
 		}
 
-		if (o.equals(rdbChoNhanPhong) && o.equals(rdbDaHuy) && o.equals(rdbDaNhanPhong) && o.equals(rdbHetHan)
-				&& o.equals(rdbTatCa)) {
+		if (o.equals(rdbChoNhanPhong) || o.equals(rdbDaHuy) || o.equals(rdbDaNhanPhong) || o.equals(rdbHetHan)
+				|| o.equals(rdbTatCa)) {
 			TimKiemTheoTrangThai();
 		}
 	}
@@ -573,9 +566,15 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		model.setRowCount(0);
 	}
 
+	public void clearFindField() {
+		txtKhachHang.setText("");
+		txtmaPhieu.setText("");
+		txtTenPhong.setText("");
+//		dateNgayNhan.setDate();
+	}
+
 	private void DocDuLieuTrenSQL() {
 		clearTable();
-
 		dsPDP = DAO_PDP.layTatCaPhieuDatPhong();
 
 		if (dsPDP != null) {
@@ -655,6 +654,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 			}
 		} else {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Không tìm thấy");
 
 		}
@@ -677,6 +677,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 			}
 		} else {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Không tìm thấy");
 
 		}
@@ -698,6 +699,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 			}
 		} else {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Không tìm thấy");
 
 		}
@@ -720,6 +722,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 			}
 		} else {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Không tìm thấy");
 
 		}
@@ -743,10 +746,12 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 				}
 
 			} else {
+				Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 				JOptionPane.showMessageDialog(null, "Phiếu " + maPDP + " không thể hủy!");
 			}
 
 		} catch (Exception e) {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Phiếu " + maPDP + "hủy thất bại!");
 		}
 
@@ -756,12 +761,11 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	public void propertyChange(PropertyChangeEvent evt) {
 		Object o = evt.getSource();
 		Date ngayNhan = new Date();
-
 		if (o.equals(dateNgayNhan)) {
 			if ("date".equals(evt.getPropertyName())) {
-					ngayNhan = (Date) evt.getNewValue();
-					clearTable();
-					TimKiemTheoNgayNhan();
+				ngayNhan = (Date) evt.getNewValue();
+				clearTable();
+				TimKiemTheoNgayNhan();
 			}
 		}
 	}
