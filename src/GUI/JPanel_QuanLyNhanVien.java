@@ -88,7 +88,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
-	private JButton btnLoc;
+	private JButton btnLamMoiBoLoc;
 	private JComboBox<String> cb_Loc_LoaiTrangThai;
 	private JComboBox<String> cb_Loc_LoaiNV;
 	private LoaiNhanVien_DAO DAO_LNV;
@@ -173,7 +173,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		table_NhanVien = new JTable();
 		table_NhanVien.setBackground(Color.WHITE);
 		Object[] header = { "Mã nhân viên", "Loại nhân viên", "Tên nhân viên", "Giới tính", "Ngày sinh",
-				"Số điện thoại", "CCCD", "Địa chỉ", "Trạng thái", "Ảnh thẻ" };
+				"Số điện thoại", "CCCD", "Địa chỉ", "Trạng thái" };
 		table_NhanVien.setModel(new DefaultTableModel(new Object[][] {}, header));
 		table_NhanVien.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
@@ -325,12 +325,12 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		cb_Loc_LoaiTrangThai.addItem("Nghỉ làm");
 		cb_Loc_LoaiTrangThai.addItem("Nghỉ phép");
 
-		btnLoc = new JButton("Lọc");
-		btnLoc.setForeground(Color.WHITE);
-		btnLoc.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnLoc.setBackground(new Color(62, 124, 177));
-		btnLoc.setBounds(69, 570, 123, 35);
-		pnl_Loc.add(btnLoc);
+		btnLamMoiBoLoc = new JButton("Làm mới bộ lọc");
+		btnLamMoiBoLoc.setForeground(Color.WHITE);
+		btnLamMoiBoLoc.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnLamMoiBoLoc.setBackground(new Color(62, 124, 177));
+		btnLamMoiBoLoc.setBounds(60, 355, 150, 35);
+		pnl_Loc.add(btnLamMoiBoLoc);
 
 		table_NhanVien.addMouseListener(new MouseListener() {
 			@Override
@@ -352,7 +352,6 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 					} catch (Exception e2) {
 						anhThe = "";
 					}
-
 					model_ThemNhanVien = new Modal_ThemNhanVien();
 					model_ThemNhanVien.setVisible(true);
 					model_ThemNhanVien.setModal_ThemNhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, sdt,
@@ -437,7 +436,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		btnThem.addActionListener((ActionListener) this);
 		btnLamMoi.addActionListener(this);
 		btnTimKiem.addActionListener(this);
-		btnLoc.addActionListener(this);
+		btnLamMoiBoLoc.addActionListener(this);
 		cb_Loc_LoaiNV.addActionListener(this);
 		cb_Loc_LoaiTrangThai.addActionListener(this);
 		chcbx_Nam.addItemListener(this);
@@ -464,7 +463,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 			DocDuLieu();
 		}
 
-		if (o.equals(btnLamMoi)) {
+		if (o.equals(btnLamMoi) || o.equals(btnLamMoiBoLoc)) {
 			DocDuLieu();
 			LamMoiBoLoc();
 		}
@@ -488,8 +487,8 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 			TimNhanVien_TheoHoTen();
 		}
 
-		if (o.equals(btnLoc) || o.equals(cb_Loc_LoaiNV) || o.equals(cb_Loc_LoaiTrangThai) || o.equals(txt_TuoiDen)
-				|| o.equals(txt_TuoiTu)) {
+		if (o.equals(btnLamMoiBoLoc) || o.equals(cb_Loc_LoaiNV) || o.equals(cb_Loc_LoaiTrangThai)
+				|| o.equals(txt_TuoiDen) || o.equals(txt_TuoiTu)) {
 			LocDuLieu();
 		}
 
@@ -518,8 +517,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 					loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
 					String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
 					Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
-							nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
-							nv.getAnhThe() };
+							nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai() };
 					model.addRow(rowData);
 				});
 			}
@@ -543,7 +541,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 			model_ThemNhanVien.setVisible(true);
 		} catch (Exception e) {
 			// TODO: handle exception
-			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có mã: " + chuoiTimKiem);
+			JOptionPane.showMessageDialog(null, "Không tồn tại nhân viên nào có mã: " + chuoiTimKiem);
 		}
 	}
 
@@ -562,7 +560,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 			model_ThemNhanVien.setVisible(true);
 		} catch (Exception e) {
 			// TODO: handle exception
-			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có số điện thoại: " + chuoiTimKiem);
+			JOptionPane.showMessageDialog(null, "Không tồn tại nhân viên nào có số điện thoại: " + chuoiTimKiem);
 		}
 	}
 
@@ -587,7 +585,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		}
 
 		if (!ketQuaTim) {
-			JOptionPane.showMessageDialog(null, "Không có nhân viên nào có chứng minh thư: " + chuoiTimKiem);
+			JOptionPane.showMessageDialog(null, "Không tồn tại nhân viên nào có chứng minh thư: " + chuoiTimKiem);
 		}
 	}
 
@@ -596,15 +594,14 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		String chuoiTimKiem = txt_TimKiem.getText().trim();
 		ArrayList<NhanVien> dsNV = DAO_NV.timNhanVien_TheoHoTen(chuoiTimKiem);
 		if (dsNV.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "Không có nhân viên nào được tìm thấy.");
+			JOptionPane.showMessageDialog(null, "Không tìm thấy nhân viên nào.");
 		} else {
 			for (NhanVien nv : dsNV) {
 				LoaiNhanVien loaiNV = new LoaiNhanVien();
 				loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
 				String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
 				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
-						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
-						nv.getAnhThe() };
+						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai() };
 				model.addRow(rowData);
 			}
 		}
@@ -672,8 +669,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 
 			if (kiemTra) {
 				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
-						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai(),
-						nv.getAnhThe() };
+						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai() };
 				model.addRow(rowData);
 				ketQuaLoc = true;
 			}

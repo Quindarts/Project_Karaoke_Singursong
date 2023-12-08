@@ -94,7 +94,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 
 	long khoangTuoi;
 	private JButton btnThem;
-	private JButton btnLoc;
+	private JButton btnLamMoiBoLoc;
 	private JButton btnXoa;
 	private JButton btnLamMoi;
 	private JButton btnTimKiem;
@@ -359,14 +359,14 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		txt_TuoiTu.setBounds(40, 38, 70, 19);
 		pnl_Loc_TheoTuoi.add(txt_TuoiTu);
 
-		btnLoc = new JButton("Lọc");
-		btnLoc.setBounds(73, 570, 125, 35);
-		pnl_Loc.add(btnLoc);
-		btnLoc.setForeground(Color.WHITE);
-		btnLoc.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnLoc.setBackground(Color.decode(hexColor_Blue2));
-		btnLoc.setForeground(Color.WHITE);
-		btnLoc.addActionListener(this);
+		btnLamMoiBoLoc = new JButton("Làm mới bộ lọc");
+		btnLamMoiBoLoc.setBounds(60, 275, 150, 35);
+		pnl_Loc.add(btnLamMoiBoLoc);
+		btnLamMoiBoLoc.setForeground(Color.WHITE);
+		btnLamMoiBoLoc.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnLamMoiBoLoc.setBackground(Color.decode(hexColor_Blue2));
+		btnLamMoiBoLoc.setForeground(Color.WHITE);
+		btnLamMoiBoLoc.addActionListener(this);
 
 		btnThem = new JButton("Thêm");
 		btnThem.setForeground(Color.WHITE);
@@ -632,6 +632,11 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 			DocDuLieu();
 			LamMoiBoLoc();
 		}
+		if (o.equals(btnLamMoiBoLoc)) {
+			DocDuLieu();
+			LamMoiBoLoc();
+		}
+		
 		if ((o.equals(txt_TimKiem) && rdBtn_TimTheoSoDT.isSelected() == false
 				&& rdBtn_TimTheoMaKH.isSelected() == false)
 				|| (o.equals(btnTimKiem) & rdBtn_TimTheoSoDT.isSelected() == false

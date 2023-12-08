@@ -291,7 +291,7 @@ public class CardPhong extends JPanel {
 
 				if (DAO_PDP.capNhatPhieuDatTrangThai_DaNhanPhong_MaPhieuDat(pdp.getMaPhieuDat()) && datPhong(pdp)) {
 
-					DAO_P.capNhat_TranThaiPhong(pdp.getPhong().getMaPhong(), "OC");
+					DAO_P.capNhat_TrangThaiPhong(pdp.getPhong().getMaPhong(), "OC");
 					JOptionPane.showMessageDialog(null, "Nhận phòng thành công");
 
 				}
@@ -378,7 +378,7 @@ public class CardPhong extends JPanel {
 
 				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong(phong, hd, cthd);
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), "", tenNV, sdtKH, tenKH);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), sdtKH, tenKH);
 
 			} catch (Exception e2) {
 				e2.printStackTrace();

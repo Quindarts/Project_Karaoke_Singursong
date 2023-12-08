@@ -1138,7 +1138,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 				ChiTietHoaDon cthd = new ChiTietHoaDon(hd, ph);
 				DAO_CTHD.taoCTHoaDon(cthd);
-				DAO_P.capNhat_TranThaiPhong(maPhong, "OC");
+				DAO_P.capNhat_TrangThaiPhong(maPhong, "OC");
 				bienDem++;
 			}
 

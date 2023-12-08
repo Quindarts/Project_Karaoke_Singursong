@@ -400,7 +400,7 @@ public class Phong_DAO {
 		return n > 0;
 	}
 
-	public boolean capNhat_TranThaiPhong(String maPh, String trThPh) {
+	public boolean capNhat_TrangThaiPhong(String maPh, String trThPh) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;

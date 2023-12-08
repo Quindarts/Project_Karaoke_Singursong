@@ -132,7 +132,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
 
-		JLabel lbl_Title = new JLabel("THÊM NHÂN VIÊN");
+		JLabel lbl_Title = new JLabel("THÔNG TIN NHÂN VIÊN");
 		lbl_Title.setForeground(Color.decode(hexColor_Blue1));
 		lbl_Title.setBounds(0, 10, 237, 20);
 		lbl_Title.setFont(new Font("Segoe UI", Font.BOLD, 17));
@@ -188,7 +188,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		pnl_ChucVu.add(lbl_ChucVu);
 
 		// Xử lý combox DAO_LoaiNhanVien
-		cbox__loaiNhanVien = new JComboBox();
+		cbox__loaiNhanVien = new JComboBox<String>();
 		cbox__loaiNhanVien.setBounds(125, 0, 225, 25);
 		pnl_ChucVu.add(cbox__loaiNhanVien);
 		cbox__loaiNhanVien.addItem("Chọn chức vụ");
@@ -282,8 +282,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		lbl_TrangThai.setBounds(0, 0, 110, 25);
 		pnl_TrangThai.add(lbl_TrangThai);
 
-		String[] dsTrangThai = { "Chọn trạng thái", "Còn làm", "Nghỉ việc", "Nghỉ phép" };
-		comboBox_TrangThai = new JComboBox(dsTrangThai);
+		String[] dsTrangThai = { "Chọn trạng thái", "Đang làm", "Nghỉ việc", "Nghỉ phép" };
+		comboBox_TrangThai = new JComboBox<String>(dsTrangThai);
 		comboBox_TrangThai.setBounds(125, 0, 225, 25);
 		pnl_TrangThai.add(comboBox_TrangThai);
 
@@ -429,8 +429,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 		for (int i = 0; i < soLuongTrangThai; i++) {
 			String item = comboBox_TrangThai.getItemAt(i);
-			if (item.equals(trangThai)) {
-				comboBox_TrangThai.setSelectedItem(trangThai);
+			if (item.equals(trangThai)) {		
+				comboBox_TrangThai.setSelectedItem(i);
 				break;
 			}
 		}
@@ -438,7 +438,6 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btn_Them)) {
 			if (txt_MaNhanVien.getText().equals("")) {
@@ -465,7 +464,6 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 			try {
 				ngaySinh = new Date((dateCh_NgaySinh).getDate().getTime());
 			} catch (Exception e) {
-				// TODO: handle exception
 				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
 			}
 			LoaiNhanVien loaiNhanVien = null;
@@ -493,21 +491,15 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
-				int result = JOptionPane.showConfirmDialog(this,
-						"Bạn có chắc chắn muốn cập nhật khách hàng " + hoTen + "?", "Xác nhận",
-						JOptionPane.YES_NO_OPTION);
-				if (result == JOptionPane.YES_OPTION) {
-					if (DAO_NV.taoNhanVien(nv)) {
-						JOptionPane.showMessageDialog(null, "Tạo mới nhân viên " + hoTen + " thành công");
-						setVisible(false);
-					} else {
-						JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
-					}
+				if (DAO_NV.taoNhanVien(nv)) {
+					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên " + hoTen + " thành công");
+					setVisible(false);
+				} else {
+					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
+
 				}
 			} catch (Exception e2) {
-				// TODO: handle exception
 				JOptionPane.showConfirmDialog(null, "Tạo mới nhân viên thất bại, vui lòng thử lại");
-				e2.printStackTrace();
 			}
 		}
 	}
@@ -524,7 +516,6 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 			try {
 				ngaySinh = new Date((dateCh_NgaySinh).getDate().getTime());
 			} catch (Exception e) {
-				// TODO: handle exception
 				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
 			}
 
@@ -567,14 +558,13 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 						JOptionPane.YES_NO_OPTION);
 				if (result == JOptionPane.YES_OPTION) {
 					if (DAO_NV.capNhatNhanVien(nv)) {
-						JOptionPane.showMessageDialog(null, "Cập nhật nhân viên " + hoTen + "thành công");
+						JOptionPane.showMessageDialog(null, "Cập nhật nhân viên " + hoTen + " thành công");
 						setVisible(false);
 					} else {
 						JOptionPane.showMessageDialog(null, "Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại");
 					}
 				}
 			} catch (Exception e2) {
-				// TODO: handle exception
 				JOptionPane.showConfirmDialog(null, "Cập nhật thông tin nhân viên thất bại, vui lòng thử lại");
 				e2.printStackTrace();
 			}
@@ -624,7 +614,6 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 				return false;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			JOptionPane.showMessageDialog(this, "Ngày sinh không được để trống!");
 			return false;
 		}
@@ -669,13 +658,13 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 	@Override
 	public void focusGained(FocusEvent e) {
 		// TODO Auto-generated method stub
-		Object o = e.getSource();
+
 	}
 
 	@Override
 	public void focusLost(FocusEvent e) {
 		// TODO Auto-generated method stub
-		Object o = e.getSource();
+
 	}
 
 	public String chooseFileEvent(String typeFile) {

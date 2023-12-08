@@ -599,7 +599,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 					JOptionPane.showMessageDialog(null, "Thanh toán thành công!!");
 
 					getDsCTHD().forEach(cthd -> {
-						DAO_P.capNhat_TranThaiPhong(cthd.getPhong().getMaPhong(), "VC");
+						DAO_P.capNhat_TrangThaiPhong(cthd.getPhong().getMaPhong(), "VC");
 					});
 					getDschiTietDV().forEach(ctdv -> {
 						ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();

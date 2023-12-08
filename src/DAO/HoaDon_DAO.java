@@ -732,7 +732,7 @@ public class HoaDon_DAO {
 		PreparedStatement statement = null;
 
 		try {
-			statement = con.prepareStatement(sql);
+			statement = con.prepareStatement(sql + "order by thoiGianKetThuc desc");
 			
 			int parameterIndex = 1;
 
