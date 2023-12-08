@@ -98,6 +98,8 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	private DichVu dv;
 	private JComboBox<String> cbx_LoaiPhong;
 	private JComboBox<String> cbx_Lau;
+	private ArrayList<LoaiPhong> listLoaiPhong;
+	private JButton btnLamMoi;
 
 	/**
 	 * Create the panel.
@@ -253,24 +255,41 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_Lau);
 
 		cbx_LoaiPhong = new JComboBox<String>();
-		cbx_LoaiPhong.setBounds(529, 12, 140, 21);
+		cbx_LoaiPhong.setBounds(529, 12, 193, 21);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(cbx_LoaiPhong);
+		dao_LoaiPhong = new LoaiPhong_DAO();
 		cbx_LoaiPhong.addItem("Chọn loại phòng");
-		cbx_LoaiPhong.addItem("Phòng thường nhỏ");
-		cbx_LoaiPhong.addItem("Phòng thường lớn");
-		cbx_LoaiPhong.addItem("Phòng VIP nhỏ");
-		cbx_LoaiPhong.addItem("Phòng VIP lớn");
+		try {
+			listLoaiPhong = dao_LoaiPhong.layTatCaLoaiPhong();
+			if (listLoaiPhong != null) {
+				listLoaiPhong.forEach((lp) -> {
+					cbx_LoaiPhong.addItem(lp.getTenLoaiPhong());
+				});
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+		
 		
 
 		cbx_Lau = new JComboBox<String>();
 		cbx_Lau.setBounds(529, 42, 120, 21);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(cbx_Lau);
+		
+		btnLamMoi = new JButton("Làm mới");
+		btnLamMoi.setForeground(Color.WHITE);
+		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btnLamMoi.setBackground(new Color(62, 124, 177));
+		btnLamMoi.setBounds(747, 46, 100, 30);
+		pnl_ThoiGianChuyenNhanPhongMoi.add(btnLamMoi);
 		cbx_Lau.addItem("Chọn lầu");
-		cbx_Lau.addItem("Chọn 1");
-		cbx_Lau.addItem("Chọn 2");
-		cbx_Lau.addItem("Chọn 3");
-		cbx_Lau.addItem("Chọn 4");
-		cbx_Lau.addItem("Chọn 5");
+		cbx_Lau.addItem("Lầu 1");
+		cbx_Lau.addItem("Lầu 2");
+		cbx_Lau.addItem("Lầu 3");
+		cbx_Lau.addItem("Lầu 4");
+		cbx_Lau.addItem("Lầu 5");
 
 		btnDatPhong = new JButton("Chuyển phòng");
 		btnDatPhong.setBackground(Color.decode(hexColor_Green));
@@ -319,7 +338,11 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		model = (DefaultTableModel) table.getModel();
 		btnDatPhong.addActionListener(this);
 		btnHy.addActionListener(this);
+		btnLamMoi.addActionListener(this);
 		table.addMouseListener(this);
+		
+		cbx_Lau.addActionListener(this);
+		cbx_LoaiPhong.addActionListener(this);
 	}
 
 	@Override
@@ -332,6 +355,15 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		}
 		if (o.equals(btnHy)) {
 			setVisible(false);
+		}
+		
+		if(o.equals(cbx_Lau) || o.equals(cbx_LoaiPhong)) {
+			LocPhong();
+		}
+		
+		if(o.equals(btnLamMoi)) {
+			cbx_Lau.setSelectedIndex(0);
+			cbx_LoaiPhong.setSelectedIndex(0);
 		}
 	}
 
@@ -452,9 +484,42 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	}
 	
 	public void LocPhong () {
-		String lau = cbx_Lau.getSelectedItem().toString().trim();
-		String loaiPh = cbx_LoaiPhong.getSelectedItem().toString().trim();
+		boolean ketQuaLoc = false;
 		
+		String lau_isSelected = cbx_Lau.getSelectedItem().toString().trim();
+		String chonLau = cbx_Lau.getItemAt(0).toString().trim();
+		
+		String loaiPh_isSelected = cbx_LoaiPhong.getSelectedItem().toString().trim();
+		String chonLoaiPhong = cbx_LoaiPhong.getItemAt(0).toString().trim();
+		
+		model.getDataVector().removeAllElements();
+		for (Phong ph : dao_Phong.layTatCaPhong()) {
+			boolean kiemTra = true;
+			
+			LoaiPhong loaiPh = new LoaiPhong();
+			loaiPh = dao_LoaiPhong.layLoaiPhong_TheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
+
+			TrangThaiPhong trThaiPh = new TrangThaiPhong();
+			trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoMaTrangThai(ph.getTrangThaiPhong().getMaTrangThai());
+			String maTrangThai = trThaiPh.getMaTrangThai().toString().trim();
+			
+			if (!lau_isSelected.equals(chonLau) && !(ph.getViTriPhong().toString().trim()).equals(lau_isSelected)) {
+				kiemTra = false;
+			}
+			
+			if (!loaiPh_isSelected.equals(chonLoaiPhong) && !(loaiPh.getTenLoaiPhong().toString().trim()).equals(loaiPh_isSelected)) {
+				kiemTra = false;
+			}
+			
+			if (maTrangThai.equals("VC") && kiemTra == true) {
+				Object[] rowData = { ph.getTenPhong(), loaiPh.getTenLoaiPhong(), trThaiPh.getTenTrangThai(),
+						ph.getNgayTaoPhong(), ph.getViTriPhong(), ph.getGhiChu()};
+				model.addRow(rowData);
+			}
+		}
+		if (!ketQuaLoc) {
+			model.fireTableDataChanged();
+		}
 	}
 
 	@Override
