@@ -78,7 +78,7 @@ public class JFrame_Loading extends JFrame {
 
 		progressBar = new JProgressBar();
 		progressBar.setStringPainted(true);
-		progressBar.setForeground(Color.decode(hexColor_Blue2));
+		progressBar.setForeground(Color.decode(hexColor_Orange));
 		progressBar.setBackground(Color.decode(hexColor_Blue1));
 		progressBar.setBounds(0, 537, 874, 23);
 		progressBar.setBorder(null);

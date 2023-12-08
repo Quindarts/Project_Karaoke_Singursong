@@ -129,7 +129,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	private JButton btnLamMoi;
 	private JButton btnSua;
 	private JButton btnThem;
-	private CustomTable customTable_PDP;
+//	private CustomTable table_PhieuDatPhong;
 	private int row;
 	private JTextField txtmaPhieu;
 	private JRadioButton rdbChoNhanPhong;
@@ -224,27 +224,27 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		table_PhieuDatPhong.setBackground(Color.WHITE);
 		table_PhieuDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		table_PhieuDatPhong.setModel(model = new DefaultTableModel(new Object[][] {}, rowData = new String[] {
-				"Mã phiếu đặt", "Ngày nhận", "Khách hàng", "Số điện thoại", "Phòng", "Trạng thái", "Ghi chú", "" }) {
+				"Mã phiếu đặt", "Ngày nhận", "Khách hàng", "Số điện thoại", "Phòng", "Trạng thái", "Ghi chú"}) {
 			private static final long serialVersionUID = -143705667217047914L;
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return column >= 6; // Đặt tất cả các ô không thể chỉnh sửa
+				return column >= 7; // Đặt tất cả các ô không thể chỉnh sửa
 			}
 
 		});
 
-		customTable_PDP = new CustomTable(model, 7);
-		customTable_PDP.setBackground(Color.WHITE);
-		customTable_PDP.setRowHeight(25);
+//		table_PhieuDatPhong = new CustomTable(model, 7);
+//		table_PhieuDatPhong.setBackground(Color.WHITE);
+//		table_PhieuDatPhong.setRowHeight(25);
 
-		customTable_PDP.addMouseListener(new MouseListener() {
+		table_PhieuDatPhong.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
 				if (e.getClickCount() == 2) {
-					int row = customTable_PDP.getSelectedRow();
+					int row = table_PhieuDatPhong.getSelectedRow();
 					String maPD = model.getValueAt(row, 0).toString();
 					dialog_CTPDP.setVisible(true);
 					dialog_CTPDP.HienThongTinTheoMaPDP(maPD);
@@ -271,8 +271,8 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		});
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 37, 1008, 588);
-		scrollPane.add(customTable_PDP);
-		scrollPane.setViewportView(customTable_PDP);
+		scrollPane.add(table_PhieuDatPhong);
+		scrollPane.setViewportView(table_PhieuDatPhong);
 		panel_Table.add(scrollPane);
 
 		DAO_PDP = new PhieuDatPhong_DAO();
@@ -285,7 +285,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		nv = new NhanVien();
 		p = new Phong();
 
-		DefaultTableModel model = (DefaultTableModel) customTable_PDP.getModel();
+		DefaultTableModel model = (DefaultTableModel) table_PhieuDatPhong.getModel();
 		DocDuLieuTrenSQL();
 
 		panel_TimKiem = new JPanel();
@@ -505,7 +505,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		Object o = e.getSource();
 		// Hủy phiếu đặt phòng có trạng thái "Chờ nhận phòng"
 		if (o.equals(btnHuyPDP)) {
-			row = customTable_PDP.getSelectedRow();
+			row = table_PhieuDatPhong.getSelectedRow();
 			if (row >= 0) {
 				String maPD = model.getValueAt(row, 0).toString().trim();
 				String ttp = model.getValueAt(row, 5).toString();
@@ -531,7 +531,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 		// Sửa thông tin phiếu đặt phòng có trạng thái "Chờ nhận phòng"
 		if (o.equals(btnSua)) {
-			row = customTable_PDP.getSelectedRow();
+			row = table_PhieuDatPhong.getSelectedRow();
 
 			if (row >= 0) {
 				String maPD = model.getValueAt(row, 0).toString().trim();
@@ -562,7 +562,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	}
 
 	public void clearTable() {
-		DefaultTableModel model = (DefaultTableModel) customTable_PDP.getModel();
+		DefaultTableModel model = (DefaultTableModel) table_PhieuDatPhong.getModel();
 		model.setRowCount(0);
 	}
 
@@ -729,7 +729,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	}
 
 	public void HuyPhieu() {
-		row = customTable_PDP.getSelectedRow();
+		row = table_PhieuDatPhong.getSelectedRow();
 		String maPDP = ((String) model.getValueAt(row, 0)).trim();
 		pdp = DAO_PDP.layPhieuDatPhong_TheoMaPhieuDat(maPDP);
 		try {

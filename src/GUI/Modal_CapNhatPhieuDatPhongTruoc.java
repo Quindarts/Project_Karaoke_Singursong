@@ -493,6 +493,7 @@ public class Modal_CapNhatPhieuDatPhongTruoc extends JFrame implements ActionLis
 		btnLuu.addActionListener(this);
 		btnThoat.addActionListener(this);
 		btnTimKiem.addActionListener(this);
+	
 
 	}
 
