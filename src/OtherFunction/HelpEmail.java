@@ -22,6 +22,7 @@ public class HelpEmail {
 //        prop.put("mail.smtp.starttls.enable", "true"); //TLS
 //		prop.put("mail.smtp.host", "smtp.gmail.com");
 //        prop.put("mail.smtp.port", "587");
+        
         prop.put("mail.smtp.user","username"); 
         prop.put("mail.smtp.host", "smtp.gmail.com"); 
         prop.put("mail.smtp.port", "25"); 
@@ -29,6 +30,8 @@ public class HelpEmail {
         prop.put("mail.smtp.auth", "true"); 
         prop.put("mail.smtp.starttls.enable","true"); 
         prop.put("mail.smtp.EnableSSL.enable","true");
+        
+        prop.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
         prop.setProperty("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");   
         prop.setProperty("mail.smtp.socketFactory.fallback", "false");   
@@ -75,7 +78,7 @@ public class HelpEmail {
 	}
 	
     public static void main(String[] args) {
-    	sendMail("nguyennga200x@gmail.com", "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: 123456");
+    	sendMail("nguyenthientu413@gmail.com", "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: 123456");
     }
 
 }

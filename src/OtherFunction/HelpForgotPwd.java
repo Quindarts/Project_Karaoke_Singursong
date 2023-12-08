@@ -7,12 +7,12 @@ import java.sql.PreparedStatement;
 
 public class HelpForgotPwd {
 	
-	private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	private static final String CHARACTERS = "0123456789";
     private static SecureRandom secureRandom = new SecureRandom();
 
     public static String generateRandomString() {
-        StringBuilder randomString = new StringBuilder(13);
-        for (int i = 0; i < 13; i++) {
+        StringBuilder randomString = new StringBuilder(6);
+        for (int i = 0; i < 6; i++) {
             int randomIndex = secureRandom.nextInt(CHARACTERS.length());
             randomString.append(CHARACTERS.charAt(randomIndex));
         }
@@ -20,7 +20,7 @@ public class HelpForgotPwd {
     }
     
     
-    public static void updatePwd(String tenDangNhap) {
+    public static void updatePwd(String tenDangNhap,String email) {
 		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
 		String user = "sa";
 		String password = "230903";
@@ -48,7 +48,7 @@ public class HelpForgotPwd {
 		}
 		
 		if(n > 0) {
-			HelpEmail.sendMail("nguyennga200x@gmail.com", "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: " + newPwd);
+			HelpEmail.sendMail(email, "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: " + newPwd);
 		}
 		
 	}
@@ -56,6 +56,6 @@ public class HelpForgotPwd {
    
 
     public static void main(String[] args) {
-        updatePwd("NV42560001");
+        updatePwd("NV42560001" , "nguyenthientu413@gmail.com");
     }
 }

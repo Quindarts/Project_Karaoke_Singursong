@@ -66,6 +66,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
+	private JButton btn_ChonAnh;
 
 	/**
 	 * Launch the application.
@@ -96,7 +97,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		contentPane.add(pnl_TieuDe);
 		pnl_TieuDe.setLayout(null);
 
-		JLabel lbl_Title = new JLabel("THÊM LOẠI PHÒNG");
+		JLabel lbl_Title = new JLabel("THÔNG TIN LOẠI PHÒNG");
 		lbl_Title.setForeground(Color.decode(hexColor_Blue1));
 		lbl_Title.setHorizontalAlignment(SwingConstants.LEFT);
 		lbl_Title.setBounds(0, 0, 237, 25);
@@ -227,7 +228,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		pnl_ThongTin.add(btn_BoQua);
 		btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		
-				JButton btn_ChonAnh = new JButton("Chọn ảnh");
+				btn_ChonAnh = new JButton("Chọn ảnh");
 				btn_ChonAnh.setIcon(new ImageIcon(Modal_ThemLoaiPhong.class.getResource("/icon/upload.png")));
 				btn_ChonAnh.setBounds(26, 252, 179, 32);
 				contentPane.add(btn_ChonAnh);
@@ -265,7 +266,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("src/img")));
+		file.setCurrentDirectory(new File("src/img"));
 
 		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
 				"xls");
@@ -303,13 +304,19 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		txt_GiaTien.setText(giaTien);
 		txt_SoLuongKhachToiDa.setText(soLuong);
 		txtA_Mota.setText(moTa);
-//		img_show_panel.setIcon(ResizeImage(ttdv.getHinhAnh()));	
-//		if(!hinhAnh.equals("")) {
-//			docAnh(hinhAnh);
-//		} else {
-//			docAnh("D:\\Hk1-3\\PTUD\\sourecode\\KaraokeSingUrSong\\src\\img\\noImage.jpg");
-//		}
 		
+		LoaiPhong lp = new LoaiPhong();
+		LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+		lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP);
+		
+		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/" + lp.getHinhAnh()));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+		img_show_panel.setIcon(resizedIcon);
+		
+		txt_MaLoaiPhong.setEditable(false);
+		txt_GiaTien.setEditable(false);
 	}
 
 	public void docAnh(String hinhAnh) {	
@@ -343,7 +350,8 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		String maLoaiPhong = txt_MaLoaiPhong.getText();
 		String tenLoaiPong = txt_TenLoaiPhong.getText();
 		int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-		String hinhA = pathImg;
+		File file = new File(pathImg);
+		String hinhA = "/img/"+ file.getName();
 		double giaTien = Double.parseDouble(txt_GiaTien.getText());
 		String moTa = txtA_Mota.getText();
 
@@ -356,7 +364,6 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 			}
 
 			LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
-			System.out.println(loaiPhong);
 			if (DAO_LP.taoLoaiPhong(loaiPhong) == false) {
 				JOptionPane.showMessageDialog(null, "Tạo loại phòng thất bại, vui lòng thử lại.");
 				return;
@@ -373,9 +380,23 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		String maLoaiPhong = txt_MaLoaiPhong.getText();
 		String tenLoaiPong = txt_TenLoaiPhong.getText();
 		int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-		String hinhA = pathImg;
+//		File file = new File(pathImg);
+//		String hinhA = file.getName();
+		
+		String hinhA;
+		if(pathImg != null) {
+			File file = new File(pathImg);
+	        String fileName = file.getName();
+	        hinhA = fileName;
+		} else {
+			hinhA = "noImage.jpg";
+		}
+		
 		double giaTien = Double.parseDouble(txt_GiaTien.getText());
 		String moTa = txtA_Mota.getText();
+
+		
+		
 
 		try {
 			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
@@ -386,7 +407,6 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 //			}
 
 			LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
-			System.out.println(loaiPhong);
 			if (DAO_LP.capNhatLoaiPhong(loaiPhong) == false) {
 				JOptionPane.showMessageDialog(null, "Cập nhất loại phòng này thất bại, vui lòng thử lại.");
 				return;
@@ -408,6 +428,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 			} else {
 				capNhatLoaiPhong();
 			}
+			setVisible(false);
 		}
 
 	}

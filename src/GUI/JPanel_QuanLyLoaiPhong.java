@@ -288,12 +288,13 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 					
 					
 					for( Phong value : dsP) {
-						DAO_P.xoaPhong(value);
+						DAO_P.capNhat_TinhTrangPhong(value.getMaPhong(), "Không sử dụng");
+						DAO_P.capNhat_TranThaiPhong(value.getMaPhong(), "OOO");
 					}
 					
 					DAO_LP = new LoaiPhong_DAO();
 					String tenLoaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP).getTenLoaiPhong();	
-					DAO_LP.xoaLoaiPhong(lp);
+//					DAO_LP.xoaLoaiPhong(lp);
 					JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
 					model.removeRow(row);
 				} catch (Exception e2) {
@@ -427,6 +428,8 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
 		if(e.getStateChange() == ItemEvent.SELECTED) {
+			txt_find.setText("");
+			
 			String selectNumber = (String) cboNumberPeople.getSelectedItem();
 			String selectPrice = (String) cboPrice.getSelectedItem();
 			String priceConvert;

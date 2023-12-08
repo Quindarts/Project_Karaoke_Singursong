@@ -268,7 +268,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 
 		// SUBMIT
 		if ("Gửi mã xác nhận".equals(btnText) && tk != null) {
-			HelpForgotPwd.updatePwd(tk.gettenDangNhap());
+			HelpForgotPwd.updatePwd(tk.gettenDangNhap(), tk.getEmail());
 			txtAccess.setEnabled(true);
 			btnSave.setText("Xác nhận mã");
 		}

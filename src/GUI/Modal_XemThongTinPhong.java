@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -80,7 +81,7 @@ public class Modal_XemThongTinPhong extends JFrame {
 		img_Phong = new JLabel("");
 		img_Phong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		img_Phong.setBackground(new Color(192, 192, 192));
-		img_Phong.setBounds(10, 50, 179, 171);
+		img_Phong.setBounds(10, 50, 166, 171);
 		contentPane.add(img_Phong);
 
 		JPanel pnl_TenPhong = new JPanel();
@@ -193,7 +194,11 @@ public class Modal_XemThongTinPhong extends JFrame {
 
 	public void SetModal_XemThongTinPhong(String anhPhong, String tenPhong ,String tenLoaiPhong, String viTriPhong, String giaPhong,
 			String trangThai, String tinhTrang) {
-		img_Phong.setText(anhPhong);
+		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/" + anhPhong));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(160, 166, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+		img_Phong.setIcon(resizedIcon);
 		lbl_TenPhong.setText(tenPhong);
 		lbl_LoaiPhong.setText(tenLoaiPhong);
 		lbl_ViTriPhong.setText(viTriPhong);

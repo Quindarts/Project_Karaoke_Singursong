@@ -282,7 +282,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		lbl_TrangThai.setBounds(0, 0, 110, 25);
 		pnl_TrangThai.add(lbl_TrangThai);
 
-		String[] dsTrangThai = { "Chọn trạng thái", "Còn làm", "Nghỉ việc", "Nghỉ phép" };
+		String[] dsTrangThai = { "Chọn trạng thái", "Ðang Làm", "Nghỉ việc", "Nghỉ phép" };
 		comboBox_TrangThai = new JComboBox(dsTrangThai);
 		comboBox_TrangThai.setBounds(125, 0, 225, 25);
 		pnl_TrangThai.add(comboBox_TrangThai);
@@ -405,6 +405,12 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		txt_CCCD.setText(cccd);
 		java.util.Date ngaySinhStr;
 //		img_show_panel.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource(anhThe)));
+		
+		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/" + anhThe));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+		img_show_panel.setIcon(resizedIcon);
 
 		try {
 			ngaySinhStr = dateFormat_YMD.parse(ngaySinh);
@@ -443,8 +449,10 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		if (o.equals(btn_Them)) {
 			if (txt_MaNhanVien.getText().equals("")) {
 				ThemNhanVien();
+				setVisible(false);
 			} else {
 				CapNhatNhanVien();
+				setVisible(false);
 			}
 		}
 
@@ -456,7 +464,16 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 	public void ThemNhanVien() {
 		if (ValueDate()) {
 			lbl_Valuedate.setText("");
-			String anhThe = pathImg;
+			
+			String anhThe;
+			if(pathImg != null) {
+				File file = new File(pathImg);
+		        String fileName = file.getName();
+		        anhThe = fileName;
+			} else {
+				anhThe = "noImage.jpg";
+			}
+			
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
 			boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
@@ -487,10 +504,8 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 					break;
 				}
 			}
-
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);
-			System.out.println(nv);
 
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
@@ -512,7 +527,16 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 	public void CapNhatNhanVien() {
 		if (ValueDate()) {
 			lbl_Valuedate.setText("");
-			String anhThe = pathImg;
+			
+			String anhThe;
+			if(pathImg != null) {
+				File file = new File(pathImg);
+		        String fileName = file.getName();
+		        anhThe = fileName;
+			} else {
+				anhThe = "noImage.jpg";
+			}
+			
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
 			boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
@@ -551,11 +575,10 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 				}
 			}
 
+			System.out.println(anhThe);
 			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(loaiNV);
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);
-
-			System.out.println(nv.toString());
 
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
@@ -674,7 +697,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+		file.setCurrentDirectory(new File("src/img"));
 
 		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
 				"xls");

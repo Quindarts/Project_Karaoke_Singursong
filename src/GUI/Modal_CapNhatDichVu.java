@@ -293,8 +293,9 @@ public class Modal_CapNhatDichVu extends JFrame {
 		dateChooser_ngayHetHan.setDate(dv.getThongTinDichVu().getNgayHetHan());
 		txt_maDichVu.setText(dv.getMaDichVu());
 
+		System.out.println(dv.getThongTinDichVu().getHinhAnh());
 		ImageIcon originalIcon = new ImageIcon(
-				Modal_CapNhatDichVu.class.getResource("/img/"+dv.getThongTinDichVu().getHinhAnh()));
+				Modal_CapNhatDichVu.class.getResource("/img/" + dv.getThongTinDichVu().getHinhAnh()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(159, 176, Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);

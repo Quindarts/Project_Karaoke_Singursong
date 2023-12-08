@@ -51,7 +51,7 @@ public class CardDichVu extends JPanel {
 		img_show_panel.setBounds(0, 0, 150, 150);
 		
 //		---mới 
-		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/"+dichVu.getThongTinDichVu().getHinhAnh()));
+		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/" + dichVu.getThongTinDichVu().getHinhAnh()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);	

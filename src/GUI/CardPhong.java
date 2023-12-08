@@ -110,7 +110,7 @@ public class CardPhong extends JPanel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		setPreferredSize(new Dimension(width, height));
+		setPreferredSize(new Dimension(152, 152));
 
 		/**
 		 * tenPhong
@@ -317,7 +317,8 @@ public class CardPhong extends JPanel {
 		xemThongTinMenuItem.addActionListener(e1 -> {
 			try {
 				phong = DAO_P.timPhong_TheoMaPhong(phong.getMaPhong());
-				String anhPhong = "";
+				loaiP = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
+				String anhPhong = loaiP.getHinhAnh();
 				String tenPhong = phong.getTenPhong();
 				String viTriPhong = phong.getViTriPhong();
 				String tinhTrang = phong.getTinhTrangPhong();
