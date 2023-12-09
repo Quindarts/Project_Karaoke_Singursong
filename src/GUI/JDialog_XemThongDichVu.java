@@ -22,7 +22,7 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
 
-public class Modal_XemThongDichVu extends JFrame {
+public class JDialog_XemThongDichVu extends JFrame {
 
 	private JPanel contentPane;
 	
@@ -53,10 +53,10 @@ public class Modal_XemThongDichVu extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Modal_XemThongDichVu() {
+	public JDialog_XemThongDichVu() {
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+				Toolkit.getDefaultToolkit().getImage(JDialog_CapNhatDichVu.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
 		setBounds(100, 100, 280, 294);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

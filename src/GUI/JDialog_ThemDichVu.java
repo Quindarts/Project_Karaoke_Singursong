@@ -18,7 +18,9 @@ import DAO.ThongTinDichVu_DAO;
 import Entity.DichVu;
 import Entity.LoaiPhong;
 import Entity.ThongTinDichVu;
+import OtherFunction.HelpRamDomKH;
 import OtherFunction.HelpRamDomMa;
+import OtherFunction.HelpRanDomDichVu;
 import OtherFunction.HelpValidate;
 
 import javax.swing.JLabel;
@@ -41,6 +43,7 @@ import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -51,7 +54,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
 import com.toedter.calendar.JDateChooser;
 
-public class Modal_ThemDichVu extends JFrame {
+public class JDialog_ThemDichVu extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField txt_maDichVu;
@@ -61,7 +64,7 @@ public class Modal_ThemDichVu extends JFrame {
 	private JTextArea txtA_moTa;
 	private JLabel img_show_panel;
 	private String pathImg = "src/img";
-	private HelpValidate valiDate;
+
 	private JTextField txt_soLuongDaSuDung;
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private JDateChooser dateChooser_ngayHetHan;
@@ -84,10 +87,10 @@ public class Modal_ThemDichVu extends JFrame {
 	 * Create the frame.
 	 */
 
-	public Modal_ThemDichVu() {
+	public JDialog_ThemDichVu() {
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+				Toolkit.getDefaultToolkit().getImage(JDialog_CapNhatDichVu.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
 		setBounds(100, 100, 1024, 400);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -147,6 +150,7 @@ public class Modal_ThemDichVu extends JFrame {
 		txt_maDichVu = new JTextField();
 		txt_maDichVu.setBounds(125, 0, 225, 25);
 		pnl_MaLoaiPhong.add(txt_maDichVu);
+		txt_maDichVu.setEditable(false);
 		txt_maDichVu.setColumns(10);
 
 		JPanel pnl_TenLoaiPhong = new JPanel();
@@ -201,7 +205,7 @@ public class Modal_ThemDichVu extends JFrame {
 		pnl_GiaTien.add(txt_GiaTien);
 
 		JButton btn_Luu = new JButton("Thêm");
-		btn_Luu.setIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/add_16px.png")));
+		btn_Luu.setIcon(new ImageIcon(JDialog_ThemDichVu.class.getResource("/icon/add_16px.png")));
 		btn_Luu.setBackground(Color.decode(hexColor_Green));
 		btn_Luu.setForeground(new Color(255, 255, 255));
 		btn_Luu.setBounds(532, 253, 110, 30);
@@ -209,7 +213,7 @@ public class Modal_ThemDichVu extends JFrame {
 		btn_Luu.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
 		JButton btn_BoQua = new JButton("Thoát");
-		btn_BoQua.setIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/exit_16px.png")));
+		btn_BoQua.setIcon(new ImageIcon(JDialog_ThemDichVu.class.getResource("/icon/exit_16px.png")));
 		btn_BoQua.setBackground(Color.decode(hexColor_Blue2));
 		btn_BoQua.setForeground(new Color(255, 255, 255));
 		btn_BoQua.setBounds(645, 253, 110, 30);
@@ -299,18 +303,18 @@ public class Modal_ThemDichVu extends JFrame {
 
 		txtA_moTa = new JTextArea();
 		txtA_moTa.setBounds(137, 11, 598, 32);
-//		pnl_GiaTien_1_1.add(txtA_moTa);
+		pnl_GiaTien_1_1.add(txtA_moTa);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panel.setBackground(new Color(255, 255, 255));
 		panel.setBounds(127, 0, 619, 53);
-		panel.add(txtA_moTa);
+//		panel.add(txtA_moTa);
 		pnl_GiaTien_1_1.add(panel);
 
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
-		btn_ChonAnh.setIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/upload.png")));
-		btn_ChonAnh.setSelectedIcon(new ImageIcon(Modal_ThemDichVu.class.getResource("/icon/upload.png")));
+		btn_ChonAnh.setIcon(new ImageIcon(JDialog_ThemDichVu.class.getResource("/icon/upload.png")));
+		btn_ChonAnh.setSelectedIcon(new ImageIcon(JDialog_ThemDichVu.class.getResource("/icon/upload.png")));
 		btn_ChonAnh.setBounds(27, 240, 179, 32);
 		contentPane.add(btn_ChonAnh);
 		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -341,55 +345,54 @@ public class Modal_ThemDichVu extends JFrame {
 
 		btn_Luu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// REGEX
+				if (Validate() == true) {
 
-				// Table Dich vu
+					// Table Dich vu
 
-				String tenDichVu = txt_tenDichVu.getText();
-				int soLuong = Integer.parseInt(txt_SoLuong.getText());
-				String donViTinh = "";
+					String tenDichVu = txt_tenDichVu.getText();
+					int soLuong = Integer.parseInt(txt_SoLuong.getText());
+					String donViTinh = "VND";
 
-				boolean trangThai = cbox_trangThai.getSelectedItem().toString().trim().equals("Còn hàng");
-				double giaTien = Double.parseDouble(txt_GiaTien.getText());
+					boolean trangThai = cbox_trangThai.getSelectedItem().toString().trim().equals("Còn hàng");
+					double giaTien = Double.parseDouble(txt_GiaTien.getText());
 
-				// Table Thong tin dich vu
-				HelpRamDomMa helpMa = new HelpRamDomMa();
-				String maDichVu = helpMa.taoMa("DichVu", "maDichVu", "DV");
-				String maThongTinDichVu = helpMa.taoMa("ThongTinDichVu", "maThongTinDichVu", "TTDV");
+					// Table Thong tin dich vu
+					HelpRanDomDichVu helpMa = new HelpRanDomDichVu();
+					String maDichVu = helpMa.taoMaDV();
+					String maThongTinDichVu = helpMa.taoMaTTDV();
 
-				txt_maDichVu.setText(maDichVu);
-				// maDichvu
-				// soLuong
-				int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
-				Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
-				Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
+					txt_maDichVu.setText(maDichVu);
+					int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText());
+					Date ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
+					Date ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
 
-				File file = new File(pathImg);
-				String fileName = file.getName().toString();;
-				
-			
+					File file = new File(pathImg);
+					String fileName = file.getName().toString();
+					String moTa = txtA_moTa.getText();
 
-				String moTa = txtA_moTa.getText();
+					ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, soLuong, soLuongDaSuDung, ngayNhap,
+							ngayHetHan, moTa, fileName);
+					DichVu dv = new DichVu(maDichVu, tenDichVu, donViTinh, giaTien, trangThai, ttdv);
 
-				ThongTinDichVu ttdv = new ThongTinDichVu(maThongTinDichVu, soLuong, soLuongDaSuDung, ngayNhap,
-						ngayHetHan, moTa, fileName);
-				DichVu dv = new DichVu(maDichVu, tenDichVu, donViTinh, giaTien, trangThai, ttdv);
+					try {
 
-				try {
+						DichVu_DAO DAO_DV = new DichVu_DAO();
+						ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
 
-					DichVu_DAO DAO_DV = new DichVu_DAO();
-					ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
+						if (DAO_TTDV.taoThongTinDichVu(ttdv) && DAO_DV.taoDichVu(dv)) {
+							JOptionPane.showMessageDialog(null, "Tạo dịch vụ thành công.");
+							setVisible(false);
+						} else {
+							JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
+						}
 
-					if (DAO_DV.taoDichVu(dv) && DAO_TTDV.taoThongTinDichVu(ttdv)) {
-						JOptionPane.showMessageDialog(null, "Tạo dịch vụ thành công.");
-					} else {
+					} catch (Exception e2) {
 						JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
+
 					}
 
-				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Tạo dịch vụ thất bại, vui lòng thử lại.");
-
 				}
-
 			}
 		});
 	}
@@ -441,5 +444,93 @@ public class Modal_ThemDichVu extends JFrame {
 			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
 		}
 		return path;
+	}
+
+	@SuppressWarnings("unused")
+	public boolean Validate() {
+
+		String tenDichVu = txt_tenDichVu.getText().trim();
+		Date ngayNhap = null;
+		Date ngayHetHan = null;
+		try {
+			if (new Date((dateChooser_ngayNhap).getDate().getTime()) != null) {
+				ngayNhap = new Date((dateChooser_ngayNhap).getDate().getTime());
+			}
+			if (new Date((dateChooser_ngayHetHan).getDate().getTime()) != null) {
+				ngayHetHan = new Date((dateChooser_ngayHetHan).getDate().getTime());
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			if (tenDichVu.equals("") && txt_SoLuong.getText().trim().equals("")
+					&& txt_soLuongDaSuDung.getText().trim().equals("") && ngayNhap == null && ngayHetHan == null) {
+				JOptionPane.showMessageDialog(this, "Các trường không được bỏ trống");
+				return false;
+			}
+		}
+
+		File file = new File(pathImg);
+		String fileName = file.getName().toString().trim();
+		String moTa = txtA_moTa.getText();
+
+		int soLuong = Integer.parseInt(txt_SoLuong.getText().trim());
+		String donViTinh = "";
+
+		double giaTien = Double.parseDouble(txt_GiaTien.getText().trim());
+		int soLuongDaSuDung = Integer.parseInt(txt_soLuongDaSuDung.getText().trim());
+
+		if (tenDichVu.equals("")) {
+			JOptionPane.showMessageDialog(this, "Tên Dịch Vụ không được bỏ trống!");
+			return false;
+		} else if (!(tenDichVu.length() > 0 && tenDichVu.matches("^[a-zA-Z\\s]+$"))) {
+			JOptionPane.showMessageDialog(this, "Tên Dịch Vụ không chứa kí tự đặc biệt!");
+			return false;
+		}
+		if (txt_GiaTien.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(this, "Giá tiền dịch vụ không được bỏ trống!");
+			return false;
+		} else if (giaTien < 5000) {
+			JOptionPane.showMessageDialog(this, "Giá tiền dịch vụ phải lớn hơn hoặc bằng 5.000VNĐ!");
+			return false;
+		}
+		if (txt_soLuongDaSuDung.getText().trim().equals("")) {
+			txt_soLuongDaSuDung.setText("0");
+		}
+		if (txt_SoLuong.getText().trim().equals("")) {
+			JOptionPane.showMessageDialog(this, "Số lượng tổng dịch vụ không được bỏ trống");
+			return false;
+		} else
+
+		if (soLuong < soLuongDaSuDung) {
+			JOptionPane.showMessageDialog(this, "Số lượng tổng dịch vụ phải lớn hơn số lượng đã sử dụng");
+			return false;
+		}
+
+		if (fileName.equals("img")) {
+			JOptionPane.showMessageDialog(this, "Ảnh dịch vụ không được bỏ trống!");
+			return false;
+		}
+
+		try {
+			java.util.Date currentDate = new java.util.Date();
+
+			if (ngayNhap.after(currentDate)) {
+				JOptionPane.showMessageDialog(this, "Ngày nhập hàng phải bé hơn hoặc bằng ngày hiện tại!");
+				return false;
+			}
+			if (ngayHetHan.before(ngayNhap)) {
+				JOptionPane.showMessageDialog(this, "Ngày hết hạn phải lớn hơn  ngày nhập hàng!");
+				return false;
+			}
+			if (ngayHetHan.before(currentDate)) {
+				JOptionPane.showMessageDialog(this, "Ngày hết hạn phải lớn hơn ngày hiện tại!");
+				return false;
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			JOptionPane.showMessageDialog(this, "Ngày nhập , ngày hết hạn của dịch vụ không được để trống!");
+			return false;
+		}
+
+		return true;
 	}
 }

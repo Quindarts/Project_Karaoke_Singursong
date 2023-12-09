@@ -45,7 +45,7 @@ import Entity.Phong;
 import java.awt.SystemColor;
 import javax.swing.SwingConstants;
 
-public class Modal_DatDichVu extends JFrame implements ActionListener {
+public class JDialog_DatDichVu extends JFrame implements ActionListener {
 
 	/**
 	 * Color
@@ -94,7 +94,7 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 	private LoaiPhong_DAO DAO_LP;
 	private LoaiPhong loaiPhong;
 
-	public Modal_DatDichVu(Phong phong) {
+	public JDialog_DatDichVu(Phong phong) {
 		this.phong = phong;
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -379,7 +379,7 @@ public class Modal_DatDichVu extends JFrame implements ActionListener {
 				if (col == 2) {
 					int selectedItem = Integer.parseInt(table_dvDatPhong.getValueAt(row, 2).toString());
 
-					Modal_CapNhatSoLuong md = new Modal_CapNhatSoLuong(table_dvDatPhong, tableDichVu, selectedItem, col,
+					JDialog_CapNhatSoLuong md = new JDialog_CapNhatSoLuong(table_dvDatPhong, tableDichVu, selectedItem, col,
 							row);
 					md.setVisible(true);
 				}

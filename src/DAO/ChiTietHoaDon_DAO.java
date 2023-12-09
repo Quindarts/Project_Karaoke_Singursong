@@ -162,16 +162,18 @@ public class ChiTietHoaDon_DAO {
 		return n > 0;
 	}
 
-	public boolean capNhatCTHoaDon_TheoMaHoaDon_MaPhong(ChiTietHoaDon ctHoaDon) {
+	public boolean capNhatCTHoaDon_TheoMaHoaDon_MaPhong(ChiTietHoaDon ctHoaDon, String maPhongCu) {
+		System.out.println(ctHoaDon.toString());
+		System.out.println(maPhongCu);
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		PreparedStatement statement = null;
 		int n = 0;
 		try {
-			statement = con.prepareStatement("UPDATE ChiTietHoaDon set maHoaDon = ?, maPhong = ? " + " WHERE maHoaDon = ?");
-			statement.setString(1, ctHoaDon.getHoaDon().getMaHoaDon());
-			statement.setString(2, ctHoaDon.getPhong().getMaPhong());
-			statement.setString(3, ctHoaDon.getHoaDon().getMaHoaDon());
+			statement = con.prepareStatement("UPDATE ChiTietHoaDon set maPhong = ? " + " WHERE maHoaDon = ? and maPhong = ?");
+			statement.setString(1, ctHoaDon.getPhong().getMaPhong());
+			statement.setString(2, ctHoaDon.getHoaDon().getMaHoaDon());
+			statement.setString(3, maPhongCu);
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

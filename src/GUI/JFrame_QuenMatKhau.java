@@ -1,4 +1,5 @@
 package GUI;
+
 import java.awt.EventQueue;
 
 import javax.swing.border.AbstractBorder;
@@ -112,7 +113,6 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
 
-	
 	private JTextField txtUsername;
 	private JPanel panelLogin;
 	private JButton btnSave;
@@ -198,7 +198,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 		lblPassword.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblPassword.setBounds(25, 235, 111, 25);
 		panelLogin.add(lblPassword);
-		
+
 		CBHienMatKhau = new JCheckBox("Hiện mật khẩu");
 		CBHienMatKhau.setBackground(new Color(255, 255, 255));
 		CBHienMatKhau.setFont(new Font("Segoe UI", Font.PLAIN, 11));
@@ -268,7 +268,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 
 		// SUBMIT
 		if ("Gửi mã xác nhận".equals(btnText) && tk != null) {
-			HelpForgotPwd.updatePwd(tk.gettenDangNhap());
+			HelpForgotPwd.updatePwd(tk.gettenDangNhap(), tk.getEmail());
 			txtAccess.setEnabled(true);
 			btnSave.setText("Xác nhận mã");
 		}
@@ -305,7 +305,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 
 			}
 		}
-		
+
 		Object o = e.getSource();
 		if (o.equals(btnExit)) {
 			JFrame_DangNhap dangNhap = new JFrame_DangNhap();
@@ -363,17 +363,17 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getStateChange() == ItemEvent.SELECTED) {            
-            txtPassword.setEchoChar(CBHienMatKhau.isSelected() ? '\u0000' : '*');
-            txtPasswordRepeat.setEchoChar(CBHienMatKhau.isSelected() ? '\u0000' : '*');
-        } else if (e.getStateChange() == ItemEvent.DESELECTED) {
-        	char echoChar = CBHienMatKhau.isSelected() ? '\u0000' : '*';
-            txtPassword.setEchoChar(echoChar);
-            txtPasswordRepeat.setEchoChar(echoChar);
-        }
+		if (e.getStateChange() == ItemEvent.SELECTED) {
+			txtPassword.setEchoChar(CBHienMatKhau.isSelected() ? '\u0000' : '*');
+			txtPasswordRepeat.setEchoChar(CBHienMatKhau.isSelected() ? '\u0000' : '*');
+		} else if (e.getStateChange() == ItemEvent.DESELECTED) {
+			char echoChar = CBHienMatKhau.isSelected() ? '\u0000' : '*';
+			txtPassword.setEchoChar(echoChar);
+			txtPasswordRepeat.setEchoChar(echoChar);
+		}
 	}
 }

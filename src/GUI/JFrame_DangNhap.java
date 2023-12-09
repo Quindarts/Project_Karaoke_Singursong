@@ -270,14 +270,10 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 					JOptionPane.showMessageDialog(null, "Mật khẩu không đúng ! ");
 				} else {
 
-//					System.out.println(taiKhoanDangNhap.toString());
-//					System.out.println("Đăng nhập thành công");
 					nhanVienDangNhap = NV_DAO
 							.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
-//					System.out.println("Đăng nhập vào màn hình" + role);
-//					System.out.println(nhanVienDangNhap.getTrangThai());
-					if (nhanVienDangNhap.getTrangThai().equals("Đang Làm")) {
+					if (nhanVienDangNhap.getTrangThai().equals("Đang làm")) {
 						thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
 						thuNgan.setVisible(true);
 					} else {
@@ -292,9 +288,6 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		if (o.equals(btnExit)) {
 			dispose();
 		}
-
-		// CHECKBOX HIEN THI MAT KHAU
-
 	}
 
 	/**
@@ -381,7 +374,6 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 
 	}
 
-//	--------------check box
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {

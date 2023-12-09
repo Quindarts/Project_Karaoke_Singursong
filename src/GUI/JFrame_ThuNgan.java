@@ -490,7 +490,7 @@ public class JFrame_ThuNgan extends JFrame {
 		mntmNewMenuItem.addActionListener((ActionListener) new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Modal_TrangCaNhan canhan = new Modal_TrangCaNhan(nhanVien);
+				JDialog_TrangCaNhan canhan = new JDialog_TrangCaNhan(nhanVien);
 				canhan.setVisible(true);
 
 			}

@@ -215,7 +215,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 					String ghiChu = model.getValueAt(row, 6).toString();
 					String tinhTrang = model.getValueAt(row, 7).toString();
 					
-					Modal_ThemPhong modal_ThemPhong = new Modal_ThemPhong();
+					JDialog_ThemPhong modal_ThemPhong = new JDialog_ThemPhong();
 					modal_ThemPhong.setVisible(true);
 					modal_ThemPhong.setModal_ThemPhong(maPhong, tenPhong, loaiPhong, trangThai, tinhTrang, viTri, ngayTao, ghiChu);
 				}
@@ -308,13 +308,17 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		
 		date_From = new JDateChooser();
 		date_From.setBounds(56, 16, 152, 30);
+		date_From.setDateFormatString("yyyy-MM-dd");
 		panel_3.add(date_From);
 		
 		date_To = new JDateChooser();
 		date_To.setBounds(56, 56, 152, 30);
+		date_To.setDateFormatString("yyyy-MM-dd");
 		panel_3.add(date_To);
 		
 		btn_find_date = new JButton("Tìm");
+		btn_find_date.setForeground(new Color(255, 255, 255));
+		btn_find_date.setBackground(new Color(0, 0, 255));
 		btn_find_date.setBounds(10, 103, 198, 30);
 		panel_3.add(btn_find_date);
 		
@@ -328,9 +332,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		lblNewLabel_1_1.setBounds(10, 56, 63, 30);
 		panel_3.add(lblNewLabel_1_1);
 		cbo_trangthai.addItem("Tất cả");
-		cbo_trangthai.addItem("Sử dụng được");
-		cbo_trangthai.addItem("Chưa dọn dẹp");
-		cbo_trangthai.addItem("Đang dọn dẹp");
+		cbo_trangthai.addItem("Đang hoạt động");
 		cbo_trangthai.addItem("Sửa chữa");
 		
 		
@@ -367,6 +369,11 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				DocDuLieu();
+				cbo_floor.setSelectedItem("Tất cả");
+				cbo_status.setSelectedItem("Tất cả");
+				cbo_trangthai.setSelectedItem("Tất cả");
+				date_From.setDate(null);
+				date_To.setDate(null);
 			}
 		});
 		
@@ -404,7 +411,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 //			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
 //			modalTKH.setVisible(true);
 			
-			Modal_ThemPhong modalTP = new Modal_ThemPhong();
+			JDialog_ThemPhong modalTP = new JDialog_ThemPhong();
 			modalTP.setVisible(true);
 		} else if(o.equals(btnTimKiem) && !txtFindCodeRoom.getText().equals("")) {
 			TimKhachHang_TheoMa();
@@ -486,7 +493,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 					
 					TrangThaiPhong trangThai = new TrangThaiPhong();
 					
-					
 					trangThai = DAO_trangThai.timTrangThaiPhong_TheoMaTrangThai(p.getTrangThaiPhong().getMaTrangThai().trim());
 					
 					Object[] rowData = {p.getMaPhong(), p.getTenPhong(), lp.getTenLoaiPhong(), trangThai.getTenTrangThai(), p.getNgayTaoPhong(), p.getViTriPhong(), p.getGhiChu(), p.getTinhTrangPhong()};
@@ -538,6 +544,8 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 	public void itemStateChanged(ItemEvent e) {
 		if (e.getStateChange() == ItemEvent.SELECTED) {
             // Xử lý sự kiện khi một mục được chọn
+			txtFindCodeRoom.setText("");
+			
             String selectFloor = (String) cbo_floor.getSelectedItem();
             String selectStatus = (String) cbo_status.getSelectedItem();
             String selectTinhTrang = (String) cbo_trangthai.getSelectedItem();

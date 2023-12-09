@@ -23,6 +23,7 @@ import javax.swing.JTextField;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import com.ctc.wstx.shaded.msv_core.verifier.identity.Matcher;
@@ -53,6 +54,7 @@ import Entity.Phong;
 import Entity.ThongTinDichVu;
 import GUI.JPanel_QuanLyKhachHang.RoundedTransparentBorder;
 import OtherFunction.HelpDate;
+import OtherFunction.HelpRamDomMa;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
@@ -77,7 +79,7 @@ import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.ImageIcon;
 
-public class Modal_ThanhToan extends JFrame implements ActionListener {
+public class JDialog_ThanhToan extends JFrame implements ActionListener, MouseListener {
 
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
@@ -96,7 +98,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 	private JTextField txt_ngayLap;
 	private JTextField txt__thoiGianTraPhong;
 	private JTextField txt__soGioHat;
-	private JTextField txt__giaPhong;
+	private JTextField txt_soPhongThanhToan;
 	private JTextField txt__tienPhong;
 	private JTextField txt_khachHang;
 	private JTextField txt__soDienThoai;
@@ -123,6 +125,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 	// Entity
 	private ArrayList<ChiTietHoaDon> dsCTHD = new ArrayList<>();
 	private ArrayList<ChiTietDichVu> dschiTietDV = new ArrayList<>();
+	private ArrayList<ChiTietDichVu> dschiTietDV_render = new ArrayList<>();
 
 	public ArrayList<ChiTietDichVu> getDschiTietDV() {
 		return dschiTietDV;
@@ -148,6 +151,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 	private BigDecimal tienTongP;
 	private ChiTietDichVu_DAO DAO_CTDV;
 	private JDialog_ThongTinHoaDon dialog_TTHD;
+	private JCheckBox JCheckBox;
 
 	public ArrayList<ChiTietHoaDon> getDsCTHD() {
 		return dsCTHD;
@@ -203,18 +207,17 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 	 *                  tongHoaDon = tienKhachDua tienThua
 	 * 
 	 */
-	public Modal_ThanhToan(HoaDon hoaDon, Phong phong, LoaiPhong loaiPhong, KhachHang khachHang) {
+	public JDialog_ThanhToan(HoaDon hoaDon, Phong phong, LoaiPhong loaiPhong, KhachHang khachHang) {
 		setHoaDon(hoaDon);
 		setLoaiPhongTT(loaiPhong);
 		setPhongTT(phong);
 		setKhachHangTT(khachHang);
-		System.out.println(getKhachHangTT());
 		layDanhSachCTHD();
 		layDanhSachCTDV();
 
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+				Toolkit.getDefaultToolkit().getImage(JDialog_CapNhatDichVu.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
 		setBounds(100, 100, 1200, 725);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -406,16 +409,16 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		panel_1_1_3_1.setBounds(290, 74, 255, 67);
 		panel_2.add(panel_1_1_3_1);
 
-		JLabel lblNewLabel_1_2_3_1 = new JLabel("Giá phòng");
+		JLabel lblNewLabel_1_2_3_1 = new JLabel("Số phòng thanh toán");
 		lblNewLabel_1_2_3_1.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblNewLabel_1_2_3_1.setBounds(0, 11, 80, 23);
+		lblNewLabel_1_2_3_1.setBounds(0, 11, 140, 23);
 		panel_1_1_3_1.add(lblNewLabel_1_2_3_1);
 
-		txt__giaPhong = new JTextField();
-		txt__giaPhong.setColumns(10);
-		txt__giaPhong.setBounds(0, 39, 255, 28);
-		txt__giaPhong.setEnabled(false);
-		panel_1_1_3_1.add(txt__giaPhong);
+		txt_soPhongThanhToan = new JTextField();
+		txt_soPhongThanhToan.setColumns(10);
+		txt_soPhongThanhToan.setBounds(0, 39, 255, 28);
+		txt_soPhongThanhToan.setEnabled(false);
+		panel_1_1_3_1.add(txt_soPhongThanhToan);
 
 		JPanel panel_1_1_4_1 = new JPanel();
 		panel_1_1_4_1.setBackground(new Color(255, 255, 255));
@@ -510,7 +513,16 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		table_DichVu.setFillsViewportHeight(true);
 		table_DichVu.setBackground(Color.WHITE);
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "STT", "Mặt hàng", "Đơn giá", "Số lượng", "Thành tiền" }));
+				new String[] { "STT", "Mã phòng", "Mặt hàng", "Đơn giá", "Số lượng", "Thành tiền" }) {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
+		;
 
 		table_DichVu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
@@ -535,8 +547,26 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		table_Phong.setFillsViewportHeight(true);
 		table_Phong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		table_Phong.setBackground(Color.WHITE);
-		table_Phong.setModel(new DefaultTableModel(new Object[][] {},
-				new String[] { "STT", "Tên loại phòng", "Tên phòng", "Số giờ hát", "Tiền phòng", "Thành tiền" }));
+		table_Phong.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "STT", "Tên loại phòng",
+				"Tên phòng", "Số giờ hát", "Tiền phòng", "Thành tiền", "Tick chọn" }) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -143705667217047914L;
+
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				if (columnIndex == 6) {
+					return Boolean.class;
+				}
+				return Object.class;
+			}
+
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
+		});
 
 		scrollPane_1.setViewportView(table_Phong);
 
@@ -551,7 +581,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		btn__exit.setBounds(880, 630, 120, 35);
 		contentPane.add(btn__exit);
 		btn__exit.setBackground(Color.decode(hexColor_Blue2));
-		btn__exit.setIcon(new ImageIcon(Modal_ThanhToan.class.getResource("/icon/return.png")));
+		btn__exit.setIcon(new ImageIcon(JDialog_ThanhToan.class.getResource("/icon/return.png")));
 		btn__exit.setForeground(new Color(255, 255, 255));
 		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
@@ -560,7 +590,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		contentPane.add(btn__thanhToan);
 		btn__thanhToan.setForeground(new Color(255, 255, 255));
 		btn__thanhToan.setBackground(Color.decode(hexColor_Orange));
-		btn__thanhToan.setIcon(new ImageIcon(Modal_ThanhToan.class.getResource("/icon/confirm.png")));
+		btn__thanhToan.setIcon(new ImageIcon(JDialog_ThanhToan.class.getResource("/icon/confirm.png")));
 		btn__thanhToan.setFont(new Font("Segoe UI", Font.BOLD, 13));
 
 		btn__thanhToan.setEnabled(false);
@@ -574,7 +604,35 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		capNhatForm();
 //		table_Phong.addMouseListener((MouseListener) this);
 		txt__tienKhachDua.addActionListener(this);
+		table_Phong.addMouseListener((MouseListener) this);
+		table_DichVu.addMouseListener((MouseListener) this);
+	}
 
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		Object o = e.getSource();
+		if (o.equals(table_Phong)) {
+			DefaultTableModel df_P = (DefaultTableModel) table_Phong.getModel();
+
+			if (e.getClickCount() == 2) {
+				int row = table_Phong.getSelectedRow();
+				Boolean checked = (Boolean) df_P.getValueAt(row, 6);
+
+				df_P.setValueAt(!checked, row, 6);
+				capNhatDanhSachDV();
+
+			}
+		}
+		if (o.equals(table_DichVu)) {
+			DefaultTableModel df_P = (DefaultTableModel) table_DichVu.getModel();
+
+			if (e.getClickCount() == 2) {
+				int row = table_DichVu.getSelectedRow();
+				int soLuong = Integer.parseInt(table_DichVu.getValueAt(row, 4).toString());
+				JDialog_CapNhatSoLuong md = new JDialog_CapNhatSoLuong(table_DichVu, soLuong, 4, row);
+				md.setVisible(true);
+			}
+		}
 	}
 
 	@Override
@@ -586,10 +644,31 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		}
 
 		if (o.equals(btn__thanhToan)) {
+			DefaultTableModel df_P = (DefaultTableModel) table_Phong.getModel();
+			ArrayList<String> dsMaP = new ArrayList<>();
+			ArrayList<String> dsMaP_hatTiep = new ArrayList<>();
 
+			for (int row = 0; row < df_P.getRowCount(); row++) {
+				Boolean checked = (Boolean) df_P.getValueAt(row, 6);
+				String maPhong = (String) df_P.getValueAt(row, 2);
+				if (checked == true) {
+					dsMaP.add(maPhong);
+					// ma phong thanh toan
+				} else {
+					dsMaP_hatTiep.add(maPhong);
+				}
+
+			}
+			System.out.println("Phong thanh toán: \n" + dsMaP);
+			System.out.println("Phong hat tiep: \n" + dsMaP_hatTiep);
+			int soLuongPhongBD = getDsCTHD().size();
+			int soLuongPhongTT = dsMaP.size();
 			long currentTimeMillis = System.currentTimeMillis();
+
 			Timestamp thoiGianHienTai = new Timestamp(currentTimeMillis);
-			if (capNhatTienThoiLaiKhach()) {
+
+			if (capNhatTienThoiLaiKhach() && soLuongPhongTT == soLuongPhongBD) {
+
 				getHoaDon().setThoiGianKetThuc(thoiGianHienTai);
 				getHoaDon().setTrangThai("Đã thanh toán");
 				boolean hdtt = DAO_HD.capNhatHoaDon(getHoaDon());
@@ -605,7 +684,7 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 						ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
 						DichVu_DAO DAO_DV = new DichVu_DAO();
 						DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(ctdv.getDichVu().getMaDichVu());
-						
+
 						dv.getThongTinDichVu()
 								.setSoLuongDaSuDung(dv.getThongTinDichVu().getSoLuongDaSuDung() + ctdv.getSoLuong());
 
@@ -619,6 +698,106 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 					dialog_TTHD.HienThongTinTheoMaHD(getHoaDon().getMaHoaDon());
 				} else {
 					JOptionPane.showMessageDialog(null, "Thanh toán thất bại, vui lòng kiểm tra lại thông tin");
+				}
+
+				dialog_TTHD = new JDialog_ThongTinHoaDon();
+
+				this.setVisible(false);
+				dialog_TTHD.setVisible(true);
+				dialog_TTHD.HienThongTinTheoMaHD(getHoaDon().getMaHoaDon());
+
+			} else if (capNhatTienThoiLaiKhach() && soLuongPhongTT < soLuongPhongBD) {
+
+				getHoaDon().setThoiGianKetThuc(thoiGianHienTai);
+				getHoaDon().setTrangThai("Đã thanh toán");
+
+				boolean hdtt = DAO_HD.capNhatHoaDon(getHoaDon());
+
+				if (hdtt == true) {
+
+					DAO_P = new Phong_DAO();
+					DAO_CTHD = new ChiTietHoaDon_DAO();
+
+					dsMaP.forEach(ma -> {
+						DAO_P.capNhat_TranThaiPhong(ma, "VC");
+
+					});
+					dsMaP_hatTiep.forEach(ma -> {
+						ChiTietHoaDon cthd = new ChiTietHoaDon(hoaDon, new Phong(ma));
+						boolean a = DAO_CTHD.xoaCTHoaDon(cthd);
+					});
+
+					try {
+						DAO_chiTietDV = new ChiTietDichVu_DAO();
+						DAO_HD = new HoaDon_DAO();
+						DAO_CTHD = new ChiTietHoaDon_DAO();
+						ArrayList<ChiTietDichVu> dsCTDVNew = new ArrayList<ChiTietDichVu>();
+
+						// taoHoaDonMoi
+						HelpRamDomMa help = new HelpRamDomMa();
+						String maHDNew = help.taoMa("HoaDon", "maHoaDon", "HD");
+
+						HoaDon hoaDonNew = new HoaDon(maHDNew, hoaDon.getKhachHang(), hoaDon.getNhanVien(),
+								hoaDon.getPhieuDatPhong(), new KhuyenMai(), hoaDon.getNgayLap(), "Đang chờ thanh toán",
+								null);
+
+						DAO_HD.taoHoaDon(hoaDonNew);
+
+						if (dschiTietDV_render != null) {
+							dschiTietDV_render.forEach(ctdv -> {
+								ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
+								DichVu_DAO DAO_DV = new DichVu_DAO();
+								DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(ctdv.getDichVu().getMaDichVu());
+
+								dv.getThongTinDichVu().setSoLuongDaSuDung(
+										dv.getThongTinDichVu().getSoLuongDaSuDung() + ctdv.getSoLuong());
+
+								DAO_TTDV.capNhatThongTinDichVu(dv.getThongTinDichVu());
+
+								System.out.println(dv.getTenDichVu());
+							});
+						}
+
+						dsMaP_hatTiep.forEach(maP -> {
+							ChiTietHoaDon ct = new ChiTietHoaDon(hoaDonNew, new Phong(maP));
+							DAO_CTHD.taoCTHoaDon(ct);
+
+						});
+
+						dschiTietDV.forEach(ctdv -> {
+							dsMaP_hatTiep.forEach(ma -> {
+
+								// Nếu tồn tại những CTDV có mã phòng còn hát tiếp
+								if (ctdv.getPhong().getMaPhong().trim().equals(ma)) {
+
+									DAO_chiTietDV = new ChiTietDichVu_DAO();
+									Phong phongDV = new Phong(ma);
+									ChiTietDichVu ctdvNew = new ChiTietDichVu(hoaDonNew, ctdv.getDichVu(),
+											ctdv.getSoLuong(), phongDV);
+
+									// Tạo và lưu CTDV mới
+									DAO_chiTietDV.taoCTDichVu(ctdvNew);
+									System.out.println(ctdv.getDichVu().getTenDichVu());
+
+									// Xóa CTDV cũ
+									DAO_CTDV.xoaCTDichVu_TheoMaHD_MaP(ctdv);
+								}
+
+							});
+
+						});
+
+						this.setVisible(false);
+						JOptionPane.showMessageDialog(null, "Thanh toán thành công!!");
+						dialog_TTHD = new JDialog_ThongTinHoaDon();
+						dialog_TTHD.setVisible(true);
+
+						dialog_TTHD.HienThongTinTheoMaHD(hoaDon.getMaHoaDon());
+					} catch (Exception e2) {
+						e2.printStackTrace();
+						// TODO: handle exception
+					}
+
 				}
 			}
 
@@ -656,6 +835,41 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 
 	}
 
+	public void capNhatDanhSachDV() {
+		DefaultTableModel df_P = (DefaultTableModel) table_Phong.getModel();
+
+		xoaDuLieuTrenTableDV();
+		ArrayList<ChiTietHoaDon> listCTHD = new ArrayList<ChiTietHoaDon>();
+		dschiTietDV_render.clear();
+		for (int row = 0; row < df_P.getRowCount(); row++) {
+			Boolean checked = (Boolean) df_P.getValueAt(row, 6);
+			String maPhong = (String) df_P.getValueAt(row, 2);
+
+			// Xử lý dữ liệu của các hàng được chọn ở đây
+			// xu ly hoa don tai day
+
+			getDschiTietDV().forEach(ctdv -> {
+				if (ctdv.getPhong().getMaPhong().trim().equals(maPhong) && checked == true) {
+					dschiTietDV_render.add(ctdv);
+
+				}
+			});
+			if (checked == true) {
+				Phong ph = DAO_P.timPhong_TheoMaPhong(maPhong);
+				listCTHD.add(new ChiTietHoaDon(getHoaDon(), ph));
+			}
+
+		}
+		// cap nhat tien
+		HoaDon hdtrungGian = new HoaDon();
+
+		txt_soPhongThanhToan.setText(String.valueOf(listCTHD.size()));
+		txt__tienDichVu.setText(dcf.format(getHoaDon().tinhTienDichVu(dschiTietDV_render)));
+		txt__tienPhong.setText(dcf.format(getHoaDon().tinhTienPhong(listCTHD)));
+		txt__tongHoaDon.setText(dcf.format(getHoaDon().tinhTongTien(listCTHD, dschiTietDV_render)));
+		renderTableDichVu(dschiTietDV_render);
+	}
+
 	public void capNhatForm() {
 		// Event
 
@@ -675,20 +889,18 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		txt_khachHang.setText(getKhachHangTT().getHoTen());
 		txt__giamGia.setText("0%");
 
-		System.out.println(getLoaiPhongTT().getGiaTien());
-		txt__giaPhong.setText(String.valueOf(getLoaiPhongTT().getGiaTien()));
-
+		txt_soPhongThanhToan.setText(String.valueOf(getDsCTHD().size()));
 		txt_ngayLap.setText(sdf.format(getHoaDon().getNgayLap()));
 
 		txt__thoiGianTraPhong.setText(sdf.format(thoiGianHienTai));
+		getHoaDon().setThoiGianKetThuc(thoiGianHienTai);
 
 		txt__soGioHat.setText(String.valueOf(getHoaDon().tinhGioHat()));
 
 		txt__tienDichVu.setText(String.valueOf(getHoaDon().tinhTienDichVu(dschiTietDV)));
-
-		txt__tienCoc.setText(dcf.format(getHoaDon().getPhieuDatPhong().getTienCoc()));
 		txt__tienPhong.setText(dcf.format(getHoaDon().tinhTienPhong(dsCTHD)));
 		txt__tongHoaDon.setText(dcf.format(getHoaDon().tinhTongTien(dsCTHD, dschiTietDV)));
+		txt__tienCoc.setText(dcf.format(getHoaDon().getPhieuDatPhong().getTienCoc()));
 
 	}
 
@@ -722,6 +934,9 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 		ArrayList<ChiTietDichVu> dschiTietDV = DAO_CTDV
 				.layDanhSachChiTietDichVu_TheoMaHoaDon(getHoaDon().getMaHoaDon());
 
+		dschiTietDV.forEach(ctdv -> {
+			dschiTietDV_render.add(ctdv);
+		});
 		setDschiTietDV(dschiTietDV);
 	}
 
@@ -736,28 +951,52 @@ public class Modal_ThanhToan extends JFrame implements ActionListener {
 				HoaDon hd = DAO_HD.layHoaDon_TheoMaHoaDon(hoaDon.getMaHoaDon());
 
 				Object[] rowData = { sttCTHD++, lp.getTenLoaiPhong(), p.getTenPhong(), hd.tinhGioHat(), lp.getGiaTien(),
-						cthd.thanhTien(hd.tinhGioHat()) };
+						cthd.thanhTien(hd.tinhGioHat()), true };
 				modelPhong.addRow(rowData);
 			}
 		}
 	}
 
-	public void renderTableDichVu(ArrayList<ChiTietDichVu> dschiTietDV) {
+	public void renderTableDichVu(ArrayList<ChiTietDichVu> dschiTietDVlc) {
 		modal_Dv = (DefaultTableModel) table_DichVu.getModel();
 		int iii = 1;
-		for (ChiTietDichVu chiTietDV : dschiTietDV) {
-			Object[] rowData = { iii++, chiTietDV.getDichVu().getTenDichVu(), chiTietDV.getDichVu().getDonGia(),
-					chiTietDV.getSoLuong(), chiTietDV.thanhTien() };
-			iii++;
+		for (ChiTietDichVu chiTietDV : dschiTietDVlc) {
+			Object[] rowData = { iii++, chiTietDV.getPhong().getMaPhong(), chiTietDV.getDichVu().getTenDichVu(),
+					chiTietDV.getDichVu().getDonGia(), chiTietDV.getSoLuong(), dcf.format(chiTietDV.thanhTien()) };
 			modal_Dv.addRow(rowData);
 		}
 		;
 
 	}
 
-	public void XoaDuLieuTrenTableDV() {
+	public void xoaDuLieuTrenTableDV() {
 		modal_Dv = (DefaultTableModel) table_DichVu.getModel();
 		modal_Dv.getDataVector().removeAllElements();
+		modal_Dv.fireTableDataChanged();
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

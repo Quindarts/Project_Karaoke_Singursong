@@ -543,6 +543,46 @@ public class HoaDon_DAO {
 		return listHD;
 	}
 
+	public HoaDon layHoaDon_TheoTrangThai_MaPhong(String tt, String maPhong) {
+		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
+		HoaDon hoaDon = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		try {
+			String sql = "SELECT * FROM HoaDon WHERE trangThai = ? and maPhong = ?";
+			statement = con.prepareStatement(sql);
+			statement.setString(1, tt);
+			statement.setString(1, maPhong);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maHoaDon = rs.getString("maHoaDon");
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(rs.getString("maPhieuDat"));
+				KhuyenMai khuyenMai = new KhuyenMai(rs.getString("maKhuyenMai"));
+				java.sql.Timestamp ngayLap = rs.getTimestamp("ngayLap");
+				java.sql.Timestamp thoiGianKetThuc = rs.getTimestamp("thoiGianKetThuc");
+				String trangThai = rs.getString("trangThai");
+
+//				NhanVien nv = 
+				hoaDon = new HoaDon(maHoaDon, khachHang, nhanVien, phieuDatPhong, khuyenMai, ngayLap, trangThai,
+						thoiGianKetThuc);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return hoaDon;
+	}
+
 	public ArrayList<HoaDon> layHoaDon_TheoTrangThai(String tt) {
 		ArrayList<HoaDon> listHD = new ArrayList<HoaDon>();
 		HoaDon hoaDon = null;
@@ -598,7 +638,6 @@ public class HoaDon_DAO {
 		try {
 			statement = con.prepareStatement(sql);
 
-			System.out.println(sql);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				hash_DV.put(rs.getString("tenLoaiPhong"), String.valueOf(rs.getDouble("soLuongTK")));
@@ -636,7 +675,6 @@ public class HoaDon_DAO {
 		try {
 
 			statement = con.prepareStatement(sql);
-			System.out.println(sql);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				hash_DV.put(rs.getString("tenDichVu"), String.valueOf(rs.getDouble("kqTK")));
@@ -659,7 +697,6 @@ public class HoaDon_DAO {
 		PreparedStatement statement = null;
 		try {
 			statement = con.prepareStatement(sql);
-			System.out.println(sql);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				tongHD = rs.getInt("tongHD");
@@ -682,7 +719,7 @@ public class HoaDon_DAO {
 		PreparedStatement statement = null;
 		try {
 			statement = con.prepareStatement(sql);
-			System.out.println(sql);
+
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
 				tongHD = rs.getInt("tongHang");

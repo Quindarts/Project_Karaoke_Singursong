@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -23,7 +24,7 @@ import javax.swing.JButton;
 import javax.swing.border.EtchedBorder;
 import javax.swing.ImageIcon;
 
-public class Modal_XemThongTinPhong extends JFrame {
+public class JDialog_XemThongTinPhong extends JFrame {
 
 	private JPanel contentPane;
 	private JLabel lbl_LoaiPhong;
@@ -49,10 +50,10 @@ public class Modal_XemThongTinPhong extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public Modal_XemThongTinPhong(Phong phong) {
+	public JDialog_XemThongTinPhong(Phong phong) {
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+				Toolkit.getDefaultToolkit().getImage(JDialog_CapNhatDichVu.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
 		setBounds(100, 100, 452, 294);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -80,7 +81,7 @@ public class Modal_XemThongTinPhong extends JFrame {
 		img_Phong = new JLabel("");
 		img_Phong.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		img_Phong.setBackground(new Color(192, 192, 192));
-		img_Phong.setBounds(10, 50, 179, 171);
+		img_Phong.setBounds(10, 50, 166, 171);
 		contentPane.add(img_Phong);
 
 		JPanel pnl_TenPhong = new JPanel();
@@ -193,7 +194,11 @@ public class Modal_XemThongTinPhong extends JFrame {
 
 	public void SetModal_XemThongTinPhong(String anhPhong, String tenPhong ,String tenLoaiPhong, String viTriPhong, String giaPhong,
 			String trangThai, String tinhTrang) {
-		img_Phong.setText(anhPhong);
+		ImageIcon originalIcon = new ImageIcon(JPanel_CardDichVu.class.getResource("/img/" + anhPhong));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(160, 166, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+		img_Phong.setIcon(resizedIcon);
 		lbl_TenPhong.setText(tenPhong);
 		lbl_LoaiPhong.setText(tenLoaiPhong);
 		lbl_ViTriPhong.setText(viTriPhong);

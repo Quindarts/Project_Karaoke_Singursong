@@ -23,15 +23,16 @@ public class TaiKhoan_DAO {
 	public TaiKhoan_DAO() {
 	}
 
-	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau) {
+	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau, String email) {
 	
 		Connection con = ConnectDB.getInstance().getConnection();
 		try {
-			PreparedStatement statement = con.prepareStatement("insert into TaiKhoan values(?,?,?,?)");
+			PreparedStatement statement = con.prepareStatement("insert into TaiKhoan values(?,?,?,?,?)");
 			statement.setString(1, maNhanVien);
 			statement.setString(2, tenDangNhap);
 			statement.setString(3, matKhau);
-			statement.setBoolean(3, true);
+			statement.setBoolean(4, true);
+			statement.setString(5, email);
 			statement.executeUpdate();
 			con.close();
 			statement.close();
@@ -60,7 +61,8 @@ public class TaiKhoan_DAO {
 				tenDangNhap = rs.getString("tenDangNhap");
 				String matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String email = rs.getString("email");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai, email);
 			}
 
 		} catch (SQLException e) {
@@ -85,7 +87,8 @@ public class TaiKhoan_DAO {
 				String tenDangNhap = rs.getString("tenDangNhap");
 				String matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String email = rs.getString("email");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai, email);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -115,7 +118,8 @@ public class TaiKhoan_DAO {
 				tenDangNhap = rs.getString("tenDangNhap");
 				matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String email = rs.getString("email");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai, email);
 				n++;
 			
 			}
@@ -138,7 +142,30 @@ public class TaiKhoan_DAO {
 				tenDangNhap = rs.getString("tenDangNhap");
 				matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String email = rs.getString("email");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai, email);
+			}
+		} catch (SQLException e) {
+			return null;
+		}
+		return taiKhoan;
+	}
+	
+	public TaiKhoan capNhatEmail_TheoMaNhanVien(String tenDangNhap, String maNhanVien, String email) {
+		Connection con = ConnectDB.getInstance().getConnection();
+		TaiKhoan taiKhoan = null;
+		try {
+			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET  email = ? WHERE maNhanVien = ?");
+			statement.setString(1, email);
+			statement.setString(2, maNhanVien);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				tenDangNhap = rs.getString("tenDangNhap");
+				String matKhau = rs.getString("matKhau");
+				Boolean trangThai = rs.getBoolean("trangThai");
+				email = rs.getString("email");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai, email);
 			}
 		} catch (SQLException e) {
 			return null;
@@ -160,7 +187,8 @@ public class TaiKhoan_DAO {
 				tenDangNhap = rs.getString("tenDangNhap");
 				String matKhau = rs.getString("matKhau");
 				Boolean trangThai = rs.getBoolean("trangThai");
-				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
+				String email = rs.getString("email");
+				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai, email);
 			}
 
 		} catch (SQLException e) {

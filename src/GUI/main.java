@@ -7,6 +7,9 @@ import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -24,7 +27,7 @@ import Entity.TrangThaiPhong;
 import OtherFunction.HelpXLSX;
 
 public class main extends JFrame {
-
+	
 	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
@@ -33,14 +36,13 @@ public class main extends JFrame {
 
 			public void run() {
 				try {
-
-					// Connect Database
+				
 					try {
 						ConnectDB.getInstance().connect();
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					// Setup my app
+					
 					FlatLightLaf.setup();
 
 					app = new JFrame_DangNhap();
@@ -49,9 +51,13 @@ public class main extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+
 			}
+
 		});
 
 	}
+
+	
 
 }

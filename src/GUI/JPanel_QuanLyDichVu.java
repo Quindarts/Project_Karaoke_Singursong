@@ -18,7 +18,10 @@ import java.awt.Graphics2D;
 import java.awt.Insets;
 import java.awt.geom.RoundRectangle2D;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.JScrollPane;
@@ -35,6 +38,7 @@ import Entity.ThongTinDichVu;
 
 import javax.swing.JButton;
 import javax.swing.AbstractButton;
+import javax.swing.ButtonGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -50,6 +54,12 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.JRadioButton;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+
+import java.awt.SystemColor;
+import com.toedter.calendar.JDateChooser;
 
 public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
@@ -64,9 +74,9 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
-	
+
 	private JTable table_DichVu;
-	private JTextField textField;
+	private JTextField txt_timKiem;
 
 	private JButton btnThem;
 
@@ -76,7 +86,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 	private ArrayList<DichVu> dsDV;
 	private String[] rowData;
 	private DefaultTableModel model_dichVu;
-	private Modal_ThemDichVu modal_ThemDichVu;
+	private JDialog_ThemDichVu modal_ThemDichVu;
 	private JButton btnLamMoi;
 	private AbstractButton btnXoa;
 	private JButton btnTrangDau;
@@ -87,7 +97,15 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 	private JTextField txt_TongTrang;
 	private JLabel lblNewLabel;
 	private final DecimalFormat dcf = new DecimalFormat("#,##0 VND");
-
+	private ButtonGroup rdGroup;
+	private JDateChooser date_loc;
+	private JComboBox cbox_khoangGia;
+	private JRadioButton rdbtn_hetHang;
+	private JRadioButton rdbtn_conHang;
+	private JButton btn_locDV;
+	private JPanel panel_Table;
+	private JComponent panel_panigation;
+	private JButton btnTimKiem;
 
 	/**
 	 * Rounded JPanel
@@ -153,7 +171,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		add(panel);
 		panel.setLayout(null);
 
-		JPanel panel_Table = new JPanel();
+		 panel_Table = new JPanel();
 		panel_Table.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		panel_Table.setBackground(Color.decode(hexColor_Blue1));
 		panel_Table.setBounds(0, 37, 1296, 635);
@@ -162,7 +180,8 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 		table_DichVu = new JTable();
 		table_DichVu.setBackground(Color.WHITE);
-		rowData = new String[] { "Mã dịch vụ", "Tên dịch vụ", "Số lượng còn lại", "Đơn vị tính", "Đơn giá", "Trạng thái" };
+		rowData = new String[] { "Mã dịch vụ", "Tên dịch vụ", "Số lượng còn lại", "Đơn vị tính", "Đơn giá",
+				"Trạng thái" };
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {}, rowData));
 		table_DichVu.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		table_DichVu.setModel(new DefaultTableModel(new Object[][] {}, rowData) {
@@ -173,7 +192,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return false; 
+				return false;
 			}
 		});
 		model_dichVu = (DefaultTableModel) table_DichVu.getModel();
@@ -186,8 +205,8 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 					int row = table_DichVu.getSelectedRow();
 					String maDichVu = model_dichVu.getValueAt(row, 0).toString();
 					DAO_DV = new DichVu_DAO();
-					DichVu dv  = DAO_DV.layDichVu_TheoMaDichVu(maDichVu);
-					Modal_CapNhatDichVu md_cn = new Modal_CapNhatDichVu(dv);
+					DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(maDichVu);
+					JDialog_CapNhatDichVu md_cn = new JDialog_CapNhatDichVu(dv);
 
 					md_cn.setVisible(true);
 
@@ -218,11 +237,74 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 		panel_Table.add(scrollPane);
 
+		JPanel panel_loc = new JPanel();
+		panel_loc.setBackground(Color.WHITE);
+		panel_loc.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel_loc.setBounds(1031, 10, 255, 615);
+		panel_Table.add(panel_loc);
+		panel_loc.setLayout(null);
+
+		JLabel lbl_trangThai = new JLabel("Lọc dịch vụ theo trạng thái");
+		lbl_trangThai.setForeground(SystemColor.textHighlight);
+		lbl_trangThai.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lbl_trangThai.setBounds(10, 113, 235, 19);
+		panel_loc.add(lbl_trangThai);
+
 		JPanel panel_1 = new JPanel();
-		panel_1.setBackground(Color.WHITE);
-		panel_1.setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel_1.setBounds(1031, 10, 255, 615);
-		panel_Table.add(panel_1);
+		panel_1.setBackground(new Color(255, 255, 255));
+		panel_1.setBounds(10, 149, 235, 27);
+		panel_loc.add(panel_1);
+		panel_1.setLayout(null);
+
+		rdbtn_conHang = new JRadioButton("Còn hàng");
+		rdbtn_conHang.setBackground(new Color(255, 255, 255));
+		rdbtn_conHang.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		rdbtn_conHang.setBounds(6, 6, 86, 21);
+		rdbtn_conHang.setSelected(true);
+		panel_1.add(rdbtn_conHang);
+
+		rdbtn_hetHang = new JRadioButton("Hết hàng");
+		rdbtn_hetHang.setBackground(new Color(255, 255, 255));
+		rdbtn_hetHang.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+		rdbtn_hetHang.setBounds(110, 6, 87, 21);
+		panel_1.add(rdbtn_hetHang);
+
+		rdGroup = new ButtonGroup();
+		rdGroup.add(rdbtn_conHang);
+		rdGroup.add(rdbtn_hetHang);
+
+		JLabel lblNewLabel_1 = new JLabel("Lọc dịch vụ theo khoảng giá");
+		lblNewLabel_1.setForeground(SystemColor.textHighlight);
+		lblNewLabel_1.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblNewLabel_1.setBounds(10, 203, 235, 27);
+		panel_loc.add(lblNewLabel_1);
+
+		cbox_khoangGia = new JComboBox();
+		cbox_khoangGia.setBounds(10, 240, 235, 27);
+		cbox_khoangGia.addItem("Tất cả");
+		cbox_khoangGia.addItem("Từ 5.000VNĐ - 20.000VNĐ");
+		cbox_khoangGia.addItem("Từ 20.000VNĐ - 50.000VNĐ");
+		cbox_khoangGia.addItem("Từ 50.000VNĐ - 100.000VNĐ");
+		cbox_khoangGia.addItem("Lớn hơn 100.000VNĐ");
+		panel_loc.add(cbox_khoangGia);
+
+		JLabel lblNewLabel_1_1 = new JLabel("Lọc dịch vụ theo ngày nhập");
+		lblNewLabel_1_1.setForeground(SystemColor.textHighlight);
+		lblNewLabel_1_1.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lblNewLabel_1_1.setBounds(10, 21, 235, 27);
+		panel_loc.add(lblNewLabel_1_1);
+
+		java.util.Date currentD = new Date();
+		date_loc = new JDateChooser(currentD);
+		date_loc.setBounds(10, 58, 235, 27);
+		panel_loc.add(date_loc);
+
+		btn_locDV = new JButton("LỌC DỊCH VỤ");
+		btn_locDV.setBackground(SystemColor.textHighlight);
+		btn_locDV.setForeground(new Color(255, 255, 255));
+		btn_locDV.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		btn_locDV.setBounds(10, 313, 235, 31);
+		panel_loc.add(btn_locDV);
 
 		btnThem = new JButton("Thêm");
 
@@ -250,12 +332,12 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
 
-		textField = new JTextField();
-		textField.setBounds(545, 0, 223, 34);
-		panel.add(textField);
-		textField.setColumns(10);
+		txt_timKiem = new JTextField();
+		txt_timKiem.setBounds(545, 0, 223, 34);
+		panel.add(txt_timKiem);
+		txt_timKiem.setColumns(10);
 
-		JButton btnTimKiem = new JButton("Tìm kiếm");
+		 btnTimKiem = new JButton("Tìm kiếm");
 		btnTimKiem.setBounds(415, 0, 123, 35);
 		panel.add(btnTimKiem);
 		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyDichVu.class.getResource("/icon/search.png")));
@@ -304,7 +386,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		btnTrangCuoi.setBorder(null);
 		btnTrangCuoi.setBackground(Color.decode(hexColor_Blue3));
 		btnTrangCuoi.setBounds(559, 585, 30, 25);
-		JPanel panel_panigation = new JPanel();
+		 panel_panigation = new JPanel();
 		panel_panigation.setBackground(new Color(255, 255, 255));
 		panel_panigation.setBounds(337, 541, 356, 31);
 		panel_Table.add(panel_panigation);
@@ -344,6 +426,8 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		btnTrangSau.addActionListener(this);
 		btnTrangTruoc.addActionListener(this);
 
+		btn_locDV.addActionListener(this);
+		btnTimKiem.addActionListener(this);
 		// panigation
 	}
 
@@ -352,24 +436,42 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			modal_ThemDichVu = new Modal_ThemDichVu();
+			modal_ThemDichVu = new JDialog_ThemDichVu();
 			modal_ThemDichVu.setVisible(true);
 		}
+		if (o.equals(btn_locDV)) {
+			xoaDL();
+			LocDichVu();
+		}
+		if(o.equals(btnTimKiem)) {
+			xoaDL();
+			timDichVu();
+		}
 		if (o.equals(btnLamMoi)) {
+			panel_Table.remove(panel_panigation);
+			panel_Table.add(panel_panigation);
+			txt_timKiem.setText("");
+			java.util.Date currentD = new Date();
+			date_loc.setDate(currentD);
+			rdbtn_conHang.setSelected(true);
+			cbox_khoangGia.setSelectedIndex(0);
+			
 			xoaDL();
 			denTrangDau();
 		}
 		if (o.equals(btnXoa)) {
 			int row = table_DichVu.getSelectedRow();
 			String maDichVu = model_dichVu.getValueAt(row, 0).toString();
+			ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
 			if (row == -1) {
 				JOptionPane.showMessageDialog(null, "Phải chọn dòng cần xóa");
 			} else {
 				int t = JOptionPane.showConfirmDialog(null, "Bạn có chắc muốn xóa dịch vụ này?", "Xóa",
 						JOptionPane.YES_NO_OPTION);
 				if (t == JOptionPane.YES_OPTION) {
-					DichVu dv = new DichVu(maDichVu);
-					if (DAO_DV.xoaDichVu(dv)) {
+					DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(maDichVu);
+
+					if (DAO_DV.xoaDichVu(dv) && DAO_TTDV.xoaThongTinDichVu(dv.getThongTinDichVu())) {
 						xoaDL();
 						JOptionPane.showMessageDialog(null, "Xóa dịch vụ thành công");
 						table_DichVu.clearSelection();
@@ -400,6 +502,78 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		model_dichVu.getDataVector().removeAllElements();
 		model_dichVu.fireTableDataChanged();
 	}
+	public void timDichVu() {
+		String tenDichVuTK = txt_timKiem.getText().trim();
+		DAO_DV = new DichVu_DAO();
+
+		try {
+			dsDV = DAO_DV.layDichVu_TheoTenDichVu(tenDichVuTK);
+			if (dsDV != null) {
+				panel_Table.remove(panel_panigation);
+				dsDV.forEach(dv -> {
+
+					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
+							dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(),  dcf.format(dv.getDonGia()),
+							dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+
+					model_dichVu.addRow(rowData);
+				});
+			}
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+	public void LocDichVu() {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+		Date ngayNhap = new Date((date_loc).getDate().getTime());
+		String fr_ngayNhap = format.format(ngayNhap);
+		String khoangGia = cbox_khoangGia.getSelectedItem().toString().trim();
+		String trangThaiL = rdbtn_conHang.isSelected() ? "1" : "0";
+		String giaBD = "";
+		String giaKT = "";
+	
+		if(khoangGia.equals("Tất cả")) {
+			 giaBD = "0";
+			 giaKT = "100000000";
+		}
+		if(khoangGia.equals("Từ 5.000VNĐ - 20.000VNĐ")) {
+			 giaBD = "5000";
+			 giaKT = "20000";
+		}
+		 if(khoangGia.equals("Từ 20.000VNĐ - 50.000VNĐ")) {
+			 giaBD = "20000";
+			 giaKT = "50000";
+		}
+		 if(khoangGia.equals("Từ 50.000VNĐ - 100.000VNĐ")) {
+			 giaBD = "50000";
+			 giaKT = "100000";
+		}
+		 if(khoangGia.equals("Lớn hơn 100.000VNĐ")) {
+			 giaBD = "100000";
+			 giaKT = "";
+		}
+			DAO_DV = new DichVu_DAO();
+
+			try {
+				dsDV = DAO_DV.locDichVu(fr_ngayNhap, trangThaiL, giaBD, giaKT);
+				if (dsDV != null) {
+					panel_Table.remove(panel_panigation);
+					dsDV.forEach(dv -> {
+
+						Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
+								dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(), dcf.format(dv.getDonGia()),
+								dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+
+						model_dichVu.addRow(rowData);
+					});
+				}
+			} catch (Exception e) {
+				// TODO: handle exception
+				e.printStackTrace();
+			}
+	}
 
 	public void DocDLDichVu() {
 		DAO_DV = new DichVu_DAO();
@@ -409,9 +583,9 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 			if (dsDV != null) {
 				dsDV.forEach(dv -> {
 
-					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(),
-							dv.getDonGia(), dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
-
+					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
+							dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(), dcf.format(dv.getDonGia()),
+							dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 					model_dichVu.addRow(rowData);
 				});
 			}
@@ -424,8 +598,9 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		DAO_DV = new DichVu_DAO();
 		ArrayList<DichVu> dsDV = DAO_DV.phanTrangDichVu(fn, ln);
 		dsDV.forEach(dv -> {
-			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(),
-					dcf.format(dv.getDonGia()), dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getThongTinDichVu().tinhSoLuongConLai(),
+					dv.getDonViTinh(), dcf.format(dv.getDonGia()),
+					dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 
 			model_dichVu.addRow(rowData);
 		});
@@ -503,6 +678,4 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		DocDLDichVu(fn, ln);
 
 	}
-
-	
 }

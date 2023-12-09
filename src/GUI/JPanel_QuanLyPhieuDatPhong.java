@@ -21,10 +21,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.geom.RoundRectangle2D;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -80,6 +85,7 @@ import java.awt.event.ItemEvent;
 import javax.swing.JRadioButton;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
+import java.awt.SystemColor;
 
 public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener {
 
@@ -100,12 +106,12 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	private ImageIcon addIcon;
 	private JTextField txtTenPhong;
 	private JPanel panel_TimKiem;
-	private JTextField txtKhachHang;
+	private JTextField txt_hoTen;
 	private JTextField textField_2;
 	private DefaultTableModel model;
-	private Modal_PhieuDatPhongTruoc modal_PhieuDatPhongTruoc;
+	private JDialog_PhieuDatPhongTruoc modal_PhieuDatPhongTruoc;
 	private JDialog_ChiTietPhieuDatPhongTruoc dialog_CTPDP;
-	private Modal_CapNhatPhieuDatPhongTruoc modal_CapNhatPhieuDatPhongTruoc;
+	private JDialog_CapNhatPhieuDatPhongTruoc modal_CapNhatPhieuDatPhongTruoc;
 	private String[] rowData;
 
 	private ArrayList<PhieuDatPhong> dsPDP;
@@ -126,7 +132,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	private JButton btnLamMoi;
 	private JButton btnSua;
 	private JButton btnThem;
-	private CustomTable customTable_PDP;
+//	private CustomTable table_PhieuDatPhong;
 	private int row;
 	private JTextField txtmaPhieu;
 	private JRadioButton rdbChoNhanPhong;
@@ -136,7 +142,8 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	private JRadioButton rdbDaHuy;
 	private JRadioButton rdbTatCa;
 	private JDateChooser dateNgayNhan;
-	private JButton btnTimKiem;
+	private JTextField txt_soDienThoai;
+	private JButton btn_loc;
 
 	/**
 	 * Rounded JPanel
@@ -204,9 +211,9 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		add(panel);
 		panel.setLayout(null);
 
-		modal_PhieuDatPhongTruoc = new Modal_PhieuDatPhongTruoc(nv);
+		modal_PhieuDatPhongTruoc = new JDialog_PhieuDatPhongTruoc(nv);
 		dialog_CTPDP = new JDialog_ChiTietPhieuDatPhongTruoc();
-		modal_CapNhatPhieuDatPhongTruoc = new Modal_CapNhatPhieuDatPhongTruoc(nv);
+		modal_CapNhatPhieuDatPhongTruoc = new JDialog_CapNhatPhieuDatPhongTruoc(nv);
 
 		JPanel panel_Table = new JPanel();
 		panel_Table.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
@@ -221,29 +228,28 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		table_PhieuDatPhong = new JTable();
 		table_PhieuDatPhong.setBackground(Color.WHITE);
 		table_PhieuDatPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-		table_PhieuDatPhong
-				.setModel(model = new DefaultTableModel(new Object[][] {}, rowData = new String[] { "Mã phiếu đặt",
-						"Ngày nhận", "Khách hàng", "Số điện thoại", "Phòng", "Trạng thái", "Ghi chú", ""}) {
-					private static final long serialVersionUID = -143705667217047914L;
+		table_PhieuDatPhong.setModel(model = new DefaultTableModel(new Object[][] {}, rowData = new String[] {
+				"Mã phiếu đặt", "Ngày nhận", "Khách hàng", "Số điện thoại", "Phòng", "Trạng thái", "Ghi chú" }) {
+			private static final long serialVersionUID = -143705667217047914L;
 
-					@Override
-					public boolean isCellEditable(int row, int column) {
-						return column >= 7; // Đặt tất cả các ô không thể chỉnh sửa
-					}
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return column >= 7; // Đặt tất cả các ô không thể chỉnh sửa
+			}
 
-				});
+		});
 
-		customTable_PDP = new CustomTable(model, 7);
-		customTable_PDP.setBackground(Color.WHITE);
-		customTable_PDP.setRowHeight(25);
+//		table_PhieuDatPhong = new CustomTable(model, 7);
+//		table_PhieuDatPhong.setBackground(Color.WHITE);
+//		table_PhieuDatPhong.setRowHeight(25);
 
-		customTable_PDP.addMouseListener(new MouseListener() {
+		table_PhieuDatPhong.addMouseListener(new MouseListener() {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
 
 				if (e.getClickCount() == 2) {
-					int row = customTable_PDP.getSelectedRow();
+					int row = table_PhieuDatPhong.getSelectedRow();
 					String maPD = model.getValueAt(row, 0).toString();
 					dialog_CTPDP.setVisible(true);
 					dialog_CTPDP.HienThongTinTheoMaPDP(maPD);
@@ -270,8 +276,8 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		});
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 37, 1008, 588);
-		scrollPane.add(customTable_PDP);
-		scrollPane.setViewportView(customTable_PDP);
+		scrollPane.add(table_PhieuDatPhong);
+		scrollPane.setViewportView(table_PhieuDatPhong);
 		panel_Table.add(scrollPane);
 
 		DAO_PDP = new PhieuDatPhong_DAO();
@@ -284,7 +290,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		nv = new NhanVien();
 		p = new Phong();
 
-		DefaultTableModel model = (DefaultTableModel) customTable_PDP.getModel();
+		DefaultTableModel model = (DefaultTableModel) table_PhieuDatPhong.getModel();
 		DocDuLieuTrenSQL();
 
 		panel_TimKiem = new JPanel();
@@ -295,22 +301,6 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		panel_TimKiem.setLayout(null);
 
 		txtTenPhong = new JTextField();
-		txtTenPhong.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					TimKiemTheoTenPhong();
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
 		txtTenPhong.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtTenPhong.setBackground(new Color(255, 255, 255));
 		txtTenPhong.setToolTipText("Nhập tên phòng");
@@ -323,44 +313,29 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		lblNewLabel.setBounds(10, 70, 235, 30);
 		panel_TimKiem.add(lblNewLabel);
 
-		JLabel lblTnKhchHng = new JLabel("Khách hàng (Họ tên / Số điện thoại)");
+		JLabel lblTnKhchHng = new JLabel("Họ tên khách hàng");
 		lblTnKhchHng.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblTnKhchHng.setBounds(10, 141, 235, 30);
 		panel_TimKiem.add(lblTnKhchHng);
 
-		txtKhachHang = new JTextField();
-		txtKhachHang.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
+		txt_hoTen = new JTextField();
+		txt_hoTen.setToolTipText("Nhập tên phòng");
+		txt_hoTen.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txt_hoTen.setColumns(10);
+		txt_hoTen.setBackground(Color.WHITE);
+		txt_hoTen.setBounds(10, 171, 235, 25);
+		panel_TimKiem.add(txt_hoTen);
 
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					TimKiemTheoTenKH();
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
-		txtKhachHang.setToolTipText("Nhập tên phòng");
-		txtKhachHang.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		txtKhachHang.setColumns(10);
-		txtKhachHang.setBackground(Color.WHITE);
-		txtKhachHang.setBounds(10, 171, 235, 25);
-		panel_TimKiem.add(txtKhachHang);
-
-		dateNgayNhan = new JDateChooser();
+		java.util.Date currentDate = new Date();
+		dateNgayNhan = new JDateChooser(currentDate);
 		dateNgayNhan.setDateFormatString("yyyy-MM-dd");
 
-		dateNgayNhan.setBounds(10, 244, 195, 27);
+		dateNgayNhan.setBounds(10, 316, 235, 27);
 		panel_TimKiem.add(dateNgayNhan);
 
 		JLabel dcNgayNhanPhong = new JLabel("Ngày nhận phòng");
 		dcNgayNhanPhong.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		dcNgayNhanPhong.setBounds(10, 212, 122, 30);
+		dcNgayNhanPhong.setBounds(10, 276, 122, 30);
 		panel_TimKiem.add(dcNgayNhanPhong);
 
 		DefaultComboBoxModel<String> dataModelTT = new DefaultComboBoxModel<String>();
@@ -374,22 +349,6 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		panel_TimKiem.add(lblNewLabel_1);
 
 		txtmaPhieu = new JTextField();
-		txtmaPhieu.addKeyListener(new KeyListener() {
-			@Override
-			public void keyTyped(KeyEvent e) {
-			}
-
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-					TimKiemTheoMaPDP();
-				}
-			}
-
-			@Override
-			public void keyReleased(KeyEvent e) {
-			}
-		});
 		txtmaPhieu.setToolTipText("Nhập tên phòng");
 		txtmaPhieu.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		txtmaPhieu.setColumns(10);
@@ -397,62 +356,45 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		txtmaPhieu.setBounds(10, 30, 235, 25);
 		panel_TimKiem.add(txtmaPhieu);
 
-		btnTimKiem = new JButton("");
-		btnTimKiem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoNgayNhan();
-			}
-		});
-		btnTimKiem.setBackground(new Color(255, 255, 255));
-		btnTimKiem.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/search.png")));
-		btnTimKiem.setBounds(206, 244, 39, 27);
-		panel_TimKiem.add(btnTimKiem);
-		;
+		JLabel lblSinThoi = new JLabel("Số điện thoại khách hàng");
+		lblSinThoi.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSinThoi.setBounds(10, 210, 235, 30);
+		panel_TimKiem.add(lblSinThoi);
+
+		txt_soDienThoai = new JTextField();
+		txt_soDienThoai.setToolTipText("Nhập tên phòng");
+		txt_soDienThoai.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		txt_soDienThoai.setColumns(10);
+		txt_soDienThoai.setBackground(Color.WHITE);
+		txt_soDienThoai.setBounds(10, 241, 235, 25);
+		panel_TimKiem.add(txt_soDienThoai);
+
+		btn_loc = new JButton("Lọc");
+		btn_loc.setBackground(SystemColor.textHighlight);
+		btn_loc.setForeground(new Color(255, 255, 255));
+		btn_loc.setFont(new Font("Tahoma", Font.BOLD, 17));
+		btn_loc.setBounds(10, 374, 235, 30);
+		panel_TimKiem.add(btn_loc);
 
 		rdbChoNhanPhong = new JRadioButton("Chờ  nhận phòng");
-		rdbChoNhanPhong.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbChoNhanPhong.setBounds(89, 7, 118, 23);
 		panel_Table.add(rdbChoNhanPhong);
 
 		rdbDaNhanPhong = new JRadioButton("Đã  nhận phòng");
-		rdbDaNhanPhong.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbDaNhanPhong.setBounds(214, 7, 114, 23);
 		panel_Table.add(rdbDaNhanPhong);
 
 		rdbHetHan = new JRadioButton("Hết hạn");
-		rdbHetHan.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-
-		});
 		rdbHetHan.setBounds(330, 7, 91, 23);
 		panel_Table.add(rdbHetHan);
 
 		rdbDaHuy = new JRadioButton("Đã hủy");
-		rdbDaHuy.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbDaHuy.setBounds(423, 7, 114, 23);
 		panel_Table.add(rdbDaHuy);
 
 		rdbTatCa = new JRadioButton("Tất cả");
-		rdbTatCa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				TimKiemTheoTrangThai();
-			}
-		});
 		rdbTatCa.setBounds(10, 7, 77, 23);
+		rdbTatCa.setSelected(true);
 		panel_Table.add(rdbTatCa);
 
 		searchGroup = new ButtonGroup();
@@ -461,13 +403,6 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		searchGroup.add(rdbHetHan);
 		searchGroup.add(rdbDaHuy);
 		searchGroup.add(rdbTatCa);
-
-		txtTenPhong.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				txtTenPhong.setText("");
-			}
-		});
 		btnHuyPDP = new JButton("Hủy phiếu");
 		btnHuyPDP.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/trash.png")));
 		btnHuyPDP.setForeground(Color.WHITE);
@@ -485,14 +420,16 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		panel.add(btnLamMoi);
 
 		btnSua = new JButton("Sửa phiếu");
+//		btnSua.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/edit.png")));
 		btnSua.setSelectedIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/update.png")));
 		btnSua.setForeground(Color.WHITE);
 		btnSua.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnSua.setBackground(Color.decode(hexColor_Green));
+		btnSua.setBackground(Color.decode(hexColor_Orange));
 		btnSua.setBounds(156, 0, 135, 35);
 		panel.add(btnSua);
 
 		btnThem = new JButton("Thêm");
+		btnThem.setIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/add.png")));
 		btnThem.setSelectedIcon(new ImageIcon(JPanel_QuanLyPhieuDatPhong.class.getResource("/icon/add.png")));
 		btnThem.setForeground(Color.WHITE);
 		btnThem.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -501,7 +438,20 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		panel.add(btnThem);
 
 		// Add event:
-		addEventForGUI();
+
+		btnHuyPDP.addActionListener(this);
+		btnLamMoi.addActionListener(this);
+		btnSua.addActionListener(this);
+		btnThem.addActionListener(this);
+		btn_loc.addActionListener(this);
+
+		rdbChoNhanPhong.addActionListener(this);
+		rdbDaHuy.addActionListener(this);
+		rdbDaNhanPhong.addActionListener(this);
+		rdbHetHan.addActionListener(this);
+		rdbTatCa.addActionListener(this);
+
+//		addEventForGUI();
 
 	}
 
@@ -510,13 +460,13 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		btnLamMoi.addActionListener(this);
 		btnSua.addActionListener(this);
 		btnThem.addActionListener(this);
-		btnTimKiem.addActionListener(this);
 
 		rdbChoNhanPhong.addActionListener(this);
 		rdbDaHuy.addActionListener(this);
 		rdbDaNhanPhong.addActionListener(this);
 		rdbHetHan.addActionListener(this);
 		rdbTatCa.addActionListener(this);
+
 	}
 
 	@Override
@@ -524,32 +474,81 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 		Object o = e.getSource();
 		// Hủy phiếu đặt phòng có trạng thái "Chờ nhận phòng"
 		if (o.equals(btnHuyPDP)) {
-			HuyPhieu();
+			row = table_PhieuDatPhong.getSelectedRow();
+			if (row >= 0) {
+				String maPD = model.getValueAt(row, 0).toString().trim();
+				String ttp = model.getValueAt(row, 5).toString();
+				if (ttp.equals("Chờ nhận phòng")) {
+					HuyPhieu();
+				} else {
+					Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+					JOptionPane.showMessageDialog(null, "Phiếu " + maPD + " không thể hủy!");
+				}
+			} else {
+				Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu cần hủy!");
+			}
+		}
+		if (o.equals(btn_loc)) {
+			String hoten = txt_hoTen.getText().trim();
+			String maP = txtTenPhong.getText().trim();
+			String soDienThoai = txt_soDienThoai.getText().trim();
+			String maPhieu = txtmaPhieu.getText().trim();
+			Date ngayLap = dateNgayNhan.getDate();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
+			String ngayLapLoc = formatter.format(ngayLap);
+			try {
+				DAO_PDP = new PhieuDatPhong_DAO();
+				ArrayList<PhieuDatPhong> dsPDLoc = DAO_PDP.locPhieuDatPhong(maPhieu, hoten, maP, soDienThoai,
+						ngayLapLoc);
+				if (dsPDLoc != null) {
+					clearTable();
+					for (PhieuDatPhong pdp : dsPDLoc) {
+						KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+						NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
+						Phong p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());
+
+						Object[] rowData = { pdp.getMaPhieuDat(), pdp.getThoiGianNhanPhong(), kh.getHoTen(),
+								kh.getSoDienThoai(), p.getMaPhong(), pdp.getTrangThai(), pdp.getMoTa() };
+						model.addRow(rowData);
+
+					}
+				}
+
+			} catch (Exception e2) {
+
+				e2.printStackTrace();
+			}
 		}
 
 		// Làm mới table
 		if (o.equals(btnLamMoi)) {
+			rdbTatCa.setSelected(true);
 			clearTable();
+			clearFindField();
 			DocDuLieuTrenSQL();
 		}
 
 		// Sửa thông tin phiếu đặt phòng có trạng thái "Chờ nhận phòng"
 		if (o.equals(btnSua)) {
-			row = customTable_PDP.getSelectedRow();
-			
-			if(row >= 0) {
+			row = table_PhieuDatPhong.getSelectedRow();
+
+			if (row >= 0) {
 				String maPD = model.getValueAt(row, 0).toString().trim();
 				String ttp = model.getValueAt(row, 5).toString();
 				if (ttp.equals("Chờ nhận phòng")) {
 					modal_CapNhatPhieuDatPhongTruoc.setVisible(true);
 					modal_CapNhatPhieuDatPhongTruoc.HienThongTinTheoMaPDP(maPD);
 				} else {
+					Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 					JOptionPane.showMessageDialog(null, "Phiếu " + maPD + " không thể cập nhật!");
 				}
-			}else {
+			} else {
+				Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 				JOptionPane.showMessageDialog(null, "Vui lòng chọn phiếu cần cập nhật!");
 			}
-			
+
 		}
 
 		// Thêm phiếu đặt phòng trước
@@ -557,25 +556,28 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 			modal_PhieuDatPhongTruoc.setVisible(true);
 		}
 
-		if (o.equals(btnTimKiem)) {
-
-		}
-
-		if (o.equals(rdbChoNhanPhong) && o.equals(rdbDaHuy) && o.equals(rdbDaNhanPhong) && o.equals(rdbHetHan)
-				&& o.equals(rdbTatCa)) {
+		if (o.equals(rdbChoNhanPhong) || o.equals(rdbDaHuy) || o.equals(rdbDaNhanPhong) || o.equals(rdbHetHan)
+				|| o.equals(rdbTatCa)) {
 			TimKiemTheoTrangThai();
 		}
-
 	}
 
 	public void clearTable() {
-		DefaultTableModel model = (DefaultTableModel) customTable_PDP.getModel();
+		DefaultTableModel model = (DefaultTableModel) table_PhieuDatPhong.getModel();
 		model.setRowCount(0);
+	}
+
+	public void clearFindField() {
+		txt_hoTen.setText("");
+		txtmaPhieu.setText("");
+		txtTenPhong.setText("");
+		txtmaPhieu.setText("");
+		java.util.Date currentDate = new Date();
+		dateNgayNhan.setDate(currentDate);
 	}
 
 	private void DocDuLieuTrenSQL() {
 		clearTable();
-
 		dsPDP = DAO_PDP.layTatCaPhieuDatPhong();
 
 		if (dsPDP != null) {
@@ -637,7 +639,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 	}
 
 	private void TimKiemTheoTenKH() {
-		String ttKH = txtKhachHang.getText();
+		String ttKH = txt_hoTen.getText();
 		dsPDP = DAO_PDP.layPhieuDatPhong_TheoTenKhachHangvsSDT(ttKH);
 
 		if (dsPDP != null) {
@@ -655,6 +657,7 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 			}
 		} else {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Không tìm thấy");
 
 		}
@@ -677,57 +680,59 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 
 			}
 		} else {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Không tìm thấy");
 
 		}
 	}
 
-	private void TimKiemTheoNgayNhan() {
-		java.util.Date ngayNhan =  dateNgayNhan.getDate();
-		dsPDP = DAO_PDP.layPhieuDatPhong_TheoNgayNhan(ngayNhan);
-
-		if (dsPDP != null) {
-			clearTable();
-			for (PhieuDatPhong pdp : dsPDP) {
-				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
-				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
-				Phong p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());
-
-				Object[] rowData = { pdp.getMaPhieuDat(), pdp.getThoiGianNhanPhong(), kh.getHoTen(),
-						kh.getSoDienThoai(), p.getTenPhong(), pdp.getTrangThai(), pdp.getMoTa() };
-				model.addRow(rowData);
-
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Không tìm thấy");
-
-		}
-	}
-
-	private void TimKiemTheoMaPDP() {
-		String ma = txtmaPhieu.getText();
-		dsPDP = DAO_PDP.layPhieuDatPhongTuongDoi_TheoMaPhieuDatPhong(ma);
-
-		if (dsPDP != null) {
-			clearTable();
-			for (PhieuDatPhong pdp : dsPDP) {
-				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
-				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
-				Phong p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());
-
-				Object[] rowData = { pdp.getMaPhieuDat(), pdp.getThoiGianNhanPhong(), kh.getHoTen(),
-						kh.getSoDienThoai(), p.getTenPhong(), pdp.getTrangThai(), pdp.getMoTa() };
-				model.addRow(rowData);
-
-			}
-		} else {
-			JOptionPane.showMessageDialog(null, "Không tìm thấy");
-
-		}
-	}
+//	private void TimKiemTheoNgayNhan() {
+//		Date ngayNhan = dateNgayNhan.getDate();
+//		ArrayList<PhieuDatPhong> dsPDP = DAO_PDP.layPhieuDatPhong_TheoNgayNhan(ngayNhan);
+//		if (dsPDP != null) {
+//			clearTable();
+//			for (PhieuDatPhong pdp : dsPDP) {
+//				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+//				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
+//				Phong p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());
+//
+//				Object[] rowData = { pdp.getMaPhieuDat(), pdp.getThoiGianNhanPhong(), kh.getHoTen(),
+//						kh.getSoDienThoai(), p.getTenPhong(), pdp.getTrangThai(), pdp.getMoTa() };
+//				model.addRow(rowData);
+//
+//			}
+//		} else {
+//			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+//			JOptionPane.showMessageDialog(null, "Không tìm thấy");
+//
+//		}
+//	}
+//
+//	private void TimKiemTheoMaPDP() {
+//		String ma = txtmaPhieu.getText();
+//		dsPDP = DAO_PDP.layPhieuDatPhongTuongDoi_TheoMaPhieuDatPhong(ma);
+//
+//		if (dsPDP != null) {
+//			clearTable();
+//			for (PhieuDatPhong pdp : dsPDP) {
+//				KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(pdp.getKhachHang().getMaKhachHang());
+//				NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(pdp.getNhanVien().getMaNhanVien());
+//				Phong p = DAO_P.timPhong_TheoMaPhong(pdp.getPhong().getMaPhong());
+//
+//				Object[] rowData = { pdp.getMaPhieuDat(), pdp.getThoiGianNhanPhong(), kh.getHoTen(),
+//						kh.getSoDienThoai(), p.getTenPhong(), pdp.getTrangThai(), pdp.getMoTa() };
+//				model.addRow(rowData);
+//
+//			}
+//		} else {
+//			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
+//			JOptionPane.showMessageDialog(null, "Không tìm thấy");
+//
+//		}
+//	}
 
 	public void HuyPhieu() {
-		row = customTable_PDP.getSelectedRow();
+		row = table_PhieuDatPhong.getSelectedRow();
 		String maPDP = ((String) model.getValueAt(row, 0)).trim();
 		pdp = DAO_PDP.layPhieuDatPhong_TheoMaPhieuDat(maPDP);
 		try {
@@ -744,13 +749,14 @@ public class JPanel_QuanLyPhieuDatPhong extends JPanel implements ActionListener
 				}
 
 			} else {
+				Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 				JOptionPane.showMessageDialog(null, "Phiếu " + maPDP + " không thể hủy!");
 			}
 
 		} catch (Exception e) {
+			Toolkit.getDefaultToolkit().beep(); // Phát ra tiếng "beep" để cảnh báo
 			JOptionPane.showMessageDialog(null, "Phiếu " + maPDP + "hủy thất bại!");
 		}
 
 	}
-
 }

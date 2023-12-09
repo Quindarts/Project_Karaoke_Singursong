@@ -41,7 +41,7 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 
-public class Modal_ThemKhachHang extends JFrame implements ActionListener {
+public class JDialog_ThemKhachHang extends JFrame implements ActionListener {
 
 	/**
 	 * Color
@@ -74,7 +74,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 	private JRadioButton rdbt__nam;
 	private Calendar cal = Calendar.getInstance();
 
-	public Modal_ThemKhachHang() {
+	public JDialog_ThemKhachHang() {
 
 		DAO_KH = new KhachHang_DAO();
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -132,7 +132,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		txt__SDT.setBounds(604, 70, 255, 25);
 		panel_1.add(txt__SDT);
 		btn__exit = new JButton("Thoát");
-		btn__exit.setIcon(new ImageIcon(Modal_ThemKhachHang.class.getResource("/icon/exit_16px.png")));
+		btn__exit.setIcon(new ImageIcon(JDialog_ThemKhachHang.class.getResource("/icon/exit_16px.png")));
 		btn__exit.setForeground(new Color(255, 255, 255));
 		btn__exit.setBackground(Color.decode(hexColor_Blue2));
 		btn__exit.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -145,7 +145,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		panel_1.add(lbl__GhiChu);
 
 		btn__Save = new JButton("Lưu");
-		btn__Save.setIcon(new ImageIcon(Modal_ThemKhachHang.class.getResource("/icon/save_16px.png")));
+		btn__Save.setIcon(new ImageIcon(JDialog_ThemKhachHang.class.getResource("/icon/save_16px.png")));
 		btn__Save.setForeground(new Color(255, 255, 255));
 		btn__Save.setBackground(Color.decode(hexColor_Green));
 		btn__Save.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -212,8 +212,6 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 
 		btn__Save.addActionListener(this);
 		btn__exit.addActionListener(this);
-		
-		
 
 	}
 
@@ -300,18 +298,22 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
 					ghiChu);
-			if (DAO_KH.capNhatKhachHang(kh)) {
-				try {
-					DAO_KH.capNhatKhachHang(kh);
-					JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
-					setVisible(false);
-				} catch (Exception e2) {
-					// TODO: handle exception
-					JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+			int result = JOptionPane.showConfirmDialog(this,
+					"Bạn có chắc chắn muốn cập nhật khách hàng " + tenKhachHang + "?", "Xác nhận",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				if (DAO_KH.capNhatKhachHang(kh)) {
+					try {
+						DAO_KH.capNhatKhachHang(kh);
+						JOptionPane.showMessageDialog(null, "Cập nhật khách hàng " + tenKhachHang + " thành công!");
+						setVisible(false);
+					} catch (Exception e2) {
+						// TODO: handle exception
+						JOptionPane.showMessageDialog(null, "Không thể cập nhật khách hàng!");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " không đã tồn tại!");
 				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Khách hàng " + tenKhachHang + " Không đã tồn tại!");
-
 			}
 		}
 	}
@@ -327,10 +329,9 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			txt__TenKH.requestFocus();
 			JOptionPane.showMessageDialog(null, "Tên nhân viên không được rỗng");
 			return false;
-		} else if (!(tenKH.matches("[aAàÀảẢãÃáÁạẠăĂằẰẳẲẵẴắẮặẶâÂầẦẩẨẫẪấẤậẬbBcCdDđĐeEèÈẻẺẽẼéÉẹẸêÊềỀểỂễỄếẾệỆ\\r\\n\"\r\n"
-				+ "					+ \"fFgGhHiIìÌỉỈĩĨíÍịỊjJkKlLmMnNoOòÒỏỎõÕóÓọỌôÔồỒổỔỗỖốỐộỘơƠờỜởỞỡỠớỚợỢpPqQrRsStTu\\r\\n\"\r\n"
-				+ "					+ \"UùÙủỦũŨúÚụỤưƯừỪửỬữỮứỨựỰvVwWxXyYỳỲỷỶỹỸýÝỵỴzZ ]+"))) {
-			JOptionPane.showMessageDialog(null, "Tên nhân viên không hợp lệ");
+		} else if (!(tenKH.matches(
+				"^[AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+ [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]+(?: [AÀẢÃÁẠĂẰẲẴẮẶÂẦẨẪẤẬBCDĐEÈẺẼÉẸÊỀỂỄẾỆFGHIÌỈĨÍỊJKLMNOÒỎÕÓỌÔỒỔỖỐỘƠỜỞỠỚỢPQRSTUÙỦŨÚỤƯỪỬỮỨỰVWXYỲỶỸÝỴZ][aàảãáạăằẳẵắặâầẩẫấậbcdđeèẻẽéẹêềểễếệfghiìỉĩíịjklmnoòỏõóọôồổỗốộơờởỡớợpqrstuùủũúụưừửữứựvwxyỳỷỹýỵz]*)*"))) {
+			JOptionPane.showMessageDialog(null, "Tên khách hàng không hợp lệ");
 			txt__TenKH.requestFocus();
 			return false;
 		}
@@ -347,6 +348,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			// TODO: handle exception
 			JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
+			return false;
 		}
 
 		if (!gt_Nam && !gt_Nu) {
@@ -364,11 +366,11 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			return false;
 		}
 
-		if (!(diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
-			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
-			txt__DiaChi.requestFocus();
-			return false;
-		}
+//		if (!(diaChi.matches("[\\p{L}0-9,.'_ ]+"))) {
+//			JOptionPane.showMessageDialog(null, "Địa chỉ không hợp lệ");
+//			txt__DiaChi.requestFocus();
+//			return false;
+//		}
 		return true;
 	}
 }

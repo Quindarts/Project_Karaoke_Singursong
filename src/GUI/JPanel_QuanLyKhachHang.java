@@ -62,7 +62,7 @@ import com.toedter.calendar.JDateChooser;
 
 public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, ItemListener {
 
-	private Modal_ThemKhachHang modal_ThemKhachHang;
+	private JDialog_ThemKhachHang modal_ThemKhachHang;
 
 	/**
 	 * Color
@@ -91,16 +91,17 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 	private JCheckBox chcbx_Nam;
 	private JCheckBox chcbx_Nu;
 	private JCheckBox chcbx_TatCa;
-	private ButtonGroup btnGr_LocTheoGioiTinh;
 
 	long khoangTuoi;
 	private JButton btnThem;
-	private JButton btnLoc;
+	private JButton btnLamMoiBoLoc;
 	private JButton btnXoa;
 	private JButton btnLamMoi;
 	private JButton btnTimKiem;
 
 	private ButtonGroup btnGr_TimTheoLoai;
+
+	private ButtonGroup btnGr_LocTheoGioiTinh;
 
 	/**
 	 * Rounded JPanel
@@ -159,12 +160,10 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		setLayout(null);
 		setBounds(0, 0, 1296, 672);
 
-		modal_ThemKhachHang = new Modal_ThemKhachHang();
-
+		modal_ThemKhachHang = new JDialog_ThemKhachHang();
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1296, 672);
 		panel.setBackground(Color.decode(hexColor_Blue1));
-//		panel.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		add(panel);
 		panel.setLayout(null);
 
@@ -192,7 +191,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 
 			@Override
 			public boolean isCellEditable(int row, int column) {
-				return false; // Đặt tất cả các ô không thể chỉnh sửa
+				return false;
 			}
 		});
 
@@ -218,7 +217,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 					String ngaySinh = model.getValueAt(row, 3).toString();
 					String diaChi = model.getValueAt(row, 4).toString();
 					String sdt = model.getValueAt(row, 5).toString();
-					String diemThuong = model.getValueAt(row, 6).toString();
 					String ghiChu = model.getValueAt(row, 7).toString();
 					modal_ThemKhachHang.setVisible(true);
 					modal_ThemKhachHang.setModal_ThemKhachHang(maKhachHang, hoTen, gioiTinh, ngaySinh, sdt, diaChi,
@@ -284,7 +282,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		pnl_Loc_TheoGioiTinh.add(chcbx_TatCa);
 		chcbx_TatCa.addItemListener(this);
 
-		ButtonGroup btnGr_LocTheoGioiTinh = new ButtonGroup();
+		btnGr_LocTheoGioiTinh = new ButtonGroup();
 		btnGr_LocTheoGioiTinh.add(chcbx_Nam);
 		btnGr_LocTheoGioiTinh.add(chcbx_Nu);
 		btnGr_LocTheoGioiTinh.add(chcbx_TatCa);
@@ -359,14 +357,14 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		txt_TuoiTu.setBounds(40, 38, 70, 19);
 		pnl_Loc_TheoTuoi.add(txt_TuoiTu);
 
-		btnLoc = new JButton("Lọc");
-		btnLoc.setBounds(73, 570, 125, 35);
-		pnl_Loc.add(btnLoc);
-		btnLoc.setForeground(Color.WHITE);
-		btnLoc.setFont(new Font("Segoe UI", Font.BOLD, 15));
-		btnLoc.setBackground(Color.decode(hexColor_Blue2));
-		btnLoc.setForeground(Color.WHITE);
-		btnLoc.addActionListener(this);
+		btnLamMoiBoLoc = new JButton("Làm mới bộ lọc");
+		btnLamMoiBoLoc.setBounds(60, 275, 150, 35);
+		pnl_Loc.add(btnLamMoiBoLoc);
+		btnLamMoiBoLoc.setForeground(Color.WHITE);
+		btnLamMoiBoLoc.setFont(new Font("Segoe UI", Font.BOLD, 15));
+		btnLamMoiBoLoc.setBackground(Color.decode(hexColor_Blue2));
+		btnLamMoiBoLoc.setForeground(Color.WHITE);
+		btnLamMoiBoLoc.addActionListener(this);
 
 		btnThem = new JButton("Thêm");
 		btnThem.setForeground(Color.WHITE);
@@ -470,9 +468,14 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		KhachHang khachHang = new KhachHang(maKhachHang);
 		try {
 			String tenKhachHang = DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang).getHoTen();
-			DAO_KH.xoaKhachHang(khachHang);
-			JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenKhachHang + "thành công");
-			model.removeRow(row);
+			int result = JOptionPane.showConfirmDialog(this,
+					"Bạn có chắc chắn muốn xóa khách hàng " + tenKhachHang + "?", "Xác nhận",
+					JOptionPane.YES_NO_OPTION);
+			if (result == JOptionPane.YES_OPTION) {
+				DAO_KH.xoaKhachHang(khachHang);
+				JOptionPane.showMessageDialog(null, "Xóa khách hàng " + tenKhachHang + " thành công");
+				model.removeRow(row);
+			}
 		} catch (Exception e2) {
 			JOptionPane.showMessageDialog(null, "Xóa thất bại");
 		}
@@ -483,7 +486,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(chuoiTimKiem);
 		try {
 			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
-			modal_ThemKhachHang = new Modal_ThemKhachHang();
+			modal_ThemKhachHang = new JDialog_ThemKhachHang();
 			modal_ThemKhachHang.setModal_ThemKhachHang(kh.getMaKhachHang(), kh.getHoTen(), gender,
 					kh.getNgaySinh().toString(), kh.getSoDienThoai(), kh.getDiaChi(), kh.getGhiChu());
 			modal_ThemKhachHang.setVisible(true);
@@ -498,7 +501,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		KhachHang kh = DAO_KH.layKhachHang_TheoSoDienThoai(chuoiTimKiem);
 		try {
 			String gender = kh.isGioiTinh() ? "Nam" : "Nữ";
-			modal_ThemKhachHang = new Modal_ThemKhachHang();
+			modal_ThemKhachHang = new JDialog_ThemKhachHang();
 			modal_ThemKhachHang.setModal_ThemKhachHang(kh.getMaKhachHang(), kh.getHoTen(), gender,
 					kh.getNgaySinh().toString(), kh.getSoDienThoai(), kh.getDiaChi(), kh.getGhiChu());
 			modal_ThemKhachHang.setVisible(true);
@@ -531,6 +534,8 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		txt_TimKiem.setText("");
 		txt_TuoiDen.setText("");
 		txt_TuoiTu.setText("");
+		btnGr_TimTheoLoai.clearSelection();
+		btnGr_LocTheoGioiTinh.clearSelection();
 	}
 
 	public void LocDuLieu() {
@@ -560,11 +565,6 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		} catch (NumberFormatException e) {
 			loc_diemThuongDen = Integer.MAX_VALUE; // Lọc theo tất cả điểm thưởng
 		}
-
-		// Kiểm tra nếu không chọn lọc theo giới tính thì mặc định là lọc tất cả
-		boolean loc_nam = chcbx_Nam.isSelected();
-		boolean loc_nu = chcbx_Nu.isSelected();
-		boolean loc_tatCa = !loc_nam && !loc_nu; // Nếu cả nam và nữ đều không được chọn
 
 		if (loc_tuoiDen < loc_tuoiTu) {
 			JOptionPane.showMessageDialog(null, "Tuổi bắt đầu phải lớn hơn tuổi kết thúc!");
@@ -620,7 +620,7 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			modal_ThemKhachHang = new Modal_ThemKhachHang();
+			modal_ThemKhachHang = new JDialog_ThemKhachHang();
 			modal_ThemKhachHang.setVisible(true);
 		}
 		if (o.equals(btnXoa)) {
@@ -630,6 +630,11 @@ public class JPanel_QuanLyKhachHang extends JPanel implements ActionListener, It
 			DocDuLieu();
 			LamMoiBoLoc();
 		}
+		if (o.equals(btnLamMoiBoLoc)) {
+			DocDuLieu();
+			LamMoiBoLoc();
+		}
+		
 		if ((o.equals(txt_TimKiem) && rdBtn_TimTheoSoDT.isSelected() == false
 				&& rdBtn_TimTheoMaKH.isSelected() == false)
 				|| (o.equals(btnTimKiem) & rdBtn_TimTheoSoDT.isSelected() == false

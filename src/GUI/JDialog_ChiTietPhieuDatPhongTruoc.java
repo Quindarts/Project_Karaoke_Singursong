@@ -96,23 +96,6 @@ public class JDialog_ChiTietPhieuDatPhongTruoc extends JDialog {
 	private JPanel panel_button;
 	private JButton btnNhanPhong;
 
-	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		try {
-//			JDialog_ChiTietPhieuDatPhongTruoc dialog = new JDialog_ChiTietPhieuDatPhongTruoc();
-//			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-//			FlatLightLaf.setup();
-//			dialog.setVisible(true);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//	}
-
-	/**
-	 * Create the dialog.
-	 */
 	public JDialog_ChiTietPhieuDatPhongTruoc() {
 		setBounds(100, 100, 550, 690);
 		getContentPane().setLayout(new BorderLayout());

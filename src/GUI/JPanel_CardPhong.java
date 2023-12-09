@@ -56,7 +56,7 @@ import java.awt.Font;
  * 
  * 
  */
-public class CardPhong extends JPanel {
+public class JPanel_CardPhong extends JPanel {
 	private static ChiTietHoaDon_DAO DAO_CTHD;
 	private Phong phong;
 	private int width = 150;
@@ -98,7 +98,7 @@ public class CardPhong extends JPanel {
 	 * @param phong
 	 */
 
-	public CardPhong(Phong phong, DefaultTableModel model, JTable table) {
+	public JPanel_CardPhong(Phong phong, DefaultTableModel model, JTable table) {
 		this.phong = phong;
 		this.model = model;
 		this.table = table;
@@ -258,12 +258,19 @@ public class CardPhong extends JPanel {
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
 
 		JPopupMenu menu = new JPopupMenu();
+
 		JMenuItem xemThongTinMenuItem = new JMenuItem("Xem thông tin phòng");
 		JMenuItem chuyenPhongMenuItem = new JMenuItem("Chuyển phòng");
-		JMenuItem datPhongMenuItem = new JMenuItem("Đặt phòng hát ngay");
-		JMenuItem themDichVuItem = new JMenuItem("Thêm dịch vụ");
+		JMenuItem themDichVuItem = new JMenuItem("Cập nhật dịch vụ");
 		JMenuItem traPhongMenuItem = new JMenuItem("Trả phòng");
 		JMenuItem nhanPhongMenuItem = new JMenuItem("Nhận phòng");
+
+		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("OOO")) {
+			themDichVuItem.setEnabled(false);
+			chuyenPhongMenuItem.setEnabled(false);
+			traPhongMenuItem.setEnabled(false);
+			nhanPhongMenuItem.setEnabled(false);
+		}
 
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 			themDichVuItem.setEnabled(false);
@@ -306,7 +313,7 @@ public class CardPhong extends JPanel {
 			try {
 				DAO_HD = new HoaDon_DAO();
 				hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
-				Modal_ThanhToan thanhToan = new Modal_ThanhToan(hoaDon, phong, loaiP, hoaDon.getKhachHang());
+				JDialog_ThanhToan thanhToan = new JDialog_ThanhToan(hoaDon, phong, loaiP, hoaDon.getKhachHang());
 				thanhToan.setVisible(true);
 
 			} catch (Exception e11) {
@@ -317,7 +324,9 @@ public class CardPhong extends JPanel {
 		xemThongTinMenuItem.addActionListener(e1 -> {
 			try {
 				phong = DAO_P.timPhong_TheoMaPhong(phong.getMaPhong());
-				String anhPhong = "";
+				loaiP = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(phong.getLoaiPhong().getMaLoaiPhong());
+				String anhPhong = loaiP.getHinhAnh();
+
 				String tenPhong = phong.getTenPhong();
 				String viTriPhong = phong.getViTriPhong();
 				String tinhTrang = phong.getTinhTrangPhong();
@@ -330,7 +339,7 @@ public class CardPhong extends JPanel {
 				TrangThaiPhong trThaiP = null;
 				trThaiP = DAO_TTP.timTrangThaiPhong_TheoMaTrangThai(phong.getTrangThaiPhong().getMaTrangThai());
 				String trangThaiPhong = trThaiP.getTenTrangThai();
-				Modal_XemThongTinPhong thongTinPhong = new Modal_XemThongTinPhong(phong);
+				JDialog_XemThongTinPhong thongTinPhong = new JDialog_XemThongTinPhong(phong);
 				thongTinPhong.setVisible(true);
 				thongTinPhong.SetModal_XemThongTinPhong(anhPhong, tenPhong, tenLoaiPhong, viTriPhong, giaPhong,
 						trangThaiPhong, tinhTrang);
@@ -340,18 +349,8 @@ public class CardPhong extends JPanel {
 
 		});
 
-		datPhongMenuItem.addActionListener(e1 -> {
-			JOptionPane.showMessageDialog(this, "Bạn có chắc chắn đặt phòng này?");
-			setSelectDatPhong(true);
-			cbox_DatPhong.setSelected(isSelectDatPhong());
-
-			model.addRow(new Object[] { 1, phong.getMaPhong().toString(), phong.getTenPhong().toString(),
-					Double.toString(loaiP.getGiaTien()) });
-
-		});
-
 		themDichVuItem.addActionListener(e1 -> {
-			JFrame modal_datDichVu = new Modal_DatDichVu(phong);
+			JFrame modal_datDichVu = new JDialog_DatDichVu(phong);
 			modal_datDichVu.setVisible(true);
 
 		});
@@ -359,26 +358,16 @@ public class CardPhong extends JPanel {
 		chuyenPhongMenuItem.addActionListener(e1 -> {
 
 			try {
+				DAO_HD = new HoaDon_DAO();
+				hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
 
-				ChiTietHoaDon cthd = new ChiTietHoaDon();
-				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());
-				System.out.println("Chi tiet hoa don cua phong: " + cthd);
-				if (cthd != null)
-					dsChiTietHoaDon.forEach(value -> {
-//						phieu = DAO_PDP.layPhieuDatPhong_TheoMaPhong(phong.getMaPhong());
-						hd = value.getHoaDon();
-						hd = DAO_HD.layHoaDon_TheoMaHoaDon(value.getHoaDon().getMaHoaDon());
-						System.out.println("Hoa don cua phong: " + hd);
-						nv = hd.getNhanVien();
-						tenNV = DAO_NV.timNhanVien_TheoMaNhanVien(nv.getMaNhanVien()).getHoTen();
-						kh = hd.getKhachHang();
-						tenKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getHoTen();
-						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();
-					});
+				ChiTietHoaDon cthd = DAO_CTHD.timCTHoaDon_TheoMaHoaDon_MaPhong(hoaDon.getMaHoaDon(),
+						phong.getMaPhong());
 
-				Modal_PhieuChuyenPhong phieuChuyenPhong = new Modal_PhieuChuyenPhong(phong, hd, cthd);
+				JDialog_PhieuChuyenPhong phieuChuyenPhong = new JDialog_PhieuChuyenPhong(phong, hoaDon, cthd);
+
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), "", tenNV, sdtKH, tenKH);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), sdtKH, tenKH);
 
 			} catch (Exception e2) {
 				e2.printStackTrace();

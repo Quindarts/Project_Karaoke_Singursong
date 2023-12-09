@@ -11,6 +11,7 @@ public class TaiKhoan {
 	private String tenDangNhap;
 	private String matKhau;
 	private boolean trangThai;
+	private String email;
 
 	/**
 	 * @param maNhanVien
@@ -18,12 +19,13 @@ public class TaiKhoan {
 	 * @param matKhau
 	 * @param trangThai
 	 */
-	public TaiKhoan(NhanVien nhanVien, String tenDangNhap, String matKhau, boolean trangThai) {
+	public TaiKhoan(NhanVien nhanVien, String tenDangNhap, String matKhau, boolean trangThai, String email) {
 		super();
 		this.nhanVien = nhanVien;
 		this.tenDangNhap = tenDangNhap;
 		this.matKhau = matKhau;
 		this.trangThai = trangThai;
+		this.email = email;
 	}
 
 	/**
@@ -73,6 +75,14 @@ public class TaiKhoan {
 	public void setTrangThai(boolean trangThai) {
 		this.trangThai = trangThai;
 	}
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	@Override
 	public int hashCode() {
@@ -93,8 +103,8 @@ public class TaiKhoan {
 
 	@Override
 	public String toString() {
-		return "tenDangNhap [nhanVien=" + nhanVien + ", tenDangNhap=" + tenDangNhap + ", matKhau=" + matKhau
-				+ ", trangThai=" + trangThai + "]";
+		return "TaiKhoan [nhanVien=" + nhanVien + ", tenDangNhap=" + tenDangNhap + ", matKhau=" + matKhau
+				+ ", trangThai=" + trangThai + ", email=" + email + "]";
 	}
 
 }

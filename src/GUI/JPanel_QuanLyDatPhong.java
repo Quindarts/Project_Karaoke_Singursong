@@ -341,19 +341,19 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		txtTenNhanVienDat.setText(nhanVien.getHoTen());
 		txtTenNhanVienDat.setBounds(157, 83, 241, 25);
 		panel_TTKH.add(txtTenNhanVienDat);
-		
+
 		JLabel lblMaPhong = new JLabel("Mã hóa đơn");
 		lblMaPhong.setForeground(new Color(5, 74, 145));
 		lblMaPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lblMaPhong.setBounds(18, 118, 106, 21);
 		panel_TTKH.add(lblMaPhong);
-		
+
 		JLabel lblNgyLpHa = new JLabel("Ngày lập hóa đơn");
 		lblNgyLpHa.setForeground(new Color(5, 74, 145));
 		lblNgyLpHa.setFont(new Font("Segoe UI", Font.BOLD, 13));
 		lblNgyLpHa.setBounds(18, 158, 111, 21);
 		panel_TTKH.add(lblNgyLpHa);
-		
+
 		txt_ngayLap = new JTextField();
 		txt_ngayLap.setText("22-11-2023");
 		txt_ngayLap.setEnabled(false);
@@ -361,8 +361,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		txt_ngayLap.setColumns(10);
 		txt_ngayLap.setBounds(157, 157, 241, 25);
 		panel_TTKH.add(txt_ngayLap);
-		
-		txt_maHoaDon = new JTextField("HD22112023A015");
+
+		help = new HelpRamDomMa();
+		txt_maHoaDon = new JTextField(help.taoMa("HoaDon", "maHoaDon", "HD"));
 		txt_maHoaDon.setEnabled(false);
 		txt_maHoaDon.setEditable(false);
 		txt_maHoaDon.setColumns(10);
@@ -397,7 +398,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		btn_lamMoiThongTin.setBackground(new Color(255, 153, 51));
 		btn_lamMoiThongTin.setBounds(233, 609, 155, 35);
 		panel_PDP.add(btn_lamMoiThongTin);
-		
+
 		JLabel lbl_dsPhongDat = new JLabel("DANH SÁCH PHÒNG ĐẶT");
 		lbl_dsPhongDat.setHorizontalAlignment(SwingConstants.CENTER);
 		lbl_dsPhongDat.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -866,8 +867,8 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 				if (matcher.matches()) {
 					datPhongTaiQuay();
 				} else {
-					JOptionPane.showMessageDialog(null, "Tên Khách hàng không hợp lệ, vui lòng thử lại.", "Không thành công",
-							JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, "Tên Khách hàng không hợp lệ, vui lòng thử lại.",
+							"Không thành công", JOptionPane.INFORMATION_MESSAGE);
 				}
 
 			}
@@ -891,8 +892,9 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 					java.util.regex.Matcher matcher = patternSDT.matcher(txtSoDienThoai.getText().trim());
 
 					if (!matcher.matches()) {
-						JOptionPane.showMessageDialog(null, "Số điện thoại bạn nhập vào không tồn tại, vui lòng thêm khách hàng mới", "Thông báo lỗi",
-								JOptionPane.INFORMATION_MESSAGE);
+						JOptionPane.showMessageDialog(null,
+								"Số điện thoại bạn nhập vào không tồn tại, vui lòng thêm khách hàng mới",
+								"Thông báo lỗi", JOptionPane.INFORMATION_MESSAGE);
 					} else {
 						txtTenKhachHang.setEnabled(true);
 					}
@@ -1025,7 +1027,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		if (dsDichVu != null) {
 			dsDichVu.forEach(dv -> {
 
-				CardDichVu cardDV = new CardDichVu(dv);
+				JPanel_CardDichVu cardDV = new JPanel_CardDichVu(dv);
 				panel_DanhSachThucDon.add(cardDV);
 			});
 		}
@@ -1036,7 +1038,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		dsPhong = phongDao.phanTrangPhong(fn, ln);
 		if (dsPhong != null) {
 			dsPhong.forEach(ph -> {
-				CardPhong cardPhong = new CardPhong(ph, model_TableDSPhong, table_DanhSachPhong);
+				JPanel_CardPhong cardPhong = new JPanel_CardPhong(ph, model_TableDSPhong, table_DanhSachPhong);
 				panel_Phong.add(cardPhong);
 
 				cardPhong.addMouseListener(new MouseAdapter() {
@@ -1113,7 +1115,14 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		Double tienCoc = 0.0;
 		HelpRamDomMa help = new HelpRamDomMa();
 		String maPDP = null;
-		String maHD = help.taoMa("HoaDon", "maHoaDon", "HD");
+		String maHD = null;
+		try {
+			maHD = help.taoMa("HoaDon", "maHoaDon", "HD");
+		} catch (Exception e) {
+			// TODO: handle exceptione
+			e.printStackTrace();
+		}
+
 		String maKhuyenMai = null;
 
 		String maNhanVien = getNhanVien().getMaNhanVien();
@@ -1324,7 +1333,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 			xoaDLPhong();
 			if (dsph2 != null) {
 				dsph2.forEach(ph -> {
-					CardPhong cardPhong = new CardPhong(ph, model_TableDSPhong, table_DanhSachPhong);
+					JPanel_CardPhong cardPhong = new JPanel_CardPhong(ph, model_TableDSPhong, table_DanhSachPhong);
 					panel_Phong.add(cardPhong);
 				});
 			}

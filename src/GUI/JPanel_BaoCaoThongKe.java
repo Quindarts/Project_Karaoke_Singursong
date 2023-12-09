@@ -208,7 +208,6 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		JPanel panel = new JPanel();
 		panel.setBounds(0, 0, 1296, 672);
 		panel.setBackground(Color.decode(hexColor_Blue1));
-//		panel.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		add(panel);
 		panel.setLayout(null);
 
@@ -448,10 +447,10 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		pnl_DichVu.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
 		pnl_DichVu.setBackground(new Color(5, 74, 145));
 		tabbedPane.addTab("Dịch vụ", null, pnl_DichVu, null);
-		
-		//Bieu do thong ke
+
+		// Bieu do thong ke
 		JPanel pnl_bieuDo = new JPanel_BieuDoThongKe();
-		
+
 		tabbedPane.addTab("Biểu đồ", null, pnl_bieuDo, null);
 
 		JScrollPane scrollPane_DichVu = new JScrollPane();

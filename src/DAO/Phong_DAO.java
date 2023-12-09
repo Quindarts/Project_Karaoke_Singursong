@@ -22,6 +22,31 @@ public class Phong_DAO {
 		// TODO Auto-generated constructor stub
 	}
 
+	public boolean capNhat_TinhTrangPhong(String maPh, String tinhTrang) {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		int n = 0;
+		try {
+			statement = con.prepareStatement("UPDATE Phong SET tinhTrangPhong=? " + " WHERE maPhong=?");
+			statement.setString(1, tinhTrang);
+			statement.setString(2, maPh);
+
+			n = statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return n > 0;
+	}
+
 	public ArrayList<Phong> layTatCaPhong() {
 		ArrayList<Phong> danhSachPhong = new ArrayList<Phong>();
 		try {
@@ -113,7 +138,7 @@ public class Phong_DAO {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
 		String sqlTenLoaiPhong = "";
-		
+
 		if (tenLoaiPhong.trim().equals("Tất cả"))
 			sqlTenLoaiPhong = "LoaiPhong.tenLoaiPhong Like N'%%'";
 		else {
@@ -160,12 +185,11 @@ public class Phong_DAO {
 		if (tenTrangThai.trim().equals("Đang sử dụng")) {
 
 			sqlTongHop = "";
-			sqlTongHop = "select * from Phong \n" + sqlJoinLoaiP + sqlJoinTrangThaiP + sqlJoinCTHoaDon
-					+ sqlJoinHoaDon + sqlJoinKhachHangHD + sqlWhere + sqlTenLoaiPhong + sqlAND + sqlTenTrangThai
-					+ sqlAND + sqlMaPhong + sqlAND + sqlTenKhachHang + sqlAND + sqlSoDienThoai + sqlAND
+			sqlTongHop = "select * from Phong \n" + sqlJoinLoaiP + sqlJoinTrangThaiP + sqlJoinCTHoaDon + sqlJoinHoaDon
+					+ sqlJoinKhachHangHD + sqlWhere + sqlTenLoaiPhong + sqlAND + sqlTenTrangThai + sqlAND + sqlMaPhong
+					+ sqlAND + sqlTenKhachHang + sqlAND + sqlSoDienThoai + sqlAND
 					+ "(HoaDon.trangThai = N'Đang chờ thanh toán' AND HoaDon.maKhachHang = KhachHang.maKhachHang) \n"
-					+ sqlAND
-					+ "CONVERT(date, HoaDon.ngayLap) = CONVERT(date, GETDATE())";
+					+ sqlAND + "CONVERT(date, HoaDon.ngayLap) = CONVERT(date, GETDATE())";
 		}
 
 		try {
@@ -238,7 +262,7 @@ public class Phong_DAO {
 
 		ArrayList<Phong> dsPhong = new ArrayList<>();
 		try {
-			String sql = "SELECT * FROM Phong WHERE maLoaiPhong LIKE '%"+maLP+"%'";
+			String sql = "SELECT * FROM Phong WHERE maLoaiPhong LIKE '%" + maLP + "%'";
 			statement = con.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
@@ -451,7 +475,7 @@ public class Phong_DAO {
 	public List<Phong> layDanhSachPhongTrongTheoNgayVaLoaiPhong(Timestamp startTime, Timestamp endTime, String lp) {
 		List<Phong> danhSachPhong = new ArrayList<Phong>();
 		PreparedStatement statement = null;
-	
+
 		try {
 			ConnectDB.getInstance();
 			Connection con = ConnectDB.getConnection();
@@ -631,7 +655,8 @@ public class Phong_DAO {
 		}
 		return dsPhong;
 	}
-	public ArrayList<Phong> timDSPhongWhenSelectCBO(String floor, String maTrangThai, String maTinhTrang) {		
+
+	public ArrayList<Phong> timDSPhongWhenSelectCBO(String floor, String maTrangThai, String maTinhTrang) {
 		Phong phong = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -640,35 +665,35 @@ public class Phong_DAO {
 		ArrayList<Phong> dsPhong = new ArrayList<>();
 		String sql = "SELECT * FROM Phong WHERE 1 = 1";
 		if (floor != null && !floor.isEmpty() && !floor.equals("Tất cả")) {
-		    sql += " AND viTriPhong = ?";
+			sql += " AND viTriPhong = ?";
 		}
 
 		if (maTrangThai != null && !maTrangThai.isEmpty() && !maTrangThai.equals("Tất cả")) {
-		    sql += " AND maTrangThai = ?";
+			sql += " AND maTrangThai = ?";
 		}
 
 		if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
-		    sql += " AND tinhTrangPhong = ?";
+			sql += " AND tinhTrangPhong = ?";
 		}
 		try {
 			statement = con.prepareStatement(sql);
 			int parameterIndex = 1;
-			
-			if (floor != null && !floor.isEmpty() && !floor.equals("Tất cả")) {
-		        statement.setString(parameterIndex++, floor);
-		        
-		    }
-			
-			if (maTrangThai != null && !maTrangThai.isEmpty() && !maTrangThai.equals("Tất cả")) {
-				
-		        statement.setString(parameterIndex++, maTrangThai);
-		        
-		    }
 
-		    if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
-		    	
-		        statement.setString(parameterIndex++, maTinhTrang);
-		    }
+			if (floor != null && !floor.isEmpty() && !floor.equals("Tất cả")) {
+				statement.setString(parameterIndex++, floor);
+
+			}
+
+			if (maTrangThai != null && !maTrangThai.isEmpty() && !maTrangThai.equals("Tất cả")) {
+
+				statement.setString(parameterIndex++, maTrangThai);
+
+			}
+
+			if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
+
+				statement.setString(parameterIndex++, maTinhTrang);
+			}
 //			statement.setString(1, floor);
 //			statement.setString(2, maTrangThai);
 //			statement.setString(3, maTinhTrang);
@@ -696,9 +721,10 @@ public class Phong_DAO {
 				e2.printStackTrace();
 			}
 		}
-		
+
 		return dsPhong;
 	}
+
 	public ArrayList<Phong> timdsPhongtheoThoigian(String from, String to) {
 		Phong phong = null;
 		ConnectDB.getInstance();
@@ -737,6 +763,7 @@ public class Phong_DAO {
 		}
 		return dsPhong;
 	}
+
 	public ArrayList<Phong> timDSPhongTheoMaPhong(String maP) {
 		Phong phong = null;
 		ConnectDB.getInstance();
@@ -774,6 +801,28 @@ public class Phong_DAO {
 		}
 		return dsPhong;
 	}
-	
+	public boolean capNhat_TrangThaiPhong(String maPh, String trThPh) {
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		int n = 0;
+		try {
+			statement = con.prepareStatement("UPDATE Phong SET maTrangThai=? " + " WHERE maPhong=?");
+			statement.setString(2, maPh);
+			statement.setString(1, trThPh);
 
+			n = statement.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return n > 0;
+	}
 }

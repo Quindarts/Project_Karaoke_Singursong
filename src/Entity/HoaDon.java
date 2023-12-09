@@ -47,7 +47,7 @@ public class HoaDon {
 	public float tinhGioHat() {
 		// Lấy Timestamp kết thúc từ đối tượng HoaDon
 		long gioHat = 0;
-		float result ;
+		float result;
 		if (getThoiGianKetThuc() != null) {
 			Timestamp thoiGianKetThuc = getThoiGianKetThuc();
 			// Lấy Timestamp đặt phòng từ đối tượng PhieuDatPhong
@@ -62,8 +62,8 @@ public class HoaDon {
 			Duration duration = Duration.between(batDau, ketThuc);
 
 			// Chuyển khoảng thời gian thành số giờ
-			gioHat = duration.toMinutes() ;
-			result =(float) gioHat / 60;
+			gioHat = duration.toMinutes();
+			result = (float) gioHat / 60;
 		} else {
 			// Lấy thời gian hiện tại
 			long currentTimeMillis = System.currentTimeMillis();
@@ -77,11 +77,11 @@ public class HoaDon {
 			gioHat = duration.toMinutes();
 
 			// In ra timestamp
-			
-			result =(float) gioHat / 60;
+
+			result = (float) gioHat / 60;
 		}
-		return   result;// Trả về giờ hát dưới dạng số nguyên
-		
+		return result;// Trả về giờ hát dưới dạng số nguyên
+
 	}
 
 	public HoaDon(String maHoaDon) {
@@ -176,8 +176,11 @@ public class HoaDon {
 			return 0;
 		int thoiGian = 0;
 		double sum = tinhTienDichVu(dsCTDV) + tinhTienPhong(dsCTHD);
-		double chietKhau = ((this.khuyenMai.getChietKhau()) / 100) * sum;
-		return sum + chietKhau;
+		if (getPhieuDatPhong() != null) {
+			sum = sum - getPhieuDatPhong().getTienCoc();
+		}
+
+		return sum * 1.05;
 	}
 
 	@Override

@@ -29,6 +29,41 @@ public class PhieuDatPhong_DAO {
 		// TODO Auto-generated constructor stub
 	}
 
+	public ArrayList<PhieuDatPhong> locPhieuDatPhong(String maPhieuDatLoc, String tenKhachHang, String maPhong,
+			String soDienThoai, String thoiGianNhanPhongLoc) {
+		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			String sql = "SELECT * \r\n" + "FROM PhieuDatPhong pd\r\n"
+					+ "JOIN KhachHang kh ON kh.maKhachHang = pd.maKhachHang\r\n" + "WHERE maPhieuDat LIKE '%"
+					+ maPhieuDatLoc + "%' AND maPhong LIKE '%" + maPhong + "%' AND CAST(thoiGianNhanPhong AS DATE) = '"
+					+ thoiGianNhanPhongLoc + "' AND kh.hoTen LIKE N'%" + tenKhachHang + "%' \r\n"
+					+ "AND kh.soDienThoai LIKE '%" + soDienThoai + "%'";
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
+		
+			while (rs.next()) {
+				String maPhieuDat = rs.getString("maPhieuDat");
+				Phong phong = new Phong(rs.getString("maPhong"));
+				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
+				KhachHang khachHang = new KhachHang(rs.getString("maKhachHang"));
+				java.sql.Timestamp thoiGianDatPhong = rs.getTimestamp("thoiGianDatPhong");
+				java.sql.Timestamp thoiGianNhanPhong = rs.getTimestamp("thoiGianNhanPhong");
+				Double tienCoc = rs.getDouble("tienCoc");
+				String trangThai = rs.getString("trangThai");
+				String moTa = rs.getString("moTa");
+				PhieuDatPhong phieuDatPhong = new PhieuDatPhong(maPhieuDat, phong, nhanVien, khachHang,
+						thoiGianDatPhong, thoiGianNhanPhong, tienCoc, trangThai, moTa);
+				danhSachPhieuDatPhong.add(phieuDatPhong);
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return danhSachPhieuDatPhong;
+	}
+
 	public ArrayList<PhieuDatPhong> layTatCaPhieuDatPhong() {
 		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
 		try {
@@ -347,7 +382,7 @@ public class PhieuDatPhong_DAO {
 				+ "' as dateTime))) <= 3600*" + soGIoDuKien + "\r\n"
 				+ "AND CONVERT(date, thoiGianNhanPhong) <= CONVERT(date, '" + ngayDat + "')";
 		try {
-		
+
 			statement = con.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 
@@ -618,7 +653,7 @@ public class PhieuDatPhong_DAO {
 		;
 
 		try {
-			
+
 			statement = con.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 
@@ -675,8 +710,6 @@ public class PhieuDatPhong_DAO {
 		return n > 0;
 
 	}
-
-
 
 	public boolean HuyPhieuDatPhong(String maPDP) {
 		ConnectDB.getInstance();

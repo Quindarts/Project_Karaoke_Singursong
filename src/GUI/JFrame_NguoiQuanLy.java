@@ -27,10 +27,6 @@ public class JFrame_NguoiQuanLy extends JFrame {
 
 	private JPanel contentPane;
 
-	/**
-	 * Color
-	 */
-
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
 	private String hexColor_Blue3 = "#81A4CD";
@@ -38,7 +34,6 @@ public class JFrame_NguoiQuanLy extends JFrame {
 	private String hexColor_Orange = "#F17300";
 	private String hexColor_Red = "#E11F1F";
 
-//	private JPanel contentPane;
 	private JPanel panel_Menu;
 	private JPanel panelMenu_QLDatPhong;
 	private JPanel panelMenu_QLKhachHang;
@@ -46,9 +41,6 @@ public class JFrame_NguoiQuanLy extends JFrame {
 	private JLabel lblMenu_QLKhachHang;
 	private JButton btnNewButton;
 
-	/**
-	 * Rounded JPanel
-	 */
 	public class RoundedTransparentBorder extends AbstractBorder {
 		private int cornerRadius;
 		private Color borderColor;
@@ -94,21 +86,6 @@ public class JFrame_NguoiQuanLy extends JFrame {
 		}
 
 	}
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					JFrame_NguoiQuanLy frame = new JFrame_NguoiQuanLy();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
@@ -123,9 +100,6 @@ public class JFrame_NguoiQuanLy extends JFrame {
 		setResizable(false);
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-
-		
 
 		panel_Menu = new JPanel();
 		panel_Menu.setBorder(new RoundedTransparentBorder(20, Color.decode(hexColor_Blue1), Color.WHITE, 1.0f));
@@ -172,7 +146,6 @@ public class JFrame_NguoiQuanLy extends JFrame {
 		lblMenu_QLKhachHang.setFont(new Font("Segoe UI", Font.BOLD, 14));
 		lblMenu_QLKhachHang.setBounds(10, 10, 166, 20);
 		panelMenu_QLKhachHang.add(lblMenu_QLKhachHang);
-	
 
 		panel_Function = new JPanel();
 		panel_Function.setBackground(Color.WHITE);

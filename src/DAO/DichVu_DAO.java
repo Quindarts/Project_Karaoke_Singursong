@@ -135,6 +135,42 @@ public class DichVu_DAO {
 		return dichVu;
 	}
 
+	public ArrayList<DichVu> layDichVu_TheoTenDichVu(String tenDichVuTK) {
+		ArrayList<DichVu> danhSachDichVu = new ArrayList<DichVu>();
+		DichVu dichVu = null;
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+		try {
+			String sql = "SELECT * FROM DichVu WHERE tenDichVu Like N'%"+tenDichVuTK+"%'";
+			statement = con.prepareStatement(sql);
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
+				String maDichVu = rs.getString("maDichVu");
+				String tenDichVu = rs.getString("tenDichVu");
+				String donViTinh = rs.getString("donViTinh");
+				Double donGia = rs.getDouble("donGia");
+				boolean trangThai = rs.getBoolean("trangThai");
+				String maTTDV = rs.getString("maThongTinDichVu");
+				ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
+				ThongTinDichVu ttdv = DAO_TTDV.timThongTinDichVu_TheoMaThongTinDichVu(maTTDV);
+
+				dichVu = new DichVu(maDichVu, tenDichVu, donViTinh, donGia, trangThai, ttdv);
+				danhSachDichVu.add(dichVu);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+		}
+		return danhSachDichVu;
+	}
+
 	public boolean taoDichVu(DichVu dichVu) {
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -169,14 +205,13 @@ public class DichVu_DAO {
 		int n = 0;
 		try {
 			statement = con.prepareStatement(
-					"UPDATE DichVu SET tenDichVu = ?, soLuong = ?, donViTinh = ?, donGia = ?, trangThai = ?, maThongTinDichVu = ?"
+					"UPDATE DichVu SET tenDichVu = ?, donViTinh = ?, donGia = ?, trangThai = ?, maThongTinDichVu = ?"
 							+ " WHERE maDichVu = ?");
 			statement.setString(1, dichVu.getTenDichVu());
 			statement.setString(2, dichVu.getDonViTinh());
 			statement.setDouble(3, dichVu.getDonGia());
 			statement.setBoolean(4, dichVu.getTrangThai());
-			statement.setString(5, dichVu.getMaDichVu());
-			statement.setString(6, dichVu.getThongTinDichVu().getMaThongTinDichVu());
+			statement.setString(5, dichVu.getThongTinDichVu().getMaThongTinDichVu());
 			statement.setString(6, dichVu.getMaDichVu());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
@@ -191,6 +226,38 @@ public class DichVu_DAO {
 		}
 
 		return n;
+	}
+
+	public ArrayList<DichVu> locDichVu(String ngayNhap, String trangThaiLoc, String giaBD, String giaKT) {
+		ConnectDB.getInstance();
+
+		String sql = "SELECT *\r\n" + "FROM DichVu dv\r\n"
+				+ "JOIN ThongTinDichVu tt ON dv.maThongTinDichVu = tt.maThongTinDichVu\r\n" + "WHERE "
+				+ "tt.ngayNhap= '" + ngayNhap + "'\r\n" + "    AND dv.trangThai = " + trangThaiLoc + "\r\n"
+				+ "    AND dv.donGia BETWEEN " + giaBD + " AND " + giaKT;
+		ArrayList<DichVu> danhSachDichVu = new ArrayList<DichVu>();
+		try {
+			ConnectDB.getInstance();
+			Connection con = ConnectDB.getConnection();
+			Statement statement = con.createStatement();
+			ResultSet rs = statement.executeQuery(sql);
+			while (rs.next()) {
+				String maDichVu = rs.getString("maDichVu");
+				String tenDichVu = rs.getString("tenDichVu");
+				String donViTinh = rs.getString("donViTinh");
+				Double donGia = rs.getDouble("donGia");
+				boolean trangThai = rs.getBoolean("trangThai");
+				String maTTDV = rs.getString("maThongTinDichVu");
+				ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
+				ThongTinDichVu ttdv = DAO_TTDV.timThongTinDichVu_TheoMaThongTinDichVu(maTTDV);
+
+				DichVu dichVu = new DichVu(maDichVu, tenDichVu, donViTinh, donGia, trangThai, ttdv);
+				danhSachDichVu.add(dichVu);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return danhSachDichVu;
 	}
 
 	public boolean xoaDichVu(DichVu dichVu) {

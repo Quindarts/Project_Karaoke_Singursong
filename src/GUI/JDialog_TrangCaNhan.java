@@ -7,6 +7,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.apache.commons.io.input.Tailer;
+
 import com.formdev.flatlaf.FlatLightLaf;
 
 import ConnectDB.ConnectDB;
@@ -63,7 +65,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.JPasswordField;
 import javax.swing.border.EtchedBorder;
 
-public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemListener {
+public class JDialog_TrangCaNhan extends JFrame implements ActionListener, ItemListener {
 
 	private JPanel contentPane;
 
@@ -106,6 +108,18 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 	private JPasswordField txt_Password;
 
 	private JCheckBox cboShowPassword;
+	private JTextField txt_Email;
+
+	private NhanVien nv;
+
+	private NhanVien_DAO DAO_NV;
+
+	private JButton btn_ChangePwd;
+
+	private TaiKhoan TK;
+
+	private TaiKhoan_DAO DAO_TK;
+
 
 	/**
 	 * Launch the application.
@@ -114,13 +128,13 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 	/**
 	 * Create the frame.
 	 */
-	public Modal_TrangCaNhan(NhanVien nhanvien) {
+	public JDialog_TrangCaNhan(NhanVien nhanvien) {
 
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
-				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
+				Toolkit.getDefaultToolkit().getImage(JDialog_CapNhatDichVu.class.getResource("/icon/microphone.png")));
 		setTitle("SING UR SONG");
-		setBounds(100, 100, 1034, 396);
+		setBounds(100, 100, 1034, 494);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -159,7 +173,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 
 		JPanel pnl_ThongTin = new JPanel();
 		pnl_ThongTin.setBackground(Color.WHITE);
-		pnl_ThongTin.setBounds(224, 70, 765, 285);
+		pnl_ThongTin.setBounds(245, 70, 765, 328);
 		contentPane.add(pnl_ThongTin);
 		pnl_ThongTin.setLayout(null);
 
@@ -184,20 +198,20 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 		JPanel pnl_ChucVu = new JPanel();
 		pnl_ChucVu.setBackground(Color.WHITE);
 		pnl_ChucVu.setLayout(null);
-		pnl_ChucVu.setBounds(405, 5, 350, 25);
+		pnl_ChucVu.setBounds(405, 5, 350, 30);
 		pnl_ThongTin.add(pnl_ChucVu);
-
-		JLabel lbl_ChucVu = new JLabel("Chức vụ");
-		lbl_ChucVu.setHorizontalAlignment(SwingConstants.LEFT);
-		lbl_ChucVu.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_ChucVu.setBounds(0, 0, 110, 25);
-		pnl_ChucVu.add(lbl_ChucVu);
-
-		txt_chucVu = new JTextField();
-		txt_chucVu.setColumns(10);
-		txt_chucVu.setBounds(125, 1, 225, 25);
-		txt_chucVu.setEditable(false);
-		pnl_ChucVu.add(txt_chucVu);
+		
+		JLabel lbl_Email = new JLabel("Email");
+		lbl_Email.setHorizontalAlignment(SwingConstants.LEFT);
+		lbl_Email.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lbl_Email.setBounds(0, 0, 110, 25);
+		pnl_ChucVu.add(lbl_Email);
+		
+		txt_Email = new JTextField();
+		txt_Email.setText((String) null);
+		txt_Email.setColumns(10);
+		txt_Email.setBounds(125, 1, 225, 24);
+		pnl_ChucVu.add(txt_Email);
 
 		JPanel pnl_TenNhanVien = new JPanel();
 		pnl_TenNhanVien.setBackground(Color.WHITE);
@@ -265,7 +279,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 		JPanel pnl_TrangThai = new JPanel();
 		pnl_TrangThai.setBackground(Color.WHITE);
 		pnl_TrangThai.setLayout(null);
-		pnl_TrangThai.setBounds(10, 185, 350, 25);
+		pnl_TrangThai.setBounds(10, 185, 350, 29);
 		pnl_ThongTin.add(pnl_TrangThai);
 
 		JLabel lbl_TrangThai = new JLabel("Trạng thái");
@@ -342,10 +356,11 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 		
 		txt_Password = new JPasswordField();
 		txt_Password.setBounds(526, 185, 198, 25);
+		txt_Password.setEditable(false);
 		pnl_ThongTin.add(txt_Password);
 
 		JButton btn_ChonAnh = new JButton("Chọn ảnh");
-		btn_ChonAnh.setIcon(new ImageIcon(Modal_TrangCaNhan.class.getResource("/icon/upload.png")));
+		btn_ChonAnh.setIcon(new ImageIcon(JDialog_TrangCaNhan.class.getResource("/icon/upload.png")));
 		btn_ChonAnh.setBounds(26, 262, 179, 32);
 		contentPane.add(btn_ChonAnh);
 		btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -368,18 +383,21 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 
 		btn_ChonAnh.setBackground(new Color(0, 128, 255));
 
+		nv = new NhanVien();
+		DAO_NV = new NhanVien_DAO();
+		nv = DAO_NV.timNhanVien_TheoMaNhanVien(nhanvien.getMaNhanVien());
 		
-		txt_MaNhanVien.setText(nhanvien.getMaNhanVien());
-		txt_TenNhanVien.setText(nhanvien.getHoTen());
+		txt_MaNhanVien.setText(nv.getMaNhanVien());
+		txt_TenNhanVien.setText(nv.getHoTen());
 		
 
 		try {
-			dateCh_NgaySinh.setDate(nhanvien.getNgaySinh());
+			dateCh_NgaySinh.setDate(nv.getNgaySinh());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-		if (nhanvien.isGioiTinh()) {
+		if (nv.isGioiTinh()) {
 			rdbtn_Nam.setSelected(true);
 		} else {
 			rdbtn_Nu.setSelected(true);
@@ -387,19 +405,22 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 		
 		DAO_LNV = new LoaiNhanVien_DAO();
 		LoaiNhanVien LNV = new LoaiNhanVien();
-		LNV = DAO_LNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nhanvien.getloaiNhanVien().getMaLoaiNhanVien());
-		txt_chucVu.setText(LNV.getTenLoaiNhanVien());
+		LNV = DAO_LNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
 		
-		txt_TrangThai.setText(nhanvien.getTrangThai());
-		txt_SoDienThoai.setText(nhanvien.getSoDienThoai());
-		txt_DiaChi.setText(nhanvien.getDiaChi());
-		txt_CCCD.setText(nhanvien.getCCCD());
+		TK = new TaiKhoan();
+		DAO_TK = new TaiKhoan_DAO();
+		
+		TK = DAO_TK.timTaiKhoan_TheoMaNhanVien(nv.getMaNhanVien());
+		
+		txt_TrangThai.setText(nv.getTrangThai());
+		txt_SoDienThoai.setText(nv.getSoDienThoai());
+		txt_DiaChi.setText(nv.getDiaChi());
+		txt_CCCD.setText(nv.getCCCD());
+		txt_Email.setText(TK.getEmail().trim());
 		
 		
 		
-		TaiKhoan_DAO DAO_TK = new TaiKhoan_DAO();
-		TaiKhoan TK = new TaiKhoan();
-		TK = DAO_TK.timTaiKhoan_TheoMaNhanVien(nhanvien.getMaNhanVien());
+		TK = DAO_TK.timTaiKhoan_TheoMaNhanVien(nv.getMaNhanVien());
 		txt_Password.setText(TK.getMatKhau().trim());
 		
 		cboShowPassword = new JCheckBox("");
@@ -408,31 +429,53 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 		pnl_ThongTin.add(cboShowPassword);
 		
 				btn_Them = new JButton("Lưu");
-				btn_Them.setIcon(new ImageIcon(Modal_TrangCaNhan.class.getResource("/icon/save_16px.png")));
-				btn_Them.setBounds(526, 244, 110, 30);
+				btn_Them.setIcon(new ImageIcon(JDialog_TrangCaNhan.class.getResource("/icon/save_16px.png")));
+				btn_Them.setBounds(526, 288, 110, 30);
 				pnl_ThongTin.add(btn_Them);
 				btn_Them.setForeground(Color.WHITE);
 				btn_Them.setFont(new Font("Segoe UI", Font.BOLD, 13));
 				btn_Them.setBackground(Color.decode(hexColor_Orange));
 				
 						btn_BoQua = new JButton("Bỏ qua");
-						btn_BoQua.setIcon(new ImageIcon(Modal_TrangCaNhan.class.getResource("/icon/exit_16px.png")));
-						btn_BoQua.setBounds(649, 244, 110, 30);
+						btn_BoQua.setIcon(new ImageIcon(JDialog_TrangCaNhan.class.getResource("/icon/exit_16px.png")));
+						btn_BoQua.setBounds(645, 288, 110, 30);
 						pnl_ThongTin.add(btn_BoQua);
 						btn_BoQua.setForeground(Color.WHITE);
 						btn_BoQua.setFont(new Font("Segoe UI", Font.BOLD, 13));
 						btn_BoQua.setBackground(Color.decode(hexColor_Blue2));
+						
+								txt_chucVu = new JTextField();
+								txt_chucVu.setBounds(130, 239, 225, 25);
+								pnl_ThongTin.add(txt_chucVu);
+								txt_chucVu.setColumns(10);
+								txt_chucVu.setEditable(false);
+								txt_chucVu.setText(LNV.getTenLoaiNhanVien());
+								
+										JLabel lbl_ChucVu = new JLabel("Chức vụ");
+										lbl_ChucVu.setBounds(10, 238, 110, 25);
+										pnl_ThongTin.add(lbl_ChucVu);
+										lbl_ChucVu.setHorizontalAlignment(SwingConstants.LEFT);
+										lbl_ChucVu.setFont(new Font("Segoe UI", Font.BOLD, 13));
+										
+										btn_ChangePwd = new JButton("Đổi mật khẩu");
+										btn_ChangePwd.setForeground(Color.WHITE);
+										btn_ChangePwd.setFont(new Font("Segoe UI", Font.BOLD, 13));
+										btn_ChangePwd.setBackground(new Color(0, 255, 0));
+										btn_ChangePwd.setBounds(618, 220, 137, 30);
+										pnl_ThongTin.add(btn_ChangePwd);
 						btn_BoQua.addActionListener(this);
 				
 						btn_Them.addActionListener(this);
 		
-		ImageIcon originalIcon = new ImageIcon(Modal_CapNhatDichVu.class.getResource(nhanvien.getAnhThe()));
+		nv = DAO_NV.timNhanVien_TheoMaNhanVien(nhanvien.getMaNhanVien());
+		ImageIcon originalIcon = new ImageIcon(JDialog_CapNhatDichVu.class.getResource("/img/" + nv.getAnhThe()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(159, 176, Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);
 		
 		img_show_panel.setIcon(resizedIcon);
 		cboShowPassword.addItemListener(this);
+		btn_ChangePwd.addActionListener(this);
 	}
 
 	@Override
@@ -449,6 +492,12 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 		if (o.equals(btn_BoQua)) {
 			dispose();
 		}
+		
+		if(o.equals(btn_ChangePwd)) {
+			TK = DAO_TK.timKiemTaiKhoan(txt_MaNhanVien.getText().trim());
+			JFrame_DoiMatKhau doiMatKhau = new JFrame_DoiMatKhau(TK);
+			doiMatKhau.setVisible(true);
+		}
 	}
 
 	public boolean ValueDate() {
@@ -458,6 +507,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 		String soDienThoai = txt_SoDienThoai.getText().trim();
 		String diaChi = txt_DiaChi.getText().trim();
 		String cccd = txt_CCCD.getText().trim();
+		String email = txt_Email.getText().trim();
 
 		if (txt_TenNhanVien.equals("")) {
 			txt_TenNhanVien.requestFocus();
@@ -521,6 +571,16 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 			txt_CCCD.requestFocus();
 			return false;
 		}
+		
+		if(email.equals("")) {
+			txt_Email.requestFocus();
+			JOptionPane.showMessageDialog(null, "Email không được rỗng");
+			return false;
+		} else if(!(email.length() > 0 && email.matches("^\\S+@\\S+\\.\\S+$"))) {
+			JOptionPane.showMessageDialog(null, "Email không hợp lệ");
+			txt_Email.requestFocus();
+			return false;
+		}
 		return true;
 	}
 	
@@ -532,14 +592,10 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 			if(pathImg != null) {
 				File file = new File(pathImg);
 		        String fileName = file.getName();
-		        String relativePath = "/img" + File.separator + fileName;
-		        relativePath = relativePath.replace(File.separator, "/");
-		        anhThe = relativePath;
+		        anhThe = fileName;
 			} else {
-				anhThe = "/img/noImage.jpg";
-			}
-	        System.out.println(anhThe);
-	        
+				anhThe = "noImage.jpg";
+			}	        
 	        
 			String CCCD = txt_CCCD.getText();
 			String diaChi = txt_DiaChi.getText();
@@ -568,8 +624,12 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);
 
-			System.out.println(nv.toString());
-
+			
+			String email = txt_Email.getText().trim();
+			TaiKhoan TK = new TaiKhoan();
+			TaiKhoan_DAO DAO_TK = new TaiKhoan_DAO();
+			TK =  DAO_TK.capNhatEmail_TheoMaNhanVien(hoTen, maNhanVien, email);
+			
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
 				if (DAO_NV.capNhatNhanVien(nv)) {
@@ -590,7 +650,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+		file.setCurrentDirectory(new File("src/img"));
 
 		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
 				"xls");
@@ -624,7 +684,7 @@ public class Modal_TrangCaNhan extends JFrame implements ActionListener, ItemLis
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getStateChange() == ItemEvent.SELECTED) {            
+		if (e.getStateChange() == ItemEvent.SELECTED) {
             txt_Password.setEchoChar(cboShowPassword.isSelected() ? '\u0000' : '*');
         } else if (e.getStateChange() == ItemEvent.DESELECTED) {
         	char echoChar = cboShowPassword.isSelected() ? '\u0000' : '*';

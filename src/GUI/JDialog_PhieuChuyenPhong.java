@@ -49,11 +49,12 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Currency;
 import java.awt.event.ActionEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, MouseListener {
+public class JDialog_PhieuChuyenPhong extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
 	private JTextField txt_SoGioDaHat;
@@ -68,16 +69,13 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	private SimpleDateFormat dateFormat_YMD = new SimpleDateFormat("yyyy-MM-dd");
 	private SimpleDateFormat dateFormat_HM = new SimpleDateFormat("HH:mm");
 	private SimpleDateFormat dateFormat_YMDHMS = new SimpleDateFormat("dd-M-yyyy hh:mm");
-	private JTextField txtMaPDP;
 	private JTextField txtTenPhong;
 	private JTextField txtLoaiPhong;
 	private JTextField txtGiaPhong;
 	private JTextField txtSoDienThoai;
 	private JTextField txtTenKH;
-	private JTextField txtNhanVien;
 	private JTable table;
 	private JDateChooser date_NhanPhongBanDau;
-	private JDateChooser date_ChuyenPhong;
 	private JButton btnDatPhong;
 	private JButton btnHy;
 	private Calendar cal = Calendar.getInstance();
@@ -98,11 +96,16 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	private ChiTietDichVu_DAO DAO_CTDV;
 	private DichVu_DAO DAO_DV;
 	private DichVu dv;
+	private JComboBox<String> cbx_LoaiPhong;
+	private JComboBox<String> cbx_Lau;
+	private ArrayList<LoaiPhong> listLoaiPhong;
+	private JButton btn_lamMoi;
+	private JButton btn_timKiem;
 
 	/**
 	 * Create the panel.
 	 */
-	public Modal_PhieuChuyenPhong(Phong phong, HoaDon hoaDon, ChiTietHoaDon chiTietHD) {
+	public JDialog_PhieuChuyenPhong(Phong phong, HoaDon hoaDon, ChiTietHoaDon chiTietHD) {
 		this.phong = phong;
 		this.hoaDon = hoaDon;
 		this.chiTietHD = chiTietHD;
@@ -220,62 +223,79 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		JLabel lbl_ThoiGianBatDauVoPhong = new JLabel("Thời gian vào nhận phòng");
 		lbl_ThoiGianBatDauVoPhong.setForeground(new Color(0, 0, 0));
 		lbl_ThoiGianBatDauVoPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_ThoiGianBatDauVoPhong.setBounds(10, 11, 196, 27);
+		lbl_ThoiGianBatDauVoPhong.setBounds(10, 10, 196, 27);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_ThoiGianBatDauVoPhong);
 
 		date_NhanPhongBanDau = new JDateChooser();
 		date_NhanPhongBanDau.setDateFormatString("yyyy-MM-dd hh:mm");
-		date_NhanPhongBanDau.setBounds(216, 11, 157, 27);
+		date_NhanPhongBanDau.setBounds(200, 11, 157, 27);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(date_NhanPhongBanDau);
 
 		txt_SoGioDaHat = new JTextField();
 		txt_SoGioDaHat.setEnabled(false);
-		txt_SoGioDaHat.setBounds(492, 11, 55, 27);
+		txt_SoGioDaHat.setBounds(120, 40, 55, 27);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(txt_SoGioDaHat);
 		txt_SoGioDaHat.setColumns(10);
-
-		JLabel lblNhanVien = new JLabel("Nhân viên");
-		lblNhanVien.setForeground(new Color(0, 0, 0));
-		lblNhanVien.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblNhanVien.setBounds(615, 49, 82, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(lblNhanVien);
-
-		JLabel lblMaPDP = new JLabel("Mã phiếu ");
-		lblMaPDP.setForeground(new Color(0, 0, 0));
-		lblMaPDP.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lblMaPDP.setBounds(615, 11, 82, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(lblMaPDP);
-
-		txtMaPDP = new JTextField();
-		txtMaPDP.setEditable(false);
-		txtMaPDP.setEnabled(false);
-		txtMaPDP.setBounds(701, 11, 140, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(txtMaPDP);
-		txtMaPDP.setColumns(10);
-
-		txtNhanVien = new JTextField();
-		txtNhanVien.setEnabled(false);
-		txtNhanVien.setEditable(false);
-		txtNhanVien.setColumns(10);
-		txtNhanVien.setBounds(701, 49, 140, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(txtNhanVien);
-
-		JLabel lbl_ThoiGianChuyenSangPhongMoi = new JLabel("Thời gian nhận phòng mới");
-		lbl_ThoiGianChuyenSangPhongMoi.setForeground(Color.BLACK);
-		lbl_ThoiGianChuyenSangPhongMoi.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_ThoiGianChuyenSangPhongMoi.setBounds(10, 48, 196, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_ThoiGianChuyenSangPhongMoi);
-
-		date_ChuyenPhong = new JDateChooser();
-		date_ChuyenPhong.setDateFormatString("yyyy-MM-dd hh:mm");
-		date_ChuyenPhong.setBounds(216, 49, 157, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(date_ChuyenPhong);
 
 		JLabel lbl_SoGioDaHat = new JLabel("Số giờ đã hát");
 		lbl_SoGioDaHat.setForeground(Color.BLACK);
 		lbl_SoGioDaHat.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_SoGioDaHat.setBounds(397, 11, 196, 27);
+		lbl_SoGioDaHat.setBounds(10, 40, 196, 27);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_SoGioDaHat);
+
+		JLabel lbl_LoaiPhong = new JLabel("Loại phòng");
+		lbl_LoaiPhong.setForeground(Color.BLACK);
+		lbl_LoaiPhong.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lbl_LoaiPhong.setBounds(424, 10, 95, 27);
+		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_LoaiPhong);
+
+		JLabel lbl_Lau = new JLabel("Lầu");
+		lbl_Lau.setForeground(Color.BLACK);
+		lbl_Lau.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		lbl_Lau.setBounds(424, 40, 95, 27);
+		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_Lau);
+
+		cbx_LoaiPhong = new JComboBox<String>();
+		cbx_LoaiPhong.setBounds(529, 12, 193, 21);
+		pnl_ThoiGianChuyenNhanPhongMoi.add(cbx_LoaiPhong);
+		dao_LoaiPhong = new LoaiPhong_DAO();
+		cbx_LoaiPhong.addItem("Chọn loại phòng");
+		try {
+			listLoaiPhong = dao_LoaiPhong.layTatCaLoaiPhong();
+			if (listLoaiPhong != null) {
+				listLoaiPhong.forEach((lp) -> {
+					cbx_LoaiPhong.addItem(lp.getTenLoaiPhong());
+				});
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		cbx_Lau = new JComboBox<String>();
+		cbx_Lau.setBounds(529, 42, 120, 21);
+		pnl_ThoiGianChuyenNhanPhongMoi.add(cbx_Lau);
+
+		btn_lamMoi = new JButton("Làm mới");
+		btn_lamMoi.setForeground(Color.WHITE);
+		btn_lamMoi.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_lamMoi.setBackground(new Color(62, 124, 177));
+		btn_lamMoi.setBounds(747, 46, 100, 30);
+		pnl_ThoiGianChuyenNhanPhongMoi.add(btn_lamMoi);
+
+		btn_timKiem = new JButton("Tìm kiếm");
+		btn_timKiem.setForeground(Color.WHITE);
+		btn_timKiem.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_timKiem.setBackground(new Color(62, 124, 177));
+		btn_timKiem.setBounds(747, 7, 100, 30);
+		pnl_ThoiGianChuyenNhanPhongMoi.add(btn_timKiem);
+		cbx_Lau.addItem("Chọn lầu");
+		cbx_Lau.addItem("Lầu 1");
+		cbx_Lau.addItem("Lầu 2");
+		cbx_Lau.addItem("Lầu 3");
+		cbx_Lau.addItem("Lầu 4");
+		cbx_Lau.addItem("Lầu 5");
 
 		btnDatPhong = new JButton("Chuyển phòng");
 		btnDatPhong.setBackground(Color.decode(hexColor_Green));
@@ -315,22 +335,20 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 
 		table.setBackground(new Color(255, 255, 255));
 		table.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-		table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã phòng", "Tên phòng", "Loại phòng",
-				"Trạng thái", "Ngày tạo phòng", "Vị trí phòng", "Ghi chú", "Tình trạng phòng" }) {
-			private static final long serialVersionUID = -143705667217047914L;
-
-			@Override
-			public boolean isCellEditable(int row, int column) {
-				return false; // Đặt tất cả các ô không thể chỉnh sửa
-			}
-		});
+		table.setModel(new DefaultTableModel(new Object[][] {},
+				new String[] { "T\u00EAn ph\u00F2ng", "Lo\u1EA1i ph\u00F2ng", "Tr\u1EA1ng th\u00E1i",
+						"Ng\u00E0y t\u1EA1o ph\u00F2ng", "V\u1ECB tr\u00ED ph\u00F2ng", "Ghi ch\u00FA" }));
 		scrollPane.add(table);
 		scrollPane.setViewportView(table);
 
 		model = (DefaultTableModel) table.getModel();
 		btnDatPhong.addActionListener(this);
 		btnHy.addActionListener(this);
+		btn_lamMoi.addActionListener(this);
 		table.addMouseListener(this);
+
+		cbx_Lau.addActionListener(this);
+		cbx_LoaiPhong.addActionListener(this);
 	}
 
 	@Override
@@ -344,9 +362,19 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		if (o.equals(btnHy)) {
 			setVisible(false);
 		}
+
+		if (o.equals(cbx_Lau) || o.equals(cbx_LoaiPhong)) {
+			LocPhong();
+		}
+
+		if (o.equals(btn_lamMoi)) {
+			cbx_Lau.setSelectedIndex(0);
+			cbx_LoaiPhong.setSelectedIndex(0);
+		}
 	}
 
 	public void ChuyenPhong() {
+
 		DAO_KH = new KhachHang_DAO();
 		DAO_PDP = new PhieuDatPhong_DAO();
 		DAO_NV = new NhanVien_DAO();
@@ -357,51 +385,47 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 
 		int row = table.getSelectedRow();
 
-		String maPDP = txtMaPDP.getText();
-		PhieuDatPhong phieuDatPhong = DAO_PDP.layPhieuDatPhong_TheoMaPhieuDat(maPDP);
-
-		Phong ph = null;
-		String maPhong = model.getValueAt(row, 0).toString();
-		ph = dao_Phong.timPhong_TheoMaPhong(maPhong);
-
-		NhanVien nv = null;
-		String maNV = hoaDon.getNhanVien().getMaNhanVien();
-		nv = DAO_NV.timNhanVien_TheoMaNhanVien(maNV);
+		Phong phongMoi = null;
+		String maPhongMoi = model.getValueAt(row, 0).toString();
+		phongMoi = dao_Phong.timPhong_TheoMaPhong(maPhongMoi);
 
 		KhachHang kh = null;
 		String maKH = hoaDon.getKhachHang().getMaKhachHang();
 		kh = DAO_KH.layKhachHang_TheoMaKhachHang(maKH);
 
-		TrangThaiPhong trThaiPh_DangSuDung = new TrangThaiPhong();
-		trThaiPh_DangSuDung = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Đang sử dụng");
-
-		TrangThaiPhong trThaiPh_Trong = new TrangThaiPhong();
-		trThaiPh_Trong = dao_TrangThaiPhong.timTrangThaiPhong_TheoTenTrangThai("Trống");
-
 		try {
+			dao_Phong = new Phong_DAO();
+			DAO_CTDV = new ChiTietDichVu_DAO();
+
 			int t = JOptionPane.showConfirmDialog(null, "Xác nhận chuyển phòng?", "Xác nhận",
 					JOptionPane.YES_NO_OPTION);
+
 			if (t == JOptionPane.YES_OPTION) {
 
-				ChiTietDichVu chiTietDV = new ChiTietDichVu();
+				chiTietHD.setPhong(phongMoi);
 
-				// Cập nhật lại chi tiết hóa đơn
-				chiTietHD = new ChiTietHoaDon(hoaDon, ph);
-				DAO_CTHD.capNhatCTHoaDon_TheoMaHoaDon_MaPhong(chiTietHD);
+				if (DAO_CTHD.capNhatCTHoaDon_TheoMaHoaDon_MaPhong(chiTietHD, phong.getMaPhong())) {
+					dao_Phong.capNhat_TrangThaiPhong(maPhongMoi, "OC");
+					dao_Phong.capNhat_TrangThaiPhong(phong.getMaPhong(), "VC");
 
-				if (chiTietHD != null) {
-					DAO_CTDV = new ChiTietDichVu_DAO();
-					ArrayList<ChiTietDichVu> dsCTDV = new ArrayList<>();
-					dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(chiTietHD.getHoaDon().getMaHoaDon());
+					ArrayList<ChiTietDichVu> dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon_MaPhong(
+							chiTietHD.getHoaDon().getMaHoaDon(), phong.getMaPhong());
 
-					JOptionPane.showMessageDialog(null,
-							"Chuyển phòng cho phiếu đặt phòng " + maPDP.trim() + " thành công");
-					dao_Phong.capNhat_TranThaiPhong(maPhong, trThaiPh_DangSuDung.getMaTrangThai());
-					dao_Phong.capNhat_TranThaiPhong(phong.getMaPhong(), trThaiPh_Trong.getMaTrangThai());
-					dispose();
+					if (dsCTDV != null) {
+
+						dsCTDV.forEach(ctdv -> {
+							DAO_CTDV.capNhatCTDichVu_TheoMaHoaDon_MaDichVu(ctdv, maPhongMoi);
+						});
+					}
+
+					JOptionPane.showMessageDialog(null, "Chuyển phòng thành công");
+
 				} else {
-					JOptionPane.showMessageDialog(null, "Thất bại, vui lòng thử lại");
+					JOptionPane.showMessageDialog(null, "Chuyển phòng thất bại, thử lại sau");
 				}
+
+				dispose();
+
 			}
 //			}
 
@@ -412,21 +436,11 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		}
 	}
 
-	public void SetModal_PhieuChuyenPhong(Timestamp thoiGianNhanPhong, String maPhieu, String tenNV, String soDT,
-			String tenKH) {
+	public void SetModal_PhieuChuyenPhong(Timestamp thoiGianNhanPhong, String soDT, String tenKH) {
 
-		txtMaPDP.setText(maPhieu);
-		txtNhanVien.setText(tenNV);
 		txtSoDienThoai.setText(soDT);
 		txtTenKH.setText(tenKH);
-		date_ChuyenPhong.setDate(cal.getTime()); // Thời gian chuyển phòng là thời gian hiện tại
 		date_NhanPhongBanDau.setDate(thoiGianNhanPhong); // Thời gian lần đầu khách vào phòng
-
-		// Tính số giờ đã hát
-		long khoangCachThoiGian = date_ChuyenPhong.getDate().getTime() - date_NhanPhongBanDau.getDate().getTime();
-		double soGioDaHat = khoangCachThoiGian / (60 * 60 * 1000);
-		txt_SoGioDaHat.setText(soGioDaHat + "");
-
 		dao_Phong = new Phong_DAO();
 		dao_LoaiPhong = new LoaiPhong_DAO();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
@@ -442,9 +456,8 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 			String maTrangThai = trThaiPh.getMaTrangThai().toString().trim();
 
 			if (maTrangThai.equals("VC")) {
-				Object[] rowData = { ph.getMaPhong(), ph.getTenPhong(), loaiPh.getTenLoaiPhong(),
-						trThaiPh.getTenTrangThai(), ph.getNgayTaoPhong(), ph.getViTriPhong(), ph.getGhiChu(),
-						ph.getTinhTrangPhong() };
+				Object[] rowData = { ph.getTenPhong(), loaiPh.getTenLoaiPhong(), trThaiPh.getTenTrangThai(),
+						ph.getNgayTaoPhong(), ph.getViTriPhong(), ph.getGhiChu() };
 				model.addRow(rowData);
 			}
 		}
@@ -463,8 +476,8 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 	public void SetThongTinPhongMoi() {
 		int row = table.getSelectedRow();
 
-		String tenPhong = model.getValueAt(row, 1).toString().trim();
-		String tenLoaiPhong = model.getValueAt(row, 2).toString().trim();
+		String tenPhong = model.getValueAt(row, 0).toString().trim();
+		String tenLoaiPhong = model.getValueAt(row, 1).toString().trim();
 
 		for (LoaiPhong loaiPh : dao_LoaiPhong.layTatCaLoaiPhong()) {
 			if (tenLoaiPhong.equals(loaiPh.getTenLoaiPhong().toString().trim()))
@@ -472,6 +485,46 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		}
 		txtTenPhong.setText(tenPhong);
 		txtLoaiPhong.setText(tenLoaiPhong);
+	}
+
+	public void LocPhong() {
+		boolean ketQuaLoc = false;
+
+		String lau_isSelected = cbx_Lau.getSelectedItem().toString().trim();
+		String chonLau = cbx_Lau.getItemAt(0).toString().trim();
+
+		String loaiPh_isSelected = cbx_LoaiPhong.getSelectedItem().toString().trim();
+		String chonLoaiPhong = cbx_LoaiPhong.getItemAt(0).toString().trim();
+
+		model.getDataVector().removeAllElements();
+		for (Phong ph : dao_Phong.layTatCaPhong()) {
+			boolean kiemTra = true;
+
+			LoaiPhong loaiPh = new LoaiPhong();
+			loaiPh = dao_LoaiPhong.layLoaiPhong_TheoMaLoaiPhong(ph.getLoaiPhong().getMaLoaiPhong());
+
+			TrangThaiPhong trThaiPh = new TrangThaiPhong();
+			trThaiPh = dao_TrangThaiPhong.timTrangThaiPhong_TheoMaTrangThai(ph.getTrangThaiPhong().getMaTrangThai());
+			String maTrangThai = trThaiPh.getMaTrangThai().toString().trim();
+
+			if (!lau_isSelected.equals(chonLau) && !(ph.getViTriPhong().toString().trim()).equals(lau_isSelected)) {
+				kiemTra = false;
+			}
+
+			if (!loaiPh_isSelected.equals(chonLoaiPhong)
+					&& !(loaiPh.getTenLoaiPhong().toString().trim()).equals(loaiPh_isSelected)) {
+				kiemTra = false;
+			}
+
+			if (maTrangThai.equals("VC") && kiemTra == true) {
+				Object[] rowData = { ph.getTenPhong(), loaiPh.getTenLoaiPhong(), trThaiPh.getTenTrangThai(),
+						ph.getNgayTaoPhong(), ph.getViTriPhong(), ph.getGhiChu() };
+				model.addRow(rowData);
+			}
+		}
+		if (!ketQuaLoc) {
+			model.fireTableDataChanged();
+		}
 	}
 
 	@Override

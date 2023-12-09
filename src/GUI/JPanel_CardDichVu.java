@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.awt.Font;
 import javax.swing.JButton;
 
-public class CardDichVu extends JPanel {
+public class JPanel_CardDichVu extends JPanel {
 	private DichVu dichVu;
 	private ThongTinDichVu ttdv;
 	private String hexColor_Blue1 = "#054A91";
@@ -34,7 +34,7 @@ public class CardDichVu extends JPanel {
 	private JLabel img_show_panel;
 	private ImageIcon originalIcon;
 
-	public CardDichVu(DichVu dichVu) {
+	public JPanel_CardDichVu(DichVu dichVu) {
 		setBackground(new Color(255, 255, 255));
 		this.dichVu = dichVu;
 
@@ -51,7 +51,7 @@ public class CardDichVu extends JPanel {
 		img_show_panel.setBounds(0, 0, 150, 150);
 		
 //		---mới 
-		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/"+dichVu.getThongTinDichVu().getHinhAnh()));
+		ImageIcon originalIcon = new ImageIcon(JPanel_CardDichVu.class.getResource("/img/"+dichVu.getThongTinDichVu().getHinhAnh()));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
@@ -89,7 +89,7 @@ public class CardDichVu extends JPanel {
 				int soLuongTon = ttdv.getSoLuong() - ttdv.getSoLuongDaSuDung();
 				String trangThai = dichVu.getTrangThai() ? "Còn hàng" : "Hết hàng";
 				String mieuTa = ttdv.getMoTa();
-				Modal_XemThongDichVu modal_XemTTDV = new Modal_XemThongDichVu();
+				JDialog_XemThongDichVu modal_XemTTDV = new JDialog_XemThongDichVu();
 				modal_XemTTDV.SetModal_XemThongTinDichVu( tenDV, donViTinh, donGia, soLuongTon, trangThai, mieuTa);
 				modal_XemTTDV.setVisible(true);
 			

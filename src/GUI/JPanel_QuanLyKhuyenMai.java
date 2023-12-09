@@ -260,7 +260,7 @@ public class JPanel_QuanLyKhuyenMai extends JPanel implements ActionListener {
 		// TODO Auto-generated method stub
 		Object o = e.getSource();
 		if (o.equals(btnThem)) {
-			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
+			JDialog_ThemKhachHang modalTKH = new JDialog_ThemKhachHang();
 			modalTKH.setVisible(true);
 		}
 
