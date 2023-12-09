@@ -12,9 +12,11 @@ import com.formdev.flatlaf.FlatLightLaf;
 import ConnectDB.ConnectDB;
 import DAO.LoaiNhanVien_DAO;
 import DAO.NhanVien_DAO;
+import DAO.TaiKhoan_DAO;
 import Entity.KhachHang;
 import Entity.LoaiNhanVien;
 import Entity.NhanVien;
+import Entity.TaiKhoan;
 import OtherFunction.HelpRamDomKH;
 
 import javax.swing.JLabel;
@@ -429,7 +431,7 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 		int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 		for (int i = 0; i < soLuongTrangThai; i++) {
 			String item = comboBox_TrangThai.getItemAt(i);
-			if (item.equals(trangThai)) {		
+			if (item.equals(trangThai)) {
 				comboBox_TrangThai.setSelectedItem(i);
 				break;
 			}
@@ -454,6 +456,9 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 
 	public void ThemNhanVien() {
 		if (ValueDate()) {
+			NhanVien_DAO DAO_NV = new NhanVien_DAO();
+			TaiKhoan_DAO DAO_TK = new TaiKhoan_DAO();
+			TaiKhoan taiKhoan = new TaiKhoan();
 			lbl_Valuedate.setText("");
 			String anhThe = pathImg;
 			String CCCD = txt_CCCD.getText();
@@ -474,7 +479,6 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 
 			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt_SoDienThoai.getText());
 			String maNhanVien = helpRamDomKH.taoMa("NhanVien", "maNhanVien", "NV");
-			txt_MaNhanVien.setText(maNhanVien);
 
 			int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 			for (int i = 0; i < soLuongTrangThai; i++) {
@@ -489,19 +493,22 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);
 
-			try {
-				NhanVien_DAO DAO_NV = new NhanVien_DAO();
-				if (DAO_NV.taoNhanVien(nv)) {
-					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên " + hoTen + " thành công");
-					setVisible(false);
-				} else {
-					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại. Vui lòng thử lại");
-
+			if (DAO_NV.timNhanVien_TheoMaNhanVien(maNhanVien) == null) {
+				try {
+					if (DAO_NV.taoNhanVien(nv)) {
+						txt_MaNhanVien.setText(maNhanVien);
+						DAO_TK.taoMoiTaiKhoan(maNhanVien, maNhanVien.trim(), "123456a");
+						JOptionPane.showMessageDialog(null, "Tạo mới nhân viên " + hoTen + " thành công");				
+						setVisible(false);
+					}
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Tạo mới nhân viên thất bại, vui lòng thử lại");
 				}
-			} catch (Exception e2) {
-				JOptionPane.showConfirmDialog(null, "Tạo mới nhân viên thất bại, vui lòng thử lại");
+			} else {
+				JOptionPane.showMessageDialog(null, "Nhân viên " + nv.getHoTen() + " đã tồn tại!");
 			}
 		}
+
 	}
 
 	public void CapNhatNhanVien() {
@@ -549,20 +556,23 @@ public class Modal_ThemNhanVien extends JFrame implements ActionListener, FocusL
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
 					trangThai, anhThe);
 
-			System.out.println(nv.toString());
-
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
-				int result = JOptionPane.showConfirmDialog(this,
-						"Bạn có chắc chắn muốn cập nhật khách hàng " + hoTen + "?", "Xác nhận",
-						JOptionPane.YES_NO_OPTION);
-				if (result == JOptionPane.YES_OPTION) {
-					if (DAO_NV.capNhatNhanVien(nv)) {
-						JOptionPane.showMessageDialog(null, "Cập nhật nhân viên " + hoTen + " thành công");
-						setVisible(false);
-					} else {
-						JOptionPane.showMessageDialog(null, "Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại");
+				if (DAO_NV.layTatCaNhanVien().contains(nv) == false) {
+					int result = JOptionPane.showConfirmDialog(this,
+							"Bạn có chắc chắn muốn cập nhật nhân viên " + hoTen + "?", "Xác nhận",
+							JOptionPane.YES_NO_OPTION);
+					if (result == JOptionPane.YES_OPTION) {
+						if (DAO_NV.capNhatNhanVien(nv)) {
+							JOptionPane.showMessageDialog(null, "Cập nhật nhân viên " + hoTen + " thành công");
+							setVisible(false);
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"Cập nhật thông tin nhân viên thất bại. Vui lòng thử lại");
+						}
 					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Nhân viên này chưa tồn tại trong hệ thống!");
 				}
 			} catch (Exception e2) {
 				JOptionPane.showConfirmDialog(null, "Cập nhật thông tin nhân viên thất bại, vui lòng thử lại");

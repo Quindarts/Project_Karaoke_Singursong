@@ -261,11 +261,10 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			String diaChi = txt__DiaChi.getText();
 			String sdt = txt__SDT.getText();
 			java.sql.Date ngaySinh = new Date((date_NgaySinh).getDate().getTime());
-//			Date dt = (Date) cal.getTime();
 			String ghiChu = txtA__GhiChu.getText();
 			HelpRamDomKH helpRamDomKH = new HelpRamDomKH(txt__SDT.getText());
 			String maKhachHang = helpRamDomKH.taoMa("KhachHang", "maKhachHang", "KH");
-			txt__MaKH.setText(maKhachHang);
+			
 			int diemThuong = 0;
 			boolean gioiTinh = btngr__gioiTinh.getSelection().getActionCommand().equals("Nam");
 			KhachHang kh = new KhachHang(maKhachHang, tenKhachHang, gioiTinh, ngaySinh, diaChi, sdt, diemThuong,
@@ -273,6 +272,7 @@ public class Modal_ThemKhachHang extends JFrame implements ActionListener {
 			if (DAO_KH.layKhachHang_TheoMaKhachHang(maKhachHang) == null) {
 				try {
 					DAO_KH.taoKhachHang(kh);
+					txt__MaKH.setText(maKhachHang);
 					JOptionPane.showMessageDialog(null, "Thêm khách hàng " + tenKhachHang + " thành công!");
 					setVisible(false);
 				} catch (Exception e2) {

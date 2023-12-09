@@ -24,19 +24,24 @@ public class TaiKhoan_DAO {
 	}
 
 	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau) {
-	
 		Connection con = ConnectDB.getInstance().getConnection();
+		PreparedStatement statement = null;
 		try {
-			PreparedStatement statement = con.prepareStatement("insert into TaiKhoan values(?,?,?,?)");
+			statement = con.prepareStatement("insert into TaiKhoan values(?,?,?,?)");
 			statement.setString(1, maNhanVien);
 			statement.setString(2, tenDangNhap);
 			statement.setString(3, matKhau);
-			statement.setBoolean(3, true);
+			statement.setBoolean(4, true);
 			statement.executeUpdate();
-			con.close();
-			statement.close();
-		} catch (SQLException e) {
-			return false;
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			try {
+				statement.close();
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
 		}
 		return true;
 	}
@@ -50,8 +55,7 @@ public class TaiKhoan_DAO {
 		Connection con = ConnectDB.getInstance().getConnection();
 		TaiKhoan taiKhoan = null;
 		try {
-			PreparedStatement statement = con
-					.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ?");
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ?");
 			statement.setString(1, tenDangNhap);
 			ResultSet rs = statement.executeQuery();
 
@@ -68,7 +72,6 @@ public class TaiKhoan_DAO {
 		}
 		return taiKhoan;
 	}
-	
 
 	public TaiKhoan timTaiKhoan_TheoMaNhanVien(String maNV) {
 		TaiKhoan taiKhoan = null;
@@ -105,7 +108,8 @@ public class TaiKhoan_DAO {
 		int n = 0;
 		TaiKhoan taiKhoan = null;
 		try {
-			PreparedStatement statement = con.prepareStatement("UPDATE TaiKhoan SET  matKhau = ? WHERE tenDangNhap = ?");
+			PreparedStatement statement = con
+					.prepareStatement("UPDATE TaiKhoan SET  matKhau = ? WHERE tenDangNhap = ?");
 			statement.setString(1, matKhau);
 			statement.setString(2, tenDangNhap);
 
@@ -117,7 +121,7 @@ public class TaiKhoan_DAO {
 				Boolean trangThai = rs.getBoolean("trangThai");
 				taiKhoan = new TaiKhoan(nhanVien, tenDangNhap, matKhau, trangThai);
 				n++;
-			
+
 			}
 		} catch (SQLException e) {
 			return n > 0;
@@ -145,13 +149,12 @@ public class TaiKhoan_DAO {
 		}
 		return taiKhoan;
 	}
-	
+
 	public TaiKhoan timTaiKhoan_TheoTenDangNhap(String tenDangNhap) {
 		Connection con = ConnectDB.getInstance().getConnection();
 		TaiKhoan taiKhoan = null;
 		try {
-			PreparedStatement statement = con
-					.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ?");
+			PreparedStatement statement = con.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ?");
 			statement.setString(1, tenDangNhap);
 			ResultSet rs = statement.executeQuery();
 
@@ -167,6 +170,6 @@ public class TaiKhoan_DAO {
 			return null;
 		}
 		return taiKhoan;
-		
+
 	}
 }

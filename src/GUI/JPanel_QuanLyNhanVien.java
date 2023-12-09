@@ -95,6 +95,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 	private ArrayList<LoaiNhanVien> listLNV;
 	private ButtonGroup btnGr_LocTheoGioiTinh;
 	private ButtonGroup btnGr_TimTheoLoai;
+	private ArrayList<LoaiNhanVien> listTrangThai;
 
 	/**
 	 * Rounded JPanel
@@ -321,7 +322,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		cb_Loc_LoaiTrangThai.setBounds(10, 30, 215, 25);
 		pnl_Loc_TheoGioiTinh_1_1.add(cb_Loc_LoaiTrangThai);
 		cb_Loc_LoaiTrangThai.addItem("Chọn trạng thái");
-		cb_Loc_LoaiTrangThai.addItem("Còn làm");
+		cb_Loc_LoaiTrangThai.addItem("Đang làm");
 		cb_Loc_LoaiTrangThai.addItem("Nghỉ làm");
 		cb_Loc_LoaiTrangThai.addItem("Nghỉ phép");
 

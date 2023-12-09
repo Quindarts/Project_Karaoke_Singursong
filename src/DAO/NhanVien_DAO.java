@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import javax.swing.JOptionPane;
+
 import ConnectDB.ConnectDB;
 import Entity.NhanVien;
 import Entity.LoaiNhanVien;
@@ -136,7 +138,7 @@ public class NhanVien_DAO {
 		}
 		return nhanVien;
 	}
-	
+
 	public NhanVien timNhanVien_TheoSoDienThoai(String soDT) {
 		NhanVien nhanVien = null;
 		ConnectDB.getInstance();
@@ -173,7 +175,7 @@ public class NhanVien_DAO {
 		}
 		return nhanVien;
 	}
-	
+
 	public ArrayList<NhanVien> timNhanVien_TheoHoTen(String ten) {
 		NhanVien nhanVien = null;
 		ConnectDB.getInstance();
@@ -181,7 +183,7 @@ public class NhanVien_DAO {
 		PreparedStatement statement = null;
 		ArrayList<NhanVien> dsNV = new ArrayList<>();
 		try {
-			String sql = "SELECT * FROM NhanVien WHERE hoTen like N'%"+ ten.trim() +"%'";
+			String sql = "SELECT * FROM NhanVien WHERE hoTen like N'%" + ten.trim() + "%'";
 			statement = con.prepareStatement(sql);
 			ResultSet rs = statement.executeQuery();
 			while (rs.next()) {
@@ -238,11 +240,11 @@ public class NhanVien_DAO {
 			n = statement.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
+
 		} finally {
 			try {
 				statement.close();
 			} catch (Exception e2) {
-				// TODO: handle exception
 				e2.printStackTrace();
 			}
 		}

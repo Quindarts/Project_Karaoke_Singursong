@@ -277,6 +277,12 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		cbx_Lau = new JComboBox<String>();
 		cbx_Lau.setBounds(529, 42, 120, 21);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(cbx_Lau);
+		cbx_Lau.addItem("Chọn lầu");
+		cbx_Lau.addItem("Lầu 1");
+		cbx_Lau.addItem("Lầu 2");
+		cbx_Lau.addItem("Lầu 3");
+		cbx_Lau.addItem("Lầu 4");
+		cbx_Lau.addItem("Lầu 5");
 		
 		btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setForeground(Color.WHITE);
@@ -284,13 +290,7 @@ public class Modal_PhieuChuyenPhong extends JFrame implements ActionListener, Mo
 		btnLamMoi.setBackground(new Color(62, 124, 177));
 		btnLamMoi.setBounds(747, 46, 100, 30);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(btnLamMoi);
-		cbx_Lau.addItem("Chọn lầu");
-		cbx_Lau.addItem("Lầu 1");
-		cbx_Lau.addItem("Lầu 2");
-		cbx_Lau.addItem("Lầu 3");
-		cbx_Lau.addItem("Lầu 4");
-		cbx_Lau.addItem("Lầu 5");
-
+		
 		btnDatPhong = new JButton("Chuyển phòng");
 		btnDatPhong.setBackground(Color.decode(hexColor_Green));
 		btnDatPhong.setForeground(new Color(255, 255, 255));
