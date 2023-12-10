@@ -424,11 +424,14 @@ public class JDialog_PhieuChuyenPhong extends JFrame implements ActionListener, 
 		}
 	}
 
-	public void SetModal_PhieuChuyenPhong(Timestamp thoiGianNhanPhong, String soDT, String tenKH) {
+	public void SetModal_PhieuChuyenPhong(HoaDon hoaDon) {
 
-		txtSoDienThoai.setText(soDT);
-		txtTenKH.setText(tenKH);
-		date_NhanPhongBanDau.setDate(thoiGianNhanPhong); // Thời gian lần đầu khách vào phòng
+		DAO_KH = new KhachHang_DAO();
+		KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hoaDon.getKhachHang().getMaKhachHang());
+		
+		txtSoDienThoai.setText(kh.getSoDienThoai());
+		txtTenKH.setText(kh.getHoTen());
+		date_NhanPhongBanDau.setDate(hoaDon.getNgayLap()); // Thời gian lần đầu khách vào phòng
 		dao_Phong = new Phong_DAO();
 		dao_LoaiPhong = new LoaiPhong_DAO();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();

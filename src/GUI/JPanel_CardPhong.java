@@ -358,20 +358,16 @@ public class JPanel_CardPhong extends JPanel {
 		chuyenPhongMenuItem.addActionListener(e1 -> {
 
 			try {
-				ChiTietHoaDon cthd = new ChiTietHoaDon();
-				cthd = DAO_CTHD.timCTHoaDon_TheoMaPhong(phong.getMaPhong());
-				if (cthd != null)
-					dsChiTietHoaDon.forEach(value -> {
-						hd = value.getHoaDon();
-						hd = DAO_HD.layHoaDon_TheoMaHoaDon(value.getHoaDon().getMaHoaDon());
-						kh = hd.getKhachHang();
-						tenKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getHoTen();
-						sdtKH = DAO_KH.layKhachHang_TheoMaKhachHang(kh.getMaKhachHang()).getSoDienThoai();
-					});
+				DAO_HD = new HoaDon_DAO();
+				hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
+
+				ChiTietHoaDon cthd = DAO_CTHD.timCTHoaDon_TheoMaHoaDon_MaPhong(hoaDon.getMaHoaDon(),
+						phong.getMaPhong());
 
 				JDialog_PhieuChuyenPhong phieuChuyenPhong = new JDialog_PhieuChuyenPhong(phong, hoaDon, cthd);
+
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), sdtKH, tenKH);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hoaDon);
 
 			} catch (Exception e2) {
 				e2.printStackTrace();
