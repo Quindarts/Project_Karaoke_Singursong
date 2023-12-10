@@ -428,9 +428,11 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 
 		int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 		for (int i = 0; i < soLuongTrangThai; i++) {
-			String item = comboBox_TrangThai.getItemAt(i);
-			if (item.equals(trangThai)) {		
-				comboBox_TrangThai.setSelectedItem(i);
+			String item = comboBox_TrangThai.getItemAt(i).trim();
+			System.out.println(item);
+			System.out.println(trangThai);
+			if (trangThai != null) {
+				comboBox_TrangThai.setSelectedItem(trangThai);
 				break;
 			}
 		}

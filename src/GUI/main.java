@@ -27,7 +27,7 @@ import Entity.TrangThaiPhong;
 import OtherFunction.HelpXLSX;
 
 public class main extends JFrame {
-	
+
 	public static void main(String[] args) {
 
 		EventQueue.invokeLater(new Runnable() {
@@ -36,15 +36,12 @@ public class main extends JFrame {
 
 			public void run() {
 				try {
-				
 					try {
 						ConnectDB.getInstance().connect();
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					
 					FlatLightLaf.setup();
-
 					app = new JFrame_DangNhap();
 					app.setVisible(true);
 
@@ -57,7 +54,5 @@ public class main extends JFrame {
 		});
 
 	}
-
-	
 
 }
