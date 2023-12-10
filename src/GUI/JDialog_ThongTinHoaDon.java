@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -51,6 +52,8 @@ import java.awt.Graphics2D;
 
 import javax.swing.JTextField;
 import java.awt.SystemColor;
+import java.awt.Toolkit;
+
 import javax.swing.JTextArea;
 import javax.swing.border.EtchedBorder;
 import java.awt.Rectangle;
@@ -73,8 +76,7 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 	/**
 	 * Color
 	 */
-	
-	
+
 	private NhanVien nhanVien;
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
@@ -127,17 +129,24 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 	private JTextField txtTienCoc;
 	private ChiTietHoaDon cthd;
 
-	
 	private final DecimalFormat dcf = new DecimalFormat("#,##0 VND");
+
 	public JDialog_ThongTinHoaDon() {
-		setBounds(100, 100, 550, 867);
+
+		setFont(new Font("Segoe UI", Font.PLAIN, 13));
+		setIconImage(
+				Toolkit.getDefaultToolkit().getImage(JDialog_ThongTinHoaDon.class.getResource("/icon/microphone.png")));
+		setTitle("SING UR SONG");
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+		setBounds(100, 100, 550, 776);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setForeground(Color.decode(hexColor_Blue1));
 		contentPanel.setBackground(new Color(255, 255, 255));
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
-
+		setLocationRelativeTo(null);
 		JPanel panel_Info = new JPanel();
 		panel_Info.setBounds(178, 0, 346, 111);
 		panel_Info.setBackground(new Color(255, 255, 255));
@@ -193,7 +202,7 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 
 		JLabel lblPDP = new JLabel("HÓA ĐƠN");
 		lblPDP.setHorizontalAlignment(SwingConstants.CENTER);
-		lblPDP.setBounds(10, 11, 494, 29);
+		lblPDP.setBounds(10, 0, 494, 29);
 		panel_Detail.add(lblPDP);
 		lblPDP.setForeground(Color.decode(hexColor_Blue1));
 		lblPDP.setBackground(new Color(240, 240, 240));
@@ -260,43 +269,43 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		JLabel lblMPhiu_1_1_1 = new JLabel("Tổng tiền mặt hàng :");
 		lblMPhiu_1_1_1.setForeground(Color.decode(hexColor_Blue1));
 		lblMPhiu_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblMPhiu_1_1_1.setBounds(265, 659, 145, 22);
+		lblMPhiu_1_1_1.setBounds(265, 604, 145, 22);
 		contentPanel.add(lblMPhiu_1_1_1);
 
 		txtTongTienDV = new JTextField();
 		txtTongTienDV.setBorder(null);
 		txtTongTienDV.setColumns(10);
-		txtTongTienDV.setBounds(389, 659, 135, 22);
+		txtTongTienDV.setBounds(389, 604, 135, 22);
 		contentPanel.add(txtTongTienDV);
 
 		JLabel lblNhnVinLp_1 = new JLabel("Chiếu khấu :");
 		lblNhnVinLp_1.setForeground(Color.decode(hexColor_Blue1));
 		lblNhnVinLp_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNhnVinLp_1.setBounds(265, 686, 101, 22);
+		lblNhnVinLp_1.setBounds(265, 631, 101, 22);
 		contentPanel.add(lblNhnVinLp_1);
 
 		txtChietKhau = new JTextField();
 		txtChietKhau.setBorder(null);
 		txtChietKhau.setColumns(10);
-		txtChietKhau.setBounds(389, 686, 135, 22);
+		txtChietKhau.setBounds(389, 631, 135, 22);
 		contentPanel.add(txtChietKhau);
 
 		JLabel lblTinCc = new JLabel("Tổng hóa đơn :");
-		lblTinCc.setBounds(265, 713, 114, 22);
+		lblTinCc.setBounds(265, 658, 114, 22);
 		contentPanel.add(lblTinCc);
 		lblTinCc.setForeground(Color.decode(hexColor_Blue1));
 		lblTinCc.setFont(new Font("Tahoma", Font.PLAIN, 13));
 
 		txtTongTienHD = new JTextField();
 		txtTongTienHD.setBorder(null);
-		txtTongTienHD.setBounds(389, 713, 135, 22);
+		txtTongTienHD.setBounds(389, 658, 135, 22);
 		contentPanel.add(txtTongTienHD);
 		txtTongTienHD.setColumns(10);
 		{
 
 			panel_button = new JPanel();
 			panel_button.setBackground(Color.decode(hexColor_Blue4));
-			panel_button.setBounds(0, 772, 534, 56);
+			panel_button.setBounds(0, 690, 534, 56);
 			contentPanel.add(panel_button);
 			panel_button.setLayout(null);
 			{
@@ -335,12 +344,12 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 
 			JPanel panel_2 = new JPanel();
 			panel_2.setBackground(new Color(255, 255, 255));
-			panel_2.setBounds(10, 417, 514, 210);
+			panel_2.setBounds(10, 417, 514, 177);
 			contentPanel.add(panel_2);
 			panel_2.setLayout(null);
 
 			JScrollPane scrollPane_1 = new JScrollPane();
-			scrollPane_1.setBounds(0, 0, 514, 210);
+			scrollPane_1.setBounds(0, 0, 514, 175);
 			panel_2.add(scrollPane_1);
 
 			table_DichVu = new JTable();
@@ -352,25 +361,25 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		JLabel lblMPhiu_1_1_1_1 = new JLabel("Tiền khách đưa  :");
 		lblMPhiu_1_1_1_1.setForeground(new Color(5, 74, 145));
 		lblMPhiu_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblMPhiu_1_1_1_1.setBounds(25, 686, 130, 22);
+		lblMPhiu_1_1_1_1.setBounds(25, 631, 130, 22);
 		contentPanel.add(lblMPhiu_1_1_1_1);
 
 		JLabel lblNhnVinLp_1_1 = new JLabel("Tiền thừa : ");
 		lblNhnVinLp_1_1.setForeground(new Color(5, 74, 145));
 		lblNhnVinLp_1_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblNhnVinLp_1_1.setBounds(25, 713, 101, 22);
+		lblNhnVinLp_1_1.setBounds(25, 658, 101, 22);
 		contentPanel.add(lblNhnVinLp_1_1);
 
 		txtTienKhachDua = new JTextField();
 		txtTienKhachDua.setColumns(10);
 		txtTienKhachDua.setBorder(null);
-		txtTienKhachDua.setBounds(149, 686, 145, 22);
+		txtTienKhachDua.setBounds(149, 631, 145, 22);
 		contentPanel.add(txtTienKhachDua);
 
 		txtTienThua = new JTextField();
 		txtTienThua.setColumns(10);
 		txtTienThua.setBorder(null);
-		txtTienThua.setBounds(149, 713, 145, 22);
+		txtTienThua.setBounds(149, 658, 145, 22);
 		contentPanel.add(txtTienThua);
 
 		JScrollPane scrollPane = new JScrollPane();
@@ -385,13 +394,13 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		JLabel lblMPhiu_1_1_1_1_1 = new JLabel("Tiền cọc (Nếu có) :");
 		lblMPhiu_1_1_1_1_1.setForeground(new Color(5, 74, 145));
 		lblMPhiu_1_1_1_1_1.setFont(new Font("Tahoma", Font.PLAIN, 13));
-		lblMPhiu_1_1_1_1_1.setBounds(25, 659, 130, 22);
+		lblMPhiu_1_1_1_1_1.setBounds(25, 604, 130, 22);
 		contentPanel.add(lblMPhiu_1_1_1_1_1);
 
 		txtTienCoc = new JTextField();
 		txtTienCoc.setColumns(10);
 		txtTienCoc.setBorder(null);
-		txtTienCoc.setBounds(149, 659, 145, 22);
+		txtTienCoc.setBounds(149, 604, 145, 22);
 		contentPanel.add(txtTienCoc);
 	}
 
@@ -421,13 +430,11 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		nv = DAO_NV.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
 		pdp = DAO_PDP.layPhieuDatPhong_TheoMaPhieuDat(hd.getPhieuDatPhong().getMaPhieuDat());
 
-
 		km = DAO_KM.layKhuyenMai_TheoMaKhuyenMai(hd.getKhuyenMai().getMaKhuyenMai());
 
 		txtMaHD.setText(hd.getMaHoaDon());
 		date_NgayLap.setText(hd.getNgayLap().toString());
 		txtNVLap.setText(nv.getHoTen());
-
 
 		// Lấy thông tin phòng và loại phòng
 		int sttCTHD = 1;
@@ -444,7 +451,7 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 				modelPhong.addRow(rowData);
 			}
 		}
-		
+
 //		txtTienCoc.setText(Double.toString(cthd.tinhTongTienPhong()));
 
 		// Lấy thông tin khách hàng:
@@ -457,13 +464,13 @@ public class JDialog_ThongTinHoaDon extends JDialog {
 		ArrayList<ChiTietDichVu> dsCTDV = DAO_CTDV.layDanhSachChiTietDichVu_TheoMaHoaDon(ma);
 		if (dsCTDV != null) {
 			for (ChiTietDichVu ctdv : dsCTDV) {
-				Object[] rowData = { sttCTDV++, ctdv.getDichVu().getTenDichVu(), dcf.format(ctdv.getDichVu().getDonGia()),
-						ctdv.getSoLuong(), dcf.format(ctdv.thanhTien())};
+				Object[] rowData = { sttCTDV++, ctdv.getDichVu().getTenDichVu(),
+						dcf.format(ctdv.getDichVu().getDonGia()), ctdv.getSoLuong(), dcf.format(ctdv.thanhTien()) };
 				modelDichVu.addRow(rowData);
 
 			}
 		}
-	
+
 		txtTienCoc.setText(dcf.format(hd.tinhTienPhong(dsCTHD)));
 		txtTongTienDV.setText(dcf.format(hd.tinhTienDichVu(dsCTDV)));
 		txtTongTienHD.setText(dcf.format(hd.tinhTongTien(dsCTHD, dsCTDV)));
