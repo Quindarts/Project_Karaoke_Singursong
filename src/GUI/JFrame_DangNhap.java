@@ -275,11 +275,11 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 					if (taiKhoanDangNhap.isTrangThai()) {
 						thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
 						thuNgan.setVisible(true);
+						setVisible(false);
+
 					} else {
 						JOptionPane.showMessageDialog(null, "Bạn đã nghĩ làm!");
 					}
-//					dispose();
-
 				}
 			}
 		}

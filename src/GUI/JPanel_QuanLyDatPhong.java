@@ -899,6 +899,10 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 						txtTenKhachHang.setEnabled(true);
 					}
 
+					if (txtSoDienThoai.getText().trim() == "") {
+						JOptionPane.showMessageDialog(null, "Số điện thoại nhập vào không được trống", "Thông báo lỗi",
+								JOptionPane.INFORMATION_MESSAGE);
+					}
 					if (txtSoDienThoai.getText().trim() != "" && matcher.matches()) {
 						KhachHang_DAO KH_DAO = new KhachHang_DAO();
 						KhachHang kh = new KhachHang();
@@ -909,6 +913,11 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 							txtTenKhachHang.setEnabled(false);
 						} else {
 							txtTenKhachHang.setEnabled(true);
+							JOptionPane.showMessageDialog(null,
+									"Số điện thoại bạn nhập vào không tồn tại, vui lòng thêm khách hàng mới",
+									"Thông báo lỗi", JOptionPane.INFORMATION_MESSAGE);
+							JDialog_ThemKhachHang modal_ThemKhachHang = new JDialog_ThemKhachHang();
+							modal_ThemKhachHang.setVisible(true);
 						}
 					}
 				}
@@ -1147,7 +1156,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 				bienDem++;
 			}
 
-			if (bienDem == soLuongPhong) {
+			if (bienDem == soLuongPhong && bienDem != 0) {
 				JOptionPane.showMessageDialog(null, "Đặt phòng thành công");
 				clearForm();
 				clearFormTimKiem();
