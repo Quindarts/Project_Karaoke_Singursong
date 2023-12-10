@@ -131,7 +131,7 @@ public class JFrame_DoiMatKhau extends JFrame implements KeyListener, ItemListen
 	 */
 	public JFrame_DoiMatKhau(TaiKhoan taiKhoan) {
 
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 439, 370);
 		contentPane = new JPanel();
 		contentPane.setBackground(new Color(255, 255, 255));
