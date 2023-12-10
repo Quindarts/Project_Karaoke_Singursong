@@ -460,7 +460,7 @@ public class JDialog_TrangCaNhan extends JFrame implements ActionListener, ItemL
 										btn_ChangePwd = new JButton("Đổi mật khẩu");
 										btn_ChangePwd.setForeground(Color.WHITE);
 										btn_ChangePwd.setFont(new Font("Segoe UI", Font.BOLD, 13));
-										btn_ChangePwd.setBackground(new Color(0, 255, 0));
+										btn_ChangePwd.setBackground(new Color(128, 255, 128));
 										btn_ChangePwd.setBounds(618, 220, 137, 30);
 										pnl_ThongTin.add(btn_ChangePwd);
 						btn_BoQua.addActionListener(this);

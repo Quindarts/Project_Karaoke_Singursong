@@ -656,7 +656,7 @@ public class Phong_DAO {
 		return dsPhong;
 	}
 
-	public ArrayList<Phong> timDSPhongWhenSelectCBO(String floor, String maTrangThai, String maTinhTrang) {
+	public ArrayList<Phong> timDSPhongWhenSelectCBO(String floor, String maTrangThai) {		
 		Phong phong = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -665,35 +665,28 @@ public class Phong_DAO {
 		ArrayList<Phong> dsPhong = new ArrayList<>();
 		String sql = "SELECT * FROM Phong WHERE 1 = 1";
 		if (floor != null && !floor.isEmpty() && !floor.equals("Tất cả")) {
-			sql += " AND viTriPhong = ?";
+		    sql += " AND viTriPhong = ?";
 		}
 
 		if (maTrangThai != null && !maTrangThai.isEmpty() && !maTrangThai.equals("Tất cả")) {
-			sql += " AND maTrangThai = ?";
+		    sql += " AND maTrangThai = ?";
 		}
 
-		if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
-			sql += " AND tinhTrangPhong = ?";
-		}
 		try {
 			statement = con.prepareStatement(sql);
 			int parameterIndex = 1;
-
+			
 			if (floor != null && !floor.isEmpty() && !floor.equals("Tất cả")) {
-				statement.setString(parameterIndex++, floor);
-
-			}
-
+		        statement.setString(parameterIndex++, floor);
+		        
+		    }
+			
 			if (maTrangThai != null && !maTrangThai.isEmpty() && !maTrangThai.equals("Tất cả")) {
+				
+		        statement.setString(parameterIndex++, maTrangThai);
+		        
+		    }
 
-				statement.setString(parameterIndex++, maTrangThai);
-
-			}
-
-			if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
-
-				statement.setString(parameterIndex++, maTinhTrang);
-			}
 //			statement.setString(1, floor);
 //			statement.setString(2, maTrangThai);
 //			statement.setString(3, maTinhTrang);
@@ -721,7 +714,7 @@ public class Phong_DAO {
 				e2.printStackTrace();
 			}
 		}
-
+		
 		return dsPhong;
 	}
 

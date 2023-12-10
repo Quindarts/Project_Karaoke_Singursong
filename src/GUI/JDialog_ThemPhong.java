@@ -22,6 +22,7 @@ import java.awt.FlowLayout;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.regex.Pattern;
 import java.awt.Component;
@@ -32,6 +33,8 @@ import java.awt.Color;
 
 import com.ctc.wstx.shaded.msv_core.verifier.identity.Matcher;
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
+
 import javax.swing.JScrollPane;
 import java.awt.Choice;
 import javax.swing.JScrollBar;
@@ -55,6 +58,7 @@ import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
+
 
 public class JDialog_ThemPhong extends JFrame {
 
@@ -210,7 +214,14 @@ public class JDialog_ThemPhong extends JFrame {
 
 		date_NgayTaoPhong = new JDateChooser();
 		date_NgayTaoPhong.setBounds(621, 90, 255, 25);
+		date_NgayTaoPhong.setEnabled(false);
+		
+//		Date today = new Date();
+//        Calendar calendar = Calendar.getInstance();
+//        calendar.setTime(today);
+        date_NgayTaoPhong.setDate(new java.util.Date());
 		panel_1.add(date_NgayTaoPhong);
+		
 
 		JPanel pnl_GhiChu = new JPanel();
 		pnl_GhiChu.setBackground(new Color(255, 255, 255));
@@ -291,10 +302,7 @@ public class JDialog_ThemPhong extends JFrame {
 		cbBox_TrangThaiPhong.setSelectedItem(trangThai);
 //		txt_ViTriPhong.setText(viTri);
 		txtA_GhiChu.setText(ghiChu);
-	
-		
-		System.out.println(tinhTrang);
-		
+			
 		java.util.Date ngayTaotr;
 		try {
 			ngayTaotr = dateFormat_YMD.parse(ngayTao);
@@ -302,6 +310,12 @@ public class JDialog_ThemPhong extends JFrame {
 		} catch (java.text.ParseException e) {
 			e.printStackTrace();
 		}
+		
+		cbBox_viTriPhong.setEditable(false);
+		cbBox_viTriPhong.setEnabled(false);
+		cbBox_viTriPhong.setSelectedItem(viTri.trim());
+		
+		date_NgayTaoPhong.setEnabled(false);
 		
 	}
 	
@@ -323,7 +337,7 @@ public class JDialog_ThemPhong extends JFrame {
 
 //	      --------
 	    maPhong = HelpRamDomMaPhong.taoMa(String.valueOf(result));
-	       
+	    tenPhong = maPhong;
 
 		LoaiPhong lp = null;
 		TrangThaiPhong ttp = null;
@@ -353,13 +367,19 @@ public class JDialog_ThemPhong extends JFrame {
 			JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
 		}
 
+		if(!ttp.getMaTrangThai().trim().equals("OOO")) {
+			tinhTrang = "Đang hoạt động";
+		} else {
+			tinhTrang = "Sửa chữa";
+		}
+		
 		Phong phong = new Phong(maPhong, tenPhong, lp, ttp, ngayTaoPhong, viTriPhong, ghiChu, tinhTrang);
 
 		try {
 			if (DAO_P.taoPhong(phong)) {
 				
 				JOptionPane.showMessageDialog(null, "Tạo phòng mới thành công!");
-
+				setVisible(false);
 			} else {
 				
 				JOptionPane.showMessageDialog(null, "Tạo phòng thất bại, vui lòng thử lại.");
