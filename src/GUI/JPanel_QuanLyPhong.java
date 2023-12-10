@@ -18,6 +18,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Insets;
+import java.awt.SystemColor;
 import java.awt.geom.RoundRectangle2D;
 import java.sql.Date;
 import java.text.ParseException;
@@ -306,9 +307,10 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		date_To.setDateFormatString("yyyy-MM-dd");
 		panel_3.add(date_To);
 		
-		btn_find_date = new JButton("Tìm");
+		btn_find_date = new JButton("Lọc");
 		btn_find_date.setForeground(new Color(255, 255, 255));
-		btn_find_date.setBackground(new Color(0, 0, 255));
+		btn_find_date.setFont(new Font("Segoe UI", Font.BOLD, 13));
+		btn_find_date.setBackground(SystemColor.textHighlight);
 		btn_find_date.setBounds(10, 103, 198, 30);
 		panel_3.add(btn_find_date);
 		
