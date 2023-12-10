@@ -321,7 +321,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		cb_Loc_LoaiTrangThai.setBounds(10, 30, 215, 25);
 		pnl_Loc_TheoGioiTinh_1_1.add(cb_Loc_LoaiTrangThai);
 		cb_Loc_LoaiTrangThai.addItem("Chọn trạng thái");
-		cb_Loc_LoaiTrangThai.addItem("Còn làm");
+		cb_Loc_LoaiTrangThai.addItem("Ðang làm");
 		cb_Loc_LoaiTrangThai.addItem("Nghỉ làm");
 		cb_Loc_LoaiTrangThai.addItem("Nghỉ phép");
 
@@ -345,7 +345,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 					String sdt = model.getValueAt(row, 5).toString();
 					String cccd = model.getValueAt(row, 6).toString();
 					String diaChi = model.getValueAt(row, 7).toString();
-					String trangThai = model.getValueAt(row, 8).toString();
+					String trangThai = model.getValueAt(row, 8).toString().trim();
 					String anhThe = "";
 					try {
 						anhThe = model.getValueAt(row, 9).toString();
