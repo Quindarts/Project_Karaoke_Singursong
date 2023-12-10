@@ -96,7 +96,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 	private JComboBox<String> cbo_floor;
 	private JLabel textField;
 	private JComboBox<String> cbo_status;
-	private JComboBox<String> cbo_trangthai;
 	private TrangThaiPhong_DAO DAO_TTP;
 	private JDateChooser date_From;
 	private JDateChooser date_To;
@@ -257,7 +256,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(new Color(255, 255, 255));
 		panel_2.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "L\u1ECDc", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 255)));
-		panel_2.setBounds(27, 25, 204, 230);
+		panel_2.setBounds(27, 25, 204, 161);
 		panel_1.add(panel_2);
 		panel_2.setLayout(null);
 		
@@ -280,10 +279,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		cbo_status.addItem("Đang sử dụng");
 		cbo_status.addItem("Không phục vụ");
 		
-		cbo_trangthai = new JComboBox<String>();
-		cbo_trangthai.setBounds(10, 190, 184, 30);
-		panel_2.add(cbo_trangthai);
-		
 		JLabel lblNewLabel = new JLabel("Lầu: ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setBounds(10, 25, 75, 20);
@@ -294,15 +289,10 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		lblTnhTrng.setBounds(10, 82, 184, 20);
 		panel_2.add(lblTnhTrng);
 		
-		JLabel lblTrngThiPhng = new JLabel("Trạng thái phòng: ");
-		lblTrngThiPhng.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblTrngThiPhng.setBounds(10, 160, 184, 20);
-		panel_2.add(lblTrngThiPhng);
-		
 		JPanel panel_3 = new JPanel();
 		panel_3.setBorder(new TitledBorder(null, "Tìm theo ngày tạo", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 255)));
 		panel_3.setBackground(new Color(255, 255, 255));
-		panel_3.setBounds(27, 265, 218, 148);
+		panel_3.setBounds(27, 196, 218, 148);
 		panel_1.add(panel_3);
 		panel_3.setLayout(null);
 		
@@ -331,9 +321,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		lblNewLabel_1_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel_1_1.setBounds(10, 56, 63, 30);
 		panel_3.add(lblNewLabel_1_1);
-		cbo_trangthai.addItem("Tất cả");
-		cbo_trangthai.addItem("Đang hoạt động");
-		cbo_trangthai.addItem("Sửa chữa");
 		
 		
 		btnThem = new JButton("Thêm");
@@ -371,7 +358,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 				DocDuLieu();
 				cbo_floor.setSelectedItem("Tất cả");
 				cbo_status.setSelectedItem("Tất cả");
-				cbo_trangthai.setSelectedItem("Tất cả");
 				date_From.setDate(null);
 				date_To.setDate(null);
 			}
@@ -398,7 +384,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		txtFindCodeRoom.addKeyListener(this); 
 		cbo_status.addItemListener(this);
 		cbo_floor.addItemListener(this);
-		cbo_trangthai.addItemListener(this);
 	}
 	
 
@@ -410,7 +395,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		if (o.equals(btnThem)) {
 //			Modal_ThemKhachHang modalTKH = new Modal_ThemKhachHang();
 //			modalTKH.setVisible(true);
-			
 			Modal_ThemPhong modalTP = new Modal_ThemPhong();
 			modalTP.setVisible(true);
 		} else if(o.equals(btnTimKiem) && !txtFindCodeRoom.getText().equals("")) {
@@ -454,10 +438,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		        }
 			} else {
 				JOptionPane.showMessageDialog(null, "Phải nhập đầy đủ");
-			}
-			
-			
-    		 
+			} 
 		}
 
 	}
@@ -467,10 +448,15 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		String maPhong = model.getValueAt(row, 0).toString();
 		Phong phong = new Phong(maPhong);
 		try {
-			String tenPhong = DAO_P.timPhong_TheoMaPhong(maPhong).getTenPhong();	
-			DAO_P.xoaPhong(phong);
-			JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenPhong + "thành công");
-			model.removeRow(row);
+			int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa không?", "Đóng?", JOptionPane.YES_NO_OPTION);
+			if (reply == JOptionPane.YES_OPTION) {
+				String tenPhong = DAO_P.timPhong_TheoMaPhong(maPhong).getTenPhong();	
+				DAO_P.xoaPhong(phong);
+				JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenPhong + "thành công");
+				model.removeRow(row);
+			} else {
+			   
+			}
 		} catch (Exception e2) {
 			JOptionPane.showMessageDialog(null, "Xóa thất bại");
 		}
@@ -548,7 +534,6 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 			
             String selectFloor = (String) cbo_floor.getSelectedItem();
             String selectStatus = (String) cbo_status.getSelectedItem();
-            String selectTinhTrang = (String) cbo_trangthai.getSelectedItem();
             
             model = (DefaultTableModel) table_Phong.getModel();
 	    	model.getDataVector().removeAllElements();
@@ -561,9 +546,9 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
     		
     		try {
     			if(!(TTP == null)) {
-    				dsP = DAO_P.timDSPhongWhenSelectCBO(selectFloor, TTP.getMaTrangThai().trim() , selectTinhTrang);
+    				dsP = DAO_P.timDSPhongWhenSelectCBO(selectFloor, TTP.getMaTrangThai().trim());
     			} else {
-    				dsP = DAO_P.timDSPhongWhenSelectCBO(selectFloor, "Tất cả" , selectTinhTrang);
+    				dsP = DAO_P.timDSPhongWhenSelectCBO(selectFloor, "Tất cả");
     			}
     			if (dsP != null) {
     				if(!dsP.isEmpty()) {

@@ -198,9 +198,9 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 					String hinhAnh = model.getValueAt(row, 4).toString();
 					String moTa = model.getValueAt(row, 5).toString();
 	
-					Modal_ThemLoaiPhong modal_loaiPhong = new Modal_ThemLoaiPhong();
-					modal_loaiPhong.setVisible(true);
-					modal_loaiPhong.setModalThemLoaiPhong(maLoaiPhong, tenPhong, giaTien, soLuong, hinhAnh, moTa);
+					Modal_CapNhatLoaiPhong modal_CNloaiPhong = new Modal_CapNhatLoaiPhong();
+					modal_CNloaiPhong.setVisible(true);
+					modal_CNloaiPhong.setModalThemLoaiPhong(maLoaiPhong, tenPhong, giaTien, soLuong, hinhAnh, moTa);
 					
 				}
 			}
@@ -293,10 +293,15 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 					}
 					
 					DAO_LP = new LoaiPhong_DAO();
-					String tenLoaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP).getTenLoaiPhong();	
-//					DAO_LP.xoaLoaiPhong(lp);
-					JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
-					model.removeRow(row);
+					String tenLoaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP).getTenLoaiPhong();
+					int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa không?", "Đóng?", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION) {
+						DAO_LP.xoaLoaiPhong(lp);
+						JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
+						model.removeRow(row);
+					} else {
+					   
+					}
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(null, "Xóa thất bại");
 				}
@@ -348,6 +353,8 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		}
 		
 		if(o.equals(btnLamMoi)) {
+			cboNumberPeople.setSelectedItem("Tất cả");
+			cboPrice.setSelectedItem("Tất cả");
 			docDuLieu();
 		}
 

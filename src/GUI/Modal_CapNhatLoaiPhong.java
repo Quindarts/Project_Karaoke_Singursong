@@ -9,7 +9,6 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.ctc.wstx.shaded.msv_core.verifier.identity.Matcher;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import ConnectDB.ConnectDB;
@@ -36,7 +35,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.sql.SQLException;
-import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
@@ -48,7 +46,7 @@ import javax.swing.JFileChooser;
 import javax.imageio.ImageIO;
 import javax.swing.border.EtchedBorder;
 
-public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
+public class Modal_CapNhatLoaiPhong extends JFrame implements ActionListener {
 
 	private JPanel contentPane;
 	private JTextField txt_MaLoaiPhong;
@@ -77,7 +75,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public Modal_ThemLoaiPhong() {
+	public Modal_CapNhatLoaiPhong() {
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(Modal_CapNhatDichVu.class.getResource("/icon/microphone.png")));
@@ -307,19 +305,28 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		txt_GiaTien.setText(giaTien);
 		txt_SoLuongKhachToiDa.setText(soLuong);
 		txtA_Mota.setText(moTa);
+		String hinhA = "";
 		
-		LoaiPhong lp = new LoaiPhong();
-		LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
-		lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP);
-		
-		ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/" + lp.getHinhAnh()));
-		Image originalImage = originalIcon.getImage();
-		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
-		img_show_panel.setIcon(resizedIcon);
-		
-		txt_MaLoaiPhong.setEditable(false);
-		txt_GiaTien.setEditable(false);
+		if(!maLP.equals("")) {
+			LoaiPhong lp = new LoaiPhong();
+			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+			lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP);
+			
+			txt_MaLoaiPhong.setEditable(false);
+			txt_GiaTien.setEditable(false);
+			
+			if(lp.getHinhAnh().trim().equals("/img/") || lp.getHinhAnh().trim().equals("")) {
+				hinhA = "noImage.jpg";
+			} else {
+				hinhA = lp.getHinhAnh();
+			}
+			ImageIcon originalIcon = new ImageIcon(CardDichVu.class.getResource("/img/" + hinhA));
+			Image originalImage = originalIcon.getImage();
+			Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+			ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+			img_show_panel.setIcon(resizedIcon);
+			
+		}
 	}
 
 	public void docAnh(String hinhAnh) {	
@@ -352,61 +359,37 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	public void themLoaiPhong() {
 		String maLoaiPhong = txt_MaLoaiPhong.getText();
 		String tenLoaiPong = txt_TenLoaiPhong.getText();
+		int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
 		File file = new File(pathImg);
 		String hinhA = "/img/"+ file.getName();
+		double giaTien = Double.parseDouble(txt_GiaTien.getText());
 		String moTa = txtA_Mota.getText();
-		int soLuongToiDa = 0;
-		double giaTien = 0;
 
-		
 		try {
 			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
-			if(!maLoaiPhong.equals("") && !tenLoaiPong.equals("") && !txt_SoLuongKhachToiDa.getText().equals("") && !txt_GiaTien.getText().equals("")) {
-				if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) == null) {
-					if(txt_SoLuongKhachToiDa.getText().matches("\\d+") && txt_GiaTien.getText().matches("\\d+")) {
-						soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-						giaTien = Double.parseDouble(txt_GiaTien.getText());
-						if(isValidString(maLoaiPhong)) {
-							LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong.toUpperCase(), tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
-							if (DAO_LP.taoLoaiPhong(loaiPhong) == false) {
-								JOptionPane.showMessageDialog(this, "Tạo loại phòng thất bại, vui lòng thử lại.");
-								return;
-							} else {
-								JOptionPane.showMessageDialog(this, "Tạo loại phòng thành công.");
-								setVisible(false);
-							}
-						} else {
-							JOptionPane.showMessageDialog(this, "Mã nhập vào không hợp lệ!");
-						}
-					} else {
-						JOptionPane.showMessageDialog(this, "Số lượng và giá tiền chỉ nhập số nguyên!");
-					}
-				} else {
-					JOptionPane.showMessageDialog(this, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
-				}
+
+			if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) != null) {
+				JOptionPane.showMessageDialog(null, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
+				return;
+			}
+
+			LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
+			if (DAO_LP.taoLoaiPhong(loaiPhong) == false) {
+				JOptionPane.showMessageDialog(null, "Tạo loại phòng thất bại, vui lòng thử lại.");
+				return;
 			} else {
-				JOptionPane.showMessageDialog(this, "Phải nhập đầy đủ thông tin!");
+				JOptionPane.showMessageDialog(null, "Tạo loại phòng thành công.");
 			}
 
 		} catch (Exception e2) {
 
 		}
 	}
-	
-	public static boolean isValidString(String s) {
-        String regex = "^(?:ORD|VIP|ord|vip).*\\d$";
-        Pattern pattern = Pattern.compile(regex);
-        java.util.regex.Matcher matcher = pattern.matcher(s);
-
-        return matcher.matches();
-    }
 
 	public void capNhatLoaiPhong() {
 		String maLoaiPhong = txt_MaLoaiPhong.getText();
 		String tenLoaiPong = txt_TenLoaiPhong.getText();
-		int soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-//		File file = new File(pathImg);
-//		String hinhA = file.getName();
+		int soLuongToiDa = 0;
 		
 		String hinhA;
 		if(pathImg != null) {
@@ -424,19 +407,19 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 		
 
 		try {
-			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
-
-//			if (DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong) != null) {
-//				JOptionPane.showMessageDialog(null, "Loại phòng này đã tồn tại, vui lòng thêm loại phòng khác");
-//				return ;
-//			}
-
-			LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
-			if (DAO_LP.capNhatLoaiPhong(loaiPhong) == false) {
-				JOptionPane.showMessageDialog(null, "Cập nhất loại phòng này thất bại, vui lòng thử lại.");
-				return;
+			if(txt_SoLuongKhachToiDa.getText().matches("\\d+")) {
+				soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
+				LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
+				if (DAO_LP.capNhatLoaiPhong(loaiPhong) == false) {
+					JOptionPane.showMessageDialog(null, "Cập nhất loại phòng này thất bại, vui lòng thử lại.");
+					return;
+				} else {
+					JOptionPane.showMessageDialog(null, "Cập nhật loại phòng này thành công.");
+					setVisible(false);
+				}
 			} else {
-				JOptionPane.showMessageDialog(null, "Cập nhật loại phòng này thành công.");
+				JOptionPane.showMessageDialog(null, "Số lượng người phải nhập số nguyên!");
 			}
 
 		} catch (Exception e2) {
@@ -448,7 +431,7 @@ public class Modal_ThemLoaiPhong extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btn_Luu)) {
-			themLoaiPhong(); 
+			capNhatLoaiPhong(); 
 		}
 
 	}

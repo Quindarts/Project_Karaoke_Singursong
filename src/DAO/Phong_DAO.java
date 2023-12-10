@@ -656,7 +656,7 @@ public class Phong_DAO {
 		}
 		return dsPhong;
 	}
-	public ArrayList<Phong> timDSPhongWhenSelectCBO(String floor, String maTrangThai, String maTinhTrang) {		
+	public ArrayList<Phong> timDSPhongWhenSelectCBO(String floor, String maTrangThai) {		
 		Phong phong = null;
 		ConnectDB.getInstance();
 		Connection con = ConnectDB.getConnection();
@@ -672,9 +672,6 @@ public class Phong_DAO {
 		    sql += " AND maTrangThai = ?";
 		}
 
-		if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
-		    sql += " AND tinhTrangPhong = ?";
-		}
 		try {
 			statement = con.prepareStatement(sql);
 			int parameterIndex = 1;
@@ -690,10 +687,6 @@ public class Phong_DAO {
 		        
 		    }
 
-		    if (maTinhTrang != null && !maTinhTrang.isEmpty() && !maTinhTrang.equals("Tất cả")) {
-		    	
-		        statement.setString(parameterIndex++, maTinhTrang);
-		    }
 //			statement.setString(1, floor);
 //			statement.setString(2, maTrangThai);
 //			statement.setString(3, maTinhTrang);
