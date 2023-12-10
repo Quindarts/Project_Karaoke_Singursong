@@ -278,6 +278,8 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 				txtPassword.setEnabled(true);
 				txtPasswordRepeat.setEnabled(true);
 				btnSave.setText("Đổi mật khẩu");
+			}else {
+				JOptionPane.showMessageDialog(null, "Mã xác nhận không chính xác!");
 			}
 		}
 
@@ -289,20 +291,21 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 			String password = new String(passwordChars);
 			String passwordRepeat = new String(passwordRepeatChars);
 
-			if (password.equals(passwordRepeat) && (!password.equals("") && !passwordRepeat.equals(""))) {
-//				System.out.println("đã đổi");
-//				System.out.println(tk.gettenDangNhap());
-//				System.out.println(tk.getNhanVien().getMaNhanVien());
-//				System.out.println(password);
-				TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password);
-//				System.out.println(TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password));
-				if (!TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password)) {
-					JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công");
-					setVisible(false);
-					JFrame_DangNhap dangNhap = new JFrame_DangNhap();
-					dangNhap.setVisible(true);
+			if((password.length() >= 8 && password.matches("\\d+")) && (passwordRepeat.length() >= 8 && passwordRepeat.matches("\\d+"))) {
+				if (password.equals(passwordRepeat) && (!password.equals("") && !passwordRepeat.equals(""))) {
+					TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password);
+//					System.out.println(TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password));
+					if (!TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password)) {
+						JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công");
+						setVisible(false);
+						JFrame_DangNhap dangNhap = new JFrame_DangNhap();
+						dangNhap.setVisible(true);
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "Mật khẩu không khớp");
 				}
-
+			} else {
+				JOptionPane.showMessageDialog(null, "Mật khẩu chỉ gồm số và lớn hơn 8 ký tự");
 			}
 		}
 

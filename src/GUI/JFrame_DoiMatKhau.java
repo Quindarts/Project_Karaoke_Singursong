@@ -236,14 +236,18 @@ public class JFrame_DoiMatKhau extends JFrame implements KeyListener, ItemListen
 	    			String passwordRepeat = new String(passwordRepeatChars);
 	            	if(password.trim().equals(taiKhoan.getMatKhau().trim())) {
 	            		if(!passwordNew.equals("") || !passwordRepeat.equals("")) {
-	            			if(passwordNew.equals(passwordRepeat)) {
-		            			TK_DAO = new TaiKhoan_DAO();
-		            			TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(taiKhoan.gettenDangNhap(), passwordNew);
-		            			JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công!");
-	            				setVisible(false);
-		            		} else {
-		            			JOptionPane.showMessageDialog(null, "Mật khẩu không khớp");
-		            		}
+	            			if((password.length() >= 8 && password.matches("\\d+")) && (passwordRepeat.length() >= 8 && passwordRepeat.matches("\\d+"))) {
+	            				if(passwordNew.equals(passwordRepeat)) {
+			            			TK_DAO = new TaiKhoan_DAO();
+			            			TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(taiKhoan.gettenDangNhap(), passwordNew);
+			            			JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công!");
+		            				setVisible(false);
+			            		} else {
+			            			JOptionPane.showMessageDialog(null, "Mật khẩu không khớp");
+			            		}
+	            			} else {
+	            				JOptionPane.showMessageDialog(null, "Mật khẩu phải lơn hơn 8 ký tự và gồm số");
+	            			}
 	            		} else {
 	            			JOptionPane.showMessageDialog(null, "Mật khẩu mới không được rỗng");
 	            		}

@@ -265,21 +265,20 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 				NhanVien nhanVienDangNhap = new NhanVien();
 
 				if (taiKhoanDangNhap == null) {
-					JOptionPane.showMessageDialog(null, "Tài Khoản không tồn tại !");
+					JOptionPane.showMessageDialog(null, "Tài Khoản không tồn tại!");
 				} else if (!taiKhoanDangNhap.getMatKhau().trim().equals(password)) {
-					JOptionPane.showMessageDialog(null, "Mật khẩu không đúng ! ");
+					JOptionPane.showMessageDialog(null, "Mật khẩu không đúng! ");
 				} else {
-
 					nhanVienDangNhap = NV_DAO
 							.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
 					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
-					if (nhanVienDangNhap.getTrangThai().equals("Đang làm")) {
+					if (nhanVienDangNhap.getTrangThai().equals("Ðang làm")) {
 						thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
 						thuNgan.setVisible(true);
 					} else {
-						JOptionPane.showMessageDialog(null, "Bạn đã nghĩ làm !");
+						JOptionPane.showMessageDialog(null, "Bạn đã nghĩ làm!");
 					}
-					dispose();
+//					dispose();
 
 				}
 			}

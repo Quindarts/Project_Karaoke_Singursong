@@ -282,4 +282,77 @@ public class DichVu_DAO {
 		return n > 0;
 	}
 
+	public ArrayList<DichVu> loc_TongHop(String ngayBD, String ngayKT, int thang, int nam, int quy) {
+		ArrayList<DichVu> dsDV = new ArrayList<>();
+
+		boolean locTheoThang = false;
+		boolean locTheoNam = false;
+		boolean locTheoQuy = false;
+
+		if (thang != 0)
+			locTheoThang = true;
+
+		if (quy != 0)
+			locTheoQuy = true;
+
+		if (nam != 0)
+			locTheoNam = true;
+
+		String sql = "select * from DichVu dv join ThongTinDichVu ttdv on dv.maThongTinDichVu = ttdv.maThongTinDichVu "
+				+ "WHERE ttdv.ngayNhap BETWEEN '" + ngayBD + "' AND '" + ngayKT + "' ";
+
+		if (locTheoThang) {
+			sql += " AND MONTH(ngayNhap) = ? ";
+		}
+
+		if (locTheoNam) {
+			sql += " AND YEAR(ngayNhap) = ? ";
+		}
+
+		if (locTheoQuy) {
+			sql += " AND DATENAME(QUARTER, ngayNhap) = ? ";
+		}
+
+		ConnectDB.getInstance();
+		Connection con = ConnectDB.getConnection();
+		PreparedStatement statement = null;
+
+		try {
+			statement = con.prepareStatement(sql);
+
+			int parameterIndex = 1;
+
+			if (locTheoThang) {
+				statement.setInt(parameterIndex++, thang);
+			}
+
+			if (locTheoNam) {
+				statement.setInt(parameterIndex++, nam);
+			}
+
+			if (locTheoQuy) {
+				statement.setInt(parameterIndex++, quy);
+			}
+
+			ResultSet rs = statement.executeQuery();
+
+			while (rs.next()) {
+				String maDichVu = rs.getString("maDichVu");
+				String tenDichVu = rs.getString("tenDichVu");
+				String donViTinh = rs.getString("donViTinh");
+				Double donGia = rs.getDouble("donGia");
+				boolean trangThai = rs.getBoolean("trangThai");
+				String maTTDV = rs.getString("maThongTinDichVu");
+				ThongTinDichVu_DAO DAO_TTDV = new ThongTinDichVu_DAO();
+				ThongTinDichVu ttdv = DAO_TTDV.timThongTinDichVu_TheoMaThongTinDichVu(maTTDV);
+				DichVu dichVu = new DichVu(maDichVu, tenDichVu, donViTinh, donGia, trangThai, ttdv);
+				dsDV.add(dichVu);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return dsDV;
+	}
 }

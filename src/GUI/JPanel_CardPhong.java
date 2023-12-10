@@ -367,7 +367,7 @@ public class JPanel_CardPhong extends JPanel {
 				JDialog_PhieuChuyenPhong phieuChuyenPhong = new JDialog_PhieuChuyenPhong(phong, hoaDon, cthd);
 
 				phieuChuyenPhong.setVisible(true);
-				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hd.getNgayLap(), sdtKH, tenKH);
+				phieuChuyenPhong.SetModal_PhieuChuyenPhong(hoaDon);
 
 			} catch (Exception e2) {
 				e2.printStackTrace();

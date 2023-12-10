@@ -405,7 +405,7 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 		txt_CCCD.setText(cccd);
 		java.util.Date ngaySinhStr;
 //		img_show_panel.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource(anhThe)));
-
+		
 		try {
 			ngaySinhStr = dateFormat_YMD.parse(ngaySinh);
 			dateCh_NgaySinh.setDate(ngaySinhStr);
@@ -428,10 +428,8 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 
 		int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 		for (int i = 0; i < soLuongTrangThai; i++) {
-			String item = comboBox_TrangThai.getItemAt(i).trim();
-			System.out.println(item);
-			System.out.println(trangThai);
-			if (trangThai != null) {
+			String item = comboBox_TrangThai.getItemAt(i).toString().trim();
+			if (item.equals(trangThai.toString().trim())) {		
 				comboBox_TrangThai.setSelectedItem(trangThai);
 				break;
 			}

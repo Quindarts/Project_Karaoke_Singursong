@@ -57,7 +57,6 @@ import javax.swing.JTable;
 public class JDialog_PhieuChuyenPhong extends JFrame implements ActionListener, MouseListener {
 
 	private JPanel contentPane;
-	private JTextField txt_SoGioDaHat;
 
 	private String hexColor_Blue1 = "#054A91";
 	private String hexColor_Blue2 = "#3E7CB1";
@@ -227,21 +226,10 @@ public class JDialog_PhieuChuyenPhong extends JFrame implements ActionListener, 
 		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_ThoiGianBatDauVoPhong);
 
 		date_NhanPhongBanDau = new JDateChooser();
+		date_NhanPhongBanDau.getCalendarButton().setEnabled(false);
 		date_NhanPhongBanDau.setDateFormatString("yyyy-MM-dd hh:mm");
 		date_NhanPhongBanDau.setBounds(200, 11, 157, 27);
 		pnl_ThoiGianChuyenNhanPhongMoi.add(date_NhanPhongBanDau);
-
-		txt_SoGioDaHat = new JTextField();
-		txt_SoGioDaHat.setEnabled(false);
-		txt_SoGioDaHat.setBounds(120, 40, 55, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(txt_SoGioDaHat);
-		txt_SoGioDaHat.setColumns(10);
-
-		JLabel lbl_SoGioDaHat = new JLabel("Số giờ đã hát");
-		lbl_SoGioDaHat.setForeground(Color.BLACK);
-		lbl_SoGioDaHat.setFont(new Font("Segoe UI", Font.BOLD, 13));
-		lbl_SoGioDaHat.setBounds(10, 40, 196, 27);
-		pnl_ThoiGianChuyenNhanPhongMoi.add(lbl_SoGioDaHat);
 
 		JLabel lbl_LoaiPhong = new JLabel("Loại phòng");
 		lbl_LoaiPhong.setForeground(Color.BLACK);
@@ -436,11 +424,14 @@ public class JDialog_PhieuChuyenPhong extends JFrame implements ActionListener, 
 		}
 	}
 
-	public void SetModal_PhieuChuyenPhong(Timestamp thoiGianNhanPhong, String soDT, String tenKH) {
+	public void SetModal_PhieuChuyenPhong(HoaDon hoaDon) {
 
-		txtSoDienThoai.setText(soDT);
-		txtTenKH.setText(tenKH);
-		date_NhanPhongBanDau.setDate(thoiGianNhanPhong); // Thời gian lần đầu khách vào phòng
+		DAO_KH = new KhachHang_DAO();
+		KhachHang kh = DAO_KH.layKhachHang_TheoMaKhachHang(hoaDon.getKhachHang().getMaKhachHang());
+		
+		txtSoDienThoai.setText(kh.getSoDienThoai());
+		txtTenKH.setText(kh.getHoTen());
+		date_NhanPhongBanDau.setDate(hoaDon.getNgayLap()); // Thời gian lần đầu khách vào phòng
 		dao_Phong = new Phong_DAO();
 		dao_LoaiPhong = new LoaiPhong_DAO();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();

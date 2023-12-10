@@ -84,8 +84,9 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 	private JButton btnLamMoi;
 
 	private String[] rowData;
-	private JComboBox<String> cboNumberPeople;
+	private JComboBox<String>  cboNumberPeople;
 	private JComboBox<String> cboPrice;
+
 
 	/**
 	 * Rounded JPanel
@@ -164,13 +165,15 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		table_LoaiPhong.setBackground(Color.WHITE);
 
 		table_LoaiPhong.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Mã loại phòng",
-				"Tên loại phòng", "Số lượng khách tối đa", "Giá tiền", "Hình ảnh", "Mô tả" }) {
+				"Tên loại phòng", "Số lượng khách tối đa", "Giá tiền", "Hình ảnh", "Mô tả" })
+		{
 			@Override
-			public boolean isCellEditable(int row, int column) {
-				// Ngăn chặn việc chỉnh sửa nội dung trong bảng, nhưng vẫn cho phép chọn dữ liệu
-				return false;
-			}
-		});
+            public boolean isCellEditable(int row, int column) {
+                // Ngăn chặn việc chỉnh sửa nội dung trong bảng, nhưng vẫn cho phép chọn dữ liệu
+                return false;
+            }
+		}
+				);
 
 		table_LoaiPhong.setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		JScrollPane scrollPane = new JScrollPane();
@@ -185,7 +188,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		table_LoaiPhong.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				if (e.getClickCount() == 2) {
+				if(e.getClickCount() == 2) {
 					int row = table_LoaiPhong.getSelectedRow();
 
 					String maLoaiPhong = model.getValueAt(row, 0).toString();
@@ -194,11 +197,11 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 					String giaTien = model.getValueAt(row, 3).toString();
 					String hinhAnh = model.getValueAt(row, 4).toString();
 					String moTa = model.getValueAt(row, 5).toString();
-
-					JDialog_ThemLoaiPhong modal_loaiPhong = new JDialog_ThemLoaiPhong();
-					modal_loaiPhong.setVisible(true);
-					modal_loaiPhong.setModalThemLoaiPhong(maLoaiPhong, tenPhong, giaTien, soLuong, hinhAnh, moTa);
-
+	
+					JDialog_CapNhatLoaiPhong modal_CNloaiPhong = new JDialog_CapNhatLoaiPhong();
+					modal_CNloaiPhong.setVisible(true);
+					modal_CNloaiPhong.setModalThemLoaiPhong(maLoaiPhong, tenPhong, giaTien, soLuong, hinhAnh, moTa);
+					
 				}
 			}
 
@@ -225,33 +228,32 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		panel_1.setBounds(1031, 10, 255, 615);
 		panel_Table.add(panel_1);
 		panel_1.setLayout(null);
-
+		
 		JPanel panel_2 = new JPanel();
 		panel_2.setBackground(new Color(255, 255, 255));
-		panel_2.setBorder(new TitledBorder(null, "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, null,
-				new Color(0, 0, 255)));
+		panel_2.setBorder(new TitledBorder(null, "T\u00ECm ki\u1EBFm", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 255)));
 		panel_2.setForeground(new Color(0, 0, 0));
 		panel_2.setBounds(10, 35, 235, 163);
 		panel_1.add(panel_2);
 		panel_2.setLayout(null);
-
+		
 		cboNumberPeople = new JComboBox();
 		cboNumberPeople.setBounds(139, 36, 86, 36);
 		panel_2.add(cboNumberPeople);
 		cboNumberPeople.addItem("Tất cả");
 		cboNumberPeople.addItem("5");
 		cboNumberPeople.addItem("12");
-
+		
 		JLabel lblNewLabel = new JLabel("Số lượng khách: ");
 		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblNewLabel.setBounds(10, 36, 119, 36);
 		panel_2.add(lblNewLabel);
-
+		
 		JLabel lblMcGiTin = new JLabel("Mức giá tiền: ");
 		lblMcGiTin.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblMcGiTin.setBounds(10, 92, 119, 36);
 		panel_2.add(lblMcGiTin);
-
+		
 		cboPrice = new JComboBox();
 		cboPrice.setBounds(116, 94, 109, 36);
 		panel_2.add(cboPrice);
@@ -281,19 +283,25 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 				try {
 					Phong p = new Phong();
 					DAO_P = new Phong_DAO();
-
+					
 					ArrayList<Phong> dsP = DAO_P.timDSPhongTheoMaLoaiPhong(maLP);
-
-					for (Phong value : dsP) {
+					
+					
+					for( Phong value : dsP) {
 						DAO_P.capNhat_TinhTrangPhong(value.getMaPhong(), "Không sử dụng");
 						DAO_P.capNhat_TranThaiPhong(value.getMaPhong(), "OOO");
 					}
-
+					
 					DAO_LP = new LoaiPhong_DAO();
 					String tenLoaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP).getTenLoaiPhong();
-//					DAO_LP.xoaLoaiPhong(lp);
-					JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
-					model.removeRow(row);
+					int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa không?", "Đóng?", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION) {
+						DAO_LP.xoaLoaiPhong(lp);
+						JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
+						model.removeRow(row);
+					} else {
+					   
+					}
 				} catch (Exception e2) {
 					JOptionPane.showMessageDialog(null, "Xóa thất bại");
 				}
@@ -343,19 +351,22 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 			JDialog_ThemLoaiPhong modal_laoPhong = new JDialog_ThemLoaiPhong();
 			modal_laoPhong.setVisible(true);
 		}
-
-		if (o.equals(btnLamMoi)) {
+		
+		if(o.equals(btnLamMoi)) {
+			cboNumberPeople.setSelectedItem("Tất cả");
+			cboPrice.setSelectedItem("Tất cả");
+			txt_find.setText("");
 			docDuLieu();
 		}
 
 	}
-
+	
 	public void docDuLieu() {
 		model = (DefaultTableModel) table_LoaiPhong.getModel();
 		model.getDataVector().removeAllElements();
-
+		
 		DAO_LP = new LoaiPhong_DAO();
-
+		
 		try {
 			dsLP = DAO_LP.layTatCaLoaiPhong();
 			if (dsLP != null) {
@@ -371,18 +382,18 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 			// TODO: handle exception
 		}
 	}
-
+	
 	public void TimTheoMaLP() {
 		model.getDataVector().removeAllElements();
 		String chuoiTimKiem = txt_find.getText().trim();
-		LoaiPhong ma_loai_phong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(chuoiTimKiem);
-
+		LoaiPhong ma_loai_phong= DAO_LP.layLoaiPhong_TheoMaLoaiPhong(chuoiTimKiem);
+		
 		dsLP = DAO_LP.timDSPhongTheoMaLPhong(chuoiTimKiem);
-
+		
 		try {
 			dsLP.add(ma_loai_phong);
 			if (dsLP != null) {
-
+							
 				dsLP = DAO_LP.timDSPhongTheoMaLPhong(chuoiTimKiem);
 				if (dsLP != null) {
 					dsLP.forEach(lp -> {
@@ -393,7 +404,8 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 						model.addRow(rowData);
 					});
 				}
-
+				
+				
 			}
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không có phòng nào có mã: " + chuoiTimKiem);
@@ -403,7 +415,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 	@Override
 	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
@@ -411,68 +423,69 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		// TODO Auto-generated method stub
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			TimTheoMaLP();
-		}
+        }
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
 		// TODO Auto-generated method stub
-
+		
 	}
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub
-		if (e.getStateChange() == ItemEvent.SELECTED) {
+		if(e.getStateChange() == ItemEvent.SELECTED) {
 			txt_find.setText("");
-
+			
 			String selectNumber = (String) cboNumberPeople.getSelectedItem();
 			String selectPrice = (String) cboPrice.getSelectedItem();
 			String priceConvert;
-
+			
 			model = (DefaultTableModel) table_LoaiPhong.getModel();
-			model.getDataVector().removeAllElements();
-			switch (selectPrice) {
-			case "20.000 VND":
-				priceConvert = "20000.00";
-				break;
-			case "40.000 VND":
-				priceConvert = "40000.00";
-				break;
-			case "60.000 VND":
-				priceConvert = "60000.00";
-				break;
-			case "80.000 VND":
-				priceConvert = "80000.00";
-				break;
-			case "100.000 VND":
-				priceConvert = "100000.00";
-				break;
+	    	model.getDataVector().removeAllElements();
+	    	switch (selectPrice) {
+	    	case "20.000 VND" :
+	    		priceConvert = "20000.00";
+	    		break;
+	    	case "40.000 VND" :
+	    		priceConvert = "40000.00";
+	    		break;
+	    	case "60.000 VND" :
+	    		priceConvert = "60000.00";
+	    		break;
+	    	case "80.000 VND" :
+	    		priceConvert = "80000.00";
+	    		break;
+	    	case "100.000 VND" :
+	    		priceConvert = "100000.00";
+	    		break;
 			default:
 				priceConvert = "Tất cả";
 			}
-
-			dsLP = DAO_LP.timDStheoSoLuongVaGiaTien(selectNumber, priceConvert);
-			try {
-				if (dsLP != null) {
-					if (!dsLP.isEmpty()) {
-						dsLP.forEach(lp -> {
+	    	
+	    	
+	    	dsLP = DAO_LP.timDStheoSoLuongVaGiaTien(selectNumber,priceConvert);    	
+	    	try {
+	    		if (dsLP != null) {
+	    			if(!dsLP.isEmpty()) {
+	    				dsLP.forEach(lp -> {
 
 							Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
 									lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
 
 							model.addRow(rowData);
-						});
-					} else {
-						model = (DefaultTableModel) table_LoaiPhong.getModel();
-						model.getDataVector().removeAllElements();
-						model.fireTableDataChanged();
-					}
+						});	
+	    			} else {
+	    				model = (DefaultTableModel) table_LoaiPhong.getModel();
+   				     	model.getDataVector().removeAllElements();
+   				     	model.fireTableDataChanged();
+	    			}
 				}
-
+				
 			} catch (Exception e1) {
 				JOptionPane.showMessageDialog(null, "Không chuỗi này");
 			}
 		}
-	}
+	}	
 }
