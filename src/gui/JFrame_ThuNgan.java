@@ -11,6 +11,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.RoundRectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -24,6 +28,12 @@ import javax.swing.border.AbstractBorder;
 import javax.swing.border.EmptyBorder;
 
 import com.formdev.flatlaf.FlatLightLaf;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfTemplate;
+import com.itextpdf.text.pdf.PdfWriter;
 
 import dao.DichVu_DAO;
 import dao.NhanVien_DAO;
@@ -36,6 +46,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
+import java.awt.Desktop;
 import java.awt.FlowLayout;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -45,6 +56,7 @@ import javax.swing.JButton;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.border.EtchedBorder;
 import javax.swing.JRadioButton;
@@ -418,9 +430,9 @@ public class JFrame_ThuNgan extends JFrame {
 		mntmNewMenuItem.setFont(new Font("Segoe UI", Font.BOLD, 12));
 		mnNewMenu.add(mntmNewMenuItem);
 
-		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Trợ giúp");
-		mntmNewMenuItem_1.setFont(new Font("Segoe UI", Font.BOLD, 12));
-		mnNewMenu.add(mntmNewMenuItem_1);
+		JMenuItem mntmNewMenuItem_troGiup = new JMenuItem("Trợ giúp");
+		mntmNewMenuItem_troGiup.setFont(new Font("Segoe UI", Font.BOLD, 12));
+		mnNewMenu.add(mntmNewMenuItem_troGiup);
 
 		mntmNewMenuItem_2 = new JMenuItem("Đăng xuất");
 		mntmNewMenuItem_2.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -486,7 +498,19 @@ public class JFrame_ThuNgan extends JFrame {
 
 			}
 		});
+		mntmNewMenuItem_troGiup.addActionListener((ActionListener) new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
 
+				try {
+					Desktop.getDesktop().open(new File("troGiup/troGiup.pdf"));
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+			}
+		});
 		mntmNewMenuItem.addActionListener((ActionListener) new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {

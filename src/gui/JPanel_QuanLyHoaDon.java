@@ -393,6 +393,10 @@ public class JPanel_QuanLyHoaDon extends JPanel
 		txtKH.setText("");
 		txtNV.setText("");
 		txtPhieuDatPhong.setText("");
+		date_NgayLap.setDate(null);
+		dateDenNgay.setDate(null);
+		date_NgayLap.setDate(null);
+		rdbTatCa.setSelected(true);
 	}
 
 	private void DocDuLieuTrenSQL() {

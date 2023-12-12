@@ -247,8 +247,8 @@ public class JDialog_CapNhatSoLuong extends JFrame implements ActionListener {
 
 					}
 				}
-				ttdvCapNhat.setSoLuongDaSuDung(ttdvCapNhat.getSoLuongDaSuDung() + getSoLuong());
-				DAO_TTDV.capNhatThongTinDichVu(ttdvCapNhat);
+//				ttdvCapNhat.setSoLuongDaSuDung(ttdvCapNhat.getSoLuongDaSuDung() + getSoLuong());
+//				DAO_TTDV.capNhatThongTinDichVu(ttdvCapNhat);
 				setVisible(false);
 
 			} else {
@@ -293,19 +293,19 @@ public class JDialog_CapNhatSoLuong extends JFrame implements ActionListener {
 
 						}
 					}
-					if (soLuongMoiCapNhat < getSoLuong()) {
-						DAO_TTDV = new ThongTinDichVu_DAO();
-
-						ttdvCapNhat.setSoLuongDaSuDung(
-								ttdvCapNhat.getSoLuongDaSuDung() + getSoLuong() - soLuongMoiCapNhat);
-						DAO_TTDV.capNhatThongTinDichVu(ttdvCapNhat);
-					} else if (soLuongMoiCapNhat > getSoLuong()) {
-
-						ttdvCapNhat.setSoLuongDaSuDung(
-								ttdvCapNhat.getSoLuongDaSuDung() - getSoLuong() + soLuongMoiCapNhat);
-						DAO_TTDV.capNhatThongTinDichVu(ttdvCapNhat);
-
-					}
+//					if (soLuongMoiCapNhat < getSoLuong()) {
+//						DAO_TTDV = new ThongTinDichVu_DAO();
+//
+//						ttdvCapNhat.setSoLuongDaSuDung(
+//								ttdvCapNhat.getSoLuongDaSuDung() + getSoLuong() - soLuongMoiCapNhat);
+//						DAO_TTDV.capNhatThongTinDichVu(ttdvCapNhat);
+//					} else if (soLuongMoiCapNhat > getSoLuong()) {
+//
+//						ttdvCapNhat.setSoLuongDaSuDung(
+//								ttdvCapNhat.getSoLuongDaSuDung() - getSoLuong() + soLuongMoiCapNhat);
+//						DAO_TTDV.capNhatThongTinDichVu(ttdvCapNhat);
+//
+//					}
 					setVisible(false);
 				}
 			}

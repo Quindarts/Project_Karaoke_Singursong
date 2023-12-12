@@ -405,13 +405,13 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 		txt_CCCD.setText(cccd);
 		java.util.Date ngaySinhStr;
 //		img_show_panel.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource(anhThe)));
-		
+
 		ImageIcon originalIcon = new ImageIcon(JPanel_CardDichVu.class.getResource("/img/" + anhThe));
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
-		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);
 		img_show_panel.setIcon(resizedIcon);
-		
+
 		try {
 			ngaySinhStr = dateFormat_YMD.parse(ngaySinh);
 			dateCh_NgaySinh.setDate(ngaySinhStr);
@@ -435,7 +435,7 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 		int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 		for (int i = 0; i < soLuongTrangThai; i++) {
 			String item = comboBox_TrangThai.getItemAt(i).toString().trim();
-			if (item.equals(trangThai.toString().trim())) {		
+			if (item.equals(trangThai.toString().trim())) {
 				comboBox_TrangThai.setSelectedItem(trangThai);
 				break;
 			}
@@ -519,19 +519,31 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 			boolean gioiTinh = btngr_GioiTinh.getSelection().getActionCommand().equals("Nam");
 			String hoTen = txt_TenNhanVien.getText();
 			Date ngaySinh = null;
+
+			String soDienThoai = txt_SoDienThoai.getText();
+			String trangThai = "";
+			String maNhanVien = txt_MaNhanVien.getText().trim();
+
 			try {
 				ngaySinh = new Date((dateCh_NgaySinh).getDate().getTime());
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
 			}
-			
-			int lastIndexOfBackslash = pathImg.lastIndexOf("\\");
-	        String fileName = pathImg.substring(lastIndexOfBackslash + 1);
-	        System.out.println(fileName);
-	        
-			String soDienThoai = txt_SoDienThoai.getText();
-			String trangThai = "";
-			String maNhanVien = txt_MaNhanVien.getText().trim();
+
+			String fileName = "";
+			if (pathImg != null) {
+				int lastIndexOfBackslash = pathImg.lastIndexOf("\\");
+				fileName = pathImg.substring(lastIndexOfBackslash + 1);
+			} else {
+				NhanVien nv = new NhanVien();
+				NhanVien_DAO DAO_NV = new NhanVien_DAO();
+				nv = DAO_NV.timNhanVien_TheoMaNhanVien(maNhanVien);
+				if (!nv.getAnhThe().trim().equals("")) {
+					fileName = nv.getAnhThe().trim();
+				} else {
+					fileName = "noImage.jpg";
+				}
+			}
 
 			int soLuongTrangThai = comboBox_TrangThai.getItemCount();
 			for (int i = 0; i < soLuongTrangThai; i++) {
@@ -560,7 +572,7 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 					trangThai, fileName);
 
 			System.out.println(nv.toString());
-			
+
 			try {
 				NhanVien_DAO DAO_NV = new NhanVien_DAO();
 				int result = JOptionPane.showConfirmDialog(this,

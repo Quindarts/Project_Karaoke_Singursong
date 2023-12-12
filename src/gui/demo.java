@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import other.HelpSMS;
 import other.HelpXLSX;
 
 public class demo extends JFrame implements ActionListener {
@@ -46,52 +47,15 @@ public class demo extends JFrame implements ActionListener {
 
 		setContentPane(contentPane);
 		JButton btnNewButton = new JButton("Đọc file Excel test ở folder Demo file Employee Write");
+		HelpSMS.createMessage("+84776466189", "Hellooo Ngaaa Quag neeee Karaoke sing ur song");
 		contentPane.add(btnNewButton);
-		btnNewButton.addActionListener(new ActionListener() {
-			HelpXLSX xls = new HelpXLSX();
 
-			public void actionPerformed(ActionEvent e) {
-//				xls.writeXLSXFile("Demo/quang.xlsx");
-			}
-		});
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-
-	}
-
-	public String chooseFileEvent(String typeFile) {
-		JFileChooser file = new JFileChooser();
-		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("user.home")));
-
-		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
-				"xls");
-		FileNameExtensionFilter filterExcel = new FileNameExtensionFilter("xlsx", "xls");
-
-		// Doc path image
-		if (typeFile.equals("image")) {
-			file.addChoosableFileFilter(filterImage);
-		}
-		// Doc path excel
-		else if (typeFile.equals("excel")) {
-			file.addChoosableFileFilter(filterExcel);
-		}
-
-		int result = file.showSaveDialog(null);
-		if (result == JFileChooser.APPROVE_OPTION) {
-
-			File selectedFile = file.getSelectedFile();
-			path = selectedFile.getAbsolutePath();
-			return path;
-		}
-
-		else if (result == JFileChooser.CANCEL_OPTION) {
-			JOptionPane.showMessageDialog(null, "Không tìm thấy file tải lên");
-		}
-		return path;
+		
 	}
 
 }
