@@ -14,6 +14,7 @@ import com.formdev.flatlaf.FlatLightLaf;
 import ConnectDB.ConnectDB;
 import DAO.LoaiPhong_DAO;
 import Entity.LoaiPhong;
+import Entity.NhanVien;
 import OtherFunction.HelpValidate;
 import io.jsonwebtoken.io.IOException;
 
@@ -67,6 +68,8 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 	private String hexColor_Red = "#E11F1F";
 	private String hexColor_Green = "#4BAC4D";
 	private JButton btn_ChonAnh;
+	private LoaiPhong_DAO DAO_LP;
+	private LoaiPhong lp;
 
 	/**
 	 * Launch the application.
@@ -75,7 +78,7 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 	/**
 	 * Create the frame.
 	 */
-	public JDialog_CapNhatLoaiPhong() {
+	public JDialog_CapNhatLoaiPhong(NhanVien nhanVien) {
 		setFont(new Font("Segoe UI", Font.PLAIN, 13));
 		setIconImage(
 				Toolkit.getDefaultToolkit().getImage(JDialog_CapNhatDichVu.class.getResource("/icon/microphone.png")));
@@ -236,20 +239,6 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 				btn_ChonAnh.setFont(new Font("Segoe UI", Font.BOLD, 13));
 				btn_ChonAnh.setForeground(new Color(255, 255, 255));
 				
-						btn_ChonAnh.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
-							}
-				
-							public ImageIcon ResizeImage(String ImagePath) {
-								ImageIcon MyImage = new ImageIcon(ImagePath);
-								Image img = MyImage.getImage();
-								Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
-										Image.SCALE_SMOOTH);
-								ImageIcon image = new ImageIcon(newImg);
-								return image;
-							}
-						});
 						btn_ChonAnh.setBackground(Color.decode(hexColor_Green));
 
 		btn_BoQua.addActionListener(new ActionListener() {
@@ -262,6 +251,22 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 		});
 
 		btn_Luu.addActionListener(this);
+		btn_ChonAnh.addActionListener(this);
+		
+		if(!nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			btn_Luu.removeActionListener(this);
+			txt_GiaTien.setEditable(false);
+			txt_MaLoaiPhong.setEditable(false);
+			txt_SoLuongKhachToiDa.setEditable(false);
+			txt_TenLoaiPhong.setEditable(false);
+			txtA_Mota.setEditable(false);
+			btn_ChonAnh.removeActionListener(this);
+			
+			btn_ChonAnh.setForeground(Color.WHITE);
+			btn_ChonAnh.setBackground(Color.LIGHT_GRAY);
+			btn_Luu.setForeground(Color.WHITE);
+			btn_Luu.setBackground(Color.LIGHT_GRAY);
+		}
 	}
 
 	public String chooseFileEvent(String typeFile) {
@@ -320,7 +325,7 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 			} else {
 				hinhA = lp.getHinhAnh();
 			}
-			ImageIcon originalIcon = new ImageIcon(JPanel_CardDichVu.class.getResource("/img/" + hinhA));
+			ImageIcon originalIcon = new ImageIcon(JPanel_CardDichVu.class.getResource("/img/" +hinhA));
 			Image originalImage = originalIcon.getImage();
 			Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
 			ImageIcon resizedIcon = new ImageIcon(resizedImage);	
@@ -391,14 +396,23 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 		String tenLoaiPong = txt_TenLoaiPhong.getText();
 		int soLuongToiDa = 0;
 		
+		lp = new LoaiPhong();
+		DAO_LP = new LoaiPhong_DAO();
+		lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLoaiPhong);
+		
 		String hinhA;
-		if(pathImg != null) {
+		if(!pathImg.equals("")) {
 			File file = new File(pathImg);
 	        String fileName = file.getName();
 	        hinhA = fileName;
 		} else {
-			hinhA = "noImage.jpg";
+			if(!lp.getHinhAnh().trim().equals("")) {
+				hinhA = lp.getHinhAnh();
+			} else {
+				hinhA = "noImage.jpg";
+			}
 		}
+
 		
 		double giaTien = Double.parseDouble(txt_GiaTien.getText());
 		String moTa = txtA_Mota.getText();
@@ -409,7 +423,7 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 		try {
 			if(txt_SoLuongKhachToiDa.getText().matches("\\d+")) {
 				soLuongToiDa = Integer.parseInt(txt_SoLuongKhachToiDa.getText());
-				LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
+				DAO_LP = new LoaiPhong_DAO();
 				LoaiPhong loaiPhong = new LoaiPhong(maLoaiPhong, tenLoaiPong, soLuongToiDa, giaTien, hinhA, moTa);
 				if (DAO_LP.capNhatLoaiPhong(loaiPhong) == false) {
 					JOptionPane.showMessageDialog(null, "Cập nhất loại phòng này thất bại, vui lòng thử lại.");
@@ -426,12 +440,25 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 
 		}
 	}
+	
+	public ImageIcon ResizeImage(String ImagePath) {
+		ImageIcon MyImage = new ImageIcon(ImagePath);
+		Image img = MyImage.getImage();
+		Image newImg = img.getScaledInstance(img_show_panel.getWidth(), img_show_panel.getHeight(),
+				Image.SCALE_SMOOTH);
+		ImageIcon image = new ImageIcon(newImg);
+		return image;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		Object o = e.getSource();
 		if (o.equals(btn_Luu)) {
 			capNhatLoaiPhong(); 
+		}
+		
+		if(o.equals(btn_ChonAnh)) {
+			img_show_panel.setIcon(ResizeImage(chooseFileEvent("image")));
 		}
 
 	}

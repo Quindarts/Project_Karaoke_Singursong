@@ -32,10 +32,12 @@ import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
 import Entity.KhachHang;
 import Entity.LoaiPhong;
+import Entity.NhanVien;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
 
 import javax.swing.JButton;
+import javax.swing.AbstractButton;
 import javax.swing.ImageIcon;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -86,6 +88,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 	private String[] rowData;
 	private JComboBox<String>  cboNumberPeople;
 	private JComboBox<String> cboPrice;
+	private AbstractButton btnXoa;
 
 
 	/**
@@ -141,7 +144,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 	/**
 	 * Create the panel.
 	 */
-	public JPanel_QuanLyLoaiPhong() {
+	public JPanel_QuanLyLoaiPhong(NhanVien nhanvien) {
 		setBackground(Color.decode(hexColor_Blue1));
 		setLayout(null);
 		setBounds(0, 0, 1296, 672);
@@ -198,7 +201,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 					String hinhAnh = model.getValueAt(row, 4).toString();
 					String moTa = model.getValueAt(row, 5).toString();
 	
-					JDialog_CapNhatLoaiPhong modal_CNloaiPhong = new JDialog_CapNhatLoaiPhong();
+					JDialog_CapNhatLoaiPhong modal_CNloaiPhong = new JDialog_CapNhatLoaiPhong(nhanvien);
 					modal_CNloaiPhong.setVisible(true);
 					modal_CNloaiPhong.setModalThemLoaiPhong(maLoaiPhong, tenPhong, giaTien, soLuong, hinhAnh, moTa);
 					
@@ -273,40 +276,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		btnThem.setBounds(10, 0, 125, 35);
 		panel.add(btnThem);
 
-		JButton btnXoa = new JButton("Xóa");
-		btnXoa.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				int row = table_LoaiPhong.getSelectedRow();
-				String maLP = model.getValueAt(row, 0).toString();
-				LoaiPhong lp = new LoaiPhong(maLP);
-				try {
-					Phong p = new Phong();
-					DAO_P = new Phong_DAO();
-					
-					ArrayList<Phong> dsP = DAO_P.timDSPhongTheoMaLoaiPhong(maLP);
-					
-					
-					for( Phong value : dsP) {
-						DAO_P.capNhat_TinhTrangPhong(value.getMaPhong(), "Không sử dụng");
-						DAO_P.capNhat_TranThaiPhong(value.getMaPhong(), "OOO");
-					}
-					
-					DAO_LP = new LoaiPhong_DAO();
-					String tenLoaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP).getTenLoaiPhong();
-					int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa không?", "Đóng?", JOptionPane.YES_NO_OPTION);
-					if (reply == JOptionPane.YES_OPTION) {
-						DAO_LP.xoaLoaiPhong(lp);
-						JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
-						model.removeRow(row);
-					} else {
-					   
-					}
-				} catch (Exception e2) {
-					JOptionPane.showMessageDialog(null, "Xóa thất bại");
-				}
-			}
-		});
+		btnXoa = new JButton("Xóa");
 		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyLoaiPhong.class.getResource("/icon/trash.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -338,9 +308,20 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		// Add event:
 		btnThem.addActionListener((ActionListener) this);
 		btnLamMoi.addActionListener(this);
+		btnXoa.addActionListener(this);
 		txt_find.addKeyListener(this);
 		cboNumberPeople.addItemListener(this);
 		cboPrice.addItemListener(this);
+		
+		if(!nhanvien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			btnThem.removeActionListener(this);
+			btnXoa.removeActionListener(this);
+			
+			btnThem.setForeground(Color.WHITE);
+			btnThem.setBackground(Color.LIGHT_GRAY);
+			btnXoa.setForeground(Color.WHITE);
+			btnXoa.setBackground(Color.LIGHT_GRAY);
+		}
 	}
 
 	@Override
@@ -357,6 +338,38 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 			cboPrice.setSelectedItem("Tất cả");
 			txt_find.setText("");
 			docDuLieu();
+		}
+		if(o.equals(btnXoa)) {
+			
+				int row = table_LoaiPhong.getSelectedRow();
+				String maLP = model.getValueAt(row, 0).toString();
+				LoaiPhong lp = new LoaiPhong(maLP);
+				try {
+					Phong p = new Phong();
+					DAO_P = new Phong_DAO();
+					
+					ArrayList<Phong> dsP = DAO_P.timDSPhongTheoMaLoaiPhong(maLP);
+					
+					
+					for( Phong value : dsP) {
+						DAO_P.capNhat_TinhTrangPhong(value.getMaPhong(), "Không sử dụng");
+						DAO_P.capNhat_TranThaiPhong(value.getMaPhong(), "OOO");
+					}
+					
+					DAO_LP = new LoaiPhong_DAO();
+					String tenLoaiPhong = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(maLP).getTenLoaiPhong();
+					int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa không?", "Đóng?", JOptionPane.YES_NO_OPTION);
+					if (reply == JOptionPane.YES_OPTION) {
+						DAO_LP.xoaLoaiPhong(lp);
+						JOptionPane.showMessageDialog(null, "Xóa " + tenLoaiPhong + " thành công");
+						model.removeRow(row);
+					} else {
+					   
+					}
+				} catch (Exception e2) {
+					JOptionPane.showMessageDialog(null, "Xóa thất bại");
+				}
+			
 		}
 
 	}
@@ -386,27 +399,25 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 	public void TimTheoMaLP() {
 		model.getDataVector().removeAllElements();
 		String chuoiTimKiem = txt_find.getText().trim();
-		LoaiPhong ma_loai_phong= DAO_LP.layLoaiPhong_TheoMaLoaiPhong(chuoiTimKiem);
-		
-		dsLP = DAO_LP.timDSPhongTheoMaLPhong(chuoiTimKiem);
-		
+		LoaiPhong ma_loai_phong= DAO_LP.layLoaiPhong_TheoMaLoaiPhong(chuoiTimKiem);		
 		try {
-			dsLP.add(ma_loai_phong);
-			if (dsLP != null) {
-							
 				dsLP = DAO_LP.timDSPhongTheoMaLPhong(chuoiTimKiem);
-				if (dsLP != null) {
-					dsLP.forEach(lp -> {
+				if( dsLP.size() != 0) {
+					if (dsLP != null) {
+						dsLP.forEach(lp -> {
 
-						Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
-								lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
+							Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
+									lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
 
-						model.addRow(rowData);
-					});
+							model.addRow(rowData);
+						});
+					}
+				} else {
+					 model = (DefaultTableModel) table_LoaiPhong.getModel();
+				     model.getDataVector().removeAllElements();
+				     model.fireTableDataChanged();
 				}
-				
-				
-			}
+					
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không có phòng nào có mã: " + chuoiTimKiem);
 		}

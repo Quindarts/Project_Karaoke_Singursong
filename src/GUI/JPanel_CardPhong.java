@@ -93,6 +93,7 @@ public class JPanel_CardPhong extends JPanel {
 	private HoaDon hd;
 	private ArrayList<HoaDon> dsHoaDon;
 	private ArrayList<ChiTietHoaDon> dsChiTietHoaDon;
+	private JLabel lblNameCustomer;
 
 	/**
 	 * @param phong
@@ -120,11 +121,16 @@ public class JPanel_CardPhong extends JPanel {
 
 		JLabel nameLabel = new JLabel(phong.getMaPhong());
 		nameLabel.setBackground(new Color(5, 74, 145));
-		nameLabel.setBounds(54, 59, 96, 43);
+		nameLabel.setBounds(54, 32, 96, 43);
 		nameLabel.setForeground(Color.decode(hexColor_Blue1));
 		nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		nameLabel.setHorizontalAlignment(SwingConstants.CENTER);
 		add(nameLabel);
+		
+		lblNameCustomer = new JLabel("");
+		lblNameCustomer.setFont(new Font("Segoe UI", Font.BOLD | Font.ITALIC, 13));
+		lblNameCustomer.setBounds(10, 99, 130, 28);
+		add(lblNameCustomer);
 
 		ImageIcon imgVIP = new ImageIcon(JFrame_DangNhap.class.getResource("/icon/vip.png"));
 
@@ -146,6 +152,33 @@ public class JPanel_CardPhong extends JPanel {
 
 		if (phong.getTrangThaiPhong().getMaTrangThai().trim().equals("VC")) {
 			add(cbox_DatPhong);
+			cbox_DatPhong.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent e) {
+
+					if (e.getStateChange() == ItemEvent.SELECTED) {
+						selectDatPhong = true;
+						if (kiemTraTrungMaPhongTrongDSPhong(phong.getMaPhong().toString().trim(), table)) {
+							model.addRow(new Object[] { table.getRowCount() + 1, phong.getMaPhong().toString(),
+									phong.getTenPhong().toString(), Double.toString(loaiP.getGiaTien()) });
+						}
+					} else {
+						selectDatPhong = false;
+					}
+					if (e.getStateChange() != ItemEvent.SELECTED) {
+						cbox_DatPhong.setSelected(false);
+						String maP = getPhong().getMaPhong();
+						for (int i = 0; i < table.getRowCount(); i++) {
+							if (maP.trim().equals(table.getValueAt(i, 1).toString().trim())) {
+								model.removeRow(i);
+							}
+						}
+//						model.removeRow(ERROR)
+					}
+				}
+			});
+		} else if(phong.getTrangThaiPhong().getMaTrangThai().trim().equals("OC") && phong.getTrangThaiPhong().getMaTrangThai().trim().equals("OCP")) {
+			add(cbox_DatPhong);
+			lblNameCustomer.setText("Nguyễn Thiên Tứ");
 			cbox_DatPhong.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent e) {
 

@@ -353,7 +353,8 @@ public class JDialog_ThemLoaiPhong extends JFrame implements ActionListener {
 		String maLoaiPhong = txt_MaLoaiPhong.getText();
 		String tenLoaiPong = txt_TenLoaiPhong.getText();
 		File file = new File(pathImg);
-		String hinhA = "/img/"+ file.getName();
+		String hinhA = file.getName();
+		System.out.println("HÌNH ẢNH: " + hinhA);
 		String moTa = txtA_Mota.getText();
 		int soLuongToiDa = 0;
 		double giaTien = 0;

@@ -239,6 +239,8 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		btnExit.addActionListener(this);
 		lblForgotPass.addMouseListener(this);
 		CBHienMatKhau.addItemListener(this);
+		txtUsername.addKeyListener(this);
+		txtPassword.addKeyListener(this);
 	}
 
 	/**
@@ -253,34 +255,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 
 			if (validateTaiKhoan()) {
 
-				String username = txtUsername.getText();
-				String password = txtPassword.getText();
-
-				TK_DAO = new TaiKhoan_DAO();
-				NV_DAO = new NhanVien_DAO();
-
-				// Search TK in DB
-				taiKhoanDangNhap = TK_DAO.timKiemTaiKhoan(username);
-
-				NhanVien nhanVienDangNhap = new NhanVien();
-
-				if (taiKhoanDangNhap == null) {
-					JOptionPane.showMessageDialog(null, "Tài Khoản không tồn tại!");
-				} else if (!taiKhoanDangNhap.getMatKhau().trim().equals(password)) {
-					JOptionPane.showMessageDialog(null, "Mật khẩu không đúng! ");
-				} else {
-					nhanVienDangNhap = NV_DAO
-							.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
-					String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
-					if (taiKhoanDangNhap.isTrangThai()) {
-						thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
-						thuNgan.setVisible(true);
-					} else {
-						JOptionPane.showMessageDialog(null, "Bạn đã nghĩ làm!");
-					}
-//					dispose();
-
-				}
+				Login();
 			}
 		}
 		// BUTTON EXIT
@@ -320,6 +295,38 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		}
 		return true;
 	}
+	
+	public void Login() {
+		String username = txtUsername.getText();
+		String password = txtPassword.getText();
+
+		TK_DAO = new TaiKhoan_DAO();
+		NV_DAO = new NhanVien_DAO();
+
+		// Search TK in DB
+		taiKhoanDangNhap = TK_DAO.timKiemTaiKhoan(username);
+
+		NhanVien nhanVienDangNhap = new NhanVien();
+
+		if (taiKhoanDangNhap == null) {
+			JOptionPane.showMessageDialog(null, "Tài Khoản không tồn tại!");
+		} else if (!taiKhoanDangNhap.getMatKhau().trim().equals(password)) {
+			JOptionPane.showMessageDialog(null, "Mật khẩu không đúng! ");
+		} else {
+			nhanVienDangNhap = NV_DAO
+					.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
+			String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
+			if (taiKhoanDangNhap.isTrangThai()) {
+				thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
+				thuNgan.setVisible(true);
+				setVisible(false);
+			} else {
+				JOptionPane.showMessageDialog(null, "Bạn đã nghĩ làm!");
+			}
+//			dispose();
+
+		}
+	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
@@ -330,7 +337,11 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
-
+		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			if (validateTaiKhoan()) {
+				Login();
+			}
+        }
 	}
 
 	@Override

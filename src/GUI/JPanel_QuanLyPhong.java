@@ -42,6 +42,7 @@ import DAO.Phong_DAO;
 import DAO.TrangThaiPhong_DAO;
 import Entity.KhachHang;
 import Entity.LoaiPhong;
+import Entity.NhanVien;
 import Entity.Phong;
 import Entity.TrangThaiPhong;
 
@@ -101,6 +102,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 	private JDateChooser date_From;
 	private JDateChooser date_To;
 	private JButton btn_find_date;
+	private JButton btnXoa;
 
 
 	/**
@@ -156,7 +158,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 	/**
 	 * Create the panel.
 	 */
-	public JPanel_QuanLyPhong() {
+	public JPanel_QuanLyPhong(NhanVien nhanVien) {
 		setBackground(Color.decode(hexColor_Blue1));
 		setLayout(null);
 		setBounds(0, 0, 1296, 672);
@@ -334,12 +336,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		btnThem.setBounds(10, 0, 125, 35);
 		panel.add(btnThem);
 
-		JButton btnXoa = new JButton("Xóa");
-		btnXoa.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				XoaPhong();
-			}
-		});
+		btnXoa = new JButton("Xóa");
 		btnXoa.setIcon(new ImageIcon(JPanel_QuanLyPhong.class.getResource("/icon/trash.png")));
 		btnXoa.setForeground(Color.WHITE);
 		btnXoa.setFont(new Font("Segoe UI", Font.BOLD, 15));
@@ -350,8 +347,8 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		JButton btnLamMoi = new JButton("Làm mới");
 		btnLamMoi.setIcon(new ImageIcon(JPanel_QuanLyPhong.class.getResource("/icon/refresh.png")));
 		btnLamMoi.setForeground(Color.WHITE);
-		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		btnLamMoi.setBackground(Color.LIGHT_GRAY);
+		btnLamMoi.setFont(new Font("Segoe UI", Font.BOLD, 15));
 		btnLamMoi.setBounds(280, 0, 125, 35);
 		panel.add(btnLamMoi);
 		btnLamMoi.addActionListener(new ActionListener() {
@@ -381,11 +378,22 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 
 		// Add event:
 		btnThem.addActionListener((ActionListener) this);
+		btnXoa.addActionListener(this);
 		btn_find_date.addActionListener(this);
 		btnTimKiem.addActionListener(this);
 		txtFindCodeRoom.addKeyListener(this); 
 		cbo_status.addItemListener(this);
 		cbo_floor.addItemListener(this);
+		
+		if(!nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			btnThem.removeActionListener(this);
+			btnXoa.removeActionListener(this);
+			
+			btnThem.setForeground(Color.WHITE);
+			btnThem.setBackground(Color.LIGHT_GRAY);
+			btnXoa.setForeground(Color.WHITE);
+			btnXoa.setBackground(Color.LIGHT_GRAY);
+		}
 	}
 	
 
@@ -410,6 +418,8 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		        
 		        long daysDifference = date2.toEpochDay() - date1.toEpochDay();
 		        if(daysDifference >= 0) {
+		        	cbo_floor.setSelectedIndex(0);
+		        	cbo_status.setSelectedIndex(0);
 		        	model = (DefaultTableModel) table_Phong.getModel();
 			    	model.getDataVector().removeAllElements();
 			    	ArrayList<Phong> dsP = new ArrayList<>();
@@ -442,7 +452,10 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 				JOptionPane.showMessageDialog(null, "Phải nhập đầy đủ");
 			} 
 		}
-
+		
+		if(o.equals(btnXoa)) {
+			XoaPhong();
+		}
 	}
 	
 	public void XoaPhong() {
@@ -454,7 +467,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 			if (reply == JOptionPane.YES_OPTION) {
 				String tenPhong = DAO_P.timPhong_TheoMaPhong(maPhong).getTenPhong();	
 				if(DAO_P.capNhat_TrangThaiPhong(maPhong, "OOO") && DAO_P.capNhat_TinhTrangPhong(maPhong, "Không sử dụng")) {
-//					DAO_P.xoaPhong(phong);
+					DAO_P.xoaPhong(phong);
 					JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenPhong + "thành công");
 					model.removeRow(row);
 				}
@@ -503,26 +516,33 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		dsP = DAO_P.timDSPhongTheoMaPhong(chuoiTimKiem);
 		
 		try {
-			if (dsP != null) {
-							
-				for(Phong value : dsP) {
+			if(dsP.size() != 0) {
+				if (dsP != null) {
 					
-					LoaiPhong lp = new LoaiPhong();
-					lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(value.getLoaiPhong().getMaLoaiPhong());
-					TrangThaiPhong_DAO DAO_trangThai = new TrangThaiPhong_DAO();
+					for(Phong value : dsP) {
+						
+						LoaiPhong lp = new LoaiPhong();
+						lp = DAO_LP.layLoaiPhong_TheoMaLoaiPhong(value.getLoaiPhong().getMaLoaiPhong());
+						TrangThaiPhong_DAO DAO_trangThai = new TrangThaiPhong_DAO();
+						
+						TrangThaiPhong trangThai = new TrangThaiPhong();
+						
+						
+						trangThai = DAO_trangThai.timTrangThaiPhong_TheoMaTrangThai(value.getTrangThaiPhong().getMaTrangThai().trim());
+						
+						Object[] rowData = {value.getMaPhong(), value.getTenPhong(), lp.getTenLoaiPhong(), trangThai.getTenTrangThai(), value.getNgayTaoPhong(), value.getViTriPhong(), value.getGhiChu(), value.getTinhTrangPhong()};
+						
+						model.addRow(rowData);
+					}
 					
-					TrangThaiPhong trangThai = new TrangThaiPhong();
 					
-					
-					trangThai = DAO_trangThai.timTrangThaiPhong_TheoMaTrangThai(value.getTrangThaiPhong().getMaTrangThai().trim());
-					
-					Object[] rowData = {value.getMaPhong(), value.getTenPhong(), lp.getTenLoaiPhong(), trangThai.getTenTrangThai(), value.getNgayTaoPhong(), value.getViTriPhong(), value.getGhiChu(), value.getTinhTrangPhong()};
-					
-					model.addRow(rowData);
 				}
-				
-				
+			} else {
+				 model = (DefaultTableModel) table_Phong.getModel();
+			     model.getDataVector().removeAllElements();
+			     model.fireTableDataChanged();
 			}
+			
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Không có phòng nào có mã: " + chuoiTimKiem);
 		}

@@ -15,6 +15,8 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -82,6 +84,8 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 	private ArrayList<ChiTietDichVu> dsCTDV;
 	private JLabel lbl_tongDoanhThu;
 	private double tongDoanhThu_HD;
+	
+	private NhanVien nv_Role;
 
 	public class RoundedTransparentBorder extends AbstractBorder {
 		private int cornerRadius;
@@ -130,8 +134,10 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 
 	}
 
-	public JPanel_BieuDoThongKe() {
-
+	public JPanel_BieuDoThongKe(NhanVien nhVien) {
+		
+		nv_Role = nhVien;
+		
 		setBackground(Color.decode(hexColor_Blue1));
 		setLayout(null);
 		setBounds(0, 0, 1296, 672);
@@ -452,6 +458,11 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 
 		btn_resetTopDV.addActionListener(this);
 		btn_thongKeTopDV.addActionListener(this);
+		
+		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			Jdate_ngayBatDau.setEnabled(false);
+			Jdate_ngayKetThuc.setEnabled(false);
+		}
 	}
 
 	@Override
@@ -489,8 +500,20 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 	}
 
 	public void renderTongHD_SoLuongHang_DoanhThu() {
-		String ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
-		String ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+		String ngayBD = "";
+		String ngayKT = "";
+		
+		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			LocalDate currentDate = LocalDate.now();
+			LocalDate tomorrowDate = currentDate.plusDays(1);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			ngayBD = currentDate.format(formatter);
+	        ngayKT = tomorrowDate.format(formatter);
+		} else {
+			ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
+			ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+		}
 		try {
 			HoaDon_DAO DAO_HD = new HoaDon_DAO();
 			lbl_tongHD.setText(String.valueOf(DAO_HD.tinhTongHoaDonTT_theoKhoangTime(ngayBD, ngayKT)));
@@ -535,14 +558,32 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		calendar.add(Calendar.DAY_OF_MONTH, -7);
 		Date sevenDaysAgo = calendar.getTime();
 
-		Jdate_ngayBatDau.setDate(sevenDaysAgo);
-		Jdate_ngayKetThuc.setDate(currentDate);
-
+		
+		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			Jdate_ngayBatDau.setDate(currentDate);
+			Jdate_ngayKetThuc.setDate(currentDate);
+		} else {
+			Jdate_ngayBatDau.setDate(sevenDaysAgo);
+			Jdate_ngayKetThuc.setDate(currentDate);
+		}
 	};
 
 	public void renderChartBarDV() {
-		String ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
-		String ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+				
+		String ngayBD = "";
+		String ngayKT = "";
+		
+		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			LocalDate currentDate = LocalDate.now();
+			LocalDate tomorrowDate = currentDate.plusDays(1);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			ngayBD = currentDate.format(formatter);
+	        ngayKT = tomorrowDate.format(formatter);
+		} else {
+			ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
+			ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+		}
 		String top = cbox_topDV.getSelectedItem().toString().trim();
 		try {
 			HoaDon_DAO DAO_HD = new HoaDon_DAO();
@@ -559,8 +600,21 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 	}
 
 	public void renderChartBarDV_DT() {
-		String ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
-		String ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+		
+		String ngayBD = "";
+		String ngayKT = "";
+		
+		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			LocalDate currentDate = LocalDate.now();
+			LocalDate tomorrowDate = currentDate.plusDays(1);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			ngayBD = currentDate.format(formatter);
+	        ngayKT = tomorrowDate.format(formatter);
+		} else {
+			ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
+			ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+		}
 		String top = cbox_topDV.getSelectedItem().toString().trim();
 		try {
 			HoaDon_DAO DAO_HD = new HoaDon_DAO();
@@ -577,8 +631,21 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 	}
 
 	public void renderChartPieDV() {
-		String ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
-		String ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+		
+		String ngayBD = "";
+		String ngayKT = "";
+		
+		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			LocalDate currentDate = LocalDate.now();
+			LocalDate tomorrowDate = currentDate.plusDays(1);
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			ngayBD = currentDate.format(formatter);
+	        ngayKT = tomorrowDate.format(formatter);
+		} else {
+			ngayBD = dateFormat.format(Jdate_ngayBatDau.getDate());
+			ngayKT = dateFormat.format(Jdate_ngayKetThuc.getDate());
+		}
 		try {
 			HoaDon_DAO DAO_HD = new HoaDon_DAO();
 			HashMap<String, String> hash_dv = DAO_HD.thongKe_loaiPhongNangCao(ngayBD, ngayKT);

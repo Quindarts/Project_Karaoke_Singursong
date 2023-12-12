@@ -215,9 +215,9 @@ public class JFrame_ThuNgan extends JFrame {
 		Panel_QLHD.setBounds(0, 0, 1296, 672);
 		Panel_QLKM = new JPanel_QuanLyKhuyenMai();
 		Panel_QLKM.setBounds(0, 0, 1296, 672);
-		Panel_QLLP = new JPanel_QuanLyLoaiPhong();
+		Panel_QLLP = new JPanel_QuanLyLoaiPhong(nhanVien);
 		Panel_QLLP.setBounds(0, 0, 1296, 672);
-		Panel_QLP = new JPanel_QuanLyPhong();
+		Panel_QLP = new JPanel_QuanLyPhong(nhanVien);
 		Panel_QLP.setBounds(0, 0, 1296, 672);
 		Panel_QLNV = new JPanel_QuanLyNhanVien();
 		Panel_QLNV.setBounds(0, 0, 1296, 672);
@@ -472,7 +472,8 @@ public class JFrame_ThuNgan extends JFrame {
 			addMenuClickListener(panelMenu_QLNhanVien, Panel_QLNV);
 			System.out.println("nay la quan ly");
 		} else {
-
+			panelMenu_QLNhanVien.setForeground(Color.WHITE);
+			panelMenu_QLNhanVien.setBackground(Color.LIGHT_GRAY);
 			System.out.println("Không phải quản lý nhân viên");
 		}
 

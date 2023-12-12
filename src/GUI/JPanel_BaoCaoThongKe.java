@@ -146,6 +146,8 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 	private Date ngayBatDau;
 	private String ngBatDau;
 	private String ngKetThuc;
+	
+	private NhanVien nv;
 
 	/**
 	 * Rounded JPanel
@@ -450,7 +452,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		tabbedPane.addTab("Dịch vụ", null, pnl_DichVu, null);
 
 		// Bieu do thong ke
-		JPanel pnl_bieuDo = new JPanel_BieuDoThongKe();
+		JPanel pnl_bieuDo = new JPanel_BieuDoThongKe(nhVien);
 
 		tabbedPane.addTab("Biểu đồ", null, pnl_bieuDo, null);
 
@@ -672,6 +674,47 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 		DocDuLieu_HD();
 		DocDuLieu_DV();
+		
+		nv = nhVien;
+		if(!nhVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			cbx_DV_LocNam.removeActionListener(this);
+			cbx_DV_LocQuy.removeActionListener(this);
+			cbx_DV_LocThang.removeActionListener(this);
+			
+			cbx_DV_LocNam.setEditable(false);
+			cbx_DV_LocQuy.setEditable(false);
+			cbx_DV_LocThang.setEditable(false);
+			
+			cbx_DV_LocNam.setEnabled(false);
+			cbx_DV_LocQuy.setEnabled(false);
+			cbx_DV_LocThang.setEnabled(false);
+//			----------------------
+			cbx_HD_LocNam.removeActionListener(this);
+			cbx_HD_LocQuy.removeActionListener(this);
+			cbx_HD_LocThang.removeActionListener(this);
+			
+			cbx_HD_LocNam.setEditable(false);
+			cbx_HD_LocQuy.setEditable(false);
+			cbx_HD_LocThang.setEditable(false);
+			
+			cbx_HD_LocNam.setEnabled(false);
+			cbx_HD_LocQuy.setEnabled(false);
+			cbx_HD_LocThang.setEnabled(false);
+			
+//			-----------------
+			dateCh_DV_TuNgay.removePropertyChangeListener(this);
+			dateCh_DV_DenNgay.removePropertyChangeListener(this);
+			dateCh_HD_TuNgay.removePropertyChangeListener(this);
+			dateCh_HD_DenNgay.removePropertyChangeListener(this);
+			
+			dateCh_DV_TuNgay.setEnabled(false);
+			dateCh_DV_DenNgay.setEnabled(false);
+			dateCh_HD_TuNgay.setEnabled(false);
+			dateCh_HD_DenNgay.setEnabled(false);
+			
+//			-----------------
+			LocDuLieu_HD();
+		}
 	}
 
 	@Override
@@ -845,7 +888,20 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 		Date ngayKetThuc = new Date();
 		try {
-			ngayKetThuc = dateCh_HD_DenNgay.getDate();
+			if(!nv.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+				Calendar calendar = Calendar.getInstance();
+				
+				calendar.add(Calendar.DAY_OF_MONTH, 1);
+				
+		        calendar.set(Calendar.HOUR_OF_DAY, 0);     // Giờ
+		        calendar.set(Calendar.MINUTE, 1);          // Phút
+		        calendar.set(Calendar.SECOND, 0);          // Giây
+		        calendar.set(Calendar.MILLISECOND, 0);    // Mili giây
+
+		        ngayKetThuc = calendar.getTime();
+			} else {
+				ngayKetThuc = dateCh_HD_DenNgay.getDate();
+			}
 			if (ngayKetThuc == null) {
 				ngayKetThuc = new java.util.Date();
 			}
@@ -853,9 +909,20 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 			ngayKetThuc = null;
 		}
 
+		
 		Date ngayBatDau = new Date();
 		try {
-			ngayBatDau = dateCh_HD_TuNgay.getDate();
+			if(!nv.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+				Calendar calendar = Calendar.getInstance();
+		        calendar.set(Calendar.HOUR_OF_DAY, 0);      // Giờ
+		        calendar.set(Calendar.MINUTE, 1);           // Phút
+		        calendar.set(Calendar.SECOND, 0);           // Giây
+		        calendar.set(Calendar.MILLISECOND, 0);      // Mili giây
+
+		        ngayBatDau = calendar.getTime();
+			} else {
+				ngayBatDau = dateCh_HD_TuNgay.getDate();
+			}
 			if (ngayBatDau == null) {
 				calendar.set(2000, Calendar.JANUARY, 01);
 				ngayBatDau = calendar.getTime();

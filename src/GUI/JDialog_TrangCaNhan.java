@@ -46,6 +46,7 @@ import java.io.File;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -119,6 +120,7 @@ public class JDialog_TrangCaNhan extends JFrame implements ActionListener, ItemL
 	private TaiKhoan TK;
 
 	private TaiKhoan_DAO DAO_TK;
+	private JTextField txt_Calam;
 
 
 	/**
@@ -463,6 +465,19 @@ public class JDialog_TrangCaNhan extends JFrame implements ActionListener, ItemL
 										btn_ChangePwd.setBackground(Color.decode(hexColor_Green));
 										btn_ChangePwd.setBounds(618, 220, 137, 30);
 										pnl_ThongTin.add(btn_ChangePwd);
+										
+										JLabel lbl_CaLam = new JLabel("Ca làm");
+										lbl_CaLam.setHorizontalAlignment(SwingConstants.LEFT);
+										lbl_CaLam.setFont(new Font("Segoe UI", Font.BOLD, 13));
+										lbl_CaLam.setBounds(10, 277, 110, 25);
+										pnl_ThongTin.add(lbl_CaLam);
+										
+										txt_Calam = new JTextField();
+										txt_Calam.setText((String) null);
+										txt_Calam.setEditable(false);
+										txt_Calam.setColumns(10);
+										txt_Calam.setBounds(130, 278, 96, 25);
+										pnl_ThongTin.add(txt_Calam);
 						btn_BoQua.addActionListener(this);
 				
 						btn_Them.addActionListener(this);
@@ -472,6 +487,21 @@ public class JDialog_TrangCaNhan extends JFrame implements ActionListener, ItemL
 		Image originalImage = originalIcon.getImage();
 		Image resizedImage = originalImage.getScaledInstance(159, 176, Image.SCALE_SMOOTH);
 		ImageIcon resizedIcon = new ImageIcon(resizedImage);
+		
+		LocalTime currentTime = LocalTime.now();
+		int hour = currentTime.getHour();
+		
+		if (hour >= 7 && hour <= 11) {
+			txt_Calam.setText("Ca 1");
+		} else if (hour >= 12 && hour <= 16) {
+			txt_Calam.setText("Ca 2");
+
+		} else if (hour >= 17 && hour <= 22) {
+			txt_Calam.setText("Ca 3");
+
+		} else {
+			txt_Calam.setText("Ca 4");
+		}
 		
 		img_show_panel.setIcon(resizedIcon);
 		cboShowPassword.addItemListener(this);
