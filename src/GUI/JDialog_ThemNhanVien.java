@@ -406,6 +406,12 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 		java.util.Date ngaySinhStr;
 //		img_show_panel.setIcon(new ImageIcon(Modal_ThemNhanVien.class.getResource(anhThe)));
 		
+		ImageIcon originalIcon = new ImageIcon(JPanel_CardDichVu.class.getResource("/img/" + anhThe));
+		Image originalImage = originalIcon.getImage();
+		Image resizedImage = originalImage.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
+		ImageIcon resizedIcon = new ImageIcon(resizedImage);	
+		img_show_panel.setIcon(resizedIcon);
+		
 		try {
 			ngaySinhStr = dateFormat_YMD.parse(ngaySinh);
 			dateCh_NgaySinh.setDate(ngaySinhStr);
@@ -518,7 +524,11 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 			} catch (Exception e) {
 				JOptionPane.showMessageDialog(null, "Ngày sinh không được để trống!");
 			}
-
+			
+			int lastIndexOfBackslash = pathImg.lastIndexOf("\\");
+	        String fileName = pathImg.substring(lastIndexOfBackslash + 1);
+	        System.out.println(fileName);
+	        
 			String soDienThoai = txt_SoDienThoai.getText();
 			String trangThai = "";
 			String maNhanVien = txt_MaNhanVien.getText().trim();
@@ -547,7 +557,7 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 
 			loaiNhanVien = DAO_LNV.layLoaiNhanVien_TheoTenLoaiNhanVien(loaiNV);
 			NhanVien nv = new NhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, soDienThoai, CCCD, diaChi,
-					trangThai, anhThe);
+					trangThai, fileName);
 
 			System.out.println(nv.toString());
 
@@ -670,7 +680,7 @@ public class JDialog_ThemNhanVien extends JFrame implements ActionListener, Focu
 	public String chooseFileEvent(String typeFile) {
 		JFileChooser file = new JFileChooser();
 		String path = "";
-		file.setCurrentDirectory(new File(System.getProperty("user.home")));
+		file.setCurrentDirectory(new File("src/img"));
 
 		FileNameExtensionFilter filterImage = new FileNameExtensionFilter("*.Images", "jpg", "gif", "png", "xlsx",
 				"xls");

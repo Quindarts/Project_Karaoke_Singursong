@@ -347,6 +347,9 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 					String diaChi = model.getValueAt(row, 7).toString();
 					String trangThai = model.getValueAt(row, 8).toString().trim();
 					String anhThe = "";
+					
+					NhanVien nv = new NhanVien();
+					nv = DAO_NV.timNhanVien_TheoMaNhanVien(maNhanVien);
 					try {
 						anhThe = model.getValueAt(row, 9).toString();
 					} catch (Exception e2) {
@@ -355,7 +358,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 					model_ThemNhanVien = new JDialog_ThemNhanVien();
 					model_ThemNhanVien.setVisible(true);
 					model_ThemNhanVien.setModal_ThemNhanVien(maNhanVien, loaiNhanVien, hoTen, gioiTinh, ngaySinh, sdt,
-							cccd, diaChi, trangThai, anhThe);
+							cccd, diaChi, trangThai, nv.getAnhThe().trim());
 				}
 			}
 
