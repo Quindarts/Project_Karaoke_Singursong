@@ -453,9 +453,11 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 			int reply = JOptionPane.showConfirmDialog(null, "Bạn có chắc chắn muốn xóa không?", "Đóng?", JOptionPane.YES_NO_OPTION);
 			if (reply == JOptionPane.YES_OPTION) {
 				String tenPhong = DAO_P.timPhong_TheoMaPhong(maPhong).getTenPhong();	
-				DAO_P.xoaPhong(phong);
-				JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenPhong + "thành công");
-				model.removeRow(row);
+				if(DAO_P.capNhat_TrangThaiPhong(maPhong, "OOO") && DAO_P.capNhat_TinhTrangPhong(maPhong, "Không sử dụng")) {
+//					DAO_P.xoaPhong(phong);
+					JOptionPane.showMessageDialog(null, "Xóa khách hàng" + tenPhong + "thành công");
+					model.removeRow(row);
+				}
 			} else {
 			   
 			}

@@ -431,7 +431,7 @@ public class JDialog_ThemPhong extends JFrame {
 		if(!ttp.getMaTrangThai().trim().equals("OOO")) {
 			tinhTrang = "Đang hoạt động";
 		} else {
-			tinhTrang = "Sửa chữa";
+			tinhTrang = "Không sử dụng";
 		}
 		Phong phong = new Phong(maPhong, tenPhong, lp, ttp, ngayTaoPhong, viTriPhong, ghiChu, tinhTrang);
 
