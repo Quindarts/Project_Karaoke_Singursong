@@ -235,11 +235,11 @@ public class JFrame_DoiMatKhau extends JFrame implements KeyListener, ItemListen
 	    			String passwordNew = new String(passwordCharsNew);
 	    			String passwordRepeat = new String(passwordRepeatChars);
 	            	if(password.trim().equals(taiKhoan.getMatKhau().trim())) {
-	            		if(!passwordNew.equals("") || !passwordRepeat.equals("")) {
-	            			if((password.length() >= 8 && password.matches("\\d+")) && (passwordRepeat.length() >= 8 && passwordRepeat.matches("\\d+"))) {
-	            				if(passwordNew.equals(passwordRepeat)) {
+	            		if(!passwordNew.trim().equals("") || !passwordRepeat.trim().equals("")) {
+	            			if((password.trim().length() >= 8 && password.trim().matches("\\d+")) && (passwordRepeat.trim().length() >= 8 && passwordRepeat.trim().matches("\\d+"))) {
+	            				if(passwordNew.trim().equals(passwordRepeat.trim())) {
 			            			TK_DAO = new TaiKhoan_DAO();
-			            			TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(taiKhoan.gettenDangNhap(), passwordNew);
+			            			TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(taiKhoan.gettenDangNhap(), passwordNew.trim());
 			            			JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công!");
 		            				setVisible(false);
 			            		} else {
