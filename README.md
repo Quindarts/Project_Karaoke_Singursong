@@ -34,11 +34,13 @@
 - **Theo dõi dịch vụ**: Quản lý và theo dõi các dịch vụ được cung cấp cho từng phòng karaoke.
 - **Giao diện quản lý**: Giao diện quản lý dịch vụ được trang bị các icon và hiệu ứng để giúp theo dõi dễ dàng và hiệu quả.
 
-### Công nghệ và Thư viện Sử dụng
-🚀 Thư viện chính
-## Java Swing: Cung cấp các thành phần giao diện đồ họa để xây dựng ứng dụng desktop với trải nghiệm người dùng mượt mà.
+### 🚀 Công nghệ và Thư viện Sử dụng
 
-## FlatLaf: flatlaf-3.2.jar - Thư viện giao diện người dùng cho Swing với phong cách phẳng, mang lại giao diện hiện đại và dễ nhìn.
+## Java Swing: 
+Cung cấp các thành phần giao diện đồ họa để xây dựng ứng dụng desktop với trải nghiệm người dùng mượt mà.
+
+## FlatLaf: flatlaf-3.2.jar 
+- Thư viện giao diện người dùng cho Swing với phong cách phẳng, mang lại giao diện hiện đại và dễ nhìn.
 
 ## Apache Commons:
 
