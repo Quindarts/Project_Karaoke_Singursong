@@ -36,17 +36,18 @@
 
 ### Công nghệ và Thư viện Sử dụng
 🚀 Thư viện chính
-Java Swing: Cung cấp các thành phần giao diện đồ họa để xây dựng ứng dụng desktop với trải nghiệm người dùng mượt mà.
+## Java Swing: Cung cấp các thành phần giao diện đồ họa để xây dựng ứng dụng desktop với trải nghiệm người dùng mượt mà.
 
-FlatLaf: flatlaf-3.2.jar - Thư viện giao diện người dùng cho Swing với phong cách phẳng, mang lại giao diện hiện đại và dễ nhìn.
+## FlatLaf: flatlaf-3.2.jar - Thư viện giao diện người dùng cho Swing với phong cách phẳng, mang lại giao diện hiện đại và dễ nhìn.
 
-Apache Commons:
+## Apache Commons:
 
 commons-codec-1.15.jar - Thư viện mã hóa và giải mã dữ liệu.
 commons-collections4-4.1.jar - Các lớp tiện ích cho xử lý tập hợp và cấu trúc dữ liệu.
 commons-io-2.7.jar - Công cụ hỗ trợ thao tác với luồng dữ liệu và tệp.
 commons-logging-1.2.jar - API cho logging, giúp ghi lại các thông điệp và lỗi.
-Jackson:
+
+## Jackson:
 
 jackson-core-2.14.0.jar - Cung cấp các công cụ cơ bản để phân tích và xử lý JSON.
 jackson-databind-2.14.0.jar - Hỗ trợ ánh xạ dữ liệu JSON vào các đối tượng Java.
@@ -54,7 +55,7 @@ jackson-dataformat-xml-2.14.0.jar - Xử lý dữ liệu XML với Jackson.
 jackson-datatype-jsr310-2.14.0.jar - Hỗ trợ ánh xạ các kiểu dữ liệu ngày tháng từ Java 8.
 iTextPDF: itextpdf-5.5.13.2.jar - Thư viện tạo và xử lý tài liệu PDF.
 
-Apache POI:
+## Apache POI:
 
 poi-3.17.jar - Thư viện để đọc và ghi các định dạng tài liệu Microsoft Office.
 poi-ooxml-3.17.jar - Hỗ trợ định dạng Office Open XML (tệp DOCX, XLSX).
@@ -64,9 +65,8 @@ JWT:
 jjwt-api-0.11.2.jar - API cho JSON Web Tokens (JWT).
 jjwt-impl-0.11.2.jar - Cung cấp các triển khai cho JWT.
 jjwt-jackson-0.11.2.jar - Tích hợp Jackson với JWT để xử lý JSON.
-MySQL JDBC Driver: sqljdbc42.jar - Driver JDBC để kết nối với cơ sở dữ liệu MySQL.
 
-Mail:
+## Mail:
 
 javax.mail.jar - Cung cấp API để gửi và nhận email.
 mail.jar - Thư viện hỗ trợ gửi và nhận email.
