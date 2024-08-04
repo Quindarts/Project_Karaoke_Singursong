@@ -2,13 +2,14 @@
 
 ## Giới thiệu
 
+**Karaoke Sing Ur Song** là một hệ thống quản lý karaoke được phát triển bằng Java Swing. Hệ thống này được thiết kế với giao diện người dùng hiện đại và trực quan, sử dụng các hiệu ứng icon đẹp mắt để nâng cao trải nghiệm người dùng. Dự án cung cấp các chức năng mạnh mẽ để quản lý phòng karaoke, bao gồm thống kê, thanh toán nhiều phòng, tách hóa đơn, xuất hóa đơn, và quản lý dịch vụ cho nhiều phòng.
+
 ![image](https://github.com/user-attachments/assets/6e76c4eb-6c28-4a1d-ace7-efe1a6c91f87)
 
 ![image](https://github.com/user-attachments/assets/6359e52e-bc35-437b-b5de-856744ae8509)
 
 ![image](https://github.com/user-attachments/assets/c97d4640-9eb2-4905-9a1b-e7c87f27707b)
 
-**Karaoke Sing Ur Song** là một hệ thống quản lý karaoke được phát triển bằng Java Swing. Hệ thống này được thiết kế với giao diện người dùng hiện đại và trực quan, sử dụng các hiệu ứng icon đẹp mắt để nâng cao trải nghiệm người dùng. Dự án cung cấp các chức năng mạnh mẽ để quản lý phòng karaoke, bao gồm thống kê, thanh toán nhiều phòng, tách hóa đơn, xuất hóa đơn, và quản lý dịch vụ cho nhiều phòng.
 
 ## Các tính năng
 
